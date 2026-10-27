@@ -1,6 +1,6 @@
 # Migración de Mealie MCP a Python
 
-Estado a2026-10-27: inventario, diseño y plan preparados; **implementación en curso (P01..P03 verificadas; P04 activa)**.
+Estado a2026-10-27: inventario, diseño y plan preparados; **implementación en curso (P01..P04 verificadas; P05 activa)**.
 
 ## Ruta de lectura
 
@@ -20,7 +20,7 @@ FastMCP, migración completa a Python, stdio local y HTTP remoto, token Bearer p
 
 Upstream fijado en d027e1b4a314d781a322f1f91e37840f01464d77. Se revisaron estáticamente los registros y42 archivos de pruebas originales. El diseño pasó una revisión independiente; el plan se revisó contra el diseño y el inventario.
 
-Las comprobaciones auxiliares de estos documentos se ejecutan en el host y se identifican como documentales. Ahora P01..P03 aportan evidencia de ejecución: Dev Container, paquete/lock,1058tests originales y3Python. El catálogo runtime está capturado; quedan los casos profundos por familia, las herramientas Python, los transportes y la imagen de producción.
+Las comprobaciones auxiliares de estos documentos se ejecutan en el host y se identifican como documentales. Ahora P01..P03 aportan evidencia de ejecución: Dev Container, paquete/lock,1058tests originales y28Python. El catálogo runtime está capturado; quedan los casos profundos por familia, las herramientas Python, los transportes y la imagen de producción.
 
 ## Cómo empezar después de revisar el plan
 

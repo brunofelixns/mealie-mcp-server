@@ -31,3 +31,5 @@ Task P02: complete — RED de wheel instalado observado y GREEN1/1, Ruff/mypy/bu
 P03: Ruling: Node26 no incluye Corepack ni Yarn; el runner instala Yarn1.22.22 por npm según packageManager upstream, sin cambiar código/lock original. Coste si falla: reproducibilidad del entorno de referencia; se verifica con suite original.
 
 Task P03: complete — catálogo real78/78, prompt/instrucciones y fake en red Docker; suite original1058/1058, suite Python3/3. Evidencia P03.md. P04 en curso.
+
+Task P04: complete — dos ciclos RED/GREEN observados; suite28/28, Ruff/mypy passed. P05 en curso.

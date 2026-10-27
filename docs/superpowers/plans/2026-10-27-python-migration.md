@@ -167,24 +167,24 @@ uv run pytest tests/contracts/test_reference_catalog.py -q
 <a id="p04"></a>
 ### P04: Configurar entorno, secretos y presencia de campos
 
-**Depende de:** P03. **Estado:** pendiente; ver registro de ejecución.
+**Depende de:** P03. **Estado:** verificada; ver registro de ejecución.
 
 **Archivos:** `src/mealie_mcp_server/config.py`, `src/mealie_mcp_server/models/common.py`, `.env.example`, `docs/configuration.md`.
 **Tests:** `tests/unit/test_config.py`, `tests/unit/test_field_presence.py`.
 
 **Interfaces:** consume Metadata del paquete P02; contratos fuente P03. Produce Settings; load_settings(environ: Mapping[str,str], overrides: Mapping[str,object] | None = None) -> Settings; Transport = Literal['stdio','http']; class UnsetType y su singleton UNSET; JsonObject = dict[str,JsonValue] (JsonValue de Pydantic).
 
-- [ ] **1. Añadir las pruebas antes del código funcional.** test_stdio_needs_only_mealie_credentials: assert settings.transport == 'stdio'. test_http_requires_own_token: HTTP sin token falla; API key Mealie no lo sustituye. test_secret_file_conflicts y test_unknown_fields_and_presence: omitido != None, 0, False, []; los campos de entorno ajenos no rompen Settings. Nunca repr/log de un SecretStr en claro.
-- [ ] **2. Ejecutar el subconjunto indicado y observar RED.** El fallo esperado es el comportamiento/handler aún ausente o incorrecto; si falta infraestructura del harness, arreglarla antes de tomar el fallo como evidencia.
-- [ ] **3. Implementar las interfaces de esta tarea y sus fixtures.** Reutilizar los contratos anteriores; preservar los valores del diseño y el inventario. URL sin barras finales; http(s) privado válido para Mealie; *_FILE mutuamente excluyente; UTC default; overrides CLI > entorno; sin I/O Mealie ni lectura de secretos al importar módulos. Solo los secretos requeridos por el transporte activo se validan.
+- [x] **1. Añadir las pruebas antes del código funcional.** test_stdio_needs_only_mealie_credentials: assert settings.transport == 'stdio'. test_http_requires_own_token: HTTP sin token falla; API key Mealie no lo sustituye. test_secret_file_conflicts y test_unknown_fields_and_presence: omitido != None, 0, False, []; los campos de entorno ajenos no rompen Settings. Nunca repr/log de un SecretStr en claro.
+- [x] **2. Ejecutar el subconjunto indicado y observar RED.** El fallo esperado es el comportamiento/handler aún ausente o incorrecto; si falta infraestructura del harness, arreglarla antes de tomar el fallo como evidencia.
+- [x] **3. Implementar las interfaces de esta tarea y sus fixtures.** Reutilizar los contratos anteriores; preservar los valores del diseño y el inventario. URL sin barras finales; http(s) privado válido para Mealie; *_FILE mutuamente excluyente; UTC default; overrides CLI > entorno; sin I/O Mealie ni lectura de secretos al importar módulos. Solo los secretos requeridos por el transporte activo se validan.
 
-- [ ] **4. Verificar el resultado de esta tarea.** Ejecutar dentro del Dev Container; salida0 y todas las aserciones indicadas en verde. Para P01 el launcher y el contenedor auxiliar son la excepción de bootstrap explicada arriba.
+- [x] **4. Verificar el resultado de esta tarea.** Ejecutar dentro del Dev Container; salida0 y todas las aserciones indicadas en verde. Para P01 el launcher y el contenedor auxiliar son la excepción de bootstrap explicada arriba.
 
 ```bash
 uv run pytest tests/unit/test_config.py tests/unit/test_field_presence.py -q
 ```
 
-- [ ] **5. Revisar, documentar y cerrar.** Comprobar el criterio de salida anterior y el diff; no ampliar la suite sin una nueva causa. Actualizar estado, diferencias si las hay y evidencia con comando/resultado/entorno. Commit de implementación sugerido: `feat: add transport-aware settings and secret loading`. Registrar su SHA en un commit documental posterior si hace falta; no intentar incluir el hash de un commit en sí mismo.
+- [x] **5. Revisar, documentar y cerrar.** Comprobar el criterio de salida anterior y el diff; no ampliar la suite sin una nueva causa. Actualizar estado, diferencias si las hay y evidencia con comando/resultado/entorno. Commit de implementación sugerido: `feat: add transport-aware settings and secret loading`. Registrar su SHA en un commit documental posterior si hace falta; no intentar incluir el hash de un commit en sí mismo.
 
 <a id="p05"></a>
 ### P05: Implementar el cliente Mealie y las utilidades HTTP
