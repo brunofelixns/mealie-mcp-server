@@ -1,0 +1,1 @@
+"""Mealie REST boundary."""

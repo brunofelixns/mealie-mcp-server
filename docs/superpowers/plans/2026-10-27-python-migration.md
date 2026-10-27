@@ -189,24 +189,24 @@ uv run pytest tests/unit/test_config.py tests/unit/test_field_presence.py -q
 <a id="p05"></a>
 ### P05: Implementar el cliente Mealie y las utilidades HTTP
 
-**Depende de:** P04. **Estado:** pendiente; ver registro de ejecución.
+**Depende de:** P04. **Estado:** verificada; ver registro de ejecución.
 
 **Archivos:** `src/mealie_mcp_server/mealie/client.py`, `src/mealie_mcp_server/mealie/errors.py`, `src/mealie_mcp_server/support/query_filter.py`, `src/mealie_mcp_server/support/concurrency.py`.
 **Tests:** `tests/unit/test_client.py`, `tests/unit/test_path_segments.py`, `tests/unit/test_query_filter.py`, `tests/unit/test_concurrency.py`.
 
 **Interfaces:** consume Settings, JsonObject y UNSET de P04; FakeMealie de P03. Produce MealieClient async context manager; request(method: str, path: str, *, params: list[tuple[str,str]] | None = None, json: JsonValue | UnsetType = UNSET, data: Mapping[str,str] | None = None, files: Mapping[str,tuple[str,bytes,str]] | None = None) -> JsonValue; MealieApiError(status: int, safe_message: str); encode_path_segment(value: str) -> str; async map_with_concurrency(items: Sequence[T], limit: int, fn: Callable[[T],Awaitable[R]]) -> list[R].
 
-- [ ] **1. Añadir las pruebas antes del código funcional.** test_repeated_query_and_csv: assert URL para tags contiene dos claves; csv solo en endpoints indicados. test_204_and_json_string: assert response_204 is None y slug JSON sigue siendo string. test_rejects_traversal rechaza '/', '\\', '.', '..', vacío. test_pool_shutdown_and_write_timeout: no retry de escritura; max_inflight <= 4; orden de salida igual a entrada. Preservar subruta de MEALIE_BASE_URL.
-- [ ] **2. Ejecutar el subconjunto indicado y observar RED.** El fallo esperado es el comportamiento/handler aún ausente o incorrecto; si falta infraestructura del harness, arreglarla antes de tomar el fallo como evidencia.
-- [ ] **3. Implementar las interfaces de esta tarea y sus fixtures.** Reutilizar los contratos anteriores; preservar los valores del diseño y el inventario. Bearer Mealie solo al origen configurado; TLS; timeouts 5/30/30/5 s y pool 20; no seguir redirecciones a otro origen con credenciales; binarios multipart sin Content-Type JSON; errores seguros y pool cerrado una vez.
+- [x] **1. Añadir las pruebas antes del código funcional.** test_repeated_query_and_csv: assert URL para tags contiene dos claves; csv solo en endpoints indicados. test_204_and_json_string: assert response_204 is None y slug JSON sigue siendo string. test_rejects_traversal rechaza '/', '\\', '.', '..', vacío. test_pool_shutdown_and_write_timeout: no retry de escritura; max_inflight <= 4; orden de salida igual a entrada. Preservar subruta de MEALIE_BASE_URL.
+- [x] **2. Ejecutar el subconjunto indicado y observar RED.** El fallo esperado es el comportamiento/handler aún ausente o incorrecto; si falta infraestructura del harness, arreglarla antes de tomar el fallo como evidencia.
+- [x] **3. Implementar las interfaces de esta tarea y sus fixtures.** Reutilizar los contratos anteriores; preservar los valores del diseño y el inventario. Bearer Mealie solo al origen configurado; TLS; timeouts 5/30/30/5 s y pool 20; no seguir redirecciones a otro origen con credenciales; binarios multipart sin Content-Type JSON; errores seguros y pool cerrado una vez.
 
-- [ ] **4. Verificar el resultado de esta tarea.** Ejecutar dentro del Dev Container; salida0 y todas las aserciones indicadas en verde. Para P01 el launcher y el contenedor auxiliar son la excepción de bootstrap explicada arriba.
+- [x] **4. Verificar el resultado de esta tarea.** Ejecutar dentro del Dev Container; salida0 y todas las aserciones indicadas en verde. Para P01 el launcher y el contenedor auxiliar son la excepción de bootstrap explicada arriba.
 
 ```bash
 uv run pytest tests/unit/test_client.py tests/unit/test_path_segments.py tests/unit/test_query_filter.py tests/unit/test_concurrency.py -q
 ```
 
-- [ ] **5. Revisar, documentar y cerrar.** Comprobar el criterio de salida anterior y el diff; no ampliar la suite sin una nueva causa. Actualizar estado, diferencias si las hay y evidencia con comando/resultado/entorno. Commit de implementación sugerido: `feat: add bounded async Mealie client`. Registrar su SHA en un commit documental posterior si hace falta; no intentar incluir el hash de un commit en sí mismo.
+- [x] **5. Revisar, documentar y cerrar.** Comprobar el criterio de salida anterior y el diff; no ampliar la suite sin una nueva causa. Actualizar estado, diferencias si las hay y evidencia con comando/resultado/entorno. Commit de implementación sugerido: `feat: add bounded async Mealie client`. Registrar su SHA en un commit documental posterior si hace falta; no intentar incluir el hash de un commit en sí mismo.
 
 <a id="p06"></a>
 ### P06: Crear la factory MCP y el adaptador de contratos
