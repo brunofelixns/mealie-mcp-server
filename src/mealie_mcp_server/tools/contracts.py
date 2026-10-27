@@ -13,6 +13,7 @@ from jsonschema.exceptions import ValidationError as SchemaValidationError
 from mcp.types import CallToolResult, ToolAnnotations
 from pydantic import BaseModel, PrivateAttr, ValidationError
 
+from mealie_mcp_server.models.common import provided_fields
 from mealie_mcp_server.tools.helpers import error_result, get_state
 
 if TYPE_CHECKING:
@@ -79,8 +80,8 @@ class ContractTool(Tool):
 
     async def run(self, arguments: dict[str, Any]) -> ToolResult:
         try:
-            self._validator.validate(arguments)
             request = self._input_model.model_validate(arguments, strict=True)
+            self._validator.validate(provided_fields(request))
         except (SchemaValidationError, ValidationError) as error:
             return ToolResult.from_mcp_result(error_result(_input_error(error)))
         try:

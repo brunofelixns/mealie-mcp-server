@@ -355,5 +355,2248 @@
   },
   "get_category_by_slug.edge200": {
     "requests": []
+  },
+  "get_foods.basic": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/foods",
+        "query": {
+          "search": [
+            "basil"
+          ],
+          "page": [
+            "1"
+          ],
+          "perPage": [
+            "20"
+          ]
+        },
+        "body": null,
+        "response": {
+          "items": [
+            {
+              "id": "20000000-0000-4000-8000-000000000001",
+              "name": "Basil",
+              "pluralName": "Basils",
+              "description": "Existing",
+              "extras": {
+                "custom": true
+              },
+              "aliases": [
+                {
+                  "name": "old alias",
+                  "id": "alias-id"
+                }
+              ],
+              "createdAt": "2024-01-01",
+              "updatedAt": "2024-02-01",
+              "providerExtra": 42,
+              "labelId": "label-1",
+              "label": {
+                "id": "label-1",
+                "name": "Produce"
+              },
+              "householdsWithIngredientFood": [
+                "home",
+                "other-home"
+              ]
+            }
+          ],
+          "total": 1,
+          "page": 1,
+          "size": 20
+        },
+        "status": 200
+      }
+    ]
+  },
+  "get_food.basic": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/foods/20000000-0000-4000-8000-000000000001",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "20000000-0000-4000-8000-000000000001",
+          "name": "Basil",
+          "pluralName": "Basils",
+          "description": "Existing",
+          "extras": {
+            "custom": true
+          },
+          "aliases": [
+            {
+              "name": "old alias",
+              "id": "alias-id"
+            }
+          ],
+          "createdAt": "2024-01-01",
+          "updatedAt": "2024-02-01",
+          "providerExtra": 42,
+          "labelId": "label-1",
+          "label": {
+            "id": "label-1",
+            "name": "Produce"
+          },
+          "householdsWithIngredientFood": [
+            "home",
+            "other-home"
+          ]
+        },
+        "status": 200
+      }
+    ]
+  },
+  "get_food_matches.basic": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/foods",
+        "query": {
+          "queryFilter": [
+            "(name LIKE \"%Basil%\" OR pluralName LIKE \"%Basil%\" OR aliases.name LIKE \"%Basil%\")"
+          ],
+          "perPage": [
+            "200"
+          ],
+          "page": [
+            "1"
+          ]
+        },
+        "body": null,
+        "response": {
+          "items": [
+            {
+              "id": "20000000-0000-4000-8000-000000000001",
+              "name": "Basil",
+              "pluralName": "Basils",
+              "description": "Existing",
+              "extras": {
+                "custom": true
+              },
+              "aliases": [
+                {
+                  "name": "old alias",
+                  "id": "alias-id"
+                }
+              ],
+              "createdAt": "2024-01-01",
+              "updatedAt": "2024-02-01",
+              "providerExtra": 42,
+              "labelId": "label-1",
+              "label": {
+                "id": "label-1",
+                "name": "Produce"
+              },
+              "householdsWithIngredientFood": [
+                "home",
+                "other-home"
+              ]
+            }
+          ],
+          "total": 1
+        },
+        "status": 200
+      }
+    ]
+  },
+  "create_food.basic": {
+    "requests": [
+      {
+        "method": "POST",
+        "path": "/api/foods",
+        "query": {},
+        "body": {
+          "name": "Basil",
+          "pluralName": "Basils",
+          "description": "Fresh",
+          "aliases": [
+            {
+              "name": "herb"
+            },
+            {
+              "name": " basil "
+            }
+          ],
+          "labelId": "label-1"
+        },
+        "response": {
+          "id": "20000000-0000-4000-8000-000000000001",
+          "name": "Basil",
+          "pluralName": "Basils",
+          "description": "Existing",
+          "extras": {
+            "custom": true
+          },
+          "aliases": [
+            {
+              "name": "old alias",
+              "id": "alias-id"
+            }
+          ],
+          "createdAt": "2024-01-01",
+          "updatedAt": "2024-02-01",
+          "providerExtra": 42,
+          "labelId": "label-1",
+          "label": {
+            "id": "label-1",
+            "name": "Produce"
+          },
+          "householdsWithIngredientFood": [
+            "home",
+            "other-home"
+          ]
+        },
+        "status": 200
+      }
+    ]
+  },
+  "update_food.basic": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/foods/20000000-0000-4000-8000-000000000001",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "20000000-0000-4000-8000-000000000001",
+          "name": "Basil",
+          "pluralName": "Basils",
+          "description": "Existing",
+          "extras": {
+            "custom": true
+          },
+          "aliases": [
+            {
+              "name": "old alias",
+              "id": "alias-id"
+            }
+          ],
+          "createdAt": "2024-01-01",
+          "updatedAt": "2024-02-01",
+          "providerExtra": 42,
+          "labelId": "label-1",
+          "label": {
+            "id": "label-1",
+            "name": "Produce"
+          },
+          "householdsWithIngredientFood": [
+            "home",
+            "other-home"
+          ]
+        },
+        "status": 200
+      },
+      {
+        "method": "PUT",
+        "path": "/api/foods/20000000-0000-4000-8000-000000000001",
+        "query": {},
+        "body": {
+          "id": "20000000-0000-4000-8000-000000000001",
+          "name": "Basil",
+          "pluralName": "Basils",
+          "description": "Updated",
+          "extras": {
+            "custom": true
+          },
+          "aliases": [
+            {
+              "name": "old alias",
+              "id": "alias-id"
+            }
+          ],
+          "labelId": "label-1",
+          "householdsWithIngredientFood": [
+            "home",
+            "other-home"
+          ]
+        },
+        "response": {
+          "id": "20000000-0000-4000-8000-000000000001",
+          "name": "Basil",
+          "pluralName": "Basils",
+          "description": "Updated",
+          "extras": {
+            "custom": true
+          },
+          "aliases": [
+            {
+              "name": "old alias",
+              "id": "alias-id"
+            }
+          ],
+          "createdAt": "2024-01-01",
+          "updatedAt": "2024-02-01",
+          "providerExtra": 42,
+          "labelId": "label-1",
+          "label": {
+            "id": "label-1",
+            "name": "Produce"
+          },
+          "householdsWithIngredientFood": [
+            "home",
+            "other-home"
+          ]
+        },
+        "status": 200
+      }
+    ]
+  },
+  "delete_food.basic": {
+    "requests": [
+      {
+        "method": "DELETE",
+        "path": "/api/foods/20000000-0000-4000-8000-000000000001",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "20000000-0000-4000-8000-000000000001"
+        },
+        "status": 200
+      }
+    ]
+  },
+  "update_food.field0": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/foods/20000000-0000-4000-8000-000000000001",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "20000000-0000-4000-8000-000000000001",
+          "name": "Basil",
+          "pluralName": "Basils",
+          "description": "Existing",
+          "extras": {
+            "custom": true
+          },
+          "aliases": [
+            {
+              "name": "old alias",
+              "id": "alias-id"
+            }
+          ],
+          "createdAt": "2024-01-01",
+          "updatedAt": "2024-02-01",
+          "providerExtra": 42,
+          "labelId": "label-1",
+          "label": {
+            "id": "label-1",
+            "name": "Produce"
+          },
+          "householdsWithIngredientFood": [
+            "home",
+            "other-home"
+          ]
+        },
+        "status": 200
+      },
+      {
+        "method": "PUT",
+        "path": "/api/foods/20000000-0000-4000-8000-000000000001",
+        "query": {},
+        "body": {
+          "id": "20000000-0000-4000-8000-000000000001",
+          "name": " untrimmed ",
+          "pluralName": "Basils",
+          "description": "Existing",
+          "extras": {
+            "custom": true
+          },
+          "aliases": [
+            {
+              "name": "old alias",
+              "id": "alias-id"
+            }
+          ],
+          "labelId": "label-1",
+          "householdsWithIngredientFood": [
+            "home",
+            "other-home"
+          ]
+        },
+        "response": {
+          "id": "20000000-0000-4000-8000-000000000001",
+          "name": " untrimmed ",
+          "pluralName": "Basils",
+          "description": "Existing",
+          "extras": {
+            "custom": true
+          },
+          "aliases": [
+            {
+              "name": "old alias",
+              "id": "alias-id"
+            }
+          ],
+          "createdAt": "2024-01-01",
+          "updatedAt": "2024-02-01",
+          "providerExtra": 42,
+          "labelId": "label-1",
+          "label": {
+            "id": "label-1",
+            "name": "Produce"
+          },
+          "householdsWithIngredientFood": [
+            "home",
+            "other-home"
+          ]
+        },
+        "status": 200
+      }
+    ]
+  },
+  "update_food.field1": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/foods/20000000-0000-4000-8000-000000000001",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "20000000-0000-4000-8000-000000000001",
+          "name": "Basil",
+          "pluralName": "Basils",
+          "description": "Existing",
+          "extras": {
+            "custom": true
+          },
+          "aliases": [
+            {
+              "name": "old alias",
+              "id": "alias-id"
+            }
+          ],
+          "createdAt": "2024-01-01",
+          "updatedAt": "2024-02-01",
+          "providerExtra": 42,
+          "labelId": "label-1",
+          "label": {
+            "id": "label-1",
+            "name": "Produce"
+          },
+          "householdsWithIngredientFood": [
+            "home",
+            "other-home"
+          ]
+        },
+        "status": 200
+      },
+      {
+        "method": "PUT",
+        "path": "/api/foods/20000000-0000-4000-8000-000000000001",
+        "query": {},
+        "body": {
+          "id": "20000000-0000-4000-8000-000000000001",
+          "name": "Basil",
+          "pluralName": "",
+          "description": "Existing",
+          "extras": {
+            "custom": true
+          },
+          "aliases": [
+            {
+              "name": "old alias",
+              "id": "alias-id"
+            }
+          ],
+          "labelId": "label-1",
+          "householdsWithIngredientFood": [
+            "home",
+            "other-home"
+          ]
+        },
+        "response": {
+          "id": "20000000-0000-4000-8000-000000000001",
+          "name": "Basil",
+          "pluralName": "",
+          "description": "Existing",
+          "extras": {
+            "custom": true
+          },
+          "aliases": [
+            {
+              "name": "old alias",
+              "id": "alias-id"
+            }
+          ],
+          "createdAt": "2024-01-01",
+          "updatedAt": "2024-02-01",
+          "providerExtra": 42,
+          "labelId": "label-1",
+          "label": {
+            "id": "label-1",
+            "name": "Produce"
+          },
+          "householdsWithIngredientFood": [
+            "home",
+            "other-home"
+          ]
+        },
+        "status": 200
+      }
+    ]
+  },
+  "update_food.field2": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/foods/20000000-0000-4000-8000-000000000001",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "20000000-0000-4000-8000-000000000001",
+          "name": "Basil",
+          "pluralName": "Basils",
+          "description": "Existing",
+          "extras": {
+            "custom": true
+          },
+          "aliases": [
+            {
+              "name": "old alias",
+              "id": "alias-id"
+            }
+          ],
+          "createdAt": "2024-01-01",
+          "updatedAt": "2024-02-01",
+          "providerExtra": 42,
+          "labelId": "label-1",
+          "label": {
+            "id": "label-1",
+            "name": "Produce"
+          },
+          "householdsWithIngredientFood": [
+            "home",
+            "other-home"
+          ]
+        },
+        "status": 200
+      },
+      {
+        "method": "PUT",
+        "path": "/api/foods/20000000-0000-4000-8000-000000000001",
+        "query": {},
+        "body": {
+          "id": "20000000-0000-4000-8000-000000000001",
+          "name": "Basil",
+          "pluralName": "Basils",
+          "description": "Existing",
+          "extras": {
+            "custom": true
+          },
+          "aliases": [],
+          "labelId": "label-1",
+          "householdsWithIngredientFood": [
+            "home",
+            "other-home"
+          ]
+        },
+        "response": {
+          "id": "20000000-0000-4000-8000-000000000001",
+          "name": "Basil",
+          "pluralName": "Basils",
+          "description": "Existing",
+          "extras": {
+            "custom": true
+          },
+          "aliases": [],
+          "createdAt": "2024-01-01",
+          "updatedAt": "2024-02-01",
+          "providerExtra": 42,
+          "labelId": "label-1",
+          "label": {
+            "id": "label-1",
+            "name": "Produce"
+          },
+          "householdsWithIngredientFood": [
+            "home",
+            "other-home"
+          ]
+        },
+        "status": 200
+      }
+    ]
+  },
+  "update_food.field3": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/foods/20000000-0000-4000-8000-000000000001",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "20000000-0000-4000-8000-000000000001",
+          "name": "Basil",
+          "pluralName": "Basils",
+          "description": "Existing",
+          "extras": {
+            "custom": true
+          },
+          "aliases": [
+            {
+              "name": "old alias",
+              "id": "alias-id"
+            }
+          ],
+          "createdAt": "2024-01-01",
+          "updatedAt": "2024-02-01",
+          "providerExtra": 42,
+          "labelId": "label-1",
+          "label": {
+            "id": "label-1",
+            "name": "Produce"
+          },
+          "householdsWithIngredientFood": [
+            "home",
+            "other-home"
+          ]
+        },
+        "status": 200
+      },
+      {
+        "method": "PUT",
+        "path": "/api/foods/20000000-0000-4000-8000-000000000001",
+        "query": {},
+        "body": {
+          "id": "20000000-0000-4000-8000-000000000001",
+          "name": "Basil",
+          "pluralName": "Basils",
+          "description": "Existing",
+          "extras": {
+            "custom": true
+          },
+          "aliases": [
+            {
+              "name": "a"
+            },
+            {
+              "name": "b"
+            }
+          ],
+          "labelId": "label-1",
+          "householdsWithIngredientFood": [
+            "home",
+            "other-home"
+          ]
+        },
+        "response": {
+          "id": "20000000-0000-4000-8000-000000000001",
+          "name": "Basil",
+          "pluralName": "Basils",
+          "description": "Existing",
+          "extras": {
+            "custom": true
+          },
+          "aliases": [
+            {
+              "name": "a"
+            },
+            {
+              "name": "b"
+            }
+          ],
+          "createdAt": "2024-01-01",
+          "updatedAt": "2024-02-01",
+          "providerExtra": 42,
+          "labelId": "label-1",
+          "label": {
+            "id": "label-1",
+            "name": "Produce"
+          },
+          "householdsWithIngredientFood": [
+            "home",
+            "other-home"
+          ]
+        },
+        "status": 200
+      }
+    ]
+  },
+  "update_food.field4": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/foods/20000000-0000-4000-8000-000000000001",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "20000000-0000-4000-8000-000000000001",
+          "name": "Basil",
+          "pluralName": "Basils",
+          "description": "Existing",
+          "extras": {
+            "custom": true
+          },
+          "aliases": [
+            {
+              "name": "old alias",
+              "id": "alias-id"
+            }
+          ],
+          "createdAt": "2024-01-01",
+          "updatedAt": "2024-02-01",
+          "providerExtra": 42,
+          "labelId": "label-1",
+          "label": {
+            "id": "label-1",
+            "name": "Produce"
+          },
+          "householdsWithIngredientFood": [
+            "home",
+            "other-home"
+          ]
+        },
+        "status": 200
+      },
+      {
+        "method": "PUT",
+        "path": "/api/foods/20000000-0000-4000-8000-000000000001",
+        "query": {},
+        "body": {
+          "id": "20000000-0000-4000-8000-000000000001",
+          "name": "Basil",
+          "pluralName": "Basils",
+          "description": "Existing",
+          "extras": {
+            "custom": true
+          },
+          "aliases": [
+            {
+              "name": "old alias",
+              "id": "alias-id"
+            }
+          ],
+          "labelId": null,
+          "householdsWithIngredientFood": [
+            "home",
+            "other-home"
+          ]
+        },
+        "response": {
+          "id": "20000000-0000-4000-8000-000000000001",
+          "name": "Basil",
+          "pluralName": "Basils",
+          "description": "Existing",
+          "extras": {
+            "custom": true
+          },
+          "aliases": [
+            {
+              "name": "old alias",
+              "id": "alias-id"
+            }
+          ],
+          "createdAt": "2024-01-01",
+          "updatedAt": "2024-02-01",
+          "providerExtra": 42,
+          "labelId": null,
+          "label": {
+            "id": "label-1",
+            "name": "Produce"
+          },
+          "householdsWithIngredientFood": [
+            "home",
+            "other-home"
+          ]
+        },
+        "status": 200
+      }
+    ]
+  },
+  "update_food.field5": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/foods/20000000-0000-4000-8000-000000000001",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "20000000-0000-4000-8000-000000000001",
+          "name": "Basil",
+          "pluralName": "Basils",
+          "description": "Existing",
+          "extras": {
+            "custom": true
+          },
+          "aliases": [
+            {
+              "name": "old alias",
+              "id": "alias-id"
+            }
+          ],
+          "createdAt": "2024-01-01",
+          "updatedAt": "2024-02-01",
+          "providerExtra": 42,
+          "labelId": "label-1",
+          "label": {
+            "id": "label-1",
+            "name": "Produce"
+          },
+          "householdsWithIngredientFood": [
+            "home",
+            "other-home"
+          ]
+        },
+        "status": 200
+      },
+      {
+        "method": "PUT",
+        "path": "/api/foods/20000000-0000-4000-8000-000000000001",
+        "query": {},
+        "body": {
+          "id": "20000000-0000-4000-8000-000000000001",
+          "name": "Basil",
+          "pluralName": "Basils",
+          "description": "Existing",
+          "extras": {
+            "custom": true
+          },
+          "aliases": [
+            {
+              "name": "old alias",
+              "id": "alias-id"
+            }
+          ],
+          "labelId": "label-1",
+          "householdsWithIngredientFood": []
+        },
+        "response": {
+          "id": "20000000-0000-4000-8000-000000000001",
+          "name": "Basil",
+          "pluralName": "Basils",
+          "description": "Existing",
+          "extras": {
+            "custom": true
+          },
+          "aliases": [
+            {
+              "name": "old alias",
+              "id": "alias-id"
+            }
+          ],
+          "createdAt": "2024-01-01",
+          "updatedAt": "2024-02-01",
+          "providerExtra": 42,
+          "labelId": "label-1",
+          "label": {
+            "id": "label-1",
+            "name": "Produce"
+          },
+          "householdsWithIngredientFood": []
+        },
+        "status": 200
+      }
+    ]
+  },
+  "update_food.field6": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/foods/20000000-0000-4000-8000-000000000001",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "20000000-0000-4000-8000-000000000001",
+          "name": "Basil",
+          "pluralName": "Basils",
+          "description": "Existing",
+          "extras": {
+            "custom": true
+          },
+          "aliases": [
+            {
+              "name": "old alias",
+              "id": "alias-id"
+            }
+          ],
+          "createdAt": "2024-01-01",
+          "updatedAt": "2024-02-01",
+          "providerExtra": 42,
+          "labelId": "label-1",
+          "label": {
+            "id": "label-1",
+            "name": "Produce"
+          },
+          "householdsWithIngredientFood": [
+            "home",
+            "other-home"
+          ]
+        },
+        "status": 200
+      },
+      {
+        "method": "PUT",
+        "path": "/api/foods/20000000-0000-4000-8000-000000000001",
+        "query": {},
+        "body": {
+          "id": "20000000-0000-4000-8000-000000000001",
+          "name": "Basil",
+          "pluralName": "Basils",
+          "description": "Existing",
+          "extras": {
+            "custom": true
+          },
+          "aliases": [
+            {
+              "name": "old alias",
+              "id": "alias-id"
+            }
+          ],
+          "labelId": "label-1",
+          "householdsWithIngredientFood": [
+            "home"
+          ]
+        },
+        "response": {
+          "id": "20000000-0000-4000-8000-000000000001",
+          "name": "Basil",
+          "pluralName": "Basils",
+          "description": "Existing",
+          "extras": {
+            "custom": true
+          },
+          "aliases": [
+            {
+              "name": "old alias",
+              "id": "alias-id"
+            }
+          ],
+          "createdAt": "2024-01-01",
+          "updatedAt": "2024-02-01",
+          "providerExtra": 42,
+          "labelId": "label-1",
+          "label": {
+            "id": "label-1",
+            "name": "Produce"
+          },
+          "householdsWithIngredientFood": [
+            "home"
+          ]
+        },
+        "status": 200
+      }
+    ]
+  },
+  "update_food.empty": {
+    "requests": []
+  },
+  "create_food.blank": {
+    "requests": []
+  },
+  "get_food_matches.trim_boundary": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/foods",
+        "query": {
+          "queryFilter": [
+            "(name LIKE \"%aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa%\" OR pluralName LIKE \"%aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa%\" OR aliases.name LIKE \"%aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa%\")"
+          ],
+          "perPage": [
+            "200"
+          ],
+          "page": [
+            "1"
+          ]
+        },
+        "body": null,
+        "response": {
+          "items": [],
+          "total": 0
+        },
+        "status": 200
+      }
+    ]
+  },
+  "get_units.basic": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/units",
+        "query": {
+          "search": [
+            "basil"
+          ],
+          "page": [
+            "1"
+          ],
+          "perPage": [
+            "20"
+          ]
+        },
+        "body": null,
+        "response": {
+          "items": [
+            {
+              "id": "20000000-0000-4000-8000-000000000001",
+              "name": "Basil",
+              "pluralName": "Basils",
+              "description": "Existing",
+              "extras": {
+                "custom": true
+              },
+              "aliases": [
+                {
+                  "name": "old alias",
+                  "id": "alias-id"
+                }
+              ],
+              "createdAt": "2024-01-01",
+              "updatedAt": "2024-02-01",
+              "providerExtra": 42,
+              "abbreviation": "tbsp",
+              "pluralAbbreviation": "tbsps",
+              "useAbbreviation": true,
+              "fraction": true,
+              "standardQuantity": 0.5,
+              "standardUnit": "fluid_ounce"
+            }
+          ],
+          "total": 1,
+          "page": 1,
+          "size": 20
+        },
+        "status": 200
+      }
+    ]
+  },
+  "get_unit.basic": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/units/20000000-0000-4000-8000-000000000001",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "20000000-0000-4000-8000-000000000001",
+          "name": "Basil",
+          "pluralName": "Basils",
+          "description": "Existing",
+          "extras": {
+            "custom": true
+          },
+          "aliases": [
+            {
+              "name": "old alias",
+              "id": "alias-id"
+            }
+          ],
+          "createdAt": "2024-01-01",
+          "updatedAt": "2024-02-01",
+          "providerExtra": 42,
+          "abbreviation": "tbsp",
+          "pluralAbbreviation": "tbsps",
+          "useAbbreviation": true,
+          "fraction": true,
+          "standardQuantity": 0.5,
+          "standardUnit": "fluid_ounce"
+        },
+        "status": 200
+      }
+    ]
+  },
+  "get_unit_matches.basic": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/units",
+        "query": {
+          "queryFilter": [
+            "(name LIKE \"%Basil%\" OR pluralName LIKE \"%Basil%\" OR abbreviation LIKE \"%Basil%\" OR pluralAbbreviation LIKE \"%Basil%\" OR aliases.name LIKE \"%Basil%\")"
+          ],
+          "perPage": [
+            "200"
+          ],
+          "page": [
+            "1"
+          ]
+        },
+        "body": null,
+        "response": {
+          "items": [
+            {
+              "id": "20000000-0000-4000-8000-000000000001",
+              "name": "Basil",
+              "pluralName": "Basils",
+              "description": "Existing",
+              "extras": {
+                "custom": true
+              },
+              "aliases": [
+                {
+                  "name": "old alias",
+                  "id": "alias-id"
+                }
+              ],
+              "createdAt": "2024-01-01",
+              "updatedAt": "2024-02-01",
+              "providerExtra": 42,
+              "abbreviation": "tbsp",
+              "pluralAbbreviation": "tbsps",
+              "useAbbreviation": true,
+              "fraction": true,
+              "standardQuantity": 0.5,
+              "standardUnit": "fluid_ounce"
+            }
+          ],
+          "total": 1
+        },
+        "status": 200
+      }
+    ]
+  },
+  "create_unit.basic": {
+    "requests": [
+      {
+        "method": "POST",
+        "path": "/api/units",
+        "query": {},
+        "body": {
+          "name": "Basil",
+          "pluralName": "Basils",
+          "description": "Fresh",
+          "aliases": [
+            {
+              "name": "herb"
+            },
+            {
+              "name": " basil "
+            }
+          ],
+          "abbreviation": "tbsp",
+          "pluralAbbreviation": "tbsps",
+          "useAbbreviation": false,
+          "fraction": false,
+          "standardQuantity": 0,
+          "standardUnit": "gram"
+        },
+        "response": {
+          "id": "20000000-0000-4000-8000-000000000001",
+          "name": "Basil",
+          "pluralName": "Basils",
+          "description": "Existing",
+          "extras": {
+            "custom": true
+          },
+          "aliases": [
+            {
+              "name": "old alias",
+              "id": "alias-id"
+            }
+          ],
+          "createdAt": "2024-01-01",
+          "updatedAt": "2024-02-01",
+          "providerExtra": 42,
+          "abbreviation": "tbsp",
+          "pluralAbbreviation": "tbsps",
+          "useAbbreviation": true,
+          "fraction": true,
+          "standardQuantity": 0.5,
+          "standardUnit": "fluid_ounce"
+        },
+        "status": 200
+      }
+    ]
+  },
+  "update_unit.basic": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/units/20000000-0000-4000-8000-000000000001",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "20000000-0000-4000-8000-000000000001",
+          "name": "Basil",
+          "pluralName": "Basils",
+          "description": "Existing",
+          "extras": {
+            "custom": true
+          },
+          "aliases": [
+            {
+              "name": "old alias",
+              "id": "alias-id"
+            }
+          ],
+          "createdAt": "2024-01-01",
+          "updatedAt": "2024-02-01",
+          "providerExtra": 42,
+          "abbreviation": "tbsp",
+          "pluralAbbreviation": "tbsps",
+          "useAbbreviation": true,
+          "fraction": true,
+          "standardQuantity": 0.5,
+          "standardUnit": "fluid_ounce"
+        },
+        "status": 200
+      },
+      {
+        "method": "PUT",
+        "path": "/api/units/20000000-0000-4000-8000-000000000001",
+        "query": {},
+        "body": {
+          "id": "20000000-0000-4000-8000-000000000001",
+          "name": "Basil",
+          "pluralName": "Basils",
+          "description": "Updated",
+          "extras": {
+            "custom": true
+          },
+          "aliases": [
+            {
+              "name": "old alias",
+              "id": "alias-id"
+            }
+          ],
+          "abbreviation": "tbsp",
+          "pluralAbbreviation": "tbsps",
+          "useAbbreviation": true,
+          "fraction": true,
+          "standardQuantity": 0.5,
+          "standardUnit": "fluid_ounce"
+        },
+        "response": {
+          "id": "20000000-0000-4000-8000-000000000001",
+          "name": "Basil",
+          "pluralName": "Basils",
+          "description": "Updated",
+          "extras": {
+            "custom": true
+          },
+          "aliases": [
+            {
+              "name": "old alias",
+              "id": "alias-id"
+            }
+          ],
+          "createdAt": "2024-01-01",
+          "updatedAt": "2024-02-01",
+          "providerExtra": 42,
+          "abbreviation": "tbsp",
+          "pluralAbbreviation": "tbsps",
+          "useAbbreviation": true,
+          "fraction": true,
+          "standardQuantity": 0.5,
+          "standardUnit": "fluid_ounce"
+        },
+        "status": 200
+      }
+    ]
+  },
+  "delete_unit.basic": {
+    "requests": [
+      {
+        "method": "DELETE",
+        "path": "/api/units/20000000-0000-4000-8000-000000000001",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "20000000-0000-4000-8000-000000000001"
+        },
+        "status": 200
+      }
+    ]
+  },
+  "update_unit.field0": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/units/20000000-0000-4000-8000-000000000001",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "20000000-0000-4000-8000-000000000001",
+          "name": "Basil",
+          "pluralName": "Basils",
+          "description": "Existing",
+          "extras": {
+            "custom": true
+          },
+          "aliases": [
+            {
+              "name": "old alias",
+              "id": "alias-id"
+            }
+          ],
+          "createdAt": "2024-01-01",
+          "updatedAt": "2024-02-01",
+          "providerExtra": 42,
+          "abbreviation": "tbsp",
+          "pluralAbbreviation": "tbsps",
+          "useAbbreviation": true,
+          "fraction": true,
+          "standardQuantity": 0.5,
+          "standardUnit": "fluid_ounce"
+        },
+        "status": 200
+      },
+      {
+        "method": "PUT",
+        "path": "/api/units/20000000-0000-4000-8000-000000000001",
+        "query": {},
+        "body": {
+          "id": "20000000-0000-4000-8000-000000000001",
+          "name": " untrimmed ",
+          "pluralName": "Basils",
+          "description": "Existing",
+          "extras": {
+            "custom": true
+          },
+          "aliases": [
+            {
+              "name": "old alias",
+              "id": "alias-id"
+            }
+          ],
+          "abbreviation": "tbsp",
+          "pluralAbbreviation": "tbsps",
+          "useAbbreviation": true,
+          "fraction": true,
+          "standardQuantity": 0.5,
+          "standardUnit": "fluid_ounce"
+        },
+        "response": {
+          "id": "20000000-0000-4000-8000-000000000001",
+          "name": " untrimmed ",
+          "pluralName": "Basils",
+          "description": "Existing",
+          "extras": {
+            "custom": true
+          },
+          "aliases": [
+            {
+              "name": "old alias",
+              "id": "alias-id"
+            }
+          ],
+          "createdAt": "2024-01-01",
+          "updatedAt": "2024-02-01",
+          "providerExtra": 42,
+          "abbreviation": "tbsp",
+          "pluralAbbreviation": "tbsps",
+          "useAbbreviation": true,
+          "fraction": true,
+          "standardQuantity": 0.5,
+          "standardUnit": "fluid_ounce"
+        },
+        "status": 200
+      }
+    ]
+  },
+  "update_unit.field1": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/units/20000000-0000-4000-8000-000000000001",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "20000000-0000-4000-8000-000000000001",
+          "name": "Basil",
+          "pluralName": "Basils",
+          "description": "Existing",
+          "extras": {
+            "custom": true
+          },
+          "aliases": [
+            {
+              "name": "old alias",
+              "id": "alias-id"
+            }
+          ],
+          "createdAt": "2024-01-01",
+          "updatedAt": "2024-02-01",
+          "providerExtra": 42,
+          "abbreviation": "tbsp",
+          "pluralAbbreviation": "tbsps",
+          "useAbbreviation": true,
+          "fraction": true,
+          "standardQuantity": 0.5,
+          "standardUnit": "fluid_ounce"
+        },
+        "status": 200
+      },
+      {
+        "method": "PUT",
+        "path": "/api/units/20000000-0000-4000-8000-000000000001",
+        "query": {},
+        "body": {
+          "id": "20000000-0000-4000-8000-000000000001",
+          "name": "Basil",
+          "pluralName": "",
+          "description": "Existing",
+          "extras": {
+            "custom": true
+          },
+          "aliases": [
+            {
+              "name": "old alias",
+              "id": "alias-id"
+            }
+          ],
+          "abbreviation": "tbsp",
+          "pluralAbbreviation": "tbsps",
+          "useAbbreviation": true,
+          "fraction": true,
+          "standardQuantity": 0.5,
+          "standardUnit": "fluid_ounce"
+        },
+        "response": {
+          "id": "20000000-0000-4000-8000-000000000001",
+          "name": "Basil",
+          "pluralName": "",
+          "description": "Existing",
+          "extras": {
+            "custom": true
+          },
+          "aliases": [
+            {
+              "name": "old alias",
+              "id": "alias-id"
+            }
+          ],
+          "createdAt": "2024-01-01",
+          "updatedAt": "2024-02-01",
+          "providerExtra": 42,
+          "abbreviation": "tbsp",
+          "pluralAbbreviation": "tbsps",
+          "useAbbreviation": true,
+          "fraction": true,
+          "standardQuantity": 0.5,
+          "standardUnit": "fluid_ounce"
+        },
+        "status": 200
+      }
+    ]
+  },
+  "update_unit.field2": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/units/20000000-0000-4000-8000-000000000001",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "20000000-0000-4000-8000-000000000001",
+          "name": "Basil",
+          "pluralName": "Basils",
+          "description": "Existing",
+          "extras": {
+            "custom": true
+          },
+          "aliases": [
+            {
+              "name": "old alias",
+              "id": "alias-id"
+            }
+          ],
+          "createdAt": "2024-01-01",
+          "updatedAt": "2024-02-01",
+          "providerExtra": 42,
+          "abbreviation": "tbsp",
+          "pluralAbbreviation": "tbsps",
+          "useAbbreviation": true,
+          "fraction": true,
+          "standardQuantity": 0.5,
+          "standardUnit": "fluid_ounce"
+        },
+        "status": 200
+      },
+      {
+        "method": "PUT",
+        "path": "/api/units/20000000-0000-4000-8000-000000000001",
+        "query": {},
+        "body": {
+          "id": "20000000-0000-4000-8000-000000000001",
+          "name": "Basil",
+          "pluralName": "Basils",
+          "description": "Existing",
+          "extras": {
+            "custom": true
+          },
+          "aliases": [],
+          "abbreviation": "tbsp",
+          "pluralAbbreviation": "tbsps",
+          "useAbbreviation": true,
+          "fraction": true,
+          "standardQuantity": 0.5,
+          "standardUnit": "fluid_ounce"
+        },
+        "response": {
+          "id": "20000000-0000-4000-8000-000000000001",
+          "name": "Basil",
+          "pluralName": "Basils",
+          "description": "Existing",
+          "extras": {
+            "custom": true
+          },
+          "aliases": [],
+          "createdAt": "2024-01-01",
+          "updatedAt": "2024-02-01",
+          "providerExtra": 42,
+          "abbreviation": "tbsp",
+          "pluralAbbreviation": "tbsps",
+          "useAbbreviation": true,
+          "fraction": true,
+          "standardQuantity": 0.5,
+          "standardUnit": "fluid_ounce"
+        },
+        "status": 200
+      }
+    ]
+  },
+  "update_unit.field3": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/units/20000000-0000-4000-8000-000000000001",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "20000000-0000-4000-8000-000000000001",
+          "name": "Basil",
+          "pluralName": "Basils",
+          "description": "Existing",
+          "extras": {
+            "custom": true
+          },
+          "aliases": [
+            {
+              "name": "old alias",
+              "id": "alias-id"
+            }
+          ],
+          "createdAt": "2024-01-01",
+          "updatedAt": "2024-02-01",
+          "providerExtra": 42,
+          "abbreviation": "tbsp",
+          "pluralAbbreviation": "tbsps",
+          "useAbbreviation": true,
+          "fraction": true,
+          "standardQuantity": 0.5,
+          "standardUnit": "fluid_ounce"
+        },
+        "status": 200
+      },
+      {
+        "method": "PUT",
+        "path": "/api/units/20000000-0000-4000-8000-000000000001",
+        "query": {},
+        "body": {
+          "id": "20000000-0000-4000-8000-000000000001",
+          "name": "Basil",
+          "pluralName": "Basils",
+          "description": "Existing",
+          "extras": {
+            "custom": true
+          },
+          "aliases": [
+            {
+              "name": "a"
+            },
+            {
+              "name": "b"
+            }
+          ],
+          "abbreviation": "tbsp",
+          "pluralAbbreviation": "tbsps",
+          "useAbbreviation": true,
+          "fraction": true,
+          "standardQuantity": 0.5,
+          "standardUnit": "fluid_ounce"
+        },
+        "response": {
+          "id": "20000000-0000-4000-8000-000000000001",
+          "name": "Basil",
+          "pluralName": "Basils",
+          "description": "Existing",
+          "extras": {
+            "custom": true
+          },
+          "aliases": [
+            {
+              "name": "a"
+            },
+            {
+              "name": "b"
+            }
+          ],
+          "createdAt": "2024-01-01",
+          "updatedAt": "2024-02-01",
+          "providerExtra": 42,
+          "abbreviation": "tbsp",
+          "pluralAbbreviation": "tbsps",
+          "useAbbreviation": true,
+          "fraction": true,
+          "standardQuantity": 0.5,
+          "standardUnit": "fluid_ounce"
+        },
+        "status": 200
+      }
+    ]
+  },
+  "update_unit.field4": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/units/20000000-0000-4000-8000-000000000001",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "20000000-0000-4000-8000-000000000001",
+          "name": "Basil",
+          "pluralName": "Basils",
+          "description": "Existing",
+          "extras": {
+            "custom": true
+          },
+          "aliases": [
+            {
+              "name": "old alias",
+              "id": "alias-id"
+            }
+          ],
+          "createdAt": "2024-01-01",
+          "updatedAt": "2024-02-01",
+          "providerExtra": 42,
+          "abbreviation": "tbsp",
+          "pluralAbbreviation": "tbsps",
+          "useAbbreviation": true,
+          "fraction": true,
+          "standardQuantity": 0.5,
+          "standardUnit": "fluid_ounce"
+        },
+        "status": 200
+      },
+      {
+        "method": "PUT",
+        "path": "/api/units/20000000-0000-4000-8000-000000000001",
+        "query": {},
+        "body": {
+          "id": "20000000-0000-4000-8000-000000000001",
+          "name": "Basil",
+          "pluralName": "Basils",
+          "description": "Existing",
+          "extras": {
+            "custom": true
+          },
+          "aliases": [
+            {
+              "name": "old alias",
+              "id": "alias-id"
+            }
+          ],
+          "abbreviation": "T",
+          "pluralAbbreviation": "tbsps",
+          "useAbbreviation": true,
+          "fraction": true,
+          "standardQuantity": 0.5,
+          "standardUnit": "fluid_ounce"
+        },
+        "response": {
+          "id": "20000000-0000-4000-8000-000000000001",
+          "name": "Basil",
+          "pluralName": "Basils",
+          "description": "Existing",
+          "extras": {
+            "custom": true
+          },
+          "aliases": [
+            {
+              "name": "old alias",
+              "id": "alias-id"
+            }
+          ],
+          "createdAt": "2024-01-01",
+          "updatedAt": "2024-02-01",
+          "providerExtra": 42,
+          "abbreviation": "T",
+          "pluralAbbreviation": "tbsps",
+          "useAbbreviation": true,
+          "fraction": true,
+          "standardQuantity": 0.5,
+          "standardUnit": "fluid_ounce"
+        },
+        "status": 200
+      }
+    ]
+  },
+  "update_unit.field5": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/units/20000000-0000-4000-8000-000000000001",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "20000000-0000-4000-8000-000000000001",
+          "name": "Basil",
+          "pluralName": "Basils",
+          "description": "Existing",
+          "extras": {
+            "custom": true
+          },
+          "aliases": [
+            {
+              "name": "old alias",
+              "id": "alias-id"
+            }
+          ],
+          "createdAt": "2024-01-01",
+          "updatedAt": "2024-02-01",
+          "providerExtra": 42,
+          "abbreviation": "tbsp",
+          "pluralAbbreviation": "tbsps",
+          "useAbbreviation": true,
+          "fraction": true,
+          "standardQuantity": 0.5,
+          "standardUnit": "fluid_ounce"
+        },
+        "status": 200
+      },
+      {
+        "method": "PUT",
+        "path": "/api/units/20000000-0000-4000-8000-000000000001",
+        "query": {},
+        "body": {
+          "id": "20000000-0000-4000-8000-000000000001",
+          "name": "Basil",
+          "pluralName": "Basils",
+          "description": "Existing",
+          "extras": {
+            "custom": true
+          },
+          "aliases": [
+            {
+              "name": "old alias",
+              "id": "alias-id"
+            }
+          ],
+          "abbreviation": "tbsp",
+          "pluralAbbreviation": "Ts",
+          "useAbbreviation": true,
+          "fraction": true,
+          "standardQuantity": 0.5,
+          "standardUnit": "fluid_ounce"
+        },
+        "response": {
+          "id": "20000000-0000-4000-8000-000000000001",
+          "name": "Basil",
+          "pluralName": "Basils",
+          "description": "Existing",
+          "extras": {
+            "custom": true
+          },
+          "aliases": [
+            {
+              "name": "old alias",
+              "id": "alias-id"
+            }
+          ],
+          "createdAt": "2024-01-01",
+          "updatedAt": "2024-02-01",
+          "providerExtra": 42,
+          "abbreviation": "tbsp",
+          "pluralAbbreviation": "Ts",
+          "useAbbreviation": true,
+          "fraction": true,
+          "standardQuantity": 0.5,
+          "standardUnit": "fluid_ounce"
+        },
+        "status": 200
+      }
+    ]
+  },
+  "update_unit.field6": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/units/20000000-0000-4000-8000-000000000001",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "20000000-0000-4000-8000-000000000001",
+          "name": "Basil",
+          "pluralName": "Basils",
+          "description": "Existing",
+          "extras": {
+            "custom": true
+          },
+          "aliases": [
+            {
+              "name": "old alias",
+              "id": "alias-id"
+            }
+          ],
+          "createdAt": "2024-01-01",
+          "updatedAt": "2024-02-01",
+          "providerExtra": 42,
+          "abbreviation": "tbsp",
+          "pluralAbbreviation": "tbsps",
+          "useAbbreviation": true,
+          "fraction": true,
+          "standardQuantity": 0.5,
+          "standardUnit": "fluid_ounce"
+        },
+        "status": 200
+      },
+      {
+        "method": "PUT",
+        "path": "/api/units/20000000-0000-4000-8000-000000000001",
+        "query": {},
+        "body": {
+          "id": "20000000-0000-4000-8000-000000000001",
+          "name": "Basil",
+          "pluralName": "Basils",
+          "description": "Existing",
+          "extras": {
+            "custom": true
+          },
+          "aliases": [
+            {
+              "name": "old alias",
+              "id": "alias-id"
+            }
+          ],
+          "abbreviation": "tbsp",
+          "pluralAbbreviation": "tbsps",
+          "useAbbreviation": false,
+          "fraction": true,
+          "standardQuantity": 0.5,
+          "standardUnit": "fluid_ounce"
+        },
+        "response": {
+          "id": "20000000-0000-4000-8000-000000000001",
+          "name": "Basil",
+          "pluralName": "Basils",
+          "description": "Existing",
+          "extras": {
+            "custom": true
+          },
+          "aliases": [
+            {
+              "name": "old alias",
+              "id": "alias-id"
+            }
+          ],
+          "createdAt": "2024-01-01",
+          "updatedAt": "2024-02-01",
+          "providerExtra": 42,
+          "abbreviation": "tbsp",
+          "pluralAbbreviation": "tbsps",
+          "useAbbreviation": false,
+          "fraction": true,
+          "standardQuantity": 0.5,
+          "standardUnit": "fluid_ounce"
+        },
+        "status": 200
+      }
+    ]
+  },
+  "update_unit.field7": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/units/20000000-0000-4000-8000-000000000001",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "20000000-0000-4000-8000-000000000001",
+          "name": "Basil",
+          "pluralName": "Basils",
+          "description": "Existing",
+          "extras": {
+            "custom": true
+          },
+          "aliases": [
+            {
+              "name": "old alias",
+              "id": "alias-id"
+            }
+          ],
+          "createdAt": "2024-01-01",
+          "updatedAt": "2024-02-01",
+          "providerExtra": 42,
+          "abbreviation": "tbsp",
+          "pluralAbbreviation": "tbsps",
+          "useAbbreviation": true,
+          "fraction": true,
+          "standardQuantity": 0.5,
+          "standardUnit": "fluid_ounce"
+        },
+        "status": 200
+      },
+      {
+        "method": "PUT",
+        "path": "/api/units/20000000-0000-4000-8000-000000000001",
+        "query": {},
+        "body": {
+          "id": "20000000-0000-4000-8000-000000000001",
+          "name": "Basil",
+          "pluralName": "Basils",
+          "description": "Existing",
+          "extras": {
+            "custom": true
+          },
+          "aliases": [
+            {
+              "name": "old alias",
+              "id": "alias-id"
+            }
+          ],
+          "abbreviation": "tbsp",
+          "pluralAbbreviation": "tbsps",
+          "useAbbreviation": true,
+          "fraction": false,
+          "standardQuantity": 0.5,
+          "standardUnit": "fluid_ounce"
+        },
+        "response": {
+          "id": "20000000-0000-4000-8000-000000000001",
+          "name": "Basil",
+          "pluralName": "Basils",
+          "description": "Existing",
+          "extras": {
+            "custom": true
+          },
+          "aliases": [
+            {
+              "name": "old alias",
+              "id": "alias-id"
+            }
+          ],
+          "createdAt": "2024-01-01",
+          "updatedAt": "2024-02-01",
+          "providerExtra": 42,
+          "abbreviation": "tbsp",
+          "pluralAbbreviation": "tbsps",
+          "useAbbreviation": true,
+          "fraction": false,
+          "standardQuantity": 0.5,
+          "standardUnit": "fluid_ounce"
+        },
+        "status": 200
+      }
+    ]
+  },
+  "update_unit.field8": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/units/20000000-0000-4000-8000-000000000001",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "20000000-0000-4000-8000-000000000001",
+          "name": "Basil",
+          "pluralName": "Basils",
+          "description": "Existing",
+          "extras": {
+            "custom": true
+          },
+          "aliases": [
+            {
+              "name": "old alias",
+              "id": "alias-id"
+            }
+          ],
+          "createdAt": "2024-01-01",
+          "updatedAt": "2024-02-01",
+          "providerExtra": 42,
+          "abbreviation": "tbsp",
+          "pluralAbbreviation": "tbsps",
+          "useAbbreviation": true,
+          "fraction": true,
+          "standardQuantity": 0.5,
+          "standardUnit": "fluid_ounce"
+        },
+        "status": 200
+      },
+      {
+        "method": "PUT",
+        "path": "/api/units/20000000-0000-4000-8000-000000000001",
+        "query": {},
+        "body": {
+          "id": "20000000-0000-4000-8000-000000000001",
+          "name": "Basil",
+          "pluralName": "Basils",
+          "description": "Existing",
+          "extras": {
+            "custom": true
+          },
+          "aliases": [
+            {
+              "name": "old alias",
+              "id": "alias-id"
+            }
+          ],
+          "abbreviation": "tbsp",
+          "pluralAbbreviation": "tbsps",
+          "useAbbreviation": true,
+          "fraction": true,
+          "standardQuantity": null,
+          "standardUnit": null
+        },
+        "response": {
+          "id": "20000000-0000-4000-8000-000000000001",
+          "name": "Basil",
+          "pluralName": "Basils",
+          "description": "Existing",
+          "extras": {
+            "custom": true
+          },
+          "aliases": [
+            {
+              "name": "old alias",
+              "id": "alias-id"
+            }
+          ],
+          "createdAt": "2024-01-01",
+          "updatedAt": "2024-02-01",
+          "providerExtra": 42,
+          "abbreviation": "tbsp",
+          "pluralAbbreviation": "tbsps",
+          "useAbbreviation": true,
+          "fraction": true,
+          "standardQuantity": null,
+          "standardUnit": null
+        },
+        "status": 200
+      }
+    ]
+  },
+  "update_unit.field9": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/units/20000000-0000-4000-8000-000000000001",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "20000000-0000-4000-8000-000000000001",
+          "name": "Basil",
+          "pluralName": "Basils",
+          "description": "Existing",
+          "extras": {
+            "custom": true
+          },
+          "aliases": [
+            {
+              "name": "old alias",
+              "id": "alias-id"
+            }
+          ],
+          "createdAt": "2024-01-01",
+          "updatedAt": "2024-02-01",
+          "providerExtra": 42,
+          "abbreviation": "tbsp",
+          "pluralAbbreviation": "tbsps",
+          "useAbbreviation": true,
+          "fraction": true,
+          "standardQuantity": 0.5,
+          "standardUnit": "fluid_ounce"
+        },
+        "status": 200
+      },
+      {
+        "method": "PUT",
+        "path": "/api/units/20000000-0000-4000-8000-000000000001",
+        "query": {},
+        "body": {
+          "id": "20000000-0000-4000-8000-000000000001",
+          "name": "Basil",
+          "pluralName": "Basils",
+          "description": "Existing",
+          "extras": {
+            "custom": true
+          },
+          "aliases": [
+            {
+              "name": "old alias",
+              "id": "alias-id"
+            }
+          ],
+          "abbreviation": "tbsp",
+          "pluralAbbreviation": "tbsps",
+          "useAbbreviation": true,
+          "fraction": true,
+          "standardQuantity": 0,
+          "standardUnit": "gram"
+        },
+        "response": {
+          "id": "20000000-0000-4000-8000-000000000001",
+          "name": "Basil",
+          "pluralName": "Basils",
+          "description": "Existing",
+          "extras": {
+            "custom": true
+          },
+          "aliases": [
+            {
+              "name": "old alias",
+              "id": "alias-id"
+            }
+          ],
+          "createdAt": "2024-01-01",
+          "updatedAt": "2024-02-01",
+          "providerExtra": 42,
+          "abbreviation": "tbsp",
+          "pluralAbbreviation": "tbsps",
+          "useAbbreviation": true,
+          "fraction": true,
+          "standardQuantity": 0,
+          "standardUnit": "gram"
+        },
+        "status": 200
+      }
+    ]
+  },
+  "update_unit.empty": {
+    "requests": []
+  },
+  "create_unit.blank": {
+    "requests": []
+  },
+  "get_unit_matches.trim_boundary": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/units",
+        "query": {
+          "queryFilter": [
+            "(name LIKE \"%aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa%\" OR pluralName LIKE \"%aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa%\" OR abbreviation LIKE \"%aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa%\" OR pluralAbbreviation LIKE \"%aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa%\" OR aliases.name LIKE \"%aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa%\")"
+          ],
+          "perPage": [
+            "200"
+          ],
+          "page": [
+            "1"
+          ]
+        },
+        "body": null,
+        "response": {
+          "items": [],
+          "total": 0
+        },
+        "status": 200
+      }
+    ]
+  },
+  "merge_foods.basic": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/foods/20000000-0000-4000-8000-000000000001",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "20000000-0000-4000-8000-000000000001",
+          "name": "source"
+        },
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/api/foods/20000000-0000-4000-8000-000000000002",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "20000000-0000-4000-8000-000000000002",
+          "name": "target",
+          "aliases": []
+        },
+        "status": 200
+      },
+      {
+        "method": "PUT",
+        "path": "/api/foods/merge",
+        "query": {},
+        "body": {
+          "fromFood": "20000000-0000-4000-8000-000000000001",
+          "toFood": "20000000-0000-4000-8000-000000000002"
+        },
+        "response": null,
+        "status": 204
+      },
+      {
+        "method": "GET",
+        "path": "/api/foods/20000000-0000-4000-8000-000000000001",
+        "query": {},
+        "body": null,
+        "response": {
+          "detail": "Not found"
+        },
+        "status": 404
+      },
+      {
+        "method": "GET",
+        "path": "/api/foods/20000000-0000-4000-8000-000000000002",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "20000000-0000-4000-8000-000000000002",
+          "name": "target",
+          "aliases": []
+        },
+        "status": 200
+      }
+    ]
+  },
+  "merge_foods.same": {
+    "requests": []
+  },
+  "merge_foods.still_exists": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/foods/20000000-0000-4000-8000-000000000001",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "20000000-0000-4000-8000-000000000001",
+          "name": "source"
+        },
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/api/foods/20000000-0000-4000-8000-000000000002",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "20000000-0000-4000-8000-000000000002",
+          "name": "target",
+          "aliases": []
+        },
+        "status": 200
+      },
+      {
+        "method": "PUT",
+        "path": "/api/foods/merge",
+        "query": {},
+        "body": {
+          "fromFood": "20000000-0000-4000-8000-000000000001",
+          "toFood": "20000000-0000-4000-8000-000000000002"
+        },
+        "response": {},
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/api/foods/20000000-0000-4000-8000-000000000001",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "20000000-0000-4000-8000-000000000001",
+          "name": "source"
+        },
+        "status": 200
+      }
+    ]
   }
 }

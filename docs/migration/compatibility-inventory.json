@@ -5043,7 +5043,7 @@
         "blobSha": "18ab6622ffed862822851c0e85d66bc66ae96dfa",
         "url": "https://github.com/timo-reymann/mealie-mcp-server/blob/d027e1b4a314d781a322f1f91e37840f01464d77/src/tools/foods.ts#L31"
       },
-      "migrationStatus": "inventoried_static_not_implemented",
+      "migrationStatus": "implemented_contract_verified",
       "effect": "read",
       "description": "Lists and searches the household's foods (reusable structured ingredient entities such as \"chicken breast\" or \"onion\") with plain pagination. For resolving several already-interpreted food concepts to candidate IDs at once (e.g. after an LLM parses a batch of ingredients), prefer get_food_matches instead — it checks aliases too and answers many lookups in one call. Performs no fuzzy matching itself; matching is delegated entirely to Mealie's search.",
       "descriptionSource": "'Lists and searches the household\\'s foods (reusable structured ingredient entities such as \"chicken breast\" ' +\n      'or \"onion\") with plain pagination. For resolving several already-interpreted food concepts to candidate ' +\n      'IDs at once (e.g. after an LLM parses a batch of ingredients), prefer get_food_matches instead — it ' +\n      'checks aliases too and answers many lookups in one call. Performs no fuzzy matching itself; matching is ' +\n      'delegated entirely to Mealie\\'s search.'",
@@ -5090,8 +5090,14 @@
         "additionalProperties": false
       },
       "runtimeOutputSchema": null,
-      "runtimeExamples": [],
-      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeExamples": [
+        {
+          "file": "tests/fixtures/compatibility/cases/foods_units.json",
+          "index": 0,
+          "scenario": "get_foods.basic"
+        }
+      ],
+      "runtimeCaptureStatus": "behavior_captured_and_python_verified",
       "runtimeOutputSchemaPresent": false
     },
     {
@@ -5104,7 +5110,7 @@
         "blobSha": "18ab6622ffed862822851c0e85d66bc66ae96dfa",
         "url": "https://github.com/timo-reymann/mealie-mcp-server/blob/d027e1b4a314d781a322f1f91e37840f01464d77/src/tools/foods.ts#L62"
       },
-      "migrationStatus": "inventoried_static_not_implemented",
+      "migrationStatus": "implemented_contract_verified",
       "effect": "read",
       "description": "Retrieves a single food by ID, including its aliases and label information when present.",
       "descriptionSource": "'Retrieves a single food by ID, including its aliases and label information when present.'",
@@ -5140,8 +5146,14 @@
         "additionalProperties": false
       },
       "runtimeOutputSchema": null,
-      "runtimeExamples": [],
-      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeExamples": [
+        {
+          "file": "tests/fixtures/compatibility/cases/foods_units.json",
+          "index": 1,
+          "scenario": "get_food.basic"
+        }
+      ],
+      "runtimeCaptureStatus": "behavior_captured_and_python_verified",
       "runtimeOutputSchemaPresent": false
     },
     {
@@ -5154,7 +5166,7 @@
         "blobSha": "18ab6622ffed862822851c0e85d66bc66ae96dfa",
         "url": "https://github.com/timo-reymann/mealie-mcp-server/blob/d027e1b4a314d781a322f1f91e37840f01464d77/src/tools/foods.ts#L77"
       },
-      "migrationStatus": "inventoried_static_not_implemented",
+      "migrationStatus": "implemented_contract_verified",
       "effect": "read",
       "description": "Finds existing canonical Mealie food candidates for multiple already-interpreted food concepts in one call, including stored aliases (which get_foods' search does not check). Use this after deciding what foods an ingredient refers to (e.g. an LLM parsing \"2 tbsp chopped fresh parsley\" into unit=tablespoon, food=parsley) and before calling create_food, to check whether a matching food or alias already exists. Returns ranked candidates per query rather than choosing one — the caller decides which candidate (if any) to use. Each query's result includes truncated: true when additional matching candidates may exist beyond the returned items (either because there were more than maxMatchesPerQuery, or because Mealie's own retrieval for that query was itself incomplete) — narrow the query text or raise maxMatchesPerQuery if that matters for a given lookup. Does not parse ingredient text, does not perform fuzzy/semantic matching, and does not create, update, or otherwise modify any food or alias.",
       "descriptionSource": "'Finds existing canonical Mealie food candidates for multiple already-interpreted food concepts in one ' +\n      'call, including stored aliases (which get_foods\\' search does not check). Use this after deciding what ' +\n      'foods an ingredient refers to (e.g. an LLM parsing \"2 tbsp chopped fresh parsley\" into unit=tablespoon, ' +\n      'food=parsley) and before calling create_food, to check whether a matching food or alias already exists. ' +\n      'Returns ranked candidates per query rather than choosing one — the caller decides which candidate (if ' +\n      'any) to use. Each query\\'s result includes truncated: true when additional matching candidates may ' +\n      'exist beyond the returned items (either because there were more than maxMatchesPerQuery, or because ' +\n      'Mealie\\'s own retrieval for that query was itself incomplete) — narrow the query text or raise ' +\n      'maxMatchesPerQuery if that matters for a given lookup. Does not parse ingredient text, does not ' +\n      'perform fuzzy/semantic matching, and does not create, update, or otherwise modify any food or alias.'",
@@ -5208,8 +5220,19 @@
         "additionalProperties": false
       },
       "runtimeOutputSchema": null,
-      "runtimeExamples": [],
-      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeExamples": [
+        {
+          "file": "tests/fixtures/compatibility/cases/foods_units.json",
+          "index": 2,
+          "scenario": "get_food_matches.basic"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/foods_units.json",
+          "index": 22,
+          "scenario": "get_food_matches.trim_boundary"
+        }
+      ],
+      "runtimeCaptureStatus": "behavior_captured_and_python_verified",
       "runtimeOutputSchemaPresent": false
     },
     {
@@ -5222,7 +5245,7 @@
         "blobSha": "18ab6622ffed862822851c0e85d66bc66ae96dfa",
         "url": "https://github.com/timo-reymann/mealie-mcp-server/blob/d027e1b4a314d781a322f1f91e37840f01464d77/src/tools/foods.ts#L122"
       },
-      "migrationStatus": "inventoried_static_not_implemented",
+      "migrationStatus": "implemented_contract_verified",
       "effect": "write",
       "description": "Creates a new food. Call get_foods first to check whether an existing food or alias already covers this name — creating a duplicate food fragments the taxonomy instead of reusing what is already there.",
       "descriptionSource": "'Creates a new food. Call get_foods first to check whether an existing food or alias already covers this ' +\n      'name — creating a duplicate food fragments the taxonomy instead of reusing what is already there.'",
@@ -5290,8 +5313,19 @@
         "additionalProperties": false
       },
       "runtimeOutputSchema": null,
-      "runtimeExamples": [],
-      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeExamples": [
+        {
+          "file": "tests/fixtures/compatibility/cases/foods_units.json",
+          "index": 3,
+          "scenario": "create_food.basic"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/foods_units.json",
+          "index": 21,
+          "scenario": "create_food.blank"
+        }
+      ],
+      "runtimeCaptureStatus": "behavior_captured_and_python_verified",
       "runtimeOutputSchemaPresent": false
     },
     {
@@ -5304,7 +5338,7 @@
         "blobSha": "18ab6622ffed862822851c0e85d66bc66ae96dfa",
         "url": "https://github.com/timo-reymann/mealie-mcp-server/blob/d027e1b4a314d781a322f1f91e37840f01464d77/src/tools/foods.ts#L144"
       },
-      "migrationStatus": "inventoried_static_not_implemented",
+      "migrationStatus": "implemented_contract_verified",
       "effect": "write",
       "description": "Updates an existing food. Fields left unspecified keep their current value. Sufficient for adding an alias: get_food the current record, append to its existing aliases, and pass the complete list back here. householdsWithIngredientFood (household slugs for which the food is on hand) is replaced whole the same way: get_food first and edit the existing list.",
       "descriptionSource": "'Updates an existing food. Fields left unspecified keep their current value. Sufficient for adding an alias: ' +\n      'get_food the current record, append to its existing aliases, and pass the complete list back here. ' +\n      'householdsWithIngredientFood (household slugs for which the food is on hand) is replaced whole the same ' +\n      'way: get_food first and edit the existing list.'",
@@ -5395,8 +5429,54 @@
         "additionalProperties": false
       },
       "runtimeOutputSchema": null,
-      "runtimeExamples": [],
-      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeExamples": [
+        {
+          "file": "tests/fixtures/compatibility/cases/foods_units.json",
+          "index": 4,
+          "scenario": "update_food.basic"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/foods_units.json",
+          "index": 13,
+          "scenario": "update_food.field0"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/foods_units.json",
+          "index": 14,
+          "scenario": "update_food.field1"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/foods_units.json",
+          "index": 15,
+          "scenario": "update_food.field2"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/foods_units.json",
+          "index": 16,
+          "scenario": "update_food.field3"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/foods_units.json",
+          "index": 17,
+          "scenario": "update_food.field4"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/foods_units.json",
+          "index": 18,
+          "scenario": "update_food.field5"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/foods_units.json",
+          "index": 19,
+          "scenario": "update_food.field6"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/foods_units.json",
+          "index": 20,
+          "scenario": "update_food.empty"
+        }
+      ],
+      "runtimeCaptureStatus": "behavior_captured_and_python_verified",
       "runtimeOutputSchemaPresent": false
     },
     {
@@ -5409,7 +5489,7 @@
         "blobSha": "18ab6622ffed862822851c0e85d66bc66ae96dfa",
         "url": "https://github.com/timo-reymann/mealie-mcp-server/blob/d027e1b4a314d781a322f1f91e37840f01464d77/src/tools/foods.ts#L191"
       },
-      "migrationStatus": "inventoried_static_not_implemented",
+      "migrationStatus": "implemented_contract_verified",
       "effect": "destructive",
       "description": "DESTRUCTIVE and irreversible: permanently deletes a food. Use get_food first to verify this is the exact food intended. Deleting a food may affect recipes and shopping list items that reference it — Mealie may refuse the deletion in that case, leaving the food intact.",
       "descriptionSource": "'DESTRUCTIVE and irreversible: permanently deletes a food. Use get_food first to verify this is the exact ' +\n      'food intended. Deleting a food may affect recipes and shopping list items that reference it — Mealie may ' +\n      'refuse the deletion in that case, leaving the food intact.'",
@@ -5445,8 +5525,14 @@
         "additionalProperties": false
       },
       "runtimeOutputSchema": null,
-      "runtimeExamples": [],
-      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeExamples": [
+        {
+          "file": "tests/fixtures/compatibility/cases/foods_units.json",
+          "index": 5,
+          "scenario": "delete_food.basic"
+        }
+      ],
+      "runtimeCaptureStatus": "behavior_captured_and_python_verified",
       "runtimeOutputSchemaPresent": false
     },
     {
@@ -5459,7 +5545,7 @@
         "blobSha": "18ab6622ffed862822851c0e85d66bc66ae96dfa",
         "url": "https://github.com/timo-reymann/mealie-mcp-server/blob/d027e1b4a314d781a322f1f91e37840f01464d77/src/tools/foods.ts#L208"
       },
-      "migrationStatus": "inventoried_static_not_implemented",
+      "migrationStatus": "implemented_contract_verified",
       "effect": "destructive",
       "description": "DESTRUCTIVE and irreversible: merges one food into another. Every recipe ingredient referencing the from-food is moved to the to-food, and the from-food is permanently deleted. Its name and aliases are NOT kept on the to-food — call update_food afterwards to add them as aliases if wanted. Mealie fails the merge while shopping list items still reference the from-food, leaving both foods untouched; those items are not moved, so find them with get_shopping_list_items and delete them first (delete_shopping_list_items_bulk). Use get_food first to verify both foods. Returns the target food.",
       "descriptionSource": "'DESTRUCTIVE and irreversible: merges one food into another. Every recipe ingredient referencing the ' +\n      'from-food is moved to the to-food, and the from-food is permanently deleted. Its name and aliases are NOT ' +\n      'kept on the to-food — call update_food afterwards to add them as aliases if wanted. Mealie fails the merge ' +\n      'while shopping list items still reference the from-food, leaving both foods untouched; those items are not ' +\n      'moved, so find them with get_shopping_list_items and delete them first (delete_shopping_list_items_bulk). ' +\n      'Use get_food first to verify both foods. Returns the target food.'",
@@ -5507,8 +5593,24 @@
         "additionalProperties": false
       },
       "runtimeOutputSchema": null,
-      "runtimeExamples": [],
-      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeExamples": [
+        {
+          "file": "tests/fixtures/compatibility/cases/foods_units.json",
+          "index": 12,
+          "scenario": "merge_foods.basic"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/foods_units.json",
+          "index": 36,
+          "scenario": "merge_foods.same"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/foods_units.json",
+          "index": 37,
+          "scenario": "merge_foods.still_exists"
+        }
+      ],
+      "runtimeCaptureStatus": "behavior_captured_and_python_verified",
       "runtimeOutputSchemaPresent": false
     },
     {
@@ -5521,7 +5623,7 @@
         "blobSha": "d4398c633d161f1ebcec9c4176006a3ba109b5a6",
         "url": "https://github.com/timo-reymann/mealie-mcp-server/blob/d027e1b4a314d781a322f1f91e37840f01464d77/src/tools/units.ts#L50"
       },
-      "migrationStatus": "inventoried_static_not_implemented",
+      "migrationStatus": "implemented_contract_verified",
       "effect": "read",
       "description": "Search or list canonical Mealie ingredient units (e.g. \"tablespoon\", \"cup\", \"gram\") with plain pagination. Use this after interpreting an ingredient's unit text (e.g. deciding that \"tbsp\" in \"2 tbsp olive oil\" means tablespoon) to resolve the existing Mealie unit and its ID for use with update_recipe_ingredients. This tool does not parse ingredient language or infer units from free text — search matches only against existing unit name, pluralName, abbreviation, and pluralAbbreviation, not aliases. For resolving several already-interpreted unit concepts at once, and for alias-aware matching, prefer get_unit_matches.",
       "descriptionSource": "'Search or list canonical Mealie ingredient units (e.g. \"tablespoon\", \"cup\", \"gram\") with plain pagination. ' +\n      'Use this after interpreting an ingredient\\'s unit text (e.g. deciding that \"tbsp\" in \"2 tbsp olive oil\" ' +\n      'means tablespoon) to resolve the existing Mealie unit and its ID for use with update_recipe_ingredients. ' +\n      'This tool does not parse ingredient language or infer units from free text — search matches only ' +\n      'against existing unit name, pluralName, abbreviation, and pluralAbbreviation, not aliases. For resolving ' +\n      'several already-interpreted unit concepts at once, and for alias-aware matching, prefer get_unit_matches.'",
@@ -5568,8 +5670,14 @@
         "additionalProperties": false
       },
       "runtimeOutputSchema": null,
-      "runtimeExamples": [],
-      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeExamples": [
+        {
+          "file": "tests/fixtures/compatibility/cases/foods_units.json",
+          "index": 6,
+          "scenario": "get_units.basic"
+        }
+      ],
+      "runtimeCaptureStatus": "behavior_captured_and_python_verified",
       "runtimeOutputSchemaPresent": false
     },
     {
@@ -5582,7 +5690,7 @@
         "blobSha": "d4398c633d161f1ebcec9c4176006a3ba109b5a6",
         "url": "https://github.com/timo-reymann/mealie-mcp-server/blob/d027e1b4a314d781a322f1f91e37840f01464d77/src/tools/units.ts#L77"
       },
-      "migrationStatus": "inventoried_static_not_implemented",
+      "migrationStatus": "implemented_contract_verified",
       "effect": "read",
       "description": "Retrieves a single canonical Mealie ingredient unit by ID, including its aliases, abbreviations, and standard-quantity conversion metadata when present.",
       "descriptionSource": "'Retrieves a single canonical Mealie ingredient unit by ID, including its aliases, abbreviations, and ' +\n      'standard-quantity conversion metadata when present.'",
@@ -5619,8 +5727,14 @@
         "additionalProperties": false
       },
       "runtimeOutputSchema": null,
-      "runtimeExamples": [],
-      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeExamples": [
+        {
+          "file": "tests/fixtures/compatibility/cases/foods_units.json",
+          "index": 7,
+          "scenario": "get_unit.basic"
+        }
+      ],
+      "runtimeCaptureStatus": "behavior_captured_and_python_verified",
       "runtimeOutputSchemaPresent": false
     },
     {
@@ -5633,7 +5747,7 @@
         "blobSha": "d4398c633d161f1ebcec9c4176006a3ba109b5a6",
         "url": "https://github.com/timo-reymann/mealie-mcp-server/blob/d027e1b4a314d781a322f1f91e37840f01464d77/src/tools/units.ts#L93"
       },
-      "migrationStatus": "inventoried_static_not_implemented",
+      "migrationStatus": "implemented_contract_verified",
       "effect": "read",
       "description": "Finds existing canonical Mealie unit candidates for multiple already-interpreted unit concepts in one call, matching against names, plural names, abbreviations, plural abbreviations, and stored aliases (which get_units' search does not check). Use after interpreting unit text (e.g. an LLM parsing \"2 tbsp olive oil\" into unit=tablespoon) and before calling create_unit, to check whether a matching unit or alias already exists. Returns ranked candidates per query rather than choosing one — the caller decides which candidate (if any) to use. Each query's result includes truncated: true when additional matching candidates may exist beyond the returned items (either because there were more than maxMatchesPerQuery, or because Mealie's own retrieval for that query was itself incomplete) — narrow the query text or raise maxMatchesPerQuery if that matters for a given lookup. Does not parse ingredient text, does not perform fuzzy/semantic matching, and does not create, update, or otherwise modify any unit or alias.",
       "descriptionSource": "'Finds existing canonical Mealie unit candidates for multiple already-interpreted unit concepts in one ' +\n      'call, matching against names, plural names, abbreviations, plural abbreviations, and stored aliases ' +\n      '(which get_units\\' search does not check). Use after interpreting unit text (e.g. an LLM parsing \"2 tbsp ' +\n      'olive oil\" into unit=tablespoon) and before calling create_unit, to check whether a matching unit or ' +\n      'alias already exists. Returns ranked candidates per query rather than choosing one — the caller decides ' +\n      'which candidate (if any) to use. Each query\\'s result includes truncated: true when additional matching ' +\n      'candidates may exist beyond the returned items (either because there were more than ' +\n      'maxMatchesPerQuery, or because Mealie\\'s own retrieval for that query was itself incomplete) — narrow ' +\n      'the query text or raise maxMatchesPerQuery if that matters for a given lookup. Does not parse ' +\n      'ingredient text, does not perform fuzzy/semantic matching, and does not create, update, or otherwise ' +\n      'modify any unit or alias.'",
@@ -5686,8 +5800,19 @@
         "additionalProperties": false
       },
       "runtimeOutputSchema": null,
-      "runtimeExamples": [],
-      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeExamples": [
+        {
+          "file": "tests/fixtures/compatibility/cases/foods_units.json",
+          "index": 8,
+          "scenario": "get_unit_matches.basic"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/foods_units.json",
+          "index": 35,
+          "scenario": "get_unit_matches.trim_boundary"
+        }
+      ],
+      "runtimeCaptureStatus": "behavior_captured_and_python_verified",
       "runtimeOutputSchemaPresent": false
     },
     {
@@ -5700,7 +5825,7 @@
         "blobSha": "d4398c633d161f1ebcec9c4176006a3ba109b5a6",
         "url": "https://github.com/timo-reymann/mealie-mcp-server/blob/d027e1b4a314d781a322f1f91e37840f01464d77/src/tools/units.ts#L140"
       },
-      "migrationStatus": "inventoried_static_not_implemented",
+      "migrationStatus": "implemented_contract_verified",
       "effect": "write",
       "description": "Creates a canonical Mealie ingredient unit when an appropriate unit does not already exist. Call get_units first to check whether an existing unit or alias already covers this name — creating a duplicate unit fragments the vocabulary instead of reusing what is already there. Note: if the new unit's name/abbreviation matches one of Mealie's built-in standardized units (e.g. \"tablespoon\"), Mealie will automatically populate standardQuantity/standardUnit itself unless both are explicitly supplied here — this tool does not perform that matching itself.",
       "descriptionSource": "'Creates a canonical Mealie ingredient unit when an appropriate unit does not already exist. Call ' +\n      'get_units first to check whether an existing unit or alias already covers this name — creating a ' +\n      'duplicate unit fragments the vocabulary instead of reusing what is already there. Note: if the new ' +\n      'unit\\'s name/abbreviation matches one of Mealie\\'s built-in standardized units (e.g. \"tablespoon\"), ' +\n      'Mealie will automatically populate standardQuantity/standardUnit itself unless both are explicitly ' +\n      'supplied here — this tool does not perform that matching itself.'",
@@ -5808,8 +5933,19 @@
         "additionalProperties": false
       },
       "runtimeOutputSchema": null,
-      "runtimeExamples": [],
-      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeExamples": [
+        {
+          "file": "tests/fixtures/compatibility/cases/foods_units.json",
+          "index": 9,
+          "scenario": "create_unit.basic"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/foods_units.json",
+          "index": 34,
+          "scenario": "create_unit.blank"
+        }
+      ],
+      "runtimeCaptureStatus": "behavior_captured_and_python_verified",
       "runtimeOutputSchemaPresent": false
     },
     {
@@ -5822,7 +5958,7 @@
         "blobSha": "d4398c633d161f1ebcec9c4176006a3ba109b5a6",
         "url": "https://github.com/timo-reymann/mealie-mcp-server/blob/d027e1b4a314d781a322f1f91e37840f01464d77/src/tools/units.ts#L180"
       },
-      "migrationStatus": "inventoried_static_not_implemented",
+      "migrationStatus": "implemented_contract_verified",
       "effect": "write",
       "description": "Updates an existing canonical Mealie ingredient unit. Fields left unspecified keep their current value. Sufficient for adding an alias: get_unit the current record, append to its existing aliases, and pass the complete list back here. Units are shared vocabulary referenced by many recipes' ingredients — update deliberately, since renaming or repurposing a unit changes how every recipe using it displays.",
       "descriptionSource": "'Updates an existing canonical Mealie ingredient unit. Fields left unspecified keep their current value. ' +\n      'Sufficient for adding an alias: get_unit the current record, append to its existing aliases, and pass ' +\n      'the complete list back here. Units are shared vocabulary referenced by many recipes\\' ingredients — ' +\n      'update deliberately, since renaming or repurposing a unit changes how every recipe using it displays.'",
@@ -5951,8 +6087,69 @@
         "additionalProperties": false
       },
       "runtimeOutputSchema": null,
-      "runtimeExamples": [],
-      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeExamples": [
+        {
+          "file": "tests/fixtures/compatibility/cases/foods_units.json",
+          "index": 10,
+          "scenario": "update_unit.basic"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/foods_units.json",
+          "index": 23,
+          "scenario": "update_unit.field0"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/foods_units.json",
+          "index": 24,
+          "scenario": "update_unit.field1"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/foods_units.json",
+          "index": 25,
+          "scenario": "update_unit.field2"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/foods_units.json",
+          "index": 26,
+          "scenario": "update_unit.field3"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/foods_units.json",
+          "index": 27,
+          "scenario": "update_unit.field4"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/foods_units.json",
+          "index": 28,
+          "scenario": "update_unit.field5"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/foods_units.json",
+          "index": 29,
+          "scenario": "update_unit.field6"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/foods_units.json",
+          "index": 30,
+          "scenario": "update_unit.field7"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/foods_units.json",
+          "index": 31,
+          "scenario": "update_unit.field8"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/foods_units.json",
+          "index": 32,
+          "scenario": "update_unit.field9"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/foods_units.json",
+          "index": 33,
+          "scenario": "update_unit.empty"
+        }
+      ],
+      "runtimeCaptureStatus": "behavior_captured_and_python_verified",
       "runtimeOutputSchemaPresent": false
     },
     {
@@ -5965,7 +6162,7 @@
         "blobSha": "d4398c633d161f1ebcec9c4176006a3ba109b5a6",
         "url": "https://github.com/timo-reymann/mealie-mcp-server/blob/d027e1b4a314d781a322f1f91e37840f01464d77/src/tools/units.ts#L222"
       },
-      "migrationStatus": "inventoried_static_not_implemented",
+      "migrationStatus": "implemented_contract_verified",
       "effect": "destructive",
       "description": "DESTRUCTIVE and irreversible: permanently deletes a canonical Mealie ingredient unit. Use get_unit first to verify this is the exact unit intended. Deleting a unit that is still referenced by existing recipe ingredients will be refused by Mealie rather than cascaded.",
       "descriptionSource": "'DESTRUCTIVE and irreversible: permanently deletes a canonical Mealie ingredient unit. Use get_unit first ' +\n      'to verify this is the exact unit intended. Deleting a unit that is still referenced by existing recipe ' +\n      'ingredients will be refused by Mealie rather than cascaded.'",
@@ -6001,8 +6198,14 @@
         "additionalProperties": false
       },
       "runtimeOutputSchema": null,
-      "runtimeExamples": [],
-      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeExamples": [
+        {
+          "file": "tests/fixtures/compatibility/cases/foods_units.json",
+          "index": 11,
+          "scenario": "delete_unit.basic"
+        }
+      ],
+      "runtimeCaptureStatus": "behavior_captured_and_python_verified",
       "runtimeOutputSchemaPresent": false
     },
     {

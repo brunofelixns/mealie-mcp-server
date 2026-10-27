@@ -22,6 +22,7 @@
 - P06: registro mediante Tool/ToolResult públicos de FastMCP4, JSON Schema explícito y modelo Pydantic estricto. jsonschema valida el contrato capturado; no hay dispatcher REST genérico ni outputSchema/structuredContent nuevo. Los mensajes de validación seguros identifican campos en lugar de copiar entradas del cliente.
 - P07: añadir PyICU/ICU para reproducir localeCompare en-US observado; trim ECMAScript y longitud UTF-16. Motor callback compartido detrás de la interfaz lookup_candidates del plan, sin variar el contrato MCP.
 - P08: resolve_organizer_values devuelve ResolveResult (resolved/created/missing), preservando información del original. El plan abreviaba esa salida a list; actualizarlo evita perder los valores no resueltos que necesitan P13/P14. D06/D07 caracterizadas con el runner original y expectativas separadas.
+- P09: modelos transforman solo los campos que el original transforma; validar después contra el esquema preserva trim antes de maxLength. JsonInteger conserva la semántica de números JSON integrales. Comparador/fake distinguen bool de number. Mecánica REST food/unit compartida con handlers MCP explícitos.
 
 ## Evidencia
 
@@ -44,3 +45,5 @@ Task P06: complete — suite68/68, Ruff/mypy passed; evidencia evidence/P06.md. 
 Task P07: complete — suite94/94, Ruff/mypy passed; evidencia evidence/P07.md. P08 en curso.
 
 Task P08: complete — suite135/135, Ruff/mypy passed; evidencia evidence/P08.md. P09 en curso.
+
+Task P09: complete — suite220/220, Ruff/mypy passed; evidencia evidence/P09.md. P10 en curso.

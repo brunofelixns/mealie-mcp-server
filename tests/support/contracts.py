@@ -66,5 +66,5 @@ async def assert_contract_matches(server: Any, case: ContractCase, fake: Any) ->
         expected["content"], is_error=is_error
     )
     assert _typed_json(result.structured_content) == _typed_json(expected.get("structuredContent"))
-    assert fake.recorded_requests == case.expected_requests
+    assert _typed_json(fake.recorded_requests) == _typed_json(case.expected_requests)
     assert not fake.errors

@@ -8,6 +8,8 @@ from types import TracebackType
 from typing import Any
 from urllib.parse import parse_qs, urlsplit
 
+from tests.support.contracts import _typed_json
+
 FIXTURES = Path(__file__).resolve().parents[1] / "fixtures" / "compatibility"
 
 
@@ -42,7 +44,8 @@ class FakeMealie:
                         (
                             spec
                             for spec in owner.pending
-                            if {key: spec.get(key) for key in received} == received
+                            if _typed_json({key: spec.get(key) for key in received})
+                            == _typed_json(received)
                         ),
                         None,
                     )

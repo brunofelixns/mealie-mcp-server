@@ -10,7 +10,7 @@
 
 **Spec:** [Diseño completo](../specs/2026-10-27-python-migration-design.md). Leer también [inventario](../../migration/compatibility-inventory.md) e [inventario JSON](../../migration/compatibility-inventory.json).
 
-Fecha: 2026-10-27. Estado: implementación autorizada; P01..P08 verificadas y P09 en curso. Ver implementation-state.json para la evidencia. No se ha publicado ni desplegado un endpoint público.
+Fecha: 2026-10-27. Estado: implementación autorizada; P01..P09 verificadas y P10 en curso. Ver implementation-state.json para la evidencia. No se ha publicado ni desplegado un endpoint público.
 
 ## Global Constraints
 
@@ -260,7 +260,7 @@ uv run pytest tests/unit/test_candidate_matching.py tests/unit/test_multi_query_
 **Archivos:** `src/mealie_mcp_server/mealie/api/categories.py`, `src/mealie_mcp_server/mealie/api/tags.py`, `src/mealie_mcp_server/models/inputs/categories.py`, `src/mealie_mcp_server/models/inputs/tags.py`, `src/mealie_mcp_server/tools/categories.py`, `src/mealie_mcp_server/tools/tags.py`, `src/mealie_mcp_server/services/organizer_resolution.py`, `tests/fixtures/compatibility/cases/categories_tags.json`.
 **Tests:** `tests/contracts/test_categories_tags.py`, `tests/unit/test_organizer_resolution.py`.
 
-**Interfaces:** consume P05/P06 y corpus load_cases P03. Produce register_categories(server: FastMCP) -> None; register_tags(server: FastMCP) -> None; resolve_organizer_values(client: MealieClient, kind: str, values: list[str], *, create_missing: bool = False) -> list[JsonObject].
+**Interfaces:** consume P05/P06 y corpus load_cases P03. Produce register_categories(server: FastMCP) -> None; register_tags(server: FastMCP) -> None; resolve_organizer_values(client: MealieClient, kind: str, values: list[str], *, create_missing: bool = False) -> ResolveResult (resolved/created/missing).
 
 **Herramientas (14):** `get_categories`, `get_empty_categories`, `create_category`, `get_category`, `get_category_by_slug`, `update_category`, `delete_category`, `get_tags`, `get_empty_tags`, `create_tag`, `get_tag`, `get_tag_by_slug`, `update_tag`, `delete_tag`.
 
@@ -279,7 +279,7 @@ uv run pytest tests/contracts/test_categories_tags.py tests/unit/test_organizer_
 <a id="p09"></a>
 ### P09: Migrar alimentos y unidades
 
-**Depende de:** P08. **Estado:** pendiente; ver registro de ejecución.
+**Depende de:** P08. **Estado:** verificada; ver registro de ejecución.
 
 **Archivos:** `src/mealie_mcp_server/mealie/api/foods.py`, `src/mealie_mcp_server/mealie/api/units.py`, `src/mealie_mcp_server/models/inputs/foods.py`, `src/mealie_mcp_server/models/inputs/units.py`, `src/mealie_mcp_server/tools/foods.py`, `src/mealie_mcp_server/tools/units.py`, `tests/fixtures/compatibility/cases/foods_units.json`.
 **Tests:** `tests/unit/test_foods_api.py`, `tests/unit/test_units_api.py`, `tests/contracts/test_foods_units.py`.
@@ -288,17 +288,17 @@ uv run pytest tests/contracts/test_categories_tags.py tests/unit/test_organizer_
 
 **Herramientas (13):** `get_foods`, `get_food`, `get_food_matches`, `create_food`, `update_food`, `delete_food`, `merge_foods`, `get_units`, `get_unit`, `get_unit_matches`, `create_unit`, `update_unit`, `delete_unit`.
 
-- [ ] **1. Añadir las pruebas antes del código funcional.** test_foods_units_contract para13 herramientas. test_update_preserves_omitted_fields_and_households: PUT mantiene metadatos/aliases no tocados. test_aliases_null_empty_distinct; test_merge_foods_verifies_source_disappeared: PUT merge y GET posterior exactos, sin retries. test_units_conversion_metadata no infiere conversiones.
-- [ ] **2. Ejecutar el subconjunto indicado y observar RED.** El fallo esperado es el comportamiento/handler aún ausente o incorrecto; si falta infraestructura del harness, arreglarla antes de tomar el fallo como evidencia.
-- [ ] **3. Implementar las interfaces de esta tarea y sus fixtures.** Reutilizar los contratos anteriores; preservar los valores del diseño y el inventario. 13 herramientas; límites de búsqueda P07; fallos de merge/PUT y preservación de datos cubiertos; no cambiar mapa de aliases ni scope del household.
+- [x] **1. Añadir las pruebas antes del código funcional.** test_foods_units_contract para13 herramientas. test_update_preserves_omitted_fields_and_households: PUT mantiene metadatos/aliases no tocados. test_aliases_null_empty_distinct; test_merge_foods_verifies_source_disappeared: PUT merge y GET posterior exactos, sin retries. test_units_conversion_metadata no infiere conversiones.
+- [x] **2. Ejecutar el subconjunto indicado y observar RED.** El fallo esperado es el comportamiento/handler aún ausente o incorrecto; si falta infraestructura del harness, arreglarla antes de tomar el fallo como evidencia.
+- [x] **3. Implementar las interfaces de esta tarea y sus fixtures.** Reutilizar los contratos anteriores; preservar los valores del diseño y el inventario. 13 herramientas; límites de búsqueda P07; fallos de merge/PUT y preservación de datos cubiertos; no cambiar mapa de aliases ni scope del household.
 
-- [ ] **4. Verificar el resultado de esta tarea.** Ejecutar dentro del Dev Container; salida0 y todas las aserciones indicadas en verde. Para P01 el launcher y el contenedor auxiliar son la excepción de bootstrap explicada arriba.
+- [x] **4. Verificar el resultado de esta tarea.** Ejecutar dentro del Dev Container; salida0 y todas las aserciones indicadas en verde. Para P01 el launcher y el contenedor auxiliar son la excepción de bootstrap explicada arriba.
 
 ```bash
 uv run pytest tests/unit/test_foods_api.py tests/unit/test_units_api.py tests/contracts/test_foods_units.py -q
 ```
 
-- [ ] **5. Revisar, documentar y cerrar.** Comprobar el criterio de salida anterior y el diff; no ampliar la suite sin una nueva causa. Actualizar estado, diferencias si las hay y evidencia con comando/resultado/entorno. Commit de implementación sugerido: `feat: port food and unit tools`. Registrar su SHA en un commit documental posterior si hace falta; no intentar incluir el hash de un commit en sí mismo.
+- [x] **5. Revisar, documentar y cerrar.** Comprobar el criterio de salida anterior y el diff; no ampliar la suite sin una nueva causa. Actualizar estado, diferencias si las hay y evidencia con comando/resultado/entorno. Commit de implementación sugerido: `feat: port food and unit tools`. Registrar su SHA en un commit documental posterior si hace falta; no intentar incluir el hash de un commit en sí mismo.
 
 <a id="p10"></a>
 ### P10: Migrar el catálogo de utensilios
