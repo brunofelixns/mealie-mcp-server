@@ -1,0 +1,805 @@
+{
+  "schemaVersion": 1,
+  "updatedOn": "2026-10-27",
+  "status": "implementation_in_progress",
+  "plan": "../superpowers/plans/2026-10-27-python-migration.md",
+  "upstreamCommit": "d027e1b4a314d781a322f1f91e37840f01464d77",
+  "executionMethod": "sequential_native",
+  "recommendedExecutionMethod": "sequential_native",
+  "tasks": [
+    {
+      "id": "P01",
+      "title": "Arrancar el Dev Container sin depender de un lock inexistente",
+      "dependsOn": [],
+      "status": "verified",
+      "tools": [],
+      "files": [
+        ".devcontainer/devcontainer.json",
+        ".devcontainer/compose.yaml",
+        "Dockerfile",
+        ".dockerignore",
+        ".gitignore",
+        "docs/development.md"
+      ],
+      "tests": [],
+      "evidence": [
+        {
+          "report": "docs/migration/evidence/P01.md",
+          "result": "passed",
+          "python": "3.14.10",
+          "uv": "0.9.9",
+          "uid": 1000,
+          "dockerServer": "28.3.0"
+        }
+      ],
+      "commit": null
+    },
+    {
+      "id": "P02",
+      "title": "Fijar paquete, dependencias y checks Python",
+      "dependsOn": [
+        "P01"
+      ],
+      "status": "in_progress",
+      "tools": [],
+      "files": [
+        "pyproject.toml",
+        "uv.lock",
+        ".python-version",
+        "src/mealie_mcp_server/__init__.py",
+        "tests/conftest.py",
+        ".github/workflows/ci.yaml",
+        "docs/development.md"
+      ],
+      "tests": [
+        "tests/unit/test_package_metadata.py"
+      ],
+      "evidence": [],
+      "commit": null
+    },
+    {
+      "id": "P03",
+      "title": "Capturar la referencia original y el corpus de compatibilidad",
+      "dependsOn": [
+        "P02"
+      ],
+      "status": "not_started",
+      "tools": [],
+      "files": [
+        "tests/reference/Dockerfile",
+        "tests/reference/compose.yaml",
+        "tests/fixtures/compatibility/upstream-manifest.json",
+        "tests/fixtures/compatibility/catalog.json",
+        "tests/fixtures/compatibility/prompts.json",
+        "tests/fixtures/compatibility/instructions.txt",
+        "tests/fixtures/compatibility/cases/",
+        "tests/support/fake_mealie.py",
+        "tests/support/contracts.py",
+        "scripts/capture_reference.py",
+        "docs/migration/baseline.md"
+      ],
+      "tests": [
+        "tests/contracts/test_reference_catalog.py"
+      ],
+      "evidence": [],
+      "commit": null
+    },
+    {
+      "id": "P04",
+      "title": "Configurar entorno, secretos y presencia de campos",
+      "dependsOn": [
+        "P03"
+      ],
+      "status": "not_started",
+      "tools": [],
+      "files": [
+        "src/mealie_mcp_server/config.py",
+        "src/mealie_mcp_server/models/common.py",
+        ".env.example",
+        "docs/configuration.md"
+      ],
+      "tests": [
+        "tests/unit/test_config.py",
+        "tests/unit/test_field_presence.py"
+      ],
+      "evidence": [],
+      "commit": null
+    },
+    {
+      "id": "P05",
+      "title": "Implementar el cliente Mealie y las utilidades HTTP",
+      "dependsOn": [
+        "P04"
+      ],
+      "status": "not_started",
+      "tools": [],
+      "files": [
+        "src/mealie_mcp_server/mealie/client.py",
+        "src/mealie_mcp_server/mealie/errors.py",
+        "src/mealie_mcp_server/support/query_filter.py",
+        "src/mealie_mcp_server/support/concurrency.py"
+      ],
+      "tests": [
+        "tests/unit/test_client.py",
+        "tests/unit/test_path_segments.py",
+        "tests/unit/test_query_filter.py",
+        "tests/unit/test_concurrency.py"
+      ],
+      "evidence": [],
+      "commit": null
+    },
+    {
+      "id": "P06",
+      "title": "Crear la factory MCP y el adaptador de contratos",
+      "dependsOn": [
+        "P05"
+      ],
+      "status": "not_started",
+      "tools": [],
+      "files": [
+        "src/mealie_mcp_server/server.py",
+        "src/mealie_mcp_server/tools/registry.py",
+        "src/mealie_mcp_server/tools/helpers.py",
+        "src/mealie_mcp_server/models/inputs/base.py",
+        "src/mealie_mcp_server/models/results/base.py",
+        "tests/support/contracts.py"
+      ],
+      "tests": [
+        "tests/unit/test_server_lifespan.py",
+        "tests/contracts/test_strict_inputs.py",
+        "tests/contracts/test_result_adapter.py"
+      ],
+      "evidence": [],
+      "commit": null
+    },
+    {
+      "id": "P07",
+      "title": "Portar candidatos y consultas agrupadas",
+      "dependsOn": [
+        "P06"
+      ],
+      "status": "not_started",
+      "tools": [],
+      "files": [
+        "src/mealie_mcp_server/services/candidate_matching.py",
+        "src/mealie_mcp_server/services/multi_query_lookup.py"
+      ],
+      "tests": [
+        "tests/unit/test_candidate_matching.py",
+        "tests/unit/test_multi_query_lookup.py"
+      ],
+      "evidence": [],
+      "commit": null
+    },
+    {
+      "id": "P08",
+      "title": "Migrar categorías y etiquetas",
+      "dependsOn": [
+        "P07"
+      ],
+      "status": "not_started",
+      "tools": [
+        "get_categories",
+        "get_empty_categories",
+        "create_category",
+        "get_category",
+        "get_category_by_slug",
+        "update_category",
+        "delete_category",
+        "get_tags",
+        "get_empty_tags",
+        "create_tag",
+        "get_tag",
+        "get_tag_by_slug",
+        "update_tag",
+        "delete_tag"
+      ],
+      "files": [
+        "src/mealie_mcp_server/mealie/api/categories.py",
+        "src/mealie_mcp_server/mealie/api/tags.py",
+        "src/mealie_mcp_server/models/inputs/categories.py",
+        "src/mealie_mcp_server/models/inputs/tags.py",
+        "src/mealie_mcp_server/tools/categories.py",
+        "src/mealie_mcp_server/tools/tags.py",
+        "src/mealie_mcp_server/services/organizer_resolution.py",
+        "tests/fixtures/compatibility/cases/categories_tags.json"
+      ],
+      "tests": [
+        "tests/contracts/test_categories_tags.py",
+        "tests/unit/test_organizer_resolution.py"
+      ],
+      "evidence": [],
+      "commit": null
+    },
+    {
+      "id": "P09",
+      "title": "Migrar alimentos y unidades",
+      "dependsOn": [
+        "P08"
+      ],
+      "status": "not_started",
+      "tools": [
+        "get_foods",
+        "get_food",
+        "get_food_matches",
+        "create_food",
+        "update_food",
+        "delete_food",
+        "merge_foods",
+        "get_units",
+        "get_unit",
+        "get_unit_matches",
+        "create_unit",
+        "update_unit",
+        "delete_unit"
+      ],
+      "files": [
+        "src/mealie_mcp_server/mealie/api/foods.py",
+        "src/mealie_mcp_server/mealie/api/units.py",
+        "src/mealie_mcp_server/models/inputs/foods.py",
+        "src/mealie_mcp_server/models/inputs/units.py",
+        "src/mealie_mcp_server/tools/foods.py",
+        "src/mealie_mcp_server/tools/units.py",
+        "tests/fixtures/compatibility/cases/foods_units.json"
+      ],
+      "tests": [
+        "tests/unit/test_foods_api.py",
+        "tests/unit/test_units_api.py",
+        "tests/contracts/test_foods_units.py"
+      ],
+      "evidence": [],
+      "commit": null
+    },
+    {
+      "id": "P10",
+      "title": "Migrar el catálogo de utensilios",
+      "dependsOn": [
+        "P09"
+      ],
+      "status": "not_started",
+      "tools": [
+        "get_tools",
+        "get_tool",
+        "get_tool_matches",
+        "create_tool",
+        "update_tool",
+        "delete_tool"
+      ],
+      "files": [
+        "src/mealie_mcp_server/mealie/api/equipment.py",
+        "src/mealie_mcp_server/models/inputs/equipment.py",
+        "src/mealie_mcp_server/tools/equipment.py",
+        "tests/fixtures/compatibility/cases/equipment.json"
+      ],
+      "tests": [
+        "tests/unit/test_equipment_api.py",
+        "tests/contracts/test_equipment.py"
+      ],
+      "evidence": [],
+      "commit": null
+    },
+    {
+      "id": "P11",
+      "title": "Migrar listas de compra e items",
+      "dependsOn": [
+        "P10"
+      ],
+      "status": "not_started",
+      "tools": [
+        "get_shopping_lists",
+        "create_shopping_list",
+        "get_shopping_list",
+        "update_shopping_list",
+        "delete_shopping_list",
+        "add_recipe_to_shopping_list",
+        "remove_recipe_from_shopping_list",
+        "get_shopping_list_items",
+        "create_shopping_list_item",
+        "create_shopping_list_items_bulk",
+        "update_shopping_list_item",
+        "delete_shopping_list_item",
+        "delete_shopping_list_items_bulk"
+      ],
+      "files": [
+        "src/mealie_mcp_server/mealie/api/shopping_lists.py",
+        "src/mealie_mcp_server/models/inputs/shopping_lists.py",
+        "src/mealie_mcp_server/tools/shopping_lists.py",
+        "tests/fixtures/compatibility/cases/shopping_lists.json"
+      ],
+      "tests": [
+        "tests/contracts/test_shopping_lists.py"
+      ],
+      "evidence": [],
+      "commit": null
+    },
+    {
+      "id": "P12",
+      "title": "Migrar el núcleo de recetas",
+      "dependsOn": [
+        "P11"
+      ],
+      "status": "not_started",
+      "tools": [
+        "get_recipes",
+        "get_recipe_detailed",
+        "get_recipe_concise",
+        "get_recipes_batch",
+        "get_recipes_detailed_batch",
+        "create_recipe",
+        "duplicate_recipe",
+        "delete_recipe"
+      ],
+      "files": [
+        "src/mealie_mcp_server/mealie/api/recipes.py",
+        "src/mealie_mcp_server/models/inputs/recipes.py",
+        "src/mealie_mcp_server/tools/recipes.py",
+        "src/mealie_mcp_server/services/taxonomy_resolution.py",
+        "tests/fixtures/compatibility/cases/recipes_core.json"
+      ],
+      "tests": [
+        "tests/contracts/test_recipes_core.py",
+        "tests/unit/test_recipe_batch.py",
+        "tests/unit/test_taxonomy_resolution.py"
+      ],
+      "evidence": [],
+      "commit": null
+    },
+    {
+      "id": "P13",
+      "title": "Migrar taxonomía y utensilios de recetas, incluido patch_recipe",
+      "dependsOn": [
+        "P12"
+      ],
+      "status": "not_started",
+      "tools": [
+        "patch_recipe",
+        "update_recipe_taxonomy",
+        "update_recipe_taxonomy_batch",
+        "update_recipe_tools",
+        "update_recipe_tools_batch"
+      ],
+      "files": [
+        "src/mealie_mcp_server/services/recipe_taxonomy.py",
+        "src/mealie_mcp_server/services/recipe_equipment.py",
+        "src/mealie_mcp_server/models/inputs/recipe_taxonomy.py",
+        "src/mealie_mcp_server/tools/recipes.py",
+        "tests/fixtures/compatibility/cases/recipe_organizers.json"
+      ],
+      "tests": [
+        "tests/unit/test_recipe_taxonomy.py",
+        "tests/unit/test_recipe_equipment.py",
+        "tests/contracts/test_recipe_organizers.py"
+      ],
+      "evidence": [],
+      "commit": null
+    },
+    {
+      "id": "P14",
+      "title": "Migrar planes de comidas y operaciones por fases",
+      "dependsOn": [
+        "P13"
+      ],
+      "status": "not_started",
+      "tools": [
+        "get_all_mealplans",
+        "get_mealplan_with_recipes",
+        "create_mealplan",
+        "create_mealplan_bulk",
+        "get_todays_mealplan",
+        "patch_mealplan"
+      ],
+      "files": [
+        "src/mealie_mcp_server/mealie/api/mealplans.py",
+        "src/mealie_mcp_server/models/inputs/mealplans.py",
+        "src/mealie_mcp_server/tools/mealplans.py",
+        "tests/fixtures/compatibility/cases/mealplans.json"
+      ],
+      "tests": [
+        "tests/unit/test_mealplans_api.py",
+        "tests/contracts/test_mealplans.py"
+      ],
+      "evidence": [],
+      "commit": null
+    },
+    {
+      "id": "P15",
+      "title": "Migrar búsqueda por ingredientes, cursores y colas de auditoría",
+      "dependsOn": [
+        "P14"
+      ],
+      "status": "not_started",
+      "tools": [
+        "find_recipes_for_ingredients",
+        "get_recipes_for_classification",
+        "get_recipes_for_ingredient_parsing",
+        "get_recipes_for_data_enrichment"
+      ],
+      "files": [
+        "src/mealie_mcp_server/services/recipe_discovery.py",
+        "src/mealie_mcp_server/services/ingredient_resolution.py",
+        "src/mealie_mcp_server/support/recipe_scan.py",
+        "src/mealie_mcp_server/services/recipe_audit.py",
+        "src/mealie_mcp_server/services/recipe_classification.py",
+        "src/mealie_mcp_server/services/recipe_ingredient_parsing.py",
+        "src/mealie_mcp_server/services/recipe_enrichment.py",
+        "src/mealie_mcp_server/tools/recipes.py",
+        "tests/fixtures/compatibility/cases/recipe_queues.json"
+      ],
+      "tests": [
+        "tests/unit/test_recipe_discovery.py",
+        "tests/unit/test_recipe_scan.py",
+        "tests/unit/test_recipe_audit.py",
+        "tests/contracts/test_recipe_queues.py"
+      ],
+      "evidence": [],
+      "commit": null
+    },
+    {
+      "id": "P16",
+      "title": "Migrar escrituras de ingredientes y recuperación",
+      "dependsOn": [
+        "P15"
+      ],
+      "status": "not_started",
+      "tools": [
+        "update_recipe_ingredients",
+        "update_recipe_ingredients_batch"
+      ],
+      "files": [
+        "src/mealie_mcp_server/models/inputs/recipe_ingredients.py",
+        "src/mealie_mcp_server/services/recipe_ingredients.py",
+        "src/mealie_mcp_server/tools/recipes.py",
+        "tests/fixtures/compatibility/cases/recipe_ingredients.json"
+      ],
+      "tests": [
+        "tests/unit/test_recipe_ingredients.py",
+        "tests/contracts/test_recipe_ingredients.py"
+      ],
+      "evidence": [],
+      "commit": null
+    },
+    {
+      "id": "P17",
+      "title": "Migrar instrucciones con guardas de snapshot",
+      "dependsOn": [
+        "P16"
+      ],
+      "status": "not_started",
+      "tools": [
+        "update_recipe_instructions",
+        "update_recipe_instructions_batch"
+      ],
+      "files": [
+        "src/mealie_mcp_server/models/inputs/recipe_instructions.py",
+        "src/mealie_mcp_server/services/recipe_instructions.py",
+        "src/mealie_mcp_server/tools/recipes.py",
+        "tests/fixtures/compatibility/cases/recipe_instructions.json"
+      ],
+      "tests": [
+        "tests/unit/test_recipe_instructions.py",
+        "tests/contracts/test_recipe_instructions.py"
+      ],
+      "evidence": [],
+      "commit": null
+    },
+    {
+      "id": "P18",
+      "title": "Migrar imágenes y el descargador con DNS fijado",
+      "dependsOn": [
+        "P17"
+      ],
+      "status": "not_started",
+      "tools": [
+        "set_recipe_image",
+        "set_recipe_image_from_file",
+        "set_recipe_image_from_url"
+      ],
+      "files": [
+        "src/mealie_mcp_server/support/safe_download.py",
+        "src/mealie_mcp_server/support/recipe_image.py",
+        "src/mealie_mcp_server/models/inputs/recipe_image.py",
+        "src/mealie_mcp_server/tools/recipes.py",
+        "tests/fixtures/compatibility/cases/recipe_images.json"
+      ],
+      "tests": [
+        "tests/unit/test_safe_download.py",
+        "tests/unit/test_recipe_image.py",
+        "tests/contracts/test_recipe_images.py"
+      ],
+      "evidence": [],
+      "commit": null
+    },
+    {
+      "id": "P19",
+      "title": "Migrar valoraciones, favoritos y fechas",
+      "dependsOn": [
+        "P18"
+      ],
+      "status": "not_started",
+      "tools": [
+        "set_recipe_rating",
+        "mark_recipe_last_made"
+      ],
+      "files": [
+        "src/mealie_mcp_server/mealie/api/users.py",
+        "src/mealie_mcp_server/services/recipe_rating.py",
+        "src/mealie_mcp_server/services/last_made.py",
+        "src/mealie_mcp_server/tools/recipes.py",
+        "tests/fixtures/compatibility/cases/ratings_dates.json"
+      ],
+      "tests": [
+        "tests/unit/test_recipe_rating.py",
+        "tests/unit/test_last_made.py",
+        "tests/contracts/test_ratings_dates.py"
+      ],
+      "evidence": [],
+      "commit": null
+    },
+    {
+      "id": "P20",
+      "title": "Cerrar catálogo, prompt e instrucciones",
+      "dependsOn": [
+        "P19"
+      ],
+      "status": "not_started",
+      "tools": [],
+      "files": [
+        "src/mealie_mcp_server/tools/registry.py",
+        "src/mealie_mcp_server/prompts.py",
+        "src/mealie_mcp_server/resources/server-instructions.md",
+        "src/mealie_mcp_server/server.py",
+        "tests/fixtures/compatibility/catalog-differences.json",
+        "docs/migration/compatibility-inventory.json"
+      ],
+      "tests": [
+        "tests/contracts/test_full_catalog.py",
+        "tests/contracts/test_prompts.py",
+        "tests/contracts/test_server_instructions.py"
+      ],
+      "evidence": [],
+      "commit": null
+    },
+    {
+      "id": "P21",
+      "title": "Completar CLI y stdio real",
+      "dependsOn": [
+        "P20"
+      ],
+      "status": "not_started",
+      "tools": [],
+      "files": [
+        "src/mealie_mcp_server/cli.py",
+        "src/mealie_mcp_server/__main__.py",
+        "pyproject.toml",
+        "docs/clients.md"
+      ],
+      "tests": [
+        "tests/integration/test_stdio.py",
+        "tests/unit/test_cli.py"
+      ],
+      "evidence": [],
+      "commit": null
+    },
+    {
+      "id": "P22",
+      "title": "Completar HTTP con Bearer personal y salud",
+      "dependsOn": [
+        "P21"
+      ],
+      "status": "not_started",
+      "tools": [],
+      "files": [
+        "src/mealie_mcp_server/auth.py",
+        "src/mealie_mcp_server/health.py",
+        "src/mealie_mcp_server/server.py",
+        "src/mealie_mcp_server/cli.py",
+        "docs/http-deployment.md",
+        "docs/configuration.md"
+      ],
+      "tests": [
+        "tests/unit/test_auth.py",
+        "tests/integration/test_http.py",
+        "tests/integration/test_http_cancellation.py"
+      ],
+      "evidence": [],
+      "commit": null
+    },
+    {
+      "id": "P23",
+      "title": "Construir y verificar la imagen de producción",
+      "dependsOn": [
+        "P22"
+      ],
+      "status": "not_started",
+      "tools": [],
+      "files": [
+        "Dockerfile",
+        "compose.production.yaml",
+        ".dockerignore",
+        ".github/workflows/ci.yaml",
+        ".github/workflows/release.yaml",
+        "docs/containers.md"
+      ],
+      "tests": [
+        "tests/containers/test_runtime_stdio.py",
+        "tests/containers/test_runtime_http.py",
+        "tests/containers/test_runtime_security.py"
+      ],
+      "evidence": [],
+      "commit": null
+    },
+    {
+      "id": "P24",
+      "title": "Cerrar integración, documentación, retirada TS y aceptación",
+      "dependsOn": [
+        "P23"
+      ],
+      "status": "not_started",
+      "tools": [],
+      "files": [
+        "compose.integration.yaml",
+        "tests/integration/test_mealie_roundtrip.py",
+        "scripts/generate_docs.py",
+        "scripts/check_compatibility.py",
+        "README.md",
+        "API_COVERAGE.md",
+        "ARCHITECTURE.md",
+        "WORKFLOWS.md",
+        "CONTRIBUTING.md",
+        "docs/README.md",
+        "docs/migration/acceptance.md",
+        "docs/migration/differences.md",
+        "docs/migration/progress.md",
+        "renovate.json",
+        "sonarcloud.properties",
+        "opencode.json",
+        ".github/workflows/ci.yaml",
+        ".github/workflows/release.yaml"
+      ],
+      "tests": [
+        "tests/contracts/test_docs_generation.py",
+        "tests/integration/test_mealie_roundtrip.py"
+      ],
+      "evidence": [],
+      "commit": null
+    }
+  ],
+  "contracts": {
+    "C01": [
+      "P04",
+      "P06",
+      "P20"
+    ],
+    "C02": [
+      "P04",
+      "P08",
+      "P09",
+      "P11",
+      "P16"
+    ],
+    "C03": [
+      "P03",
+      "P06",
+      "P20"
+    ],
+    "C04": [
+      "P05"
+    ],
+    "C05": [
+      "P05",
+      "P11",
+      "P12"
+    ],
+    "C06": [
+      "P05",
+      "P12",
+      "P13",
+      "P14",
+      "P16",
+      "P17"
+    ],
+    "C07": [
+      "P15"
+    ],
+    "C08": [
+      "P15"
+    ],
+    "C09": [
+      "P16"
+    ],
+    "C10": [
+      "P17"
+    ],
+    "C11": [
+      "P13",
+      "P14",
+      "P16",
+      "P17"
+    ],
+    "C12": [
+      "P18"
+    ],
+    "C13": [
+      "P18"
+    ],
+    "C14": [
+      "P19"
+    ],
+    "C15": [
+      "P19"
+    ],
+    "C16": [
+      "P05",
+      "P16",
+      "P17",
+      "P22"
+    ]
+  },
+  "upstreamLibraries": {
+    "src/lib/candidate-matching.ts": "P07",
+    "src/lib/concurrency.ts": "P05",
+    "src/lib/find-recipes-for-ingredients.ts": "P15",
+    "src/lib/ingredient-resolution.ts": "P15",
+    "src/lib/last-made.ts": "P19",
+    "src/lib/multi-query-lookup.ts": "P07",
+    "src/lib/organizer-resolution.ts": "P08",
+    "src/lib/query-filter.ts": "P05",
+    "src/lib/recipe-audit.ts": "P15",
+    "src/lib/recipe-classification.ts": "P15",
+    "src/lib/recipe-enrichment.ts": "P15",
+    "src/lib/recipe-image.ts": "P18",
+    "src/lib/recipe-ingredient-parsing.ts": "P15",
+    "src/lib/recipe-ingredients.ts": "P16",
+    "src/lib/recipe-instructions.ts": "P17",
+    "src/lib/recipe-rating.ts": "P19",
+    "src/lib/recipe-scan.ts": "P15",
+    "src/lib/recipe-taxonomy.ts": "P13",
+    "src/lib/recipe-tools.ts": "P13",
+    "src/lib/safe-download.ts": "P18",
+    "src/lib/taxonomy-resolution.ts": "P12"
+  },
+  "upstreamTests": {
+    "src/__tests__/candidate-matching.test.ts": "P07",
+    "src/__tests__/client.test.ts": "P05",
+    "src/__tests__/docs-generation.test.ts": "P24",
+    "src/__tests__/find-recipes-for-ingredients-tool.test.ts": "P15",
+    "src/__tests__/find-recipes-for-ingredients.test.ts": "P15",
+    "src/__tests__/foods-api.test.ts": "P09",
+    "src/__tests__/foods-tools.test.ts": "P09",
+    "src/__tests__/formatParams.test.ts": "P05",
+    "src/__tests__/get-recipes-taxonomy-filter.test.ts": "P12",
+    "src/__tests__/last-made.test.ts": "P19",
+    "src/__tests__/mark-recipe-last-made-tool.test.ts": "P19",
+    "src/__tests__/mealplans-api.test.ts": "P14",
+    "src/__tests__/mealplans-tools.test.ts": "P14",
+    "src/__tests__/multi-query-lookup.test.ts": "P07",
+    "src/__tests__/patch-recipe-tool.test.ts": "P13",
+    "src/__tests__/path-segments.test.ts": "P05",
+    "src/__tests__/query-filter.test.ts": "P05",
+    "src/__tests__/recipe-audit.test.ts": "P15",
+    "src/__tests__/recipe-classification.test.ts": "P15",
+    "src/__tests__/recipe-enrichment.test.ts": "P15",
+    "src/__tests__/recipe-image-file.test.ts": "P18",
+    "src/__tests__/recipe-image.test.ts": "P18",
+    "src/__tests__/recipe-ingredient-parsing-tool.test.ts": "P15",
+    "src/__tests__/recipe-ingredient-parsing.test.ts": "P15",
+    "src/__tests__/recipe-ingredients-tool.test.ts": "P16",
+    "src/__tests__/recipe-ingredients.test.ts": "P16",
+    "src/__tests__/recipe-instructions.test.ts": "P17",
+    "src/__tests__/recipe-rating.test.ts": "P19",
+    "src/__tests__/recipe-taxonomy.test.ts": "P13",
+    "src/__tests__/recipe-tools-taxonomy.test.ts": "P13",
+    "src/__tests__/recipe-tools-update.test.ts": "P13",
+    "src/__tests__/recipes-batch-concurrency.test.ts": "P12",
+    "src/__tests__/recipes-tool-registration.test.ts": "P20",
+    "src/__tests__/recipes.test.ts": "P12",
+    "src/__tests__/server-instructions.test.ts": "P20",
+    "src/__tests__/set-recipe-image-from-file-tool.test.ts": "P18",
+    "src/__tests__/strict-tool-inputs.test.ts": "P06",
+    "src/__tests__/taxonomy-resolution.test.ts": "P12",
+    "src/__tests__/tools-api.test.ts": "P10",
+    "src/__tests__/tools-tools.test.ts": "P10",
+    "src/__tests__/units-api.test.ts": "P09",
+    "src/__tests__/units-tools.test.ts": "P09"
+  }
+}

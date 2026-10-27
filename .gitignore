@@ -10,5 +10,17 @@ coverage/
 .pnp.loader.mjs
 package-lock.json
 .idea/
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.egg-info/
+.superpowers/
+artifacts/
+.env.*
+!.env.example
+secrets/
 
 

@@ -1,0 +1,35 @@
+{
+  "name": "Mealie MCP · Python",
+  "dockerComposeFile": "compose.yaml",
+  "service": "dev",
+  "workspaceFolder": "/workspaces/mealie-mcp-server",
+  "remoteUser": "vscode",
+  "updateRemoteUserUID": false,
+  "shutdownAction": "stopCompose",
+  "features": {
+    "ghcr.io/devcontainers/features/docker-outside-of-docker:1.10.1": {}
+  },
+  "forwardPorts": [
+    8000
+  ],
+  "portsAttributes": {
+    "8000": {
+      "label": "Mealie MCP HTTP",
+      "onAutoForward": "notify",
+      "visibility": "private"
+    }
+  },
+  "postCreateCommand": "sudo chown vscode:vscode .venv /home/vscode/.cache/uv && git config --global --add safe.directory /workspaces/mealie-mcp-server && if [ -f uv.lock ]; then uv sync --frozen --group dev; else printf 'Bootstrap listo: uv.lock se creará en P02.\\n'; fi",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-python.python",
+        "charliermarsh.ruff"
+      ],
+      "settings": {
+        "python.defaultInterpreterPath": "/workspaces/mealie-mcp-server/.venv/bin/python",
+        "python.terminal.activateEnvironment": true
+      }
+    }
+  }
+}

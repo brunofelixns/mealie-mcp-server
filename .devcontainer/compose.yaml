@@ -1,0 +1,20 @@
+name: mealie-mcp-development
+services:
+  dev:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+      target: development
+    init: true
+    command: ["sleep", "infinity"]
+    volumes:
+      - ..:/workspaces/mealie-mcp-server
+      - python-environment:/workspaces/mealie-mcp-server/.venv
+      - uv-cache:/home/vscode/.cache/uv
+    environment:
+      UV_PROJECT_ENVIRONMENT: /workspaces/mealie-mcp-server/.venv
+      UV_CACHE_DIR: /home/vscode/.cache/uv
+      TZ: UTC
+volumes:
+  python-environment:
+  uv-cache:

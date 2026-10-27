@@ -1,59 +1,21 @@
-# Syntax=docker/dockerfile:1.28
+# syntax=docker/dockerfile:1
+ARG PYTHON_IMAGE=python:3.14-slim-bookworm@sha256:9974e24551f9e7ca172cf284d85b8ab3e031d22d945f7026ede7a8279118c9f1
+ARG UV_IMAGE=ghcr.io/astral-sh/uv:0.9.9@sha256:f6e3549ed287fee0ddde2460a2a74a2d74366f84b04aaa34c1f19fec40da8652
+FROM ${UV_IMAGE} AS uv
+FROM ${PYTHON_IMAGE} AS base
+ENV PYTHONUNBUFFERED=1 PYTHONDONTWRITEBYTECODE=1 TZ=UTC
+COPY --from=uv /uv /uvx /usr/local/bin/
 
-# Build stage
-FROM node:26-alpine AS builder
-
-WORKDIR /app
-
-# Copy package files
-COPY package.json yarn.lock ./
-
-# Copy LICENSE early so it's available in builder
-COPY LICENSE ./
-
-# Enable Corepack and install dependencies
-RUN corepack enable && \
-    yarn install --immutable --production=false
-
-# Copy source files
-COPY . .
-
-# Build the TypeScript project
-RUN yarn build
-
-# Production stage
-FROM node:26-alpine AS runner
-
-# OCI Labels
-LABEL org.opencontainers.image.title="mealie-mcp-server" \
-      org.opencontainers.image.description="A Model Context Protocol (MCP) server for Mealie recipe management. Exposes 43 tools and 1 prompt for AI assistants to search, create, and manage recipes, meal plans, shopping lists, categories, and tags." \
-      org.opencontainers.image.ref.name="main" \
-      org.opencontainers.image.licenses='MIT' \
-      org.opencontainers.image.vendor="Timo Reymann <mail@timo-reymann.de>" \
-      org.opencontainers.image.authors="Timo Reymann <mail@timo-reymann.de>" \
-      org.opencontainers.image.url="https://github.com/timo-reymann/mealie-mcp-server" \
-      org.opencontainers.image.documentation="https://github.com/timo-reymann/mealie-mcp-server" \
-      org.opencontainers.image.source="https://github.com/timo-reymann/mealie-mcp-server.git"
-
-WORKDIR /app
-
-# Copy built files and LICENSE from builder
-COPY --from=builder /app/dist ./dist
-COPY --from=builder /app/package.json ./package.json
-COPY --from=builder /app/LICENSE ./LICENSE
-
-# Install only production dependencies
-RUN corepack enable && \
-    yarn install --immutable --production
-
-# Create non-root user for security
-RUN addgroup -g 1001 -S nodejs && \
-    adduser -S nodejs -u 1001
-
-USER nodejs
-
-# Expose the default MCP server port (stdio, but can be used with TCP if needed)
-EXPOSE 3000
-
-# Set entrypoint
-ENTRYPOINT ["node", "dist/index.js"]
+FROM base AS development
+RUN apt-get update \
+    && apt-get install --yes --no-install-recommends bash ca-certificates curl git sudo tzdata \
+    && rm -rf /var/lib/apt/lists/* \
+    && groupadd --gid 1000 vscode \
+    && useradd --uid 1000 --gid vscode --create-home --shell /bin/bash vscode \
+    && printf 'vscode ALL=(ALL) NOPASSWD:ALL\n' > /etc/sudoers.d/vscode \
+    && chmod 0440 /etc/sudoers.d/vscode \
+    && install -d -o vscode -g vscode /workspaces/mealie-mcp-server/.venv /home/vscode/.cache/uv
+ENV UV_PROJECT_ENVIRONMENT=/workspaces/mealie-mcp-server/.venv UV_CACHE_DIR=/home/vscode/.cache/uv
+WORKDIR /workspaces/mealie-mcp-server
+USER vscode
+CMD ["sleep", "infinity"]
