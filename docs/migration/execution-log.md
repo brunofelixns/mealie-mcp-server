@@ -19,6 +19,8 @@
 - P01: trabajar en la carpeta nueva y rama migration/python del upstream fijado, conservando docs; el plan ya define este bootstrap y no existe un checkout principal previo que aislar. No crear otro worktree duplicado.
 - Ejecución: usar este ledger versionado y el estado JSON en docs como registro durable. Los helpers de la skill esperan encabezados Task N y el plan aprobado usa P01..P24; no renombrar ni duplicar el plan para depender de ese parser.
 - Docker Desktop: acceso al daemon denegado dentro del sandbox; comprobación escalada autorizada y exitosa. Ejecutar Docker con el permiso necesario; no instalar/runtime de aplicación en el host.
+- P06: registro mediante Tool/ToolResult públicos de FastMCP4, JSON Schema explícito y modelo Pydantic estricto. jsonschema valida el contrato capturado; no hay dispatcher REST genérico ni outputSchema/structuredContent nuevo. Los mensajes de validación seguros identifican campos en lugar de copiar entradas del cliente.
+- P07: añadir PyICU/ICU para reproducir localeCompare en-US observado; trim ECMAScript y longitud UTF-16. Motor callback compartido detrás de la interfaz lookup_candidates del plan, sin variar el contrato MCP.
 
 ## Evidencia
 
@@ -37,3 +39,5 @@ Task P04: complete — dos ciclos RED/GREEN observados; suite28/28, Ruff/mypy pa
 Task P05: complete — suite53/53, Ruff/mypy passed; HTTP real contra fake y límites/orden verificados. P06 en curso.
 
 Task P06: complete — suite68/68, Ruff/mypy passed; evidencia evidence/P06.md. P07 en curso.
+
+Task P07: complete — suite94/94, Ruff/mypy passed; evidencia evidence/P07.md. P08 en curso.

@@ -16,6 +16,7 @@ dependencies = [
   "pydantic>=2.12,<3",
   "pydantic-settings>=2,<3",
   "jsonschema>=4.25,<5",
+  "pyicu>=2.16,<3",
 ]
 
 [dependency-groups]

@@ -10,7 +10,7 @@
 
 **Spec:** [Diseño completo](../specs/2026-10-27-python-migration-design.md). Leer también [inventario](../../migration/compatibility-inventory.md) e [inventario JSON](../../migration/compatibility-inventory.json).
 
-Fecha: 2026-10-27. Estado: implementación autorizada; P01..P06 verificadas y P07 en curso. Ver implementation-state.json para la evidencia. No se ha publicado ni desplegado un endpoint público.
+Fecha: 2026-10-27. Estado: implementación autorizada; P01..P07 verificadas y P08 en curso. Ver implementation-state.json para la evidencia. No se ha publicado ni desplegado un endpoint público.
 
 ## Global Constraints
 
@@ -233,24 +233,24 @@ uv run pytest tests/unit/test_server_lifespan.py tests/contracts/test_strict_inp
 <a id="p07"></a>
 ### P07: Portar candidatos y consultas agrupadas
 
-**Depende de:** P06. **Estado:** pendiente; ver registro de ejecución.
+**Depende de:** P06. **Estado:** verificada; ver registro de ejecución.
 
 **Archivos:** `src/mealie_mcp_server/services/candidate_matching.py`, `src/mealie_mcp_server/services/multi_query_lookup.py`.
 **Tests:** `tests/unit/test_candidate_matching.py`, `tests/unit/test_multi_query_lookup.py`.
 
 **Interfaces:** consume MealieClient y map_with_concurrency de P05. Produce classify_and_rank(query: str, candidates: list[JsonObject], fields: list[str]) -> list[JsonObject]; lookup_candidates(client: MealieClient, kind: Literal['food','unit','tool'], queries: list[str], max_matches: int | None = None) -> JsonObject.
 
-- [ ] **1. Añadir las pruebas antes del código funcional.** test_exact_precedes_substring_and_aliases; test_duplicate_queries_preserve_positions; test_lookup_limits: 1..25 queries, longitud <=200, maxMatches default10/cap25, chunks10, pool200, requests concurrentes4; assert results conserva una entrada por consulta incluso repetida. No elegir canónico ni crear entidades.
-- [ ] **2. Ejecutar el subconjunto indicado y observar RED.** El fallo esperado es el comportamiento/handler aún ausente o incorrecto; si falta infraestructura del harness, arreglarla antes de tomar el fallo como evidencia.
-- [ ] **3. Implementar las interfaces de esta tarea y sus fixtures.** Reutilizar los contratos anteriores; preservar los valores del diseño y el inventario. Orden y desempates reproducen baseline, incluyendo Unicode, blancos, aliases y queries con caracteres de filtros escapados.
+- [x] **1. Añadir las pruebas antes del código funcional.** test_exact_precedes_substring_and_aliases; test_duplicate_queries_preserve_positions; test_lookup_limits: 1..25 queries, longitud <=200, maxMatches default10/cap25, chunks10, pool200, requests concurrentes4; assert results conserva una entrada por consulta incluso repetida. No elegir canónico ni crear entidades.
+- [x] **2. Ejecutar el subconjunto indicado y observar RED.** El fallo esperado es el comportamiento/handler aún ausente o incorrecto; si falta infraestructura del harness, arreglarla antes de tomar el fallo como evidencia.
+- [x] **3. Implementar las interfaces de esta tarea y sus fixtures.** Reutilizar los contratos anteriores; preservar los valores del diseño y el inventario. Orden y desempates reproducen baseline, incluyendo Unicode, blancos, aliases y queries con caracteres de filtros escapados.
 
-- [ ] **4. Verificar el resultado de esta tarea.** Ejecutar dentro del Dev Container; salida0 y todas las aserciones indicadas en verde. Para P01 el launcher y el contenedor auxiliar son la excepción de bootstrap explicada arriba.
+- [x] **4. Verificar el resultado de esta tarea.** Ejecutar dentro del Dev Container; salida0 y todas las aserciones indicadas en verde. Para P01 el launcher y el contenedor auxiliar son la excepción de bootstrap explicada arriba.
 
 ```bash
 uv run pytest tests/unit/test_candidate_matching.py tests/unit/test_multi_query_lookup.py -q
 ```
 
-- [ ] **5. Revisar, documentar y cerrar.** Comprobar el criterio de salida anterior y el diff; no ampliar la suite sin una nueva causa. Actualizar estado, diferencias si las hay y evidencia con comando/resultado/entorno. Commit de implementación sugerido: `feat: port deterministic candidate matching`. Registrar su SHA en un commit documental posterior si hace falta; no intentar incluir el hash de un commit en sí mismo.
+- [x] **5. Revisar, documentar y cerrar.** Comprobar el criterio de salida anterior y el diff; no ampliar la suite sin una nueva causa. Actualizar estado, diferencias si las hay y evidencia con comando/resultado/entorno. Commit de implementación sugerido: `feat: port deterministic candidate matching`. Registrar su SHA en un commit documental posterior si hace falta; no intentar incluir el hash de un commit en sí mismo.
 
 <a id="p08"></a>
 ### P08: Migrar categorías y etiquetas

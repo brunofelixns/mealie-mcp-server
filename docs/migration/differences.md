@@ -1,6 +1,6 @@
 # Diferencias controladas respecto al original
 
-Estado: registro preparado; ninguna diferencia de ejecución ha sido verificada aún.
+Estado: ejecución en curso; cada evidencia de fase identifica las diferencias verificadas.
 Referencia: d027e1b4a314d781a322f1f91e37840f01464d77.
 
 | ID | Diferencia prevista | Motivo / decisión | Tarea | Estado |
@@ -13,6 +13,7 @@ Referencia: d027e1b4a314d781a322f1f91e37840f01464d77.
 | D06 | Salud HTTP y mensajes/logs con redacción de secretos | Operación del nuevo transporte sin exponer credenciales | P05/P22 | Propuesta documentada |
 | D07 | Texto de éxito válido si un DELETE devuelve204 | Posible defecto al serializar undefined en original; requiere caracterización | P03/P06/P08..P20 | Condicional, no confirmado |
 | D08 | structuredContent/outputSchema por herramienta | Solo si conserva el contenido contractual y pasa comparación de clientes | P06/P20 | Opcional y condicionado |
+| D09 | Texto de validación de argumentos identifica campo/regla sin copiar entradas | Validación estricta equivalente con JSON Schema/Pydantic; no exponer entradas ni secretos por mensajes del SDK | P06 | Verificada: tests/contracts/test_strict_inputs.py |
 
 ## Regla para añadir una diferencia
 

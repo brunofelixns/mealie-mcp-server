@@ -3,9 +3,11 @@
 import re
 from collections.abc import Sequence
 
+from mealie_mcp_server.support.strings import trim
+
 
 def sanitize_for_like_filter(raw: str) -> str:
-    return re.sub(r'["%_]', "", raw).strip()
+    return trim(re.sub(r'["%_]', "", raw))
 
 
 def build_combined_like_filter(

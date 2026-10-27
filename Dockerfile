@@ -5,10 +5,13 @@ FROM ${UV_IMAGE} AS uv
 FROM ${PYTHON_IMAGE} AS base
 ENV PYTHONUNBUFFERED=1 PYTHONDONTWRITEBYTECODE=1 UV_LINK_MODE=copy TZ=UTC
 COPY --from=uv /uv /uvx /usr/local/bin/
+RUN apt-get update \
+    && apt-get install --yes --no-install-recommends libicu72 \
+    && rm -rf /var/lib/apt/lists/*
 
 FROM base AS development
 RUN apt-get update \
-    && apt-get install --yes --no-install-recommends bash ca-certificates curl git sudo tzdata \
+    && apt-get install --yes --no-install-recommends bash ca-certificates curl git sudo tzdata g++ pkg-config libicu-dev \
     && rm -rf /var/lib/apt/lists/* \
     && groupadd --gid 1000 vscode \
     && useradd --uid 1000 --gid vscode --create-home --shell /bin/bash vscode \
