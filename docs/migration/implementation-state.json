@@ -160,7 +160,7 @@
           "focusedTests": 24
         }
       ],
-      "commit": null
+      "commit": "ae9fb19a5660e40b234a89886100684a515e0508"
     },
     {
       "id": "P06",
@@ -168,7 +168,7 @@
       "dependsOn": [
         "P05"
       ],
-      "status": "in_progress",
+      "status": "verified",
       "tools": [],
       "files": [
         "src/mealie_mcp_server/server.py",
@@ -183,7 +183,13 @@
         "tests/contracts/test_strict_inputs.py",
         "tests/contracts/test_result_adapter.py"
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "report": "docs/migration/evidence/P06.md",
+          "result": "passed",
+          "tests": 68
+        }
+      ],
       "commit": null
     },
     {
@@ -192,7 +198,7 @@
       "dependsOn": [
         "P06"
       ],
-      "status": "not_started",
+      "status": "in_progress",
       "tools": [],
       "files": [
         "src/mealie_mcp_server/services/candidate_matching.py",

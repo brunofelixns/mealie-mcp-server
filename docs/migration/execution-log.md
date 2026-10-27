@@ -35,3 +35,5 @@ Task P03: complete — catálogo real78/78, prompt/instrucciones y fake en red D
 Task P04: complete — dos ciclos RED/GREEN observados; suite28/28, Ruff/mypy passed. P05 en curso.
 
 Task P05: complete — suite53/53, Ruff/mypy passed; HTTP real contra fake y límites/orden verificados. P06 en curso.
+
+Task P06: complete — suite68/68, Ruff/mypy passed; evidencia evidence/P06.md. P07 en curso.

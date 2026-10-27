@@ -10,7 +10,7 @@
 
 **Spec:** [Diseño completo](../specs/2026-10-27-python-migration-design.md). Leer también [inventario](../../migration/compatibility-inventory.md) e [inventario JSON](../../migration/compatibility-inventory.json).
 
-Fecha: 2026-10-27. Estado: implementación autorizada por el usuario; P01..P03 verificadas y P04 en curso. El estado actualizado se mantiene en implementation-state.json; no hay autorización para publicar o desplegar un endpoint público.
+Fecha: 2026-10-27. Estado: implementación autorizada; P01..P06 verificadas y P07 en curso. Ver implementation-state.json para la evidencia. No se ha publicado ni desplegado un endpoint público.
 
 ## Global Constraints
 
@@ -211,24 +211,24 @@ uv run pytest tests/unit/test_client.py tests/unit/test_path_segments.py tests/u
 <a id="p06"></a>
 ### P06: Crear la factory MCP y el adaptador de contratos
 
-**Depende de:** P05. **Estado:** pendiente; ver registro de ejecución.
+**Depende de:** P05. **Estado:** verificada; ver registro de ejecución.
 
 **Archivos:** `src/mealie_mcp_server/server.py`, `src/mealie_mcp_server/tools/registry.py`, `src/mealie_mcp_server/tools/helpers.py`, `src/mealie_mcp_server/models/inputs/base.py`, `src/mealie_mcp_server/models/results/base.py`, `tests/support/contracts.py`.
 **Tests:** `tests/unit/test_server_lifespan.py`, `tests/contracts/test_strict_inputs.py`, `tests/contracts/test_result_adapter.py`.
 
 **Interfaces:** consume Settings y MealieClient; corpus P03. Produce AppState(settings: Settings, client: MealieClient); create_server(settings: Settings, *, client_factory: Callable[[],AbstractAsyncContextManager[MealieClient]] | None = None) -> FastMCP; get_state(ctx: Context) -> AppState; register_all_tools(server: FastMCP) -> None; ToolInput base extra='forbid'; success_result(data: JsonValue) -> CallToolResult; error_result(error: Exception) -> CallToolResult.
 
-- [ ] **1. Añadir las pruebas antes del código funcional.** test_nested_unknown_key_never_calls_upstream: assert recorded_requests == []. test_no_import_side_effects: construir/importar no llama Mealie. test_lifespan_isolated_clients: dos settings no comparten cachés. test_result_adapter_preserves_strings_arrays_and_null: no wrapper nuevo que altere resultados; text e isError como baseline. Tests sintéticos locales no se publican como herramientas reales.
-- [ ] **2. Ejecutar el subconjunto indicado y observar RED.** El fallo esperado es el comportamiento/handler aún ausente o incorrecto; si falta infraestructura del harness, arreglarla antes de tomar el fallo como evidencia.
-- [ ] **3. Implementar las interfaces de esta tarea y sus fixtures.** Reutilizar los contratos anteriores; preservar los valores del diseño y el inventario. Lifecycle en ambos transportes preparado; aliases camelCase; campos abiertos originales siguen abiertos. El catálogo parcial es explícito durante desarrollo y no se etiqueta como completo.
+- [x] **1. Añadir las pruebas antes del código funcional.** test_nested_unknown_key_never_calls_upstream: assert recorded_requests == []. test_no_import_side_effects: construir/importar no llama Mealie. test_lifespan_isolated_clients: dos settings no comparten cachés. test_result_adapter_preserves_strings_arrays_and_null: no wrapper nuevo que altere resultados; text e isError como baseline. Tests sintéticos locales no se publican como herramientas reales.
+- [x] **2. Ejecutar el subconjunto indicado y observar RED.** El fallo esperado es el comportamiento/handler aún ausente o incorrecto; si falta infraestructura del harness, arreglarla antes de tomar el fallo como evidencia.
+- [x] **3. Implementar las interfaces de esta tarea y sus fixtures.** Reutilizar los contratos anteriores; preservar los valores del diseño y el inventario. Lifecycle en ambos transportes preparado; aliases camelCase; campos abiertos originales siguen abiertos. El catálogo parcial es explícito durante desarrollo y no se etiqueta como completo.
 
-- [ ] **4. Verificar el resultado de esta tarea.** Ejecutar dentro del Dev Container; salida0 y todas las aserciones indicadas en verde. Para P01 el launcher y el contenedor auxiliar son la excepción de bootstrap explicada arriba.
+- [x] **4. Verificar el resultado de esta tarea.** Ejecutar dentro del Dev Container; salida0 y todas las aserciones indicadas en verde. Para P01 el launcher y el contenedor auxiliar son la excepción de bootstrap explicada arriba.
 
 ```bash
 uv run pytest tests/unit/test_server_lifespan.py tests/contracts/test_strict_inputs.py tests/contracts/test_result_adapter.py -q
 ```
 
-- [ ] **5. Revisar, documentar y cerrar.** Comprobar el criterio de salida anterior y el diff; no ampliar la suite sin una nueva causa. Actualizar estado, diferencias si las hay y evidencia con comando/resultado/entorno. Commit de implementación sugerido: `feat: add MCP factory and strict contract adapter`. Registrar su SHA en un commit documental posterior si hace falta; no intentar incluir el hash de un commit en sí mismo.
+- [x] **5. Revisar, documentar y cerrar.** Comprobar el criterio de salida anterior y el diff; no ampliar la suite sin una nueva causa. Actualizar estado, diferencias si las hay y evidencia con comando/resultado/entorno. Commit de implementación sugerido: `feat: add MCP factory and strict contract adapter`. Registrar su SHA en un commit documental posterior si hace falta; no intentar incluir el hash de un commit en sí mismo.
 
 <a id="p07"></a>
 ### P07: Portar candidatos y consultas agrupadas
