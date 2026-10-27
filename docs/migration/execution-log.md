@@ -26,3 +26,6 @@
 - Historial incorporado mediante alpine/git2.49.1 fijado por digest; HEAD d027e1b4a314d781a322f1f91e37840f01464d77; rama migration/python. docs preservada y upstream solo lectura.
 
 Task P01: complete — apertura real del Dev Container y checks Docker/Python/uid/volúmenes passed; evidencia evidence/P01.md. P02 en curso.
+
+Task P02: complete — RED de wheel instalado observado y GREEN1/1, Ruff/mypy/build y reapertura frozen passed. P03 en curso.
+P03: Ruling: Node26 no incluye Corepack ni Yarn; el runner instala Yarn1.22.22 por npm según packageManager upstream, sin cambiar código/lock original. Coste si falla: reproducibilidad del entorno de referencia; se verifica con suite original.

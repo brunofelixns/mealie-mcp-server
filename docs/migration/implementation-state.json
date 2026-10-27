@@ -32,7 +32,7 @@
           "dockerServer": "28.3.0"
         }
       ],
-      "commit": null
+      "commit": "d7a7707f0b12bb74bc994a84cd46d22f55b7dfeb"
     },
     {
       "id": "P02",
@@ -40,7 +40,7 @@
       "dependsOn": [
         "P01"
       ],
-      "status": "in_progress",
+      "status": "verified",
       "tools": [],
       "files": [
         "pyproject.toml",
@@ -54,7 +54,15 @@
       "tests": [
         "tests/unit/test_package_metadata.py"
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "report": "docs/migration/evidence/P02.md",
+          "result": "passed",
+          "tests": 1,
+          "redLog": "artifacts/P02-red.log",
+          "frozenReopen": "success"
+        }
+      ],
       "commit": null
     },
     {
@@ -63,7 +71,7 @@
       "dependsOn": [
         "P02"
       ],
-      "status": "not_started",
+      "status": "in_progress",
       "tools": [],
       "files": [
         "tests/reference/Dockerfile",

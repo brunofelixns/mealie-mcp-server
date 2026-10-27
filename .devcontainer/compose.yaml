@@ -14,6 +14,7 @@ services:
     environment:
       UV_PROJECT_ENVIRONMENT: /workspaces/mealie-mcp-server/.venv
       UV_CACHE_DIR: /home/vscode/.cache/uv
+      UV_LINK_MODE: copy
       TZ: UTC
 volumes:
   python-environment:

@@ -1,0 +1,55 @@
+[build-system]
+requires = ["hatchling>=1.27,<2"]
+build-backend = "hatchling.build"
+
+[project]
+name = "mealie-mcp-server"
+version = "2.1.0"
+description = "Python Model Context Protocol server for Mealie"
+readme = "README.md"
+requires-python = ">=3.14"
+license = "MIT"
+dependencies = [
+  "fastmcp==4.1.4",
+  "mcp==2.3.0",
+  "httpx2>=2.10.0,<3",
+  "pydantic>=2.12,<3",
+  "pydantic-settings>=2,<3",
+]
+
+[dependency-groups]
+dev = [
+  "mypy>=1.18,<2",
+  "pytest>=8.4,<10",
+  "pytest-asyncio>=1.2,<2",
+  "pytest-cov>=6.2,<8",
+  "ruff>=0.14,<1",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/mealie_mcp_server"]
+
+[tool.hatch.build.targets.sdist]
+include = ["src/mealie_mcp_server", "pyproject.toml", "README.md", "LICENSE", "uv.lock"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+addopts = "-ra"
+
+[tool.ruff]
+target-version = "py314"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "ASYNC"]
+
+[tool.mypy]
+python_version = "3.14"
+strict = true
+files = ["src/mealie_mcp_server"]
+
+[tool.coverage.run]
+source = ["mealie_mcp_server"]
+branch = true

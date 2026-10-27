@@ -1,0 +1,23 @@
+name: Python migration checks
+on:
+  push:
+    branches: [migration/python]
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  python:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - name: Verify inside the Dev Container
+        uses: devcontainers/ci@513af61f4de4f75d37e4438f184ba4358f0fc1ca # v0.3
+        with:
+          push: never
+          runCmd: |
+            uv sync --frozen --group dev
+            uv run ruff check .
+            uv run ruff format --check .
+            uv run mypy src/mealie_mcp_server
+            uv run pytest
+            uv build
