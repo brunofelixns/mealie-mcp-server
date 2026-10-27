@@ -1,19 +1,19 @@
 # Inventario de compatibilidad: Mealie MCP en Python
 
-Fecha: 2026-10-27. Estado: inventario estático completo de la superficie registrada; migración y capturas de ejecución pendientes.
+Fecha: 2026-10-27. Estado: superficie inventariada y catálogo runtime capturado en P03; migración Python de herramientas pendiente.
 
 La referencia es [timo-reymann/mealie-mcp-server, commit d027e1b4a314d781a322f1f91e37840f01464d77](https://github.com/timo-reymann/mealie-mcp-server/tree/d027e1b4a314d781a322f1f91e37840f01464d77). El alcance es migrar lo que implementa este commit, incluidos sus flujos compuestos. No equivale a implementar todos los endpoints posibles de Mealie.
 
-El directorio local estaba vacío y sin repositorio Git al comenzar. Este entregable contiene documentación; no se ha clonado, instalado, compilado ni ejecutado el servidor original o la versión Python.
+El directorio local estaba vacío y sin repositorio Git al comenzar. Este entregable contiene documentación; posteriormente P01..P03 incorporaron el historial, abrieron el Dev Container, crearon el paquete Python y ejecutaron el original; ver evidence/P03.md.
 
 ## 1. Evidencia y reglas de lectura
 
 - 78 herramientas registradas en ocho módulos, un prompt y las instrucciones generales del servidor.
 - Cero resources MCP registrados en el entrypoint y los módulos revisados.
-- 42 archivos de pruebas TypeScript revisados como fuente. No se conoce una cifra de pruebas pasadas porque no se han ejecutado.
+- 42 archivos TypeScript revisados y ejecutados en P03:1058pruebas pasan,0fallan; informe JSON extraído del contenedor.
 - El paquete declara 2.1.0, mientras el servidor anuncia 1.0.0. La introducción del README habla de 71 herramientas; la lista generada y los registros reales contienen 78.
 - El inventario JSON conserva los nombres, las descripciones y expresiones Zod originales, las declaraciones compartidas, los parámetros expandidos de factories, los endpoints declarados y enlaces al commit. Las expresiones Zod son evidencia estática, no JSON Schema ya obtenido por MCP.
-- runtimeInputSchema, runtimeOutputSchema y runtimeExamples permanecen pendientes en el JSON. Se rellenarán al caracterizar el original dentro del entorno de desarrollo. Un outputSchema ausente en el original se registrará como ausencia comprobada, no como dato perdido.
+- runtimeInputSchema y la presencia/ausencia de runtimeOutputSchema se capturaron en P03. runtimeExamples se completará por familia. La ausencia de outputSchema está marcada explícitamente, no se considera dato perdido.
 - Las referencias a tests se obtuvieron buscando el nombre completo de cada herramienta en los 42 archivos. Una referencia no demuestra cobertura ejecutada; su ausencia tampoco prueba que no haya pruebas de la API interna.
 - Los nombres públicos y el camelCase actual se conservan. Las listas de argumentos de las tablas incluyen obligatorios y opcionales: el esquema exacto y sus defaults se consultan en el JSON y se verificarán después en tools/list.
 - Estado de todos los registros: inventariado, sin implementar. Las notas indican qué conservar, no comportamiento ejecutado durante esta revisión.

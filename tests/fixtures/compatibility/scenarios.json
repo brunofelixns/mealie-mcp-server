@@ -1,0 +1,35 @@
+{
+  "categories.basic": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/organizers/categories",
+        "query": {
+          "page": [
+            "1"
+          ],
+          "perPage": [
+            "20"
+          ]
+        },
+        "body": null,
+        "status": 200,
+        "response": {
+          "items": [
+            {
+              "id": "category-1",
+              "name": "Dinner",
+              "slug": "dinner"
+            }
+          ],
+          "total": 1,
+          "page": 1,
+          "size": 20
+        }
+      }
+    ]
+  },
+  "no_requests": {
+    "requests": []
+  }
+}

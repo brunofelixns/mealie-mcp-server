@@ -1,0 +1,33 @@
+[
+  {
+    "tool": "get_categories",
+    "arguments": {
+      "page": 1,
+      "perPage": 20
+    },
+    "scenario": "categories.basic",
+    "expected_requests": [
+      {
+        "method": "GET",
+        "path": "/api/organizers/categories",
+        "query": {
+          "page": [
+            "1"
+          ],
+          "perPage": [
+            "20"
+          ]
+        },
+        "body": null
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"items\":[{\"id\":\"category-1\",\"name\":\"Dinner\",\"slug\":\"dinner\"}],\"total\":1,\"page\":1,\"size\":20}"
+        }
+      ]
+    }
+  }
+]

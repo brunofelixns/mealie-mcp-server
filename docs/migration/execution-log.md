@@ -29,3 +29,5 @@ Task P01: complete — apertura real del Dev Container y checks Docker/Python/ui
 
 Task P02: complete — RED de wheel instalado observado y GREEN1/1, Ruff/mypy/build y reapertura frozen passed. P03 en curso.
 P03: Ruling: Node26 no incluye Corepack ni Yarn; el runner instala Yarn1.22.22 por npm según packageManager upstream, sin cambiar código/lock original. Coste si falla: reproducibilidad del entorno de referencia; se verifica con suite original.
+
+Task P03: complete — catálogo real78/78, prompt/instrucciones y fake en red Docker; suite original1058/1058, suite Python3/3. Evidencia P03.md. P04 en curso.

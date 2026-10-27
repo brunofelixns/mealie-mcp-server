@@ -10,12 +10,12 @@
   },
   "scope": "Existing implemented MCP surface only, plus separately designed HTTP transport and containers",
   "evidence": {
-    "kind": "static_source_review",
+    "kind": "static_review_and_runtime_catalog_capture",
     "tools": 78,
     "prompts": 1,
     "resources": 0,
     "testFiles": 42,
-    "testsExecuted": false,
+    "testsExecuted": true,
     "toolNamesWithoutLiteralTestReferences": [
       "set_recipe_rating",
       "get_empty_categories",
@@ -42,7 +42,13 @@
       "delete_shopping_list_item",
       "delete_shopping_list_items_bulk"
     ],
-    "note": "A literal reference is traceability, not proof of executed coverage; missing references do not prove an API behavior is untested."
+    "note": "A literal reference is traceability, not proof of executed coverage; missing references do not prove an API behavior is untested.",
+    "upstreamSuite": {
+      "passed": 1058,
+      "failed": 0,
+      "files": 42,
+      "report": "docs/migration/evidence/P03.md"
+    }
   },
   "groups": [
     {
@@ -149,10 +155,46 @@
         "src/__tests__/get-recipes-taxonomy-filter.test.ts",
         "src/__tests__/recipes-tool-registration.test.ts"
       ],
-      "runtimeInputSchema": null,
+      "runtimeInputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "search": {
+            "type": "string"
+          },
+          "page": {
+            "type": "number"
+          },
+          "perPage": {
+            "type": "number"
+          },
+          "categories": {
+            "description": "Each given as a name, slug, or ID (matched case-insensitively by name/slug).",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "tags": {
+            "description": "Each given as a name, slug, or ID (matched case-insensitively by name/slug).",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "requireAllTags": {
+            "type": "boolean"
+          },
+          "requireAllCategories": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
       "runtimeOutputSchema": null,
       "runtimeExamples": [],
-      "runtimeCaptureStatus": "pending_capture_from_pinned_typescript_server"
+      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeOutputSchemaPresent": false
     },
     {
       "id": "T002",
@@ -210,10 +252,58 @@
         "src/__tests__/find-recipes-for-ingredients-tool.test.ts",
         "src/__tests__/recipes-tool-registration.test.ts"
       ],
-      "runtimeInputSchema": null,
+      "runtimeInputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "ingredients": {
+            "minItems": 1,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "One or more human-readable ingredient names (e.g. \"branzino\", \"chicken thighs\"). Never Mealie food UUIDs — this tool resolves names against Mealie's food taxonomy internally."
+          },
+          "categories": {
+            "description": "Optional category filter, same name/slug/ID matching convention as get_recipes.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "tags": {
+            "description": "Optional tag filter, same name/slug/ID matching convention as get_recipes.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "requireAllIngredients": {
+            "description": "When true, only return recipes containing every resolved ingredient (AND). Default false returns recipes containing any one of them, ranked by how many they contain and how few other ingredients they are missing (Mealie's Recipe Finder behavior).",
+            "type": "boolean"
+          },
+          "requireAllCategories": {
+            "description": "Require every given category, not just one.",
+            "type": "boolean"
+          },
+          "requireAllTags": {
+            "description": "Require every given tag, not just one.",
+            "type": "boolean"
+          },
+          "limit": {
+            "description": "Max recipes to return, default 10, capped at 50.",
+            "type": "number"
+          }
+        },
+        "required": [
+          "ingredients"
+        ],
+        "additionalProperties": false
+      },
       "runtimeOutputSchema": null,
       "runtimeExamples": [],
-      "runtimeCaptureStatus": "pending_capture_from_pinned_typescript_server"
+      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeOutputSchemaPresent": false
     },
     {
       "id": "T003",
@@ -246,10 +336,23 @@
         "src/__tests__/recipes-tool-registration.test.ts",
         "src/__tests__/server-instructions.test.ts"
       ],
-      "runtimeInputSchema": null,
+      "runtimeInputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "slug": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "slug"
+        ],
+        "additionalProperties": false
+      },
       "runtimeOutputSchema": null,
       "runtimeExamples": [],
-      "runtimeCaptureStatus": "pending_capture_from_pinned_typescript_server"
+      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeOutputSchemaPresent": false
     },
     {
       "id": "T004",
@@ -281,10 +384,23 @@
         "src/__tests__/recipes-tool-registration.test.ts",
         "src/__tests__/strict-tool-inputs.test.ts"
       ],
-      "runtimeInputSchema": null,
+      "runtimeInputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "slug": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "slug"
+        ],
+        "additionalProperties": false
+      },
       "runtimeOutputSchema": null,
       "runtimeExamples": [],
-      "runtimeCaptureStatus": "pending_capture_from_pinned_typescript_server"
+      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeOutputSchemaPresent": false
     },
     {
       "id": "T005",
@@ -315,10 +431,26 @@
       "testFilesMentioningTool": [
         "src/__tests__/recipes-tool-registration.test.ts"
       ],
-      "runtimeInputSchema": null,
+      "runtimeInputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "slugs": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "slugs"
+        ],
+        "additionalProperties": false
+      },
       "runtimeOutputSchema": null,
       "runtimeExamples": [],
-      "runtimeCaptureStatus": "pending_capture_from_pinned_typescript_server"
+      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeOutputSchemaPresent": false
     },
     {
       "id": "T006",
@@ -349,10 +481,27 @@
       "testFilesMentioningTool": [
         "src/__tests__/recipes-tool-registration.test.ts"
       ],
-      "runtimeInputSchema": null,
+      "runtimeInputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "slugs": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Recipe slugs to fetch in parallel"
+          }
+        },
+        "required": [
+          "slugs"
+        ],
+        "additionalProperties": false
+      },
       "runtimeOutputSchema": null,
       "runtimeExamples": [],
-      "runtimeCaptureStatus": "pending_capture_from_pinned_typescript_server"
+      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeOutputSchemaPresent": false
     },
     {
       "id": "T007",
@@ -392,10 +541,38 @@
       "testFilesMentioningTool": [
         "src/__tests__/recipes-tool-registration.test.ts"
       ],
-      "runtimeInputSchema": null,
+      "runtimeInputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "cursor": {
+            "description": "Opaque continuation token from a previous call's nextCursor. Pass it back unchanged to resume exactly where that call left off; omit it to start from the beginning of the collection. Do not construct or edit this value — malformed or foreign cursors are rejected with a clear error.",
+            "type": "string"
+          },
+          "limit": {
+            "description": "Maximum recipes to return (1-50, default 25).",
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 50
+          },
+          "taxonomyState": {
+            "description": "Which recipes to include, based on their existing Categories/Tags (default \"missing_either\"): \"missing_either\" — category list empty, tag list empty, or both; \"missing_both\" — both empty; \"missing_categories\" — category list empty regardless of tags; \"missing_tags\" — tag list empty regardless of categories; \"any\" — no taxonomy filtering.",
+            "type": "string",
+            "enum": [
+              "missing_either",
+              "missing_both",
+              "missing_categories",
+              "missing_tags",
+              "any"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
       "runtimeOutputSchema": null,
       "runtimeExamples": [],
-      "runtimeCaptureStatus": "pending_capture_from_pinned_typescript_server"
+      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeOutputSchemaPresent": false
     },
     {
       "id": "T008",
@@ -437,10 +614,36 @@
         "src/__tests__/recipes-tool-registration.test.ts",
         "src/__tests__/server-instructions.test.ts"
       ],
-      "runtimeInputSchema": null,
+      "runtimeInputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "cursor": {
+            "description": "Opaque continuation token from a previous call's nextCursor. Pass it back unchanged to resume exactly where that call left off; omit it to start from the beginning of the collection. Do not construct or edit this value — malformed or foreign cursors are rejected with a clear error.",
+            "type": "string"
+          },
+          "limit": {
+            "description": "Maximum recipes to return (1-50, default 25).",
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 50
+          },
+          "state": {
+            "description": "Which recipes to include (default \"unparsed_only\"): \"unparsed_only\" — at least one non-section ingredient has no associated food (pure section headings are excluded); \"partially_parsed\" — at least one ingredient has a food but no unit despite a positive quantity (coarse signal, see tool description for its known false-positive tradeoff); \"any\" — no filtering, every scanned recipe is returned (useful for auditing).",
+            "type": "string",
+            "enum": [
+              "unparsed_only",
+              "partially_parsed",
+              "any"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
       "runtimeOutputSchema": null,
       "runtimeExamples": [],
-      "runtimeCaptureStatus": "pending_capture_from_pinned_typescript_server"
+      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeOutputSchemaPresent": false
     },
     {
       "id": "T009",
@@ -484,10 +687,73 @@
       "testFilesMentioningTool": [
         "src/__tests__/recipe-enrichment.test.ts"
       ],
-      "runtimeInputSchema": null,
+      "runtimeInputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "cursor": {
+            "description": "Opaque continuation token from a previous call's nextCursor. Pass it back unchanged; omit it to start from the oldest recipe. Malformed or foreign cursors are rejected with a clear error.",
+            "type": "string"
+          },
+          "limit": {
+            "description": "Maximum recipes to return (1-50, default 25).",
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 50
+          },
+          "match": {
+            "description": "How active filters combine: \"any\" (default) = at least one matches; \"all\" = every active filter matches.",
+            "type": "string",
+            "enum": [
+              "any",
+              "all"
+            ]
+          },
+          "filters": {
+            "description": "Complete active filter set (replaces the defaults; must contain at least one key). Booleans: true = present, false = absent. Omit to use the default enrichment filters.",
+            "type": "object",
+            "properties": {
+              "ingredientParsing": {
+                "type": "string",
+                "enum": [
+                  "unparsed",
+                  "partial",
+                  "unparsed_or_partial"
+                ]
+              },
+              "ingredientSections": {
+                "type": "boolean"
+              },
+              "instructionIngredientLinks": {
+                "type": "string",
+                "enum": [
+                  "missing",
+                  "dangling",
+                  "missing_or_dangling"
+                ]
+              },
+              "tools": {
+                "type": "boolean"
+              },
+              "categories": {
+                "type": "boolean"
+              },
+              "tags": {
+                "type": "boolean"
+              },
+              "image": {
+                "type": "boolean"
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false
+      },
       "runtimeOutputSchema": null,
       "runtimeExamples": [],
-      "runtimeCaptureStatus": "pending_capture_from_pinned_typescript_server"
+      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeOutputSchemaPresent": false
     },
     {
       "id": "T010",
@@ -527,10 +793,35 @@
       "testFilesMentioningTool": [
         "src/__tests__/recipes-tool-registration.test.ts"
       ],
-      "runtimeInputSchema": null,
+      "runtimeInputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "ingredients": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "instructions": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "additionalProperties": false
+      },
       "runtimeOutputSchema": null,
       "runtimeExamples": [],
-      "runtimeCaptureStatus": "pending_capture_from_pinned_typescript_server"
+      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeOutputSchemaPresent": false
     },
     {
       "id": "T011",
@@ -613,10 +904,77 @@
         "src/__tests__/recipes-tool-registration.test.ts",
         "src/__tests__/strict-tool-inputs.test.ts"
       ],
-      "runtimeInputSchema": null,
+      "runtimeInputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "slug": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "recipeYield": {
+            "type": "string"
+          },
+          "totalTime": {
+            "type": "string"
+          },
+          "recipeServings": {
+            "type": "number"
+          },
+          "recipeYieldQuantity": {
+            "type": "number"
+          },
+          "orgURL": {
+            "type": "string"
+          },
+          "categories": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Categories to assign, each given as a name, slug, or ID (matched case-insensitively by name/slug). Categories are broad groupings (e.g. \"Dinner\", \"Dessert\") as opposed to Tags, which are more specific attributes (e.g. \"Quick\", \"Dairy-Free\"). Omit this field to leave the recipe's categories unchanged. Passing an empty array with mode \"replace\" clears all categories from the recipe — use with care."
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Tags to assign, each given as a name, slug, or ID (matched case-insensitively by name/slug). Tags are specific, free-form attributes (e.g. \"Quick\", \"Dairy-Free\") as opposed to Categories, which are broad groupings (e.g. \"Dinner\", \"Dessert\"). Omit this field to leave the recipe's tags unchanged. Passing an empty array with mode \"replace\" clears all tags from the recipe — use with care."
+          },
+          "taxonomyMode": {
+            "type": "string",
+            "enum": [
+              "merge",
+              "replace"
+            ],
+            "description": "merge (default) adds the given categories/tags to whatever the recipe already has. replace overwrites the corresponding collection with exactly the given list — an empty array in replace mode clears that collection entirely."
+          },
+          "createMissing": {
+            "type": "boolean",
+            "description": "When true, any named category/tag that does not already exist in Mealie is created automatically. When false (default), unknown names cause the call to fail with an error listing the unresolved values."
+          },
+          "instructions": {
+            "description": "Complete new list of steps, in order. Replaces all steps; [] clears them.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "slug"
+        ],
+        "additionalProperties": false
+      },
       "runtimeOutputSchema": null,
       "runtimeExamples": [],
-      "runtimeCaptureStatus": "pending_capture_from_pinned_typescript_server"
+      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeOutputSchemaPresent": false
     },
     {
       "id": "T012",
@@ -671,10 +1029,270 @@
         "src/__tests__/server-instructions.test.ts",
         "src/__tests__/strict-tool-inputs.test.ts"
       ],
-      "runtimeInputSchema": null,
+      "runtimeInputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "slug": {
+            "type": "string",
+            "description": "Slug of the recipe to update."
+          },
+          "ingredients": {
+            "description": "Replacement form: complete desired ingredient collection, in order — replaces the recipe's entire recipeIngredient list. Pass every ingredient that should remain, not just the ones changing. An empty array clears all ingredients. Cannot be combined with the delta fields.",
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "quantity": {
+                  "description": "Numeric amount, e.g. 2. 0 is a valid explicit value; omit to use Mealie's default (0).",
+                  "type": [
+                    "number",
+                    "null"
+                  ]
+                },
+                "unitId": {
+                  "description": "UUID of an existing unit. Must be given together with unitName — never alone.",
+                  "type": "string",
+                  "format": "uuid",
+                  "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                },
+                "unitName": {
+                  "description": "Human-readable name of the unit identified by unitId. Required whenever unitId is given.",
+                  "type": "string"
+                },
+                "foodId": {
+                  "description": "UUID of an existing food (see get_food_matches for resolving multiple already-interpreted concepts at once, or get_foods/get_food for a single manual lookup). Must be given together with foodName — never alone. This tool never looks up or creates foods; resolve the food first.",
+                  "type": "string",
+                  "format": "uuid",
+                  "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                },
+                "foodName": {
+                  "description": "Human-readable name of the food identified by foodId. Required whenever foodId is given.",
+                  "type": "string"
+                },
+                "note": {
+                  "description": "Free-text note for this ingredient line.",
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "display": {
+                  "description": "Fully composed display string, e.g. \"2 tablespoons olive oil\". Mealie does not persist this field — it always recomputes its own display string from quantity/unit/food/note when the ingredient is read, so do not rely on this value round-tripping literally.",
+                  "type": "string"
+                },
+                "originalText": {
+                  "description": "The original, unparsed ingredient text, if any.",
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "title": {
+                  "description": "Section heading for this ingredient line (e.g. \"For the sauce\"); omit or use null for a normal ingredient.",
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "referenceId": {
+                  "description": "Stable UUID for this ingredient line. Recipe instructions can reference ingredients by this ID — pass back the value from a prior get_recipe_detailed to preserve those links; omit to let Mealie assign a new one.",
+                  "type": "string",
+                  "format": "uuid",
+                  "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                },
+                "referencedRecipeId": {
+                  "description": "UUID (the recipe's \"id\", stable across renames — not its slug) of an existing recipe to use as a sub-recipe on this line, e.g. a sauce or spice mix. Read it back as referencedRecipe in get_recipe_detailed. Cannot be combined with foodId/unitId on the same row. An id that matches no recipe fails the call before anything is written.",
+                  "type": "string",
+                  "format": "uuid",
+                  "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "addIngredients": {
+            "description": "Delta form: ingredient rows to add. Without an insert anchor a row is appended to the end, in the order given; anchors must name an existing row that is not being removed, and rows sharing an anchor keep their given order. A row with a \"title\" starts an ingredient section. An explicit referenceId must not already exist on the recipe. Cannot be combined with ingredients.",
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "quantity": {
+                  "description": "Numeric amount, e.g. 2. 0 is a valid explicit value; omit to use Mealie's default (0).",
+                  "type": [
+                    "number",
+                    "null"
+                  ]
+                },
+                "unitId": {
+                  "description": "UUID of an existing unit. Must be given together with unitName — never alone.",
+                  "type": "string",
+                  "format": "uuid",
+                  "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                },
+                "unitName": {
+                  "description": "Human-readable name of the unit identified by unitId. Required whenever unitId is given.",
+                  "type": "string"
+                },
+                "foodId": {
+                  "description": "UUID of an existing food (see get_food_matches for resolving multiple already-interpreted concepts at once, or get_foods/get_food for a single manual lookup). Must be given together with foodName — never alone. This tool never looks up or creates foods; resolve the food first.",
+                  "type": "string",
+                  "format": "uuid",
+                  "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                },
+                "foodName": {
+                  "description": "Human-readable name of the food identified by foodId. Required whenever foodId is given.",
+                  "type": "string"
+                },
+                "note": {
+                  "description": "Free-text note for this ingredient line.",
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "display": {
+                  "description": "Fully composed display string, e.g. \"2 tablespoons olive oil\". Mealie does not persist this field — it always recomputes its own display string from quantity/unit/food/note when the ingredient is read, so do not rely on this value round-tripping literally.",
+                  "type": "string"
+                },
+                "originalText": {
+                  "description": "The original, unparsed ingredient text, if any.",
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "title": {
+                  "description": "Section heading for this ingredient line (e.g. \"For the sauce\"); omit or use null for a normal ingredient.",
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "referenceId": {
+                  "description": "Stable UUID for this ingredient line. Recipe instructions can reference ingredients by this ID — pass back the value from a prior get_recipe_detailed to preserve those links; omit to let Mealie assign a new one.",
+                  "type": "string",
+                  "format": "uuid",
+                  "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                },
+                "referencedRecipeId": {
+                  "description": "UUID (the recipe's \"id\", stable across renames — not its slug) of an existing recipe to use as a sub-recipe on this line, e.g. a sauce or spice mix. Read it back as referencedRecipe in get_recipe_detailed. Cannot be combined with foodId/unitId on the same row. An id that matches no recipe fails the call before anything is written.",
+                  "type": "string",
+                  "format": "uuid",
+                  "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                },
+                "insertAfterReferenceId": {
+                  "description": "Insert this row directly after the existing row with this referenceId. Not with insertBeforeReferenceId.",
+                  "type": "string",
+                  "format": "uuid",
+                  "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                },
+                "insertBeforeReferenceId": {
+                  "description": "Insert this row directly before the existing row with this referenceId. Not with insertAfterReferenceId.",
+                  "type": "string",
+                  "format": "uuid",
+                  "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "updateIngredients": {
+            "description": "Delta form: partial updates to existing rows, matched by referenceId. Only the fields supplied change; everything else on the row is kept. foodId/foodName and unitId/unitName must each be given as a pair (food/unit can be replaced but not cleared this way — use the complete-replacement form for that). Set \"title\" to add/change/clear (null) a section heading. Cannot be combined with ingredients.",
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "quantity": {
+                  "description": "Numeric amount, e.g. 2. 0 is a valid explicit value; omit to use Mealie's default (0).",
+                  "type": [
+                    "number",
+                    "null"
+                  ]
+                },
+                "unitId": {
+                  "description": "UUID of an existing unit. Must be given together with unitName — never alone.",
+                  "type": "string",
+                  "format": "uuid",
+                  "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                },
+                "unitName": {
+                  "description": "Human-readable name of the unit identified by unitId. Required whenever unitId is given.",
+                  "type": "string"
+                },
+                "foodId": {
+                  "description": "UUID of an existing food (see get_food_matches for resolving multiple already-interpreted concepts at once, or get_foods/get_food for a single manual lookup). Must be given together with foodName — never alone. This tool never looks up or creates foods; resolve the food first.",
+                  "type": "string",
+                  "format": "uuid",
+                  "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                },
+                "foodName": {
+                  "description": "Human-readable name of the food identified by foodId. Required whenever foodId is given.",
+                  "type": "string"
+                },
+                "note": {
+                  "description": "Free-text note for this ingredient line.",
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "display": {
+                  "description": "Fully composed display string, e.g. \"2 tablespoons olive oil\". Mealie does not persist this field — it always recomputes its own display string from quantity/unit/food/note when the ingredient is read, so do not rely on this value round-tripping literally.",
+                  "type": "string"
+                },
+                "originalText": {
+                  "description": "The original, unparsed ingredient text, if any.",
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "title": {
+                  "description": "Section heading for this ingredient line (e.g. \"For the sauce\"); omit or use null for a normal ingredient.",
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "referenceId": {
+                  "type": "string",
+                  "format": "uuid",
+                  "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                  "description": "referenceId of the existing row to update (from get_recipe_detailed)."
+                },
+                "referencedRecipeId": {
+                  "description": "UUID (the recipe's \"id\", stable across renames — not its slug) of an existing recipe to use as a sub-recipe on this line, e.g. a sauce or spice mix. Read it back as referencedRecipe in get_recipe_detailed. Cannot be combined with foodId/unitId on the same row. An id that matches no recipe fails the call before anything is written.",
+                  "type": "string",
+                  "format": "uuid",
+                  "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                }
+              },
+              "required": [
+                "referenceId"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "removeIngredientReferenceIds": {
+            "description": "Delta form: referenceIds of existing rows to remove. Cannot be combined with ingredients, and cannot overlap updateIngredients. Duplicate or unknown referenceIds reject the whole call before any write.",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+            }
+          }
+        },
+        "required": [
+          "slug"
+        ],
+        "additionalProperties": false
+      },
       "runtimeOutputSchema": null,
       "runtimeExamples": [],
-      "runtimeCaptureStatus": "pending_capture_from_pinned_typescript_server"
+      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeOutputSchemaPresent": false
     },
     {
       "id": "T013",
@@ -706,10 +1324,285 @@
       "testFilesMentioningTool": [
         "src/__tests__/recipe-ingredients-tool.test.ts"
       ],
-      "runtimeInputSchema": null,
+      "runtimeInputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "updates": {
+            "minItems": 1,
+            "maxItems": 25,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "slug": {
+                  "type": "string",
+                  "description": "Slug of the recipe to update."
+                },
+                "ingredients": {
+                  "description": "Replacement form: complete desired ingredient collection for this recipe, in order — replaces its entire recipeIngredient list. An empty array clears all ingredients for this recipe. Cannot be combined with the delta fields.",
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "quantity": {
+                        "description": "Numeric amount, e.g. 2. 0 is a valid explicit value; omit to use Mealie's default (0).",
+                        "type": [
+                          "number",
+                          "null"
+                        ]
+                      },
+                      "unitId": {
+                        "description": "UUID of an existing unit. Must be given together with unitName — never alone.",
+                        "type": "string",
+                        "format": "uuid",
+                        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                      },
+                      "unitName": {
+                        "description": "Human-readable name of the unit identified by unitId. Required whenever unitId is given.",
+                        "type": "string"
+                      },
+                      "foodId": {
+                        "description": "UUID of an existing food (see get_food_matches for resolving multiple already-interpreted concepts at once, or get_foods/get_food for a single manual lookup). Must be given together with foodName — never alone. This tool never looks up or creates foods; resolve the food first.",
+                        "type": "string",
+                        "format": "uuid",
+                        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                      },
+                      "foodName": {
+                        "description": "Human-readable name of the food identified by foodId. Required whenever foodId is given.",
+                        "type": "string"
+                      },
+                      "note": {
+                        "description": "Free-text note for this ingredient line.",
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "display": {
+                        "description": "Fully composed display string, e.g. \"2 tablespoons olive oil\". Mealie does not persist this field — it always recomputes its own display string from quantity/unit/food/note when the ingredient is read, so do not rely on this value round-tripping literally.",
+                        "type": "string"
+                      },
+                      "originalText": {
+                        "description": "The original, unparsed ingredient text, if any.",
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "title": {
+                        "description": "Section heading for this ingredient line (e.g. \"For the sauce\"); omit or use null for a normal ingredient.",
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "referenceId": {
+                        "description": "Stable UUID for this ingredient line. Recipe instructions can reference ingredients by this ID — pass back the value from a prior get_recipe_detailed to preserve those links; omit to let Mealie assign a new one.",
+                        "type": "string",
+                        "format": "uuid",
+                        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                      },
+                      "referencedRecipeId": {
+                        "description": "UUID (the recipe's \"id\", stable across renames — not its slug) of an existing recipe to use as a sub-recipe on this line, e.g. a sauce or spice mix. Read it back as referencedRecipe in get_recipe_detailed. Cannot be combined with foodId/unitId on the same row. An id that matches no recipe fails the call before anything is written.",
+                        "type": "string",
+                        "format": "uuid",
+                        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                      }
+                    },
+                    "additionalProperties": false
+                  }
+                },
+                "addIngredients": {
+                  "description": "Delta form: ingredient rows to add. Without an insert anchor a row is appended to the end, in the order given; anchors must name an existing row that is not being removed, and rows sharing an anchor keep their given order. A row with a \"title\" starts an ingredient section. An explicit referenceId must not already exist on the recipe. Cannot be combined with ingredients.",
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "quantity": {
+                        "description": "Numeric amount, e.g. 2. 0 is a valid explicit value; omit to use Mealie's default (0).",
+                        "type": [
+                          "number",
+                          "null"
+                        ]
+                      },
+                      "unitId": {
+                        "description": "UUID of an existing unit. Must be given together with unitName — never alone.",
+                        "type": "string",
+                        "format": "uuid",
+                        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                      },
+                      "unitName": {
+                        "description": "Human-readable name of the unit identified by unitId. Required whenever unitId is given.",
+                        "type": "string"
+                      },
+                      "foodId": {
+                        "description": "UUID of an existing food (see get_food_matches for resolving multiple already-interpreted concepts at once, or get_foods/get_food for a single manual lookup). Must be given together with foodName — never alone. This tool never looks up or creates foods; resolve the food first.",
+                        "type": "string",
+                        "format": "uuid",
+                        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                      },
+                      "foodName": {
+                        "description": "Human-readable name of the food identified by foodId. Required whenever foodId is given.",
+                        "type": "string"
+                      },
+                      "note": {
+                        "description": "Free-text note for this ingredient line.",
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "display": {
+                        "description": "Fully composed display string, e.g. \"2 tablespoons olive oil\". Mealie does not persist this field — it always recomputes its own display string from quantity/unit/food/note when the ingredient is read, so do not rely on this value round-tripping literally.",
+                        "type": "string"
+                      },
+                      "originalText": {
+                        "description": "The original, unparsed ingredient text, if any.",
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "title": {
+                        "description": "Section heading for this ingredient line (e.g. \"For the sauce\"); omit or use null for a normal ingredient.",
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "referenceId": {
+                        "description": "Stable UUID for this ingredient line. Recipe instructions can reference ingredients by this ID — pass back the value from a prior get_recipe_detailed to preserve those links; omit to let Mealie assign a new one.",
+                        "type": "string",
+                        "format": "uuid",
+                        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                      },
+                      "referencedRecipeId": {
+                        "description": "UUID (the recipe's \"id\", stable across renames — not its slug) of an existing recipe to use as a sub-recipe on this line, e.g. a sauce or spice mix. Read it back as referencedRecipe in get_recipe_detailed. Cannot be combined with foodId/unitId on the same row. An id that matches no recipe fails the call before anything is written.",
+                        "type": "string",
+                        "format": "uuid",
+                        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                      },
+                      "insertAfterReferenceId": {
+                        "description": "Insert this row directly after the existing row with this referenceId. Not with insertBeforeReferenceId.",
+                        "type": "string",
+                        "format": "uuid",
+                        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                      },
+                      "insertBeforeReferenceId": {
+                        "description": "Insert this row directly before the existing row with this referenceId. Not with insertAfterReferenceId.",
+                        "type": "string",
+                        "format": "uuid",
+                        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                      }
+                    },
+                    "additionalProperties": false
+                  }
+                },
+                "updateIngredients": {
+                  "description": "Delta form: partial updates to existing rows, matched by referenceId. Only the fields supplied change; everything else on the row is kept. foodId/foodName and unitId/unitName must each be given as a pair (food/unit can be replaced but not cleared this way — use the complete-replacement form for that). Set \"title\" to add/change/clear (null) a section heading. Cannot be combined with ingredients.",
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "quantity": {
+                        "description": "Numeric amount, e.g. 2. 0 is a valid explicit value; omit to use Mealie's default (0).",
+                        "type": [
+                          "number",
+                          "null"
+                        ]
+                      },
+                      "unitId": {
+                        "description": "UUID of an existing unit. Must be given together with unitName — never alone.",
+                        "type": "string",
+                        "format": "uuid",
+                        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                      },
+                      "unitName": {
+                        "description": "Human-readable name of the unit identified by unitId. Required whenever unitId is given.",
+                        "type": "string"
+                      },
+                      "foodId": {
+                        "description": "UUID of an existing food (see get_food_matches for resolving multiple already-interpreted concepts at once, or get_foods/get_food for a single manual lookup). Must be given together with foodName — never alone. This tool never looks up or creates foods; resolve the food first.",
+                        "type": "string",
+                        "format": "uuid",
+                        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                      },
+                      "foodName": {
+                        "description": "Human-readable name of the food identified by foodId. Required whenever foodId is given.",
+                        "type": "string"
+                      },
+                      "note": {
+                        "description": "Free-text note for this ingredient line.",
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "display": {
+                        "description": "Fully composed display string, e.g. \"2 tablespoons olive oil\". Mealie does not persist this field — it always recomputes its own display string from quantity/unit/food/note when the ingredient is read, so do not rely on this value round-tripping literally.",
+                        "type": "string"
+                      },
+                      "originalText": {
+                        "description": "The original, unparsed ingredient text, if any.",
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "title": {
+                        "description": "Section heading for this ingredient line (e.g. \"For the sauce\"); omit or use null for a normal ingredient.",
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "referenceId": {
+                        "type": "string",
+                        "format": "uuid",
+                        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                        "description": "referenceId of the existing row to update (from get_recipe_detailed)."
+                      },
+                      "referencedRecipeId": {
+                        "description": "UUID (the recipe's \"id\", stable across renames — not its slug) of an existing recipe to use as a sub-recipe on this line, e.g. a sauce or spice mix. Read it back as referencedRecipe in get_recipe_detailed. Cannot be combined with foodId/unitId on the same row. An id that matches no recipe fails the call before anything is written.",
+                        "type": "string",
+                        "format": "uuid",
+                        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                      }
+                    },
+                    "required": [
+                      "referenceId"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "removeIngredientReferenceIds": {
+                  "description": "Delta form: referenceIds of existing rows to remove. Cannot be combined with ingredients, and cannot overlap updateIngredients. Duplicate or unknown referenceIds reject the whole call before any write.",
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  }
+                }
+              },
+              "required": [
+                "slug"
+              ],
+              "additionalProperties": false
+            },
+            "description": "One entry per recipe to update. Each entry uses either the replacement form (a complete ingredient collection in `ingredients`) or the delta fields, never both. Each recipe is processed independently with bounded concurrency (5 at a time) — a failure on one recipe does not abort the others. Max 25 recipes per call; each slug must be unique within the call."
+          }
+        },
+        "required": [
+          "updates"
+        ],
+        "additionalProperties": false
+      },
       "runtimeOutputSchema": null,
       "runtimeExamples": [],
-      "runtimeCaptureStatus": "pending_capture_from_pinned_typescript_server"
+      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeOutputSchemaPresent": false
     },
     {
       "id": "T014",
@@ -765,10 +1658,183 @@
         "src/__tests__/recipe-instructions.test.ts",
         "src/__tests__/recipes-tool-registration.test.ts"
       ],
-      "runtimeInputSchema": null,
+      "runtimeInputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "slug": {
+            "type": "string",
+            "description": "Slug of the recipe to update."
+          },
+          "expectedUpdatedAt": {
+            "type": "string",
+            "minLength": 1,
+            "description": "The exact opaque updatedAt from the get_recipe_detailed read whose instruction indexes you are using. Pass it back unchanged. A mismatch means the recipe changed since that read: the call fails before any write (a stale-snapshot guard, not an atomic conditional write)."
+          },
+          "instructions": {
+            "description": "Replacement form: complete desired ordered instruction list. Cannot be combined with the delta fields.",
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "text": {
+                  "type": "string",
+                  "minLength": 1,
+                  "description": "Instruction text."
+                },
+                "title": {
+                  "description": "Instruction section title; omit or null for none.",
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "summary": {
+                  "description": "Instruction summary; omit or null for none.",
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "ingredientReferenceIds": {
+                  "description": "referenceIds of the recipe ingredients this instruction uses (from get_recipe_detailed recipeIngredient).",
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  }
+                },
+                "noteReferenceIds": {
+                  "description": "Low-level preservation field: noteReferences (referenceId) read from the recipe, passed back unchanged so a complete replacement does not drop them. Omit for none.",
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  }
+                }
+              },
+              "required": [
+                "text"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "addInstructions": {
+            "description": "Delta form: instructions to add. No anchor appends to the end in the given order; anchors refer to the guarded original snapshot, must exist and must not be removed; additions sharing an anchor keep input order; opposite anchors targeting the same gap are rejected as ambiguous. Cannot be combined with instructions.",
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "text": {
+                  "type": "string",
+                  "minLength": 1,
+                  "description": "Instruction text (required)."
+                },
+                "title": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "summary": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "ingredientReferenceIds": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  }
+                },
+                "insertBeforeIndex": {
+                  "description": "Insert before the instruction at this index of the guarded snapshot. Not with insertAfterIndex.",
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 9007199254740991
+                },
+                "insertAfterIndex": {
+                  "description": "Insert after the instruction at this index of the guarded snapshot. Not with insertBeforeIndex.",
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 9007199254740991
+                }
+              },
+              "required": [
+                "text"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "updateInstructions": {
+            "description": "Delta form: partial updates by snapshot index. Only supplied fields change; omitted fields and noteReferences are preserved. An index may appear once and cannot also be removed.",
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "index": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 9007199254740991,
+                  "description": "Zero-based index in the guarded snapshot."
+                },
+                "text": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "title": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "summary": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "ingredientReferenceIds": {
+                  "description": "Replaces this instruction's complete ingredient links; [] clears them; omit to keep them.",
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  }
+                }
+              },
+              "required": [
+                "index"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "removeInstructionIndexes": {
+            "description": "Delta form: zero-based snapshot indexes to remove (no duplicates, no overlap with updates).",
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            }
+          }
+        },
+        "required": [
+          "slug",
+          "expectedUpdatedAt"
+        ],
+        "additionalProperties": false
+      },
       "runtimeOutputSchema": null,
       "runtimeExamples": [],
-      "runtimeCaptureStatus": "pending_capture_from_pinned_typescript_server"
+      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeOutputSchemaPresent": false
     },
     {
       "id": "T015",
@@ -800,10 +1866,198 @@
       "testFilesMentioningTool": [
         "src/__tests__/recipes-tool-registration.test.ts"
       ],
-      "runtimeInputSchema": null,
+      "runtimeInputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "updates": {
+            "minItems": 1,
+            "maxItems": 25,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "slug": {
+                  "type": "string",
+                  "description": "Slug of the recipe to update."
+                },
+                "expectedUpdatedAt": {
+                  "type": "string",
+                  "minLength": 1,
+                  "description": "The exact opaque updatedAt from the get_recipe_detailed read whose instruction indexes you are using. Pass it back unchanged. A mismatch means the recipe changed since that read: the call fails before any write (a stale-snapshot guard, not an atomic conditional write)."
+                },
+                "instructions": {
+                  "description": "Replacement form: complete desired ordered instruction list. Cannot be combined with the delta fields.",
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "text": {
+                        "type": "string",
+                        "minLength": 1,
+                        "description": "Instruction text."
+                      },
+                      "title": {
+                        "description": "Instruction section title; omit or null for none.",
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "summary": {
+                        "description": "Instruction summary; omit or null for none.",
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "ingredientReferenceIds": {
+                        "description": "referenceIds of the recipe ingredients this instruction uses (from get_recipe_detailed recipeIngredient).",
+                        "type": "array",
+                        "items": {
+                          "type": "string",
+                          "format": "uuid",
+                          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                        }
+                      },
+                      "noteReferenceIds": {
+                        "description": "Low-level preservation field: noteReferences (referenceId) read from the recipe, passed back unchanged so a complete replacement does not drop them. Omit for none.",
+                        "type": "array",
+                        "items": {
+                          "type": "string",
+                          "format": "uuid",
+                          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                        }
+                      }
+                    },
+                    "required": [
+                      "text"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "addInstructions": {
+                  "description": "Delta form: instructions to add. No anchor appends to the end in the given order; anchors refer to the guarded original snapshot, must exist and must not be removed; additions sharing an anchor keep input order; opposite anchors targeting the same gap are rejected as ambiguous. Cannot be combined with instructions.",
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "text": {
+                        "type": "string",
+                        "minLength": 1,
+                        "description": "Instruction text (required)."
+                      },
+                      "title": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "summary": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "ingredientReferenceIds": {
+                        "type": "array",
+                        "items": {
+                          "type": "string",
+                          "format": "uuid",
+                          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                        }
+                      },
+                      "insertBeforeIndex": {
+                        "description": "Insert before the instruction at this index of the guarded snapshot. Not with insertAfterIndex.",
+                        "type": "integer",
+                        "minimum": 0,
+                        "maximum": 9007199254740991
+                      },
+                      "insertAfterIndex": {
+                        "description": "Insert after the instruction at this index of the guarded snapshot. Not with insertBeforeIndex.",
+                        "type": "integer",
+                        "minimum": 0,
+                        "maximum": 9007199254740991
+                      }
+                    },
+                    "required": [
+                      "text"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "updateInstructions": {
+                  "description": "Delta form: partial updates by snapshot index. Only supplied fields change; omitted fields and noteReferences are preserved. An index may appear once and cannot also be removed.",
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "index": {
+                        "type": "integer",
+                        "minimum": 0,
+                        "maximum": 9007199254740991,
+                        "description": "Zero-based index in the guarded snapshot."
+                      },
+                      "text": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "title": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "summary": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "ingredientReferenceIds": {
+                        "description": "Replaces this instruction's complete ingredient links; [] clears them; omit to keep them.",
+                        "type": "array",
+                        "items": {
+                          "type": "string",
+                          "format": "uuid",
+                          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                        }
+                      }
+                    },
+                    "required": [
+                      "index"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "removeInstructionIndexes": {
+                  "description": "Delta form: zero-based snapshot indexes to remove (no duplicates, no overlap with updates).",
+                  "type": "array",
+                  "items": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  }
+                }
+              },
+              "required": [
+                "slug",
+                "expectedUpdatedAt"
+              ],
+              "additionalProperties": false
+            },
+            "description": "One entry per recipe. Max 25 per call; each slug must be unique within the call."
+          }
+        },
+        "required": [
+          "updates"
+        ],
+        "additionalProperties": false
+      },
       "runtimeOutputSchema": null,
       "runtimeExamples": [],
-      "runtimeCaptureStatus": "pending_capture_from_pinned_typescript_server"
+      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeOutputSchemaPresent": false
     },
     {
       "id": "T016",
@@ -876,10 +2130,82 @@
         "src/__tests__/recipe-tools-taxonomy.test.ts",
         "src/__tests__/recipes-tool-registration.test.ts"
       ],
-      "runtimeInputSchema": null,
+      "runtimeInputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "slug": {
+            "type": "string",
+            "description": "Slug of the recipe to update."
+          },
+          "categories": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Categories to assign, each given as a name, slug, or ID (matched case-insensitively by name/slug). Categories are broad groupings (e.g. \"Dinner\", \"Dessert\") as opposed to Tags, which are more specific attributes (e.g. \"Quick\", \"Dairy-Free\"). Omit this field to leave the recipe's categories unchanged. Passing an empty array with mode \"replace\" clears all categories from the recipe — use with care."
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Tags to assign, each given as a name, slug, or ID (matched case-insensitively by name/slug). Tags are specific, free-form attributes (e.g. \"Quick\", \"Dairy-Free\") as opposed to Categories, which are broad groupings (e.g. \"Dinner\", \"Dessert\"). Omit this field to leave the recipe's tags unchanged. Passing an empty array with mode \"replace\" clears all tags from the recipe — use with care."
+          },
+          "addCategories": {
+            "description": "Delta form: categories to add (name, slug, or ID). Cannot be combined with categories. Unchanged categories are preserved.",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "removeCategories": {
+            "description": "Delta form: categories to remove (name, slug, or ID). Must already exist — never created. Cannot be combined with categories, and cannot overlap addCategories.",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "addTags": {
+            "description": "Delta form: tags to add (name, slug, or ID). Cannot be combined with tags.",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "removeTags": {
+            "description": "Delta form: tags to remove (name, slug, or ID). Must already exist — never created. Cannot be combined with tags, and cannot overlap addTags.",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "mode": {
+            "type": "string",
+            "enum": [
+              "merge",
+              "replace"
+            ],
+            "description": "merge (default) adds the given categories/tags to whatever the recipe already has. replace overwrites the corresponding collection with exactly the given list — an empty array in replace mode clears that collection entirely."
+          },
+          "createMissing": {
+            "type": "boolean",
+            "description": "When true, any named category/tag that does not already exist in Mealie is created automatically. When false (default), unknown names cause the call to fail with an error listing the unresolved values."
+          }
+        },
+        "required": [
+          "slug"
+        ],
+        "additionalProperties": false
+      },
       "runtimeOutputSchema": null,
       "runtimeExamples": [],
-      "runtimeCaptureStatus": "pending_capture_from_pinned_typescript_server"
+      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeOutputSchemaPresent": false
     },
     {
       "id": "T017",
@@ -916,10 +2242,95 @@
         "src/__tests__/recipe-tools-taxonomy.test.ts",
         "src/__tests__/recipes-tool-registration.test.ts"
       ],
-      "runtimeInputSchema": null,
+      "runtimeInputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "updates": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "slug": {
+                  "type": "string",
+                  "description": "Slug of the recipe to update."
+                },
+                "categories": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "Categories to assign, each given as a name, slug, or ID (matched case-insensitively by name/slug). Categories are broad groupings (e.g. \"Dinner\", \"Dessert\") as opposed to Tags, which are more specific attributes (e.g. \"Quick\", \"Dairy-Free\"). Omit this field to leave the recipe's categories unchanged. Passing an empty array with mode \"replace\" clears all categories from the recipe — use with care."
+                },
+                "tags": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "Tags to assign, each given as a name, slug, or ID (matched case-insensitively by name/slug). Tags are specific, free-form attributes (e.g. \"Quick\", \"Dairy-Free\") as opposed to Categories, which are broad groupings (e.g. \"Dinner\", \"Dessert\"). Omit this field to leave the recipe's tags unchanged. Passing an empty array with mode \"replace\" clears all tags from the recipe — use with care."
+                },
+                "addCategories": {
+                  "description": "Delta form: categories to add (name, slug, or ID). Cannot be combined with categories. Unchanged categories are preserved.",
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "removeCategories": {
+                  "description": "Delta form: categories to remove (name, slug, or ID). Must already exist — never created. Cannot be combined with categories, and cannot overlap addCategories.",
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "addTags": {
+                  "description": "Delta form: tags to add (name, slug, or ID). Cannot be combined with tags.",
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "removeTags": {
+                  "description": "Delta form: tags to remove (name, slug, or ID). Must already exist — never created. Cannot be combined with tags, and cannot overlap addTags.",
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "mode": {
+                  "type": "string",
+                  "enum": [
+                    "merge",
+                    "replace"
+                  ],
+                  "description": "merge (default) adds the given categories/tags to whatever the recipe already has. replace overwrites the corresponding collection with exactly the given list — an empty array in replace mode clears that collection entirely."
+                },
+                "createMissing": {
+                  "type": "boolean",
+                  "description": "When true, any named category/tag that does not already exist in Mealie is created automatically. When false (default), unknown names cause the call to fail with an error listing the unresolved values."
+                }
+              },
+              "required": [
+                "slug"
+              ],
+              "additionalProperties": false
+            },
+            "description": "One entry per recipe to update; slugs must be unique (duplicates reject the whole request with no changes). Each recipe is processed independently with bounded concurrency — a failure on one recipe does not abort the others, and the response includes a success/error result for every entry."
+          }
+        },
+        "required": [
+          "updates"
+        ],
+        "additionalProperties": false
+      },
       "runtimeOutputSchema": null,
       "runtimeExamples": [],
-      "runtimeCaptureStatus": "pending_capture_from_pinned_typescript_server"
+      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeOutputSchemaPresent": false
     },
     {
       "id": "T018",
@@ -979,10 +2390,60 @@
         "src/__tests__/recipe-tools-update.test.ts",
         "src/__tests__/recipes-tool-registration.test.ts"
       ],
-      "runtimeInputSchema": null,
+      "runtimeInputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "slug": {
+            "type": "string",
+            "description": "Slug of the recipe to update."
+          },
+          "tools": {
+            "description": "Legacy form: tools to assign, each a name, slug, or ID of a Mealie Tool organizer. An empty array is a no-op in merge mode, but with mode \"replace\" it DESTRUCTIVELY clears all tools from the recipe. Cannot be combined with add/remove.",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "mode": {
+            "description": "Only for the tools form. merge (default) adds to existing tools; replace sets exactly the given list and removes all others.",
+            "type": "string",
+            "enum": [
+              "merge",
+              "replace"
+            ]
+          },
+          "add": {
+            "description": "Delta form: tools to add (name, slug, or ID). Cannot be combined with tools/mode.",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "remove": {
+            "description": "Delta form: tools to remove (name, slug, or ID). Must already exist as Tool organizers — never created. Cannot be combined with tools/mode, and cannot overlap add.",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "createMissing": {
+            "description": "When true, tools from tools/add that do not exist are created using the requested value as the name. Default false: unknown values fail the call and are all listed.",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "slug"
+        ],
+        "additionalProperties": false
+      },
       "runtimeOutputSchema": null,
       "runtimeExamples": [],
-      "runtimeCaptureStatus": "pending_capture_from_pinned_typescript_server"
+      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeOutputSchemaPresent": false
     },
     {
       "id": "T019",
@@ -1016,10 +2477,75 @@
       "testFilesMentioningTool": [
         "src/__tests__/recipe-tools-update.test.ts"
       ],
-      "runtimeInputSchema": null,
+      "runtimeInputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "updates": {
+            "minItems": 1,
+            "maxItems": 25,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "slug": {
+                  "type": "string",
+                  "description": "Slug of the recipe to update."
+                },
+                "tools": {
+                  "description": "Legacy form: tools to assign, each a name, slug, or ID of a Mealie Tool organizer. An empty array is a no-op in merge mode, but with mode \"replace\" it DESTRUCTIVELY clears all tools from the recipe. Cannot be combined with add/remove.",
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "mode": {
+                  "description": "Only for the tools form. merge (default) adds to existing tools; replace sets exactly the given list and removes all others.",
+                  "type": "string",
+                  "enum": [
+                    "merge",
+                    "replace"
+                  ]
+                },
+                "add": {
+                  "description": "Delta form: tools to add (name, slug, or ID). Cannot be combined with tools/mode.",
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "remove": {
+                  "description": "Delta form: tools to remove (name, slug, or ID). Must already exist as Tool organizers — never created. Cannot be combined with tools/mode, and cannot overlap add.",
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "createMissing": {
+                  "description": "When true, tools from tools/add that do not exist are created using the requested value as the name. Default false: unknown values fail the call and are all listed.",
+                  "type": "boolean"
+                }
+              },
+              "required": [
+                "slug"
+              ],
+              "additionalProperties": false
+            },
+            "description": "One entry per recipe, each with its own tools/mode or add/remove mutation. Max 25 per call; each slug must be unique within the call."
+          }
+        },
+        "required": [
+          "updates"
+        ],
+        "additionalProperties": false
+      },
       "runtimeOutputSchema": null,
       "runtimeExamples": [],
-      "runtimeCaptureStatus": "pending_capture_from_pinned_typescript_server"
+      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeOutputSchemaPresent": false
     },
     {
       "id": "T020",
@@ -1054,10 +2580,26 @@
       "testFilesMentioningTool": [
         "src/__tests__/recipes-tool-registration.test.ts"
       ],
-      "runtimeInputSchema": null,
+      "runtimeInputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "slug": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "slug"
+        ],
+        "additionalProperties": false
+      },
       "runtimeOutputSchema": null,
       "runtimeExamples": [],
-      "runtimeCaptureStatus": "pending_capture_from_pinned_typescript_server"
+      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeOutputSchemaPresent": false
     },
     {
       "id": "T021",
@@ -1093,10 +2635,26 @@
         "src/__tests__/mark-recipe-last-made-tool.test.ts",
         "src/__tests__/recipes-tool-registration.test.ts"
       ],
-      "runtimeInputSchema": null,
+      "runtimeInputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "slug": {
+            "type": "string"
+          },
+          "timestamp": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "slug"
+        ],
+        "additionalProperties": false
+      },
       "runtimeOutputSchema": null,
       "runtimeExamples": [],
-      "runtimeCaptureStatus": "pending_capture_from_pinned_typescript_server"
+      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeOutputSchemaPresent": false
     },
     {
       "id": "T022",
@@ -1137,10 +2695,35 @@
         "src/__tests__/recipe-image-file.test.ts",
         "src/__tests__/recipes-tool-registration.test.ts"
       ],
-      "runtimeInputSchema": null,
+      "runtimeInputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "slug": {
+            "type": "string"
+          },
+          "imageBase64": {
+            "description": "Base64-encoded image data to upload, or null to delete the recipe image.",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "extension": {
+            "description": "Optional image extension (png, jpg, jpeg, webp, gif); must match the data.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "slug",
+          "imageBase64"
+        ],
+        "additionalProperties": false
+      },
       "runtimeOutputSchema": null,
       "runtimeExamples": [],
-      "runtimeCaptureStatus": "pending_capture_from_pinned_typescript_server"
+      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeOutputSchemaPresent": false
     },
     {
       "id": "T023",
@@ -1180,10 +2763,39 @@
         "GET /api/users/self/ratings/{recipe_id}"
       ],
       "testFilesMentioningTool": [],
-      "runtimeInputSchema": null,
+      "runtimeInputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "slug": {
+            "type": "string"
+          },
+          "rating": {
+            "anyOf": [
+              {
+                "type": "number",
+                "minimum": 0.5,
+                "maximum": 5,
+                "multipleOf": 0.5
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "isFavorite": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "slug"
+        ],
+        "additionalProperties": false
+      },
       "runtimeOutputSchema": null,
       "runtimeExamples": [],
-      "runtimeCaptureStatus": "pending_capture_from_pinned_typescript_server"
+      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeOutputSchemaPresent": false
     },
     {
       "id": "T024",
@@ -1224,10 +2836,50 @@
         "src/__tests__/recipes-tool-registration.test.ts",
         "src/__tests__/set-recipe-image-from-file-tool.test.ts"
       ],
-      "runtimeInputSchema": null,
+      "runtimeInputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "slug": {
+            "type": "string"
+          },
+          "file": {
+            "type": "object",
+            "properties": {
+              "download_url": {
+                "type": "string",
+                "description": "Temporary URL the server downloads the file from."
+              },
+              "file_id": {
+                "type": "string",
+                "description": "Host file identifier."
+              },
+              "mime_type": {
+                "description": "Optional MIME type hint; not trusted.",
+                "type": "string"
+              },
+              "file_name": {
+                "description": "Optional file name hint; not trusted.",
+                "type": "string"
+              }
+            },
+            "required": [
+              "download_url",
+              "file_id"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "slug",
+          "file"
+        ],
+        "additionalProperties": false
+      },
       "runtimeOutputSchema": null,
       "runtimeExamples": [],
-      "runtimeCaptureStatus": "pending_capture_from_pinned_typescript_server"
+      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeOutputSchemaPresent": false
     },
     {
       "id": "T025",
@@ -1263,10 +2915,27 @@
         "src/__tests__/recipe-image-file.test.ts",
         "src/__tests__/recipes-tool-registration.test.ts"
       ],
-      "runtimeInputSchema": null,
+      "runtimeInputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "slug": {
+            "type": "string"
+          },
+          "imageUrl": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "slug",
+          "imageUrl"
+        ],
+        "additionalProperties": false
+      },
       "runtimeOutputSchema": null,
       "runtimeExamples": [],
-      "runtimeCaptureStatus": "pending_capture_from_pinned_typescript_server"
+      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeOutputSchemaPresent": false
     },
     {
       "id": "T026",
@@ -1297,10 +2966,23 @@
       "testFilesMentioningTool": [
         "src/__tests__/recipes-tool-registration.test.ts"
       ],
-      "runtimeInputSchema": null,
+      "runtimeInputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "slug": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "slug"
+        ],
+        "additionalProperties": false
+      },
       "runtimeOutputSchema": null,
       "runtimeExamples": [],
-      "runtimeCaptureStatus": "pending_capture_from_pinned_typescript_server"
+      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeOutputSchemaPresent": false
     },
     {
       "id": "T027",
@@ -1343,10 +3025,31 @@
       "testFilesMentioningTool": [
         "src/__tests__/mealplans-tools.test.ts"
       ],
-      "runtimeInputSchema": null,
+      "runtimeInputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "startDate": {
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+          },
+          "endDate": {
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+          },
+          "page": {
+            "type": "number"
+          },
+          "perPage": {
+            "type": "number"
+          }
+        },
+        "additionalProperties": false
+      },
       "runtimeOutputSchema": null,
       "runtimeExamples": [],
-      "runtimeCaptureStatus": "pending_capture_from_pinned_typescript_server"
+      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeOutputSchemaPresent": false
     },
     {
       "id": "T028",
@@ -1382,10 +3085,29 @@
       "testFilesMentioningTool": [
         "src/__tests__/mealplans-tools.test.ts"
       ],
-      "runtimeInputSchema": null,
+      "runtimeInputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "startDate": {
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+          },
+          "endDate": {
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+          }
+        },
+        "required": [
+          "startDate",
+          "endDate"
+        ],
+        "additionalProperties": false
+      },
       "runtimeOutputSchema": null,
       "runtimeExamples": [],
-      "runtimeCaptureStatus": "pending_capture_from_pinned_typescript_server"
+      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeOutputSchemaPresent": false
     },
     {
       "id": "T029",
@@ -1428,10 +3150,33 @@
       "testFilesMentioningTool": [
         "src/__tests__/mealplans-tools.test.ts"
       ],
-      "runtimeInputSchema": null,
+      "runtimeInputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": "string"
+          },
+          "recipeId": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "entryType": {
+            "default": "breakfast",
+            "type": "string"
+          }
+        },
+        "required": [
+          "date"
+        ],
+        "additionalProperties": false
+      },
       "runtimeOutputSchema": null,
       "runtimeExamples": [],
-      "runtimeCaptureStatus": "pending_capture_from_pinned_typescript_server"
+      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeOutputSchemaPresent": false
     },
     {
       "id": "T030",
@@ -1462,10 +3207,45 @@
       "testFilesMentioningTool": [
         "src/__tests__/mealplans-tools.test.ts"
       ],
-      "runtimeInputSchema": null,
+      "runtimeInputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "entries": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "date": {
+                  "type": "string"
+                },
+                "recipeId": {
+                  "type": "string"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "entryType": {
+                  "default": "breakfast",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "date"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": [
+          "entries"
+        ],
+        "additionalProperties": false
+      },
       "runtimeOutputSchema": null,
       "runtimeExamples": [],
-      "runtimeCaptureStatus": "pending_capture_from_pinned_typescript_server"
+      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeOutputSchemaPresent": false
     },
     {
       "id": "T031",
@@ -1492,10 +3272,16 @@
         "src/__tests__/mealplans-tools.test.ts",
         "src/__tests__/strict-tool-inputs.test.ts"
       ],
-      "runtimeInputSchema": null,
+      "runtimeInputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      },
       "runtimeOutputSchema": null,
       "runtimeExamples": [],
-      "runtimeCaptureStatus": "pending_capture_from_pinned_typescript_server"
+      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeOutputSchemaPresent": false
     },
     {
       "id": "T032",
@@ -1530,10 +3316,112 @@
         "src/__tests__/mealplans-tools.test.ts",
         "src/__tests__/strict-tool-inputs.test.ts"
       ],
-      "runtimeInputSchema": null,
+      "runtimeInputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "actions": {
+            "minItems": 1,
+            "type": "array",
+            "items": {
+              "oneOf": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "action": {
+                      "type": "string",
+                      "const": "delete"
+                    },
+                    "id": {
+                      "type": "string",
+                      "description": "ID of the meal plan entry to delete"
+                    }
+                  },
+                  "required": [
+                    "action",
+                    "id"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "action": {
+                      "type": "string",
+                      "const": "replace"
+                    },
+                    "id": {
+                      "type": "string",
+                      "description": "ID of the meal plan entry to update"
+                    },
+                    "date": {
+                      "description": "New date (YYYY-MM-DD)",
+                      "type": "string"
+                    },
+                    "recipeId": {
+                      "description": "New recipe ID",
+                      "type": "string"
+                    },
+                    "title": {
+                      "description": "New title",
+                      "type": "string"
+                    },
+                    "entryType": {
+                      "description": "New entry type (breakfast | lunch | dinner | snack)",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "action",
+                    "id"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "action": {
+                      "type": "string",
+                      "const": "append"
+                    },
+                    "date": {
+                      "type": "string",
+                      "description": "Date for the new entry (YYYY-MM-DD)"
+                    },
+                    "recipeId": {
+                      "description": "Recipe ID to add",
+                      "type": "string"
+                    },
+                    "title": {
+                      "description": "Title for the entry",
+                      "type": "string"
+                    },
+                    "entryType": {
+                      "default": "breakfast",
+                      "description": "Entry type (breakfast | lunch | dinner | snack)",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "action",
+                    "date"
+                  ],
+                  "additionalProperties": false
+                }
+              ]
+            },
+            "description": "Ordered list of actions. Deletions and replacements execute before appends, so you can move a recipe by deleting it from one slot and appending it to another in a single call."
+          }
+        },
+        "required": [
+          "actions"
+        ],
+        "additionalProperties": false
+      },
       "runtimeOutputSchema": null,
       "runtimeExamples": [],
-      "runtimeCaptureStatus": "pending_capture_from_pinned_typescript_server"
+      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeOutputSchemaPresent": false
     },
     {
       "id": "T033",
@@ -1568,10 +3456,23 @@
       "testFilesMentioningTool": [
         "src/__tests__/strict-tool-inputs.test.ts"
       ],
-      "runtimeInputSchema": null,
+      "runtimeInputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "page": {
+            "type": "number"
+          },
+          "perPage": {
+            "type": "number"
+          }
+        },
+        "additionalProperties": false
+      },
       "runtimeOutputSchema": null,
       "runtimeExamples": [],
-      "runtimeCaptureStatus": "pending_capture_from_pinned_typescript_server"
+      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeOutputSchemaPresent": false
     },
     {
       "id": "T034",
@@ -1595,10 +3496,16 @@
         "GET /api/organizers/categories/empty"
       ],
       "testFilesMentioningTool": [],
-      "runtimeInputSchema": null,
+      "runtimeInputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      },
       "runtimeOutputSchema": null,
       "runtimeExamples": [],
-      "runtimeCaptureStatus": "pending_capture_from_pinned_typescript_server"
+      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeOutputSchemaPresent": false
     },
     {
       "id": "T035",
@@ -1627,10 +3534,23 @@
         "POST /api/organizers/categories"
       ],
       "testFilesMentioningTool": [],
-      "runtimeInputSchema": null,
+      "runtimeInputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "additionalProperties": false
+      },
       "runtimeOutputSchema": null,
       "runtimeExamples": [],
-      "runtimeCaptureStatus": "pending_capture_from_pinned_typescript_server"
+      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeOutputSchemaPresent": false
     },
     {
       "id": "T036",
@@ -1659,10 +3579,25 @@
         "GET /api/organizers/categories/{id}"
       ],
       "testFilesMentioningTool": [],
-      "runtimeInputSchema": null,
+      "runtimeInputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "categoryId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          }
+        },
+        "required": [
+          "categoryId"
+        ],
+        "additionalProperties": false
+      },
       "runtimeOutputSchema": null,
       "runtimeExamples": [],
-      "runtimeCaptureStatus": "pending_capture_from_pinned_typescript_server"
+      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeOutputSchemaPresent": false
     },
     {
       "id": "T037",
@@ -1691,10 +3626,23 @@
         "GET /api/organizers/categories/slug/{slug}"
       ],
       "testFilesMentioningTool": [],
-      "runtimeInputSchema": null,
+      "runtimeInputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "categorySlug": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "categorySlug"
+        ],
+        "additionalProperties": false
+      },
       "runtimeOutputSchema": null,
       "runtimeExamples": [],
-      "runtimeCaptureStatus": "pending_capture_from_pinned_typescript_server"
+      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeOutputSchemaPresent": false
     },
     {
       "id": "T038",
@@ -1727,10 +3675,28 @@
         "PUT /api/organizers/categories/{id}"
       ],
       "testFilesMentioningTool": [],
-      "runtimeInputSchema": null,
+      "runtimeInputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "categoryId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "categoryId"
+        ],
+        "additionalProperties": false
+      },
       "runtimeOutputSchema": null,
       "runtimeExamples": [],
-      "runtimeCaptureStatus": "pending_capture_from_pinned_typescript_server"
+      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeOutputSchemaPresent": false
     },
     {
       "id": "T039",
@@ -1759,10 +3725,25 @@
         "DELETE /api/organizers/categories/{id}"
       ],
       "testFilesMentioningTool": [],
-      "runtimeInputSchema": null,
+      "runtimeInputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "categoryId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          }
+        },
+        "required": [
+          "categoryId"
+        ],
+        "additionalProperties": false
+      },
       "runtimeOutputSchema": null,
       "runtimeExamples": [],
-      "runtimeCaptureStatus": "pending_capture_from_pinned_typescript_server"
+      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeOutputSchemaPresent": false
     },
     {
       "id": "T040",
@@ -1797,10 +3778,23 @@
       "testFilesMentioningTool": [
         "src/__tests__/strict-tool-inputs.test.ts"
       ],
-      "runtimeInputSchema": null,
+      "runtimeInputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "page": {
+            "type": "number"
+          },
+          "perPage": {
+            "type": "number"
+          }
+        },
+        "additionalProperties": false
+      },
       "runtimeOutputSchema": null,
       "runtimeExamples": [],
-      "runtimeCaptureStatus": "pending_capture_from_pinned_typescript_server"
+      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeOutputSchemaPresent": false
     },
     {
       "id": "T041",
@@ -1824,10 +3818,16 @@
         "GET /api/organizers/tags/empty"
       ],
       "testFilesMentioningTool": [],
-      "runtimeInputSchema": null,
+      "runtimeInputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      },
       "runtimeOutputSchema": null,
       "runtimeExamples": [],
-      "runtimeCaptureStatus": "pending_capture_from_pinned_typescript_server"
+      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeOutputSchemaPresent": false
     },
     {
       "id": "T042",
@@ -1856,10 +3856,23 @@
         "POST /api/organizers/tags"
       ],
       "testFilesMentioningTool": [],
-      "runtimeInputSchema": null,
+      "runtimeInputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "additionalProperties": false
+      },
       "runtimeOutputSchema": null,
       "runtimeExamples": [],
-      "runtimeCaptureStatus": "pending_capture_from_pinned_typescript_server"
+      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeOutputSchemaPresent": false
     },
     {
       "id": "T043",
@@ -1888,10 +3901,25 @@
         "GET /api/organizers/tags/{id}"
       ],
       "testFilesMentioningTool": [],
-      "runtimeInputSchema": null,
+      "runtimeInputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "tagId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          }
+        },
+        "required": [
+          "tagId"
+        ],
+        "additionalProperties": false
+      },
       "runtimeOutputSchema": null,
       "runtimeExamples": [],
-      "runtimeCaptureStatus": "pending_capture_from_pinned_typescript_server"
+      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeOutputSchemaPresent": false
     },
     {
       "id": "T044",
@@ -1920,10 +3948,23 @@
         "GET /api/organizers/tags/slug/{slug}"
       ],
       "testFilesMentioningTool": [],
-      "runtimeInputSchema": null,
+      "runtimeInputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "tagSlug": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "tagSlug"
+        ],
+        "additionalProperties": false
+      },
       "runtimeOutputSchema": null,
       "runtimeExamples": [],
-      "runtimeCaptureStatus": "pending_capture_from_pinned_typescript_server"
+      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeOutputSchemaPresent": false
     },
     {
       "id": "T045",
@@ -1956,10 +3997,28 @@
         "PUT /api/organizers/tags/{id}"
       ],
       "testFilesMentioningTool": [],
-      "runtimeInputSchema": null,
+      "runtimeInputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "tagId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "tagId"
+        ],
+        "additionalProperties": false
+      },
       "runtimeOutputSchema": null,
       "runtimeExamples": [],
-      "runtimeCaptureStatus": "pending_capture_from_pinned_typescript_server"
+      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeOutputSchemaPresent": false
     },
     {
       "id": "T046",
@@ -1988,10 +4047,25 @@
         "DELETE /api/organizers/tags/{id}"
       ],
       "testFilesMentioningTool": [],
-      "runtimeInputSchema": null,
+      "runtimeInputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "tagId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          }
+        },
+        "required": [
+          "tagId"
+        ],
+        "additionalProperties": false
+      },
       "runtimeOutputSchema": null,
       "runtimeExamples": [],
-      "runtimeCaptureStatus": "pending_capture_from_pinned_typescript_server"
+      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeOutputSchemaPresent": false
     },
     {
       "id": "T047",
@@ -2026,10 +4100,23 @@
       "testFilesMentioningTool": [
         "src/__tests__/strict-tool-inputs.test.ts"
       ],
-      "runtimeInputSchema": null,
+      "runtimeInputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "page": {
+            "type": "number"
+          },
+          "perPage": {
+            "type": "number"
+          }
+        },
+        "additionalProperties": false
+      },
       "runtimeOutputSchema": null,
       "runtimeExamples": [],
-      "runtimeCaptureStatus": "pending_capture_from_pinned_typescript_server"
+      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeOutputSchemaPresent": false
     },
     {
       "id": "T048",
@@ -2058,10 +4145,23 @@
         "POST /api/households/shopping/lists"
       ],
       "testFilesMentioningTool": [],
-      "runtimeInputSchema": null,
+      "runtimeInputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "additionalProperties": false
+      },
       "runtimeOutputSchema": null,
       "runtimeExamples": [],
-      "runtimeCaptureStatus": "pending_capture_from_pinned_typescript_server"
+      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeOutputSchemaPresent": false
     },
     {
       "id": "T049",
@@ -2090,10 +4190,25 @@
         "GET /api/households/shopping/lists/{id}"
       ],
       "testFilesMentioningTool": [],
-      "runtimeInputSchema": null,
+      "runtimeInputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "listId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          }
+        },
+        "required": [
+          "listId"
+        ],
+        "additionalProperties": false
+      },
       "runtimeOutputSchema": null,
       "runtimeExamples": [],
-      "runtimeCaptureStatus": "pending_capture_from_pinned_typescript_server"
+      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeOutputSchemaPresent": false
     },
     {
       "id": "T050",
@@ -2126,10 +4241,28 @@
         "PUT /api/households/shopping/lists/{id}"
       ],
       "testFilesMentioningTool": [],
-      "runtimeInputSchema": null,
+      "runtimeInputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "listId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "listId"
+        ],
+        "additionalProperties": false
+      },
       "runtimeOutputSchema": null,
       "runtimeExamples": [],
-      "runtimeCaptureStatus": "pending_capture_from_pinned_typescript_server"
+      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeOutputSchemaPresent": false
     },
     {
       "id": "T051",
@@ -2158,10 +4291,25 @@
         "DELETE /api/households/shopping/lists/{id}"
       ],
       "testFilesMentioningTool": [],
-      "runtimeInputSchema": null,
+      "runtimeInputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "listId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          }
+        },
+        "required": [
+          "listId"
+        ],
+        "additionalProperties": false
+      },
       "runtimeOutputSchema": null,
       "runtimeExamples": [],
-      "runtimeCaptureStatus": "pending_capture_from_pinned_typescript_server"
+      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeOutputSchemaPresent": false
     },
     {
       "id": "T052",
@@ -2198,10 +4346,34 @@
         "POST /api/households/shopping/lists/{id}/recipe/{recipeId}"
       ],
       "testFilesMentioningTool": [],
-      "runtimeInputSchema": null,
+      "runtimeInputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "listId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          },
+          "recipeId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          },
+          "recipeIncrementQuantity": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "listId",
+          "recipeId"
+        ],
+        "additionalProperties": false
+      },
       "runtimeOutputSchema": null,
       "runtimeExamples": [],
-      "runtimeCaptureStatus": "pending_capture_from_pinned_typescript_server"
+      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeOutputSchemaPresent": false
     },
     {
       "id": "T053",
@@ -2234,10 +4406,31 @@
         "POST /api/households/shopping/lists/{id}/recipe/{recipeId}/delete"
       ],
       "testFilesMentioningTool": [],
-      "runtimeInputSchema": null,
+      "runtimeInputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "listId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          },
+          "recipeId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          }
+        },
+        "required": [
+          "listId",
+          "recipeId"
+        ],
+        "additionalProperties": false
+      },
       "runtimeOutputSchema": null,
       "runtimeExamples": [],
-      "runtimeCaptureStatus": "pending_capture_from_pinned_typescript_server"
+      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeOutputSchemaPresent": false
     },
     {
       "id": "T054",
@@ -2274,10 +4467,26 @@
         "GET /api/households/shopping/items"
       ],
       "testFilesMentioningTool": [],
-      "runtimeInputSchema": null,
+      "runtimeInputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "page": {
+            "type": "number"
+          },
+          "perPage": {
+            "type": "number"
+          },
+          "search": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
       "runtimeOutputSchema": null,
       "runtimeExamples": [],
-      "runtimeCaptureStatus": "pending_capture_from_pinned_typescript_server"
+      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeOutputSchemaPresent": false
     },
     {
       "id": "T055",
@@ -2326,10 +4535,41 @@
         "POST /api/households/shopping/items"
       ],
       "testFilesMentioningTool": [],
-      "runtimeInputSchema": null,
+      "runtimeInputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "shoppingListId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          },
+          "note": {
+            "type": "string"
+          },
+          "quantity": {
+            "type": "number"
+          },
+          "unitId": {
+            "type": "string"
+          },
+          "foodId": {
+            "type": "string"
+          },
+          "labelId": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "shoppingListId",
+          "note"
+        ],
+        "additionalProperties": false
+      },
       "runtimeOutputSchema": null,
       "runtimeExamples": [],
-      "runtimeCaptureStatus": "pending_capture_from_pinned_typescript_server"
+      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeOutputSchemaPresent": false
     },
     {
       "id": "T056",
@@ -2360,10 +4600,166 @@
       "testFilesMentioningTool": [
         "src/__tests__/strict-tool-inputs.test.ts"
       ],
-      "runtimeInputSchema": null,
+      "runtimeInputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "shoppingListId": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "note": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "display": {
+                  "type": "string"
+                },
+                "quantity": {
+                  "type": "number"
+                },
+                "checked": {
+                  "type": "boolean"
+                },
+                "position": {
+                  "type": "integer",
+                  "minimum": -9007199254740991,
+                  "maximum": 9007199254740991
+                },
+                "unitId": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "foodId": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "labelId": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "unit": {
+                  "anyOf": [
+                    {
+                      "type": "object",
+                      "propertyNames": {
+                        "type": "string"
+                      },
+                      "additionalProperties": {}
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "food": {
+                  "anyOf": [
+                    {
+                      "type": "object",
+                      "propertyNames": {
+                        "type": "string"
+                      },
+                      "additionalProperties": {}
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "referencedRecipe": {
+                  "anyOf": [
+                    {
+                      "type": "object",
+                      "propertyNames": {
+                        "type": "string"
+                      },
+                      "additionalProperties": {}
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "extras": {
+                  "anyOf": [
+                    {
+                      "type": "object",
+                      "propertyNames": {
+                        "type": "string"
+                      },
+                      "additionalProperties": {}
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "recipeReferences": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "recipeId": {
+                        "type": "string"
+                      },
+                      "recipeQuantity": {
+                        "type": "number"
+                      },
+                      "recipeScale": {
+                        "type": [
+                          "number",
+                          "null"
+                        ]
+                      },
+                      "recipeNote": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "recipeId"
+                    ],
+                    "additionalProperties": false
+                  }
+                }
+              },
+              "required": [
+                "shoppingListId"
+              ],
+              "additionalProperties": false
+            },
+            "description": "Items to create; every item needs shoppingListId."
+          }
+        },
+        "required": [
+          "items"
+        ],
+        "additionalProperties": false
+      },
       "runtimeOutputSchema": null,
       "runtimeExamples": [],
-      "runtimeCaptureStatus": "pending_capture_from_pinned_typescript_server"
+      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeOutputSchemaPresent": false
     },
     {
       "id": "T057",
@@ -2404,10 +4800,34 @@
         "PUT /api/households/shopping/items/{id}"
       ],
       "testFilesMentioningTool": [],
-      "runtimeInputSchema": null,
+      "runtimeInputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "itemId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          },
+          "note": {
+            "type": "string"
+          },
+          "quantity": {
+            "type": "number"
+          },
+          "checked": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "itemId"
+        ],
+        "additionalProperties": false
+      },
       "runtimeOutputSchema": null,
       "runtimeExamples": [],
-      "runtimeCaptureStatus": "pending_capture_from_pinned_typescript_server"
+      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeOutputSchemaPresent": false
     },
     {
       "id": "T058",
@@ -2436,10 +4856,25 @@
         "DELETE /api/households/shopping/items/{id}"
       ],
       "testFilesMentioningTool": [],
-      "runtimeInputSchema": null,
+      "runtimeInputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "itemId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          }
+        },
+        "required": [
+          "itemId"
+        ],
+        "additionalProperties": false
+      },
       "runtimeOutputSchema": null,
       "runtimeExamples": [],
-      "runtimeCaptureStatus": "pending_capture_from_pinned_typescript_server"
+      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeOutputSchemaPresent": false
     },
     {
       "id": "T059",
@@ -2468,10 +4903,26 @@
         "DELETE /api/households/shopping/items"
       ],
       "testFilesMentioningTool": [],
-      "runtimeInputSchema": null,
+      "runtimeInputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "itemIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "itemIds"
+        ],
+        "additionalProperties": false
+      },
       "runtimeOutputSchema": null,
       "runtimeExamples": [],
-      "runtimeCaptureStatus": "pending_capture_from_pinned_typescript_server"
+      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeOutputSchemaPresent": false
     },
     {
       "id": "T060",
@@ -2512,10 +4963,27 @@
         "src/__tests__/foods-tools.test.ts",
         "src/__tests__/strict-tool-inputs.test.ts"
       ],
-      "runtimeInputSchema": null,
+      "runtimeInputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "search": {
+            "description": "Matches against food name and pluralName only, per Mealie's search behavior — despite having aliases, a food is NOT found by searching for one of its aliases here (confirmed by live testing: a food named \"fermented pork\" with alias \"cured pork (som moo)\" is not returned by search=\"som moo\"). Use get_food_matches for alias-aware lookup.",
+            "type": "string"
+          },
+          "page": {
+            "type": "number"
+          },
+          "perPage": {
+            "type": "number"
+          }
+        },
+        "additionalProperties": false
+      },
       "runtimeOutputSchema": null,
       "runtimeExamples": [],
-      "runtimeCaptureStatus": "pending_capture_from_pinned_typescript_server"
+      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeOutputSchemaPresent": false
     },
     {
       "id": "T061",
@@ -2546,10 +5014,26 @@
       "testFilesMentioningTool": [
         "src/__tests__/foods-tools.test.ts"
       ],
-      "runtimeInputSchema": null,
+      "runtimeInputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "foodId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+            "description": "UUID of the food to retrieve."
+          }
+        },
+        "required": [
+          "foodId"
+        ],
+        "additionalProperties": false
+      },
       "runtimeOutputSchema": null,
       "runtimeExamples": [],
-      "runtimeCaptureStatus": "pending_capture_from_pinned_typescript_server"
+      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeOutputSchemaPresent": false
     },
     {
       "id": "T062",
@@ -2587,10 +5071,37 @@
         "src/__tests__/server-instructions.test.ts",
         "src/__tests__/units-api.test.ts"
       ],
-      "runtimeInputSchema": null,
+      "runtimeInputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "queries": {
+            "minItems": 1,
+            "maxItems": 25,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 200
+            },
+            "description": "Food concepts to resolve, e.g. [\"fresh mozzarella\", \"basil\", \"som moo\"]. 1-25 plain lookup strings (not search syntax) — duplicates (case-insensitive) are resolved once but still returned once per input entry."
+          },
+          "maxMatchesPerQuery": {
+            "description": "Maximum ranked candidates to return per query (default 10, capped at 25). Strongest matches (exact name/pluralName/alias, then substring matches) are kept first when a query has more candidates than this.",
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 25
+          }
+        },
+        "required": [
+          "queries"
+        ],
+        "additionalProperties": false
+      },
       "runtimeOutputSchema": null,
       "runtimeExamples": [],
-      "runtimeCaptureStatus": "pending_capture_from_pinned_typescript_server"
+      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeOutputSchemaPresent": false
     },
     {
       "id": "T063",
@@ -2637,10 +5148,42 @@
       "testFilesMentioningTool": [
         "src/__tests__/foods-tools.test.ts"
       ],
-      "runtimeInputSchema": null,
+      "runtimeInputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Name of the new food. Cannot be blank."
+          },
+          "pluralName": {
+            "description": "Plural form of the name, if different.",
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "aliases": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Alternate names Mealie should also recognize for this food (e.g. \"scallions\" as an alias for \"green onion\"), given as plain strings — converted internally to the alias object shape Mealie expects."
+          },
+          "labelId": {
+            "description": "ID of an existing food label to assign. Does not create a new label.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "additionalProperties": false
+      },
       "runtimeOutputSchema": null,
       "runtimeExamples": [],
-      "runtimeCaptureStatus": "pending_capture_from_pinned_typescript_server"
+      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeOutputSchemaPresent": false
     },
     {
       "id": "T064",
@@ -2696,10 +5239,56 @@
       "testFilesMentioningTool": [
         "src/__tests__/foods-tools.test.ts"
       ],
-      "runtimeInputSchema": null,
+      "runtimeInputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "foodId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+            "description": "UUID of the food to update."
+          },
+          "name": {
+            "type": "string"
+          },
+          "pluralName": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "aliases": {
+            "description": "Alternate names Mealie should also recognize for this food (e.g. \"scallions\" as an alias for \"green onion\"), given as plain strings — converted internally to the alias object shape Mealie expects. Replaces the food's entire alias collection when provided — pass an empty array to clear all aliases, or omit this field entirely to leave existing aliases untouched.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "labelId": {
+            "description": "ID of an existing food label to assign. Pass null to clear the food's label, or omit to leave the current label unchanged.",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "householdsWithIngredientFood": {
+            "description": "Household slugs for which this food is flagged on hand (a food is on hand for a household when its slug is in the list). Replaces the whole list when provided — call get_food first and edit the existing list so another household's slug is not dropped by accident. Pass an empty array to clear the flag for every household, or omit to leave it unchanged.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "foodId"
+        ],
+        "additionalProperties": false
+      },
       "runtimeOutputSchema": null,
       "runtimeExamples": [],
-      "runtimeCaptureStatus": "pending_capture_from_pinned_typescript_server"
+      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeOutputSchemaPresent": false
     },
     {
       "id": "T065",
@@ -2730,10 +5319,26 @@
       "testFilesMentioningTool": [
         "src/__tests__/foods-tools.test.ts"
       ],
-      "runtimeInputSchema": null,
+      "runtimeInputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "foodId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+            "description": "UUID of the food to delete."
+          }
+        },
+        "required": [
+          "foodId"
+        ],
+        "additionalProperties": false
+      },
       "runtimeOutputSchema": null,
       "runtimeExamples": [],
-      "runtimeCaptureStatus": "pending_capture_from_pinned_typescript_server"
+      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeOutputSchemaPresent": false
     },
     {
       "id": "T066",
@@ -2769,10 +5374,33 @@
       "testFilesMentioningTool": [
         "src/__tests__/path-segments.test.ts"
       ],
-      "runtimeInputSchema": null,
+      "runtimeInputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "fromFoodId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+            "description": "UUID of the food to merge away; it is deleted."
+          },
+          "toFoodId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+            "description": "UUID of the food that remains and receives the references."
+          }
+        },
+        "required": [
+          "fromFoodId",
+          "toFoodId"
+        ],
+        "additionalProperties": false
+      },
       "runtimeOutputSchema": null,
       "runtimeExamples": [],
-      "runtimeCaptureStatus": "pending_capture_from_pinned_typescript_server"
+      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeOutputSchemaPresent": false
     },
     {
       "id": "T067",
@@ -2813,10 +5441,27 @@
         "src/__tests__/units-api.test.ts",
         "src/__tests__/units-tools.test.ts"
       ],
-      "runtimeInputSchema": null,
+      "runtimeInputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "search": {
+            "description": "Matches against unit name, pluralName, abbreviation, and pluralAbbreviation, per Mealie's search behavior.",
+            "type": "string"
+          },
+          "page": {
+            "type": "number"
+          },
+          "perPage": {
+            "type": "number"
+          }
+        },
+        "additionalProperties": false
+      },
       "runtimeOutputSchema": null,
       "runtimeExamples": [],
-      "runtimeCaptureStatus": "pending_capture_from_pinned_typescript_server"
+      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeOutputSchemaPresent": false
     },
     {
       "id": "T068",
@@ -2848,10 +5493,26 @@
         "src/__tests__/units-api.test.ts",
         "src/__tests__/units-tools.test.ts"
       ],
-      "runtimeInputSchema": null,
+      "runtimeInputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "unitId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+            "description": "UUID of the unit to retrieve."
+          }
+        },
+        "required": [
+          "unitId"
+        ],
+        "additionalProperties": false
+      },
       "runtimeOutputSchema": null,
       "runtimeExamples": [],
-      "runtimeCaptureStatus": "pending_capture_from_pinned_typescript_server"
+      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeOutputSchemaPresent": false
     },
     {
       "id": "T069",
@@ -2888,10 +5549,37 @@
         "src/__tests__/units-api.test.ts",
         "src/__tests__/units-tools.test.ts"
       ],
-      "runtimeInputSchema": null,
+      "runtimeInputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "queries": {
+            "minItems": 1,
+            "maxItems": 25,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 200
+            },
+            "description": "Unit concepts to resolve, e.g. [\"tablespoon\", \"ounce\", \"cup\"]. 1-25 plain lookup strings (not search syntax) — duplicates (case-insensitive) are resolved once but still returned once per input entry."
+          },
+          "maxMatchesPerQuery": {
+            "description": "Maximum ranked candidates to return per query (default 10, capped at 25). Strongest matches (exact name/pluralName/abbreviation/pluralAbbreviation/alias, then substring matches) are kept first when a query has more candidates than this.",
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 25
+          }
+        },
+        "required": [
+          "queries"
+        ],
+        "additionalProperties": false
+      },
       "runtimeOutputSchema": null,
       "runtimeExamples": [],
-      "runtimeCaptureStatus": "pending_capture_from_pinned_typescript_server"
+      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeOutputSchemaPresent": false
     },
     {
       "id": "T070",
@@ -2958,10 +5646,62 @@
       "testFilesMentioningTool": [
         "src/__tests__/units-tools.test.ts"
       ],
-      "runtimeInputSchema": null,
+      "runtimeInputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Name of the new unit. Cannot be blank."
+          },
+          "pluralName": {
+            "description": "Plural form of the name, if different.",
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "abbreviation": {
+            "description": "Short form used for display when useAbbreviation is true (e.g. \"tbsp\").",
+            "type": "string"
+          },
+          "pluralAbbreviation": {
+            "description": "Plural form of abbreviation, used for display when useAbbreviation is true and quantity > 1.",
+            "type": "string"
+          },
+          "useAbbreviation": {
+            "description": "Whether Mealie should render this unit using its abbreviation instead of its name. Display-only; does not affect matching or search.",
+            "type": "boolean"
+          },
+          "fraction": {
+            "description": "Whether Mealie should render this unit's quantity as a fraction (e.g. \"1 1/2\") instead of a decimal. Display-only.",
+            "type": "boolean"
+          },
+          "aliases": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Alternate names Mealie should also recognize for this unit (e.g. \"tbsp\" or \"tbs\" as aliases for \"tablespoon\"), given as plain strings — converted internally to the alias object shape Mealie expects. Note: aliases are not matched by get_units' search — search only matches name, pluralName, abbreviation, and pluralAbbreviation."
+          },
+          "standardQuantity": {
+            "type": "number",
+            "description": "How many standardUnit this unit is equivalent to (e.g. a tablespoon might have standardQuantity 0.5 with standardUnit \"fluid_ounce\"). Used only by Mealie's own shopping-list item merging to combine quantities across differently-expressed but equivalent units — this tool does not compute or validate conversions. Must be provided together with standardUnit: supplying only one causes Mealie to silently clear both."
+          },
+          "standardUnit": {
+            "type": "string",
+            "description": "The reference unit standardQuantity is expressed in, as a plain string Mealie's conversion library (pint) can parse (e.g. \"fluid_ounce\", \"cup\", \"gram\"). Must be provided together with standardQuantity: supplying only one causes Mealie to silently clear both."
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "additionalProperties": false
+      },
       "runtimeOutputSchema": null,
       "runtimeExamples": [],
-      "runtimeCaptureStatus": "pending_capture_from_pinned_typescript_server"
+      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeOutputSchemaPresent": false
     },
     {
       "id": "T071",
@@ -3033,10 +5773,78 @@
       "testFilesMentioningTool": [
         "src/__tests__/units-tools.test.ts"
       ],
-      "runtimeInputSchema": null,
+      "runtimeInputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "unitId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+            "description": "UUID of the unit to update."
+          },
+          "name": {
+            "type": "string"
+          },
+          "pluralName": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "abbreviation": {
+            "type": "string"
+          },
+          "pluralAbbreviation": {
+            "type": "string"
+          },
+          "useAbbreviation": {
+            "type": "boolean"
+          },
+          "fraction": {
+            "type": "boolean"
+          },
+          "aliases": {
+            "description": "Alternate names Mealie should also recognize for this unit (e.g. \"tbsp\" or \"tbs\" as aliases for \"tablespoon\"), given as plain strings — converted internally to the alias object shape Mealie expects. Note: aliases are not matched by get_units' search — search only matches name, pluralName, abbreviation, and pluralAbbreviation. Replaces the unit's entire alias collection when provided — pass an empty array to clear all aliases, or omit this field entirely to leave existing aliases untouched.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "standardQuantity": {
+            "description": "How many standardUnit this unit is equivalent to (e.g. a tablespoon might have standardQuantity 0.5 with standardUnit \"fluid_ounce\"). Used only by Mealie's own shopping-list item merging to combine quantities across differently-expressed but equivalent units — this tool does not compute or validate conversions. Must be provided together with standardUnit: supplying only one causes Mealie to silently clear both. Pass null (together with standardUnit: null) to clear both.",
+            "anyOf": [
+              {
+                "type": "number",
+                "description": "How many standardUnit this unit is equivalent to (e.g. a tablespoon might have standardQuantity 0.5 with standardUnit \"fluid_ounce\"). Used only by Mealie's own shopping-list item merging to combine quantities across differently-expressed but equivalent units — this tool does not compute or validate conversions. Must be provided together with standardUnit: supplying only one causes Mealie to silently clear both."
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "standardUnit": {
+            "description": "The reference unit standardQuantity is expressed in, as a plain string Mealie's conversion library (pint) can parse (e.g. \"fluid_ounce\", \"cup\", \"gram\"). Must be provided together with standardQuantity: supplying only one causes Mealie to silently clear both. Pass null (together with standardQuantity: null) to clear both.",
+            "anyOf": [
+              {
+                "type": "string",
+                "description": "The reference unit standardQuantity is expressed in, as a plain string Mealie's conversion library (pint) can parse (e.g. \"fluid_ounce\", \"cup\", \"gram\"). Must be provided together with standardQuantity: supplying only one causes Mealie to silently clear both."
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "unitId"
+        ],
+        "additionalProperties": false
+      },
       "runtimeOutputSchema": null,
       "runtimeExamples": [],
-      "runtimeCaptureStatus": "pending_capture_from_pinned_typescript_server"
+      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeOutputSchemaPresent": false
     },
     {
       "id": "T072",
@@ -3067,10 +5875,26 @@
       "testFilesMentioningTool": [
         "src/__tests__/units-tools.test.ts"
       ],
-      "runtimeInputSchema": null,
+      "runtimeInputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "unitId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+            "description": "UUID of the unit to delete."
+          }
+        },
+        "required": [
+          "unitId"
+        ],
+        "additionalProperties": false
+      },
       "runtimeOutputSchema": null,
       "runtimeExamples": [],
-      "runtimeCaptureStatus": "pending_capture_from_pinned_typescript_server"
+      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeOutputSchemaPresent": false
     },
     {
       "id": "T073",
@@ -3109,10 +5933,27 @@
       "testFilesMentioningTool": [
         "src/__tests__/tools-tools.test.ts"
       ],
-      "runtimeInputSchema": null,
+      "runtimeInputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "search": {
+            "description": "Matched against the tool name, per Mealie's search behavior.",
+            "type": "string"
+          },
+          "page": {
+            "type": "number"
+          },
+          "perPage": {
+            "type": "number"
+          }
+        },
+        "additionalProperties": false
+      },
       "runtimeOutputSchema": null,
       "runtimeExamples": [],
-      "runtimeCaptureStatus": "pending_capture_from_pinned_typescript_server"
+      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeOutputSchemaPresent": false
     },
     {
       "id": "T074",
@@ -3143,10 +5984,26 @@
       "testFilesMentioningTool": [
         "src/__tests__/tools-tools.test.ts"
       ],
-      "runtimeInputSchema": null,
+      "runtimeInputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "toolId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+            "description": "UUID of the tool to retrieve."
+          }
+        },
+        "required": [
+          "toolId"
+        ],
+        "additionalProperties": false
+      },
       "runtimeOutputSchema": null,
       "runtimeExamples": [],
-      "runtimeCaptureStatus": "pending_capture_from_pinned_typescript_server"
+      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeOutputSchemaPresent": false
     },
     {
       "id": "T075",
@@ -3181,10 +6038,37 @@
       "testFilesMentioningTool": [
         "src/__tests__/tools-tools.test.ts"
       ],
-      "runtimeInputSchema": null,
+      "runtimeInputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "queries": {
+            "minItems": 1,
+            "maxItems": 25,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 200
+            },
+            "description": "Tool names to resolve, e.g. [\"whisk\", \"sheet pan\"]. 1-25 plain lookup strings (not search syntax) — duplicates (case-insensitive) are resolved once but still returned once per input entry."
+          },
+          "maxMatchesPerQuery": {
+            "description": "Maximum ranked candidates to return per query (default 10, capped at 25).",
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 25
+          }
+        },
+        "required": [
+          "queries"
+        ],
+        "additionalProperties": false
+      },
       "runtimeOutputSchema": null,
       "runtimeExamples": [],
-      "runtimeCaptureStatus": "pending_capture_from_pinned_typescript_server"
+      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeOutputSchemaPresent": false
     },
     {
       "id": "T076",
@@ -3215,10 +6099,24 @@
       "testFilesMentioningTool": [
         "src/__tests__/tools-tools.test.ts"
       ],
-      "runtimeInputSchema": null,
+      "runtimeInputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Name of the new tool. Cannot be blank."
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "additionalProperties": false
+      },
       "runtimeOutputSchema": null,
       "runtimeExamples": [],
-      "runtimeCaptureStatus": "pending_capture_from_pinned_typescript_server"
+      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeOutputSchemaPresent": false
     },
     {
       "id": "T077",
@@ -3254,10 +6152,30 @@
       "testFilesMentioningTool": [
         "src/__tests__/tools-tools.test.ts"
       ],
-      "runtimeInputSchema": null,
+      "runtimeInputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "toolId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+            "description": "UUID of the tool to update."
+          },
+          "name": {
+            "description": "New name. At least one update field is required.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "toolId"
+        ],
+        "additionalProperties": false
+      },
       "runtimeOutputSchema": null,
       "runtimeExamples": [],
-      "runtimeCaptureStatus": "pending_capture_from_pinned_typescript_server"
+      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeOutputSchemaPresent": false
     },
     {
       "id": "T078",
@@ -3288,10 +6206,26 @@
       "testFilesMentioningTool": [
         "src/__tests__/tools-tools.test.ts"
       ],
-      "runtimeInputSchema": null,
+      "runtimeInputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "toolId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+            "description": "UUID of the tool to delete."
+          }
+        },
+        "required": [
+          "toolId"
+        ],
+        "additionalProperties": false
+      },
       "runtimeOutputSchema": null,
       "runtimeExamples": [],
-      "runtimeCaptureStatus": "pending_capture_from_pinned_typescript_server"
+      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeOutputSchemaPresent": false
     }
   ],
   "prompts": [

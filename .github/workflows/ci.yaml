@@ -19,5 +19,6 @@ jobs:
             uv run ruff check .
             uv run ruff format --check .
             uv run mypy src/mealie_mcp_server
+            docker build -f tests/reference/Dockerfile -t mealie-mcp-reference:upstream-d027e1b .
             uv run pytest
             uv build

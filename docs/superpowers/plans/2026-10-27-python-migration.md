@@ -10,7 +10,7 @@
 
 **Spec:** [Diseño completo](../specs/2026-10-27-python-migration-design.md). Leer también [inventario](../../migration/compatibility-inventory.md) e [inventario JSON](../../migration/compatibility-inventory.json).
 
-Fecha: 2026-10-27. Estado: plan preparado, **0/24 tareas iniciadas**. El usuario ha pedido planificar antes de empezar. Este documento no es autorización para construir, publicar o desplegar durante esta fase.
+Fecha: 2026-10-27. Estado: implementación autorizada por el usuario; P01..P03 verificadas y P04 en curso. El estado actualizado se mantiene en implementation-state.json; no hay autorización para publicar o desplegar un endpoint público.
 
 ## Global Constraints
 
@@ -93,16 +93,16 @@ El árbol de archivos definitivo está en el diseño, sección5. Este plan concr
 <a id="p01"></a>
 ### P01: Arrancar el Dev Container sin depender de un lock inexistente
 
-**Depende de:** ninguna. **Estado:** pendiente; ver registro de ejecución.
+**Depende de:** ninguna. **Estado:** verificada; ver registro de ejecución.
 
 **Archivos:** `.devcontainer/devcontainer.json`, `.devcontainer/compose.yaml`, `Dockerfile`, `.dockerignore`, `.gitignore`, `docs/development.md`.
 
 **Interfaces:** consume Docker Desktop con contenedores Linux y la carpeta actual con docs preservada. Produce Target development utilizable sin pyproject ni uv.lock; usuario no root, Python 3.14 y Docker CLI con daemon externo. Repositorio Git basado en el upstream fijado con docs preservada; no se fuerza checkout sobre trabajo ajeno.
 
-- [ ] **1. Preparar el bootstrap conservando docs y el historial fijado.** Comprobar estado Git/archivos antes de importar fuentes; no sobreescribir trabajo ajeno. Después crear los archivos de entorno descritos.
-- [ ] **2. Reabrir en Dev Container y ejecutar las comprobaciones reales.** Reabrir desde cero; python --version informa 3.14.x; id -u no es 0; docker version conecta al daemon; .venv usa volumen Linux; puerto 8000 privado. El arranque inicial no ejecuta uv sync --frozen si todavía no existe uv.lock. Antes de crear Dockerfile, incorporar el historial upstream fijado a una rama local migration/python mediante un contenedor Git auxiliar, preservando docs. El launcher Docker y la edición de archivos son el bootstrap del host; ningún comando Python/Node de la aplicación se ejecuta en el host. Leer instrucciones de repositorio tras incorporar fuentes; no configurar origin ni hacer push.
+- [x] **1. Preparar el bootstrap conservando docs y el historial fijado.** Comprobar estado Git/archivos antes de importar fuentes; no sobreescribir trabajo ajeno. Después crear los archivos de entorno descritos.
+- [x] **2. Reabrir en Dev Container y ejecutar las comprobaciones reales.** Reabrir desde cero; python --version informa 3.14.x; id -u no es 0; docker version conecta al daemon; .venv usa volumen Linux; puerto 8000 privado. El arranque inicial no ejecuta uv sync --frozen si todavía no existe uv.lock. Antes de crear Dockerfile, incorporar el historial upstream fijado a una rama local migration/python mediante un contenedor Git auxiliar, preservando docs. El launcher Docker y la edición de archivos son el bootstrap del host; ningún comando Python/Node de la aplicación se ejecuta en el host. Leer instrucciones de repositorio tras incorporar fuentes; no configurar origin ni hacer push.
 
-- [ ] **3. Verificar el resultado de esta tarea.** Ejecutar dentro del Dev Container; salida0 y todas las aserciones indicadas en verde. Para P01 el launcher y el contenedor auxiliar son la excepción de bootstrap explicada arriba.
+- [x] **3. Verificar el resultado de esta tarea.** Ejecutar dentro del Dev Container; salida0 y todas las aserciones indicadas en verde. Para P01 el launcher y el contenedor auxiliar son la excepción de bootstrap explicada arriba.
 
 ```bash
 docker compose -f .devcontainer/compose.yaml config
@@ -111,23 +111,23 @@ id -u
 docker version
 ```
 
-- [ ] **4. Revisar, documentar y cerrar.** Entrar en el Dev Container limpio y verificar requisitos reales. No escribir tests que solo repitan la configuración. Actualizar estado, diferencias si las hay y evidencia con comando/resultado/entorno. Commit de implementación sugerido: `chore: bootstrap reproducible Python dev container`. Registrar su SHA en un commit documental posterior si hace falta; no intentar incluir el hash de un commit en sí mismo.
+- [x] **4. Revisar, documentar y cerrar.** Entrar en el Dev Container limpio y verificar requisitos reales. No escribir tests que solo repitan la configuración. Actualizar estado, diferencias si las hay y evidencia con comando/resultado/entorno. Commit de implementación sugerido: `chore: bootstrap reproducible Python dev container`. Registrar su SHA en un commit documental posterior si hace falta; no intentar incluir el hash de un commit en sí mismo.
 
 <a id="p02"></a>
 ### P02: Fijar paquete, dependencias y checks Python
 
-**Depende de:** P01. **Estado:** pendiente; ver registro de ejecución.
+**Depende de:** P01. **Estado:** verificada; ver registro de ejecución.
 
 **Archivos:** `pyproject.toml`, `uv.lock`, `.python-version`, `src/mealie_mcp_server/__init__.py`, `tests/conftest.py`, `.github/workflows/ci.yaml`, `docs/development.md`.
 **Tests:** `tests/unit/test_package_metadata.py`.
 
 **Interfaces:** consume Dev Container P01. Produce Paquete mealie_mcp_server con version() -> str; build hatchling; uv.lock fijado; comandos Ruff/mypy/pytest disponibles dentro del contenedor.
 
-- [ ] **1. Añadir las pruebas antes del código funcional.** test_package_version_matches_metadata: assert version() == importlib.metadata.version('mealie-mcp-server'). Verificar import desde wheel instalado fuera del source tree. Aún no crear una CLI operativa ni afirmar que existe un servidor.
-- [ ] **2. Ejecutar el subconjunto indicado y observar RED.** El fallo esperado es el comportamiento/handler aún ausente o incorrecto; si falta infraestructura del harness, arreglarla antes de tomar el fallo como evidencia.
-- [ ] **3. Implementar las interfaces de esta tarea y sus fixtures.** Reutilizar los contratos anteriores; preservar los valores del diseño y el inventario. Resolver FastMCP 4.1.4 y mcp 2.3.0 compatibles con Python 3.14; fijar uv/base image reales. Crear lock dentro del Dev Container y después activar postCreateCommand uv sync --frozen --group dev. CI usa el mismo entorno y no permite publicar todavía.
+- [x] **1. Añadir las pruebas antes del código funcional.** test_package_version_matches_metadata: assert version() == importlib.metadata.version('mealie-mcp-server'). Verificar import desde wheel instalado fuera del source tree. Aún no crear una CLI operativa ni afirmar que existe un servidor.
+- [x] **2. Ejecutar el subconjunto indicado y observar RED.** El fallo esperado es el comportamiento/handler aún ausente o incorrecto; si falta infraestructura del harness, arreglarla antes de tomar el fallo como evidencia.
+- [x] **3. Implementar las interfaces de esta tarea y sus fixtures.** Reutilizar los contratos anteriores; preservar los valores del diseño y el inventario. Resolver FastMCP 4.1.4 y mcp 2.3.0 compatibles con Python 3.14; fijar uv/base image reales. Crear lock dentro del Dev Container y después activar postCreateCommand uv sync --frozen --group dev. CI usa el mismo entorno y no permite publicar todavía.
 
-- [ ] **4. Verificar el resultado de esta tarea.** Ejecutar dentro del Dev Container; salida0 y todas las aserciones indicadas en verde. Para P01 el launcher y el contenedor auxiliar son la excepción de bootstrap explicada arriba.
+- [x] **4. Verificar el resultado de esta tarea.** Ejecutar dentro del Dev Container; salida0 y todas las aserciones indicadas en verde. Para P01 el launcher y el contenedor auxiliar son la excepción de bootstrap explicada arriba.
 
 ```bash
 uv lock
@@ -138,23 +138,23 @@ uv run mypy src
 uv build
 ```
 
-- [ ] **5. Revisar, documentar y cerrar.** Comprobar el criterio de salida anterior y el diff; no ampliar la suite sin una nueva causa. Actualizar estado, diferencias si las hay y evidencia con comando/resultado/entorno. Commit de implementación sugerido: `build: add locked Python package and container checks`. Registrar su SHA en un commit documental posterior si hace falta; no intentar incluir el hash de un commit en sí mismo.
+- [x] **5. Revisar, documentar y cerrar.** Comprobar el criterio de salida anterior y el diff; no ampliar la suite sin una nueva causa. Actualizar estado, diferencias si las hay y evidencia con comando/resultado/entorno. Commit de implementación sugerido: `build: add locked Python package and container checks`. Registrar su SHA en un commit documental posterior si hace falta; no intentar incluir el hash de un commit en sí mismo.
 
 <a id="p03"></a>
 ### P03: Capturar la referencia original y el corpus de compatibilidad
 
-**Depende de:** P02. **Estado:** pendiente; ver registro de ejecución.
+**Depende de:** P02. **Estado:** verificada; ver registro de ejecución.
 
 **Archivos:** `tests/reference/Dockerfile`, `tests/reference/compose.yaml`, `tests/fixtures/compatibility/upstream-manifest.json`, `tests/fixtures/compatibility/catalog.json`, `tests/fixtures/compatibility/prompts.json`, `tests/fixtures/compatibility/instructions.txt`, `tests/fixtures/compatibility/cases/`, `tests/support/fake_mealie.py`, `tests/support/contracts.py`, `scripts/capture_reference.py`, `docs/migration/baseline.md`.
 **Tests:** `tests/contracts/test_reference_catalog.py`.
 
 **Interfaces:** consume Commit upstream d027e1b4a314d781a322f1f91e37840f01464d77 e inventario de 78 nombres. Produce FakeMealie(scenario: str) con server_url y recorded_requests; load_cases(family: str) -> list[ContractCase]; ContractCase contiene tool, arguments, scenario, expected_requests, expected_result. Runner TS aislado y temporal.
 
-- [ ] **1. Añadir las pruebas antes del código funcional.** test_reference_catalog: assert len(catalog.tools) == 78; assert prompts == ['weekly-meal-plan']; capturar capability/error de resources y confirmar cero recursos registrados sin fabricar una respuesta []; assert file_tool.meta == {'openai/fileParams':['file']}. Ejecutar la suite original y registrar resultado, incluidas fallas reales; no inventar éxito. Capturar ausencia de outputSchema como ausencia observada.
-- [ ] **2. Ejecutar el subconjunto indicado y observar RED.** El fallo esperado es el comportamiento/handler aún ausente o incorrecto; si falta infraestructura del harness, arreglarla antes de tomar el fallo como evidencia.
-- [ ] **3. Implementar las interfaces de esta tarea y sus fixtures.** Reutilizar los contratos anteriores; preservar los valores del diseño y el inventario. Identificar hashes/SDK/Node/lock y snapshots; catálogo/prompt/instrucciones completos. Los casos de comportamiento se amplían en cada familia antes de portarla. El fake no conoce credenciales ni datos reales.
+- [x] **1. Añadir las pruebas antes del código funcional.** test_reference_catalog: assert len(catalog.tools) == 78; assert prompts == ['weekly-meal-plan']; capturar capability/error de resources y confirmar cero recursos registrados sin fabricar una respuesta []; assert file_tool.meta == {'openai/fileParams':['file']}. Ejecutar la suite original y registrar resultado, incluidas fallas reales; no inventar éxito. Capturar ausencia de outputSchema como ausencia observada.
+- [x] **2. Ejecutar el subconjunto indicado y observar RED.** El fallo esperado es el comportamiento/handler aún ausente o incorrecto; si falta infraestructura del harness, arreglarla antes de tomar el fallo como evidencia.
+- [x] **3. Implementar las interfaces de esta tarea y sus fixtures.** Reutilizar los contratos anteriores; preservar los valores del diseño y el inventario. Identificar hashes/SDK/Node/lock y snapshots; catálogo/prompt/instrucciones completos. Los casos de comportamiento se amplían en cada familia antes de portarla. El fake no conoce credenciales ni datos reales.
 
-- [ ] **4. Verificar el resultado de esta tarea.** Ejecutar dentro del Dev Container; salida0 y todas las aserciones indicadas en verde. Para P01 el launcher y el contenedor auxiliar son la excepción de bootstrap explicada arriba.
+- [x] **4. Verificar el resultado de esta tarea.** Ejecutar dentro del Dev Container; salida0 y todas las aserciones indicadas en verde. Para P01 el launcher y el contenedor auxiliar son la excepción de bootstrap explicada arriba.
 
 ```bash
 docker compose -f tests/reference/compose.yaml build
@@ -162,7 +162,7 @@ uv run python scripts/capture_reference.py --commit d027e1b4a314d781a322f1f91e37
 uv run pytest tests/contracts/test_reference_catalog.py -q
 ```
 
-- [ ] **5. Revisar, documentar y cerrar.** Comprobar el criterio de salida anterior y el diff; no ampliar la suite sin una nueva causa. Actualizar estado, diferencias si las hay y evidencia con comando/resultado/entorno. Commit de implementación sugerido: `test: capture pinned upstream MCP baseline`. Registrar su SHA en un commit documental posterior si hace falta; no intentar incluir el hash de un commit en sí mismo.
+- [x] **5. Revisar, documentar y cerrar.** Comprobar el criterio de salida anterior y el diff; no ampliar la suite sin una nueva causa. Actualizar estado, diferencias si las hay y evidencia con comando/resultado/entorno. Commit de implementación sugerido: `test: capture pinned upstream MCP baseline`. Registrar su SHA en un commit documental posterior si hace falta; no intentar incluir el hash de un commit en sí mismo.
 
 <a id="p04"></a>
 ### P04: Configurar entorno, secretos y presencia de campos
@@ -701,6 +701,6 @@ Las interfaces de dominios compartidas se construyen primero: P07 matching -> P0
 
 ## Handoff y cambios de alcance
 
-El siguiente acto será revisar este plan y seleccionar ejecución secuencial o delegada. No iniciar una tarea por el mero hecho de que el plan exista. La preparación del plan está autorizada; las24 tareas continúan pendientes hasta empezar la implementación de forma explícita.
+El usuario autorizó empezar la implementación; se utiliza ejecución secuencial nativa. Se registran avances en docs/migration y no se pide confirmación entre tareas ya autorizadas.
 
 Una tarea bloqueada registra condición y próximo paso, sin marcarse completa. Al retomar se lee el estado y se continúa en la primera tarea pendiente con dependencias satisfechas, sin repetir fases cerradas salvo cambio/fallo concreto. Publicación de imagen/paquete y despliegue público requieren destino configurado y autorización correspondiente; no son condición para disponer de la imagen local de producción probada.

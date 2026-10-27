@@ -63,7 +63,7 @@
           "frozenReopen": "success"
         }
       ],
-      "commit": null
+      "commit": "82d34405ee3be73ec43a71e312eca7a04cba5e61"
     },
     {
       "id": "P03",
@@ -71,7 +71,7 @@
       "dependsOn": [
         "P02"
       ],
-      "status": "in_progress",
+      "status": "verified",
       "tools": [],
       "files": [
         "tests/reference/Dockerfile",
@@ -89,7 +89,16 @@
       "tests": [
         "tests/contracts/test_reference_catalog.py"
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "report": "docs/migration/evidence/P03.md",
+          "result": "passed",
+          "upstreamTests": 1058,
+          "upstreamFiles": 42,
+          "pythonTests": 3,
+          "runtimeCatalogTools": 78
+        }
+      ],
       "commit": null
     },
     {
@@ -98,7 +107,7 @@
       "dependsOn": [
         "P03"
       ],
-      "status": "not_started",
+      "status": "in_progress",
       "tools": [],
       "files": [
         "src/mealie_mcp_server/config.py",

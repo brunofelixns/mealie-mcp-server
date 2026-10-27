@@ -1,0 +1,51 @@
+{
+  "prompts": [
+    {
+      "name": "weekly-meal-plan",
+      "description": "Generate a balanced weekly meal plan with breakfast, lunch, and dinner for 7 days",
+      "arguments": [
+        {
+          "name": "preferences",
+          "description": "Dietary preferences or constraints",
+          "required": false
+        }
+      ]
+    }
+  ],
+  "expanded": {
+    "messages": [
+      {
+        "role": "assistant",
+        "content": {
+          "type": "text",
+          "text": "<context>\nYou have access to a Mealie recipe database. You can search for recipes and create meal plans.\n\n## Tool Usage Guidelines\n\n### Recipe Tools\n- get_recipes: Search and list recipes (always set per_page=50)\n- get_recipe_concise: Get basic recipe details (use by default)\n- get_recipe_detailed: Get full recipe information (only if asked)\n- get_recipes_batch: Fetch multiple recipes at once by slug\n\n### Meal Plan Tools\n- get_all_mealplans: View existing meal plans\n- get_mealplan_with_recipes: View meal plans with embedded recipe details\n- create_mealplan_bulk: Add multiple recipes to a meal plan at once\n- get_todays_mealplan: View today's planned meals\n</context>\n\n<instructions>\n# Meal Planning Guidelines\n- Include breakfast, lunch, and dinner for all 7 days\n- Create variety using different proteins, grains, and vegetables\n- Consider seasonal ingredients and balance nutrition\n- Use recipes from the Mealie database when available\n- Plan for leftovers where appropriate\n\n# User Interaction\n- Present the meal plan in table format\n- Ask for feedback about meal swaps and dietary needs\n- Before saving to Mealie, display the complete meal plan for confirmation\n</instructions>"
+        }
+      },
+      {
+        "role": "user",
+        "content": {
+          "type": "text",
+          "text": "I need help creating a balanced meal plan for the next week that includes breakfast, lunch, and dinner."
+        }
+      }
+    ]
+  },
+  "withPreferences": {
+    "messages": [
+      {
+        "role": "assistant",
+        "content": {
+          "type": "text",
+          "text": "<context>\nYou have access to a Mealie recipe database. You can search for recipes and create meal plans.\n\n## Tool Usage Guidelines\n\n### Recipe Tools\n- get_recipes: Search and list recipes (always set per_page=50)\n- get_recipe_concise: Get basic recipe details (use by default)\n- get_recipe_detailed: Get full recipe information (only if asked)\n- get_recipes_batch: Fetch multiple recipes at once by slug\n\n### Meal Plan Tools\n- get_all_mealplans: View existing meal plans\n- get_mealplan_with_recipes: View meal plans with embedded recipe details\n- create_mealplan_bulk: Add multiple recipes to a meal plan at once\n- get_todays_mealplan: View today's planned meals\n</context>\n\n<instructions>\n# Meal Planning Guidelines\n- Include breakfast, lunch, and dinner for all 7 days\n- Create variety using different proteins, grains, and vegetables\n- Consider seasonal ingredients and balance nutrition\n- Use recipes from the Mealie database when available\n- Plan for leftovers where appropriate\n\n# User Interaction\n- Present the meal plan in table format\n- Ask for feedback about meal swaps and dietary needs\n- Before saving to Mealie, display the complete meal plan for confirmation\n</instructions>"
+        }
+      },
+      {
+        "role": "user",
+        "content": {
+          "type": "text",
+          "text": "I need help creating a balanced meal plan for the next week that includes breakfast, lunch, and dinner. My preferences are: vegetarian"
+        }
+      }
+    ]
+  }
+}

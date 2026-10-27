@@ -1,0 +1,24 @@
+{
+  "commit": "d027e1b4a314d781a322f1f91e37840f01464d77",
+  "image": "mealie-mcp-reference:upstream-d027e1b",
+  "imageId": "sha256:e0083b8749bcd4d47ccb85fcb94e1995dc48b8933dd6ba2fb8a284073e1d047e",
+  "captureClientVersion": "2.3.0",
+  "protocolVersion": "2025-11-25",
+  "serverInfo": {
+    "name": "mealie-mcp-server",
+    "version": "1.0.0"
+  },
+  "capabilities": {
+    "prompts": {
+      "listChanged": true
+    },
+    "tools": {
+      "listChanged": true
+    }
+  },
+  "resources": {
+    "unsupported": true,
+    "code": -32601
+  },
+  "testsExecuted": false
+}
