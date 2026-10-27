@@ -31,5 +31,329 @@
   },
   "no_requests": {
     "requests": []
+  },
+  "get_categories.basic": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/organizers/categories",
+        "query": {
+          "page": [
+            "1"
+          ],
+          "perPage": [
+            "20"
+          ]
+        },
+        "body": null,
+        "response": {
+          "items": [
+            {
+              "id": "10000000-0000-4000-8000-000000000001",
+              "name": "Dinner",
+              "slug": "dinner",
+              "providerExtra": {
+                "preserved": true
+              }
+            }
+          ],
+          "total": 1,
+          "page": 1,
+          "size": 20
+        }
+      }
+    ]
+  },
+  "get_empty_categories.basic": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/organizers/categories/empty",
+        "query": {},
+        "body": null,
+        "response": {
+          "items": [],
+          "total": 0
+        }
+      }
+    ]
+  },
+  "create_category.basic": {
+    "requests": [
+      {
+        "method": "POST",
+        "path": "/api/organizers/categories",
+        "query": {},
+        "body": {
+          "name": "Dinner"
+        },
+        "response": {
+          "id": "10000000-0000-4000-8000-000000000001",
+          "name": "Dinner",
+          "slug": "dinner",
+          "providerExtra": {
+            "preserved": true
+          }
+        }
+      }
+    ]
+  },
+  "get_category.basic": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/organizers/categories/10000000-0000-4000-8000-000000000001",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "10000000-0000-4000-8000-000000000001",
+          "name": "Dinner",
+          "slug": "dinner",
+          "providerExtra": {
+            "preserved": true
+          }
+        }
+      }
+    ]
+  },
+  "get_category_by_slug.basic": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/organizers/categories/slug/dinner",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "10000000-0000-4000-8000-000000000001",
+          "name": "Dinner",
+          "slug": "dinner",
+          "providerExtra": {
+            "preserved": true
+          }
+        }
+      }
+    ]
+  },
+  "update_category.basic": {
+    "requests": [
+      {
+        "method": "PUT",
+        "path": "/api/organizers/categories/10000000-0000-4000-8000-000000000001",
+        "query": {},
+        "body": {
+          "name": "Dinner"
+        },
+        "response": {
+          "id": "10000000-0000-4000-8000-000000000001",
+          "name": "Dinner",
+          "slug": "dinner",
+          "providerExtra": {
+            "preserved": true
+          }
+        }
+      }
+    ]
+  },
+  "delete_category.basic": {
+    "requests": [
+      {
+        "method": "DELETE",
+        "path": "/api/organizers/categories/10000000-0000-4000-8000-000000000001",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "10000000-0000-4000-8000-000000000001",
+          "name": "Dinner",
+          "slug": "dinner",
+          "providerExtra": {
+            "preserved": true
+          }
+        }
+      }
+    ]
+  },
+  "get_tags.basic": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/organizers/tags",
+        "query": {
+          "page": [
+            "1"
+          ],
+          "perPage": [
+            "20"
+          ]
+        },
+        "body": null,
+        "response": {
+          "items": [
+            {
+              "id": "10000000-0000-4000-8000-000000000001",
+              "name": "Dinner",
+              "slug": "dinner",
+              "providerExtra": {
+                "preserved": true
+              }
+            }
+          ],
+          "total": 1,
+          "page": 1,
+          "size": 20
+        }
+      }
+    ]
+  },
+  "get_empty_tags.basic": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/organizers/tags/empty",
+        "query": {},
+        "body": null,
+        "response": {
+          "items": [],
+          "total": 0
+        }
+      }
+    ]
+  },
+  "create_tag.basic": {
+    "requests": [
+      {
+        "method": "POST",
+        "path": "/api/organizers/tags",
+        "query": {},
+        "body": {
+          "name": "Dinner"
+        },
+        "response": {
+          "id": "10000000-0000-4000-8000-000000000001",
+          "name": "Dinner",
+          "slug": "dinner",
+          "providerExtra": {
+            "preserved": true
+          }
+        }
+      }
+    ]
+  },
+  "get_tag.basic": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/organizers/tags/10000000-0000-4000-8000-000000000001",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "10000000-0000-4000-8000-000000000001",
+          "name": "Dinner",
+          "slug": "dinner",
+          "providerExtra": {
+            "preserved": true
+          }
+        }
+      }
+    ]
+  },
+  "get_tag_by_slug.basic": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/organizers/tags/slug/dinner",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "10000000-0000-4000-8000-000000000001",
+          "name": "Dinner",
+          "slug": "dinner",
+          "providerExtra": {
+            "preserved": true
+          }
+        }
+      }
+    ]
+  },
+  "update_tag.basic": {
+    "requests": [
+      {
+        "method": "PUT",
+        "path": "/api/organizers/tags/10000000-0000-4000-8000-000000000001",
+        "query": {},
+        "body": {
+          "name": "Dinner"
+        },
+        "response": {
+          "id": "10000000-0000-4000-8000-000000000001",
+          "name": "Dinner",
+          "slug": "dinner",
+          "providerExtra": {
+            "preserved": true
+          }
+        }
+      }
+    ]
+  },
+  "delete_tag.basic": {
+    "requests": [
+      {
+        "method": "DELETE",
+        "path": "/api/organizers/tags/10000000-0000-4000-8000-000000000001",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "10000000-0000-4000-8000-000000000001",
+          "name": "Dinner",
+          "slug": "dinner",
+          "providerExtra": {
+            "preserved": true
+          }
+        }
+      }
+    ]
+  },
+  "delete_category.edge400": {
+    "requests": [
+      {
+        "method": "DELETE",
+        "path": "/api/organizers/categories/10000000-0000-4000-8000-000000000001",
+        "query": {},
+        "body": null,
+        "response": {
+          "detail": "Category in use"
+        },
+        "status": 400
+      }
+    ]
+  },
+  "delete_tag.edge204": {
+    "requests": [
+      {
+        "method": "DELETE",
+        "path": "/api/organizers/tags/10000000-0000-4000-8000-000000000001",
+        "query": {},
+        "body": null,
+        "response": null,
+        "status": 204
+      }
+    ]
+  },
+  "update_tag.edge200": {
+    "requests": [
+      {
+        "method": "PUT",
+        "path": "/api/organizers/tags/10000000-0000-4000-8000-000000000001",
+        "query": {},
+        "body": {},
+        "response": {
+          "id": "10000000-0000-4000-8000-000000000001",
+          "name": "unchanged"
+        },
+        "status": 200
+      }
+    ]
+  },
+  "get_category_by_slug.edge200": {
+    "requests": []
   }
 }

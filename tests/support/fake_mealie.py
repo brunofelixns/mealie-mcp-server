@@ -12,9 +12,11 @@ FIXTURES = Path(__file__).resolve().parents[1] / "fixtures" / "compatibility"
 
 
 class FakeMealie:
-    def __init__(self, scenario: str) -> None:
+    def __init__(self, scenario: str | list[dict[str, Any]]) -> None:
         scenarios = json.loads((FIXTURES / "scenarios.json").read_text())
-        self.pending = scenarios[scenario]["requests"]
+        self.pending = (
+            scenarios[scenario]["requests"] if isinstance(scenario, str) else list(scenario)
+        )
         self.recorded_requests: list[dict[str, Any]] = []
         self.errors: list[str] = []
         self._lock = threading.Lock()

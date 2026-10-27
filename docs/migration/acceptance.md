@@ -1,7 +1,7 @@
 # Informe de aceptación de la migración
 
-Estado: **plantilla pendiente de ejecución**. Preparada el2026-10-27.
-No hay resultados de aplicación ni builds en este documento. Las casillas pendientes son requisitos futuros.
+Estado: **informe en construcción; aceptación final pendiente**. Actualizado el2026-10-28.
+P01..P08 verificadas:14/78herramientas,135tests Python y1058originales pasan. La evidencia detallada está en evidence/P01.md..P08.md. Las casillas pendientes siguen siendo requisitos futuros; transportes e imagen de producción no están implementados aún.
 
 Referencias: [plan](../superpowers/plans/2026-10-27-python-migration.md), [estado](implementation-state.json), [inventario](compatibility-inventory.md), [diferencias](differences.md).
 
@@ -11,8 +11,8 @@ Referencias: [plan](../superpowers/plans/2026-10-27-python-migration.md), [estad
 |---|---|
 | Commit upstream | d027e1b4a314d781a322f1f91e37840f01464d77 |
 | Commit del port probado | Pendiente |
-| Versión del paquete | Pendiente de implementación |
-| Versiones resueltas Python/FastMCP/mcp/uv | Pendientes; referencias del diseño no sustituyen el lock |
+| Versión del paquete | 2.1.0 |
+| Versiones resueltas Python/FastMCP/mcp/uv | 3.14.10 / 4.1.4 / 2.3.0 / 0.9.9 verificadas en Dev Container |
 | Digest de imagen runtime amd64 | Pendiente |
 | Digest de imagen runtime arm64 | Pendiente |
 | Plataforma nativa o emulada | Pendiente por arquitectura |

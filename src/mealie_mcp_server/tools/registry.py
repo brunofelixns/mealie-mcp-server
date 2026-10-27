@@ -31,4 +31,8 @@ def definitions() -> dict[str, ToolDefinition]:
 def register_all_tools(server: FastMCP) -> None:
     # Families are added explicitly as their implementation tasks are verified.
     # Definitions are metadata, never placeholders advertised as working tools.
-    return None
+    from mealie_mcp_server.tools.categories import register_categories
+    from mealie_mcp_server.tools.tags import register_tags
+
+    register_categories(server)
+    register_tags(server)

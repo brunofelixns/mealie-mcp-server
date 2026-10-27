@@ -215,7 +215,7 @@
           "tests": 94
         }
       ],
-      "commit": null
+      "commit": "c09e0b5c4e7318d599a3d137342d3142454e9299"
     },
     {
       "id": "P08",
@@ -223,7 +223,7 @@
       "dependsOn": [
         "P07"
       ],
-      "status": "in_progress",
+      "status": "verified",
       "tools": [
         "get_categories",
         "get_empty_categories",
@@ -254,7 +254,13 @@
         "tests/contracts/test_categories_tags.py",
         "tests/unit/test_organizer_resolution.py"
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "report": "docs/migration/evidence/P08.md",
+          "result": "passed",
+          "tests": 135
+        }
+      ],
       "commit": null
     },
     {
@@ -263,7 +269,7 @@
       "dependsOn": [
         "P08"
       ],
-      "status": "not_started",
+      "status": "in_progress",
       "tools": [
         "get_foods",
         "get_food",

@@ -10,7 +10,7 @@
 
 **Spec:** [Diseño completo](../specs/2026-10-27-python-migration-design.md). Leer también [inventario](../../migration/compatibility-inventory.md) e [inventario JSON](../../migration/compatibility-inventory.json).
 
-Fecha: 2026-10-27. Estado: implementación autorizada; P01..P07 verificadas y P08 en curso. Ver implementation-state.json para la evidencia. No se ha publicado ni desplegado un endpoint público.
+Fecha: 2026-10-27. Estado: implementación autorizada; P01..P08 verificadas y P09 en curso. Ver implementation-state.json para la evidencia. No se ha publicado ni desplegado un endpoint público.
 
 ## Global Constraints
 
@@ -255,7 +255,7 @@ uv run pytest tests/unit/test_candidate_matching.py tests/unit/test_multi_query_
 <a id="p08"></a>
 ### P08: Migrar categorías y etiquetas
 
-**Depende de:** P07. **Estado:** pendiente; ver registro de ejecución.
+**Depende de:** P07. **Estado:** verificada; ver registro de ejecución.
 
 **Archivos:** `src/mealie_mcp_server/mealie/api/categories.py`, `src/mealie_mcp_server/mealie/api/tags.py`, `src/mealie_mcp_server/models/inputs/categories.py`, `src/mealie_mcp_server/models/inputs/tags.py`, `src/mealie_mcp_server/tools/categories.py`, `src/mealie_mcp_server/tools/tags.py`, `src/mealie_mcp_server/services/organizer_resolution.py`, `tests/fixtures/compatibility/cases/categories_tags.json`.
 **Tests:** `tests/contracts/test_categories_tags.py`, `tests/unit/test_organizer_resolution.py`.
@@ -264,17 +264,17 @@ uv run pytest tests/unit/test_candidate_matching.py tests/unit/test_multi_query_
 
 **Herramientas (14):** `get_categories`, `get_empty_categories`, `create_category`, `get_category`, `get_category_by_slug`, `update_category`, `delete_category`, `get_tags`, `get_empty_tags`, `create_tag`, `get_tag`, `get_tag_by_slug`, `update_tag`, `delete_tag`.
 
-- [ ] **1. Añadir las pruebas antes del código funcional.** test_categories_tags_contract parametrizado por 14 herramientas: comparar REST/result/isError con baseline y rechazar unknown key antes de REST. test_delete_in_use conserva rechazo Mealie. test_empty_endpoints_and_slug separa empty/slug/id. No añadir search ausente. Caracterizar 204 y registrar cualquier corrección.
-- [ ] **2. Ejecutar el subconjunto indicado y observar RED.** El fallo esperado es el comportamiento/handler aún ausente o incorrecto; si falta infraestructura del harness, arreglarla antes de tomar el fallo como evidencia.
-- [ ] **3. Implementar las interfaces de esta tarea y sus fixtures.** Reutilizar los contratos anteriores; preservar los valores del diseño y el inventario. 14 nombres exactos y dos casos MCP por cada uno; resolver nombre/slug/ID sin creación implícita; preservación de errores.
+- [x] **1. Añadir las pruebas antes del código funcional.** test_categories_tags_contract parametrizado por 14 herramientas: comparar REST/result/isError con baseline y rechazar unknown key antes de REST. test_delete_in_use conserva rechazo Mealie. test_empty_endpoints_and_slug separa empty/slug/id. No añadir search ausente. Caracterizar 204 y registrar cualquier corrección.
+- [x] **2. Ejecutar el subconjunto indicado y observar RED.** El fallo esperado es el comportamiento/handler aún ausente o incorrecto; si falta infraestructura del harness, arreglarla antes de tomar el fallo como evidencia.
+- [x] **3. Implementar las interfaces de esta tarea y sus fixtures.** Reutilizar los contratos anteriores; preservar los valores del diseño y el inventario. 14 nombres exactos y dos casos MCP por cada uno; resolver nombre/slug/ID sin creación implícita; preservación de errores.
 
-- [ ] **4. Verificar el resultado de esta tarea.** Ejecutar dentro del Dev Container; salida0 y todas las aserciones indicadas en verde. Para P01 el launcher y el contenedor auxiliar son la excepción de bootstrap explicada arriba.
+- [x] **4. Verificar el resultado de esta tarea.** Ejecutar dentro del Dev Container; salida0 y todas las aserciones indicadas en verde. Para P01 el launcher y el contenedor auxiliar son la excepción de bootstrap explicada arriba.
 
 ```bash
 uv run pytest tests/contracts/test_categories_tags.py tests/unit/test_organizer_resolution.py -q
 ```
 
-- [ ] **5. Revisar, documentar y cerrar.** Comprobar el criterio de salida anterior y el diff; no ampliar la suite sin una nueva causa. Actualizar estado, diferencias si las hay y evidencia con comando/resultado/entorno. Commit de implementación sugerido: `feat: port category and tag tools`. Registrar su SHA en un commit documental posterior si hace falta; no intentar incluir el hash de un commit en sí mismo.
+- [x] **5. Revisar, documentar y cerrar.** Comprobar el criterio de salida anterior y el diff; no ampliar la suite sin una nueva causa. Actualizar estado, diferencias si las hay y evidencia con comando/resultado/entorno. Commit de implementación sugerido: `feat: port category and tag tools`. Registrar su SHA en un commit documental posterior si hace falta; no intentar incluir el hash de un commit en sí mismo.
 
 <a id="p09"></a>
 ### P09: Migrar alimentos y unidades

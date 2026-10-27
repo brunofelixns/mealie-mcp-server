@@ -1,6 +1,6 @@
 # Migración de Mealie MCP a Python
 
-Estado a2026-10-27: **implementación en curso (P01..P07 verificadas; P08 activa)**.
+Estado a2026-10-27: **implementación en curso (P01..P08 verificadas; P09 activa)**.
 
 ## Ruta de lectura
 

@@ -11,8 +11,8 @@ Diferencias: [registro](differences.md).
 ## Situación actual
 
 - Documentados: inventario de78 herramientas, un prompt, diseño y plan.
-- Implementación:7/24 tareas verificadas; P08 en curso;0 herramientas portadas y verificadas.
-- Pruebas ejecutadas:1058originales y94Python pasan; sin Mealie de producción.
+- Implementación:8/24 tareas verificadas; P09 en curso;14 herramientas portadas y verificadas.
+- Pruebas ejecutadas:1058originales y135Python pasan; sin Mealie de producción.
 - Dev Container creado/abierto: verificado en P01.
 - Imagen de producción construida: pendiente.
 - Publicación y endpoint remoto: pendientes; se decidirá destino después de las pruebas locales.
@@ -31,8 +31,8 @@ La tabla es la vista inicial del JSON. Durante la ejecución se actualizan ambos
 | [P05](../superpowers/plans/2026-10-27-python-migration.md#p05) | Implementar el cliente Mealie y las utilidades HTTP | P04 | Verificada |
 | [P06](../superpowers/plans/2026-10-27-python-migration.md#p06) | Crear la factory MCP y el adaptador de contratos | P05 | Verificada |
 | [P07](../superpowers/plans/2026-10-27-python-migration.md#p07) | Portar candidatos y consultas agrupadas | P06 | Verificada |
-| [P08](../superpowers/plans/2026-10-27-python-migration.md#p08) | Migrar categorías y etiquetas | P07 | En curso |
-| [P09](../superpowers/plans/2026-10-27-python-migration.md#p09) | Migrar alimentos y unidades | P08 | Pendiente |
+| [P08](../superpowers/plans/2026-10-27-python-migration.md#p08) | Migrar categorías y etiquetas | P07 | Verificada |
+| [P09](../superpowers/plans/2026-10-27-python-migration.md#p09) | Migrar alimentos y unidades | P08 | En curso |
 | [P10](../superpowers/plans/2026-10-27-python-migration.md#p10) | Migrar el catálogo de utensilios | P09 | Pendiente |
 | [P11](../superpowers/plans/2026-10-27-python-migration.md#p11) | Migrar listas de compra e items | P10 | Pendiente |
 | [P12](../superpowers/plans/2026-10-27-python-migration.md#p12) | Migrar el núcleo de recetas | P11 | Pendiente |

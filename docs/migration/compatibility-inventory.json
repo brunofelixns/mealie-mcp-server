@@ -3433,7 +3433,7 @@
         "blobSha": "6afd8ee14c1a1e83c6e6348db62a22615179a850",
         "url": "https://github.com/timo-reymann/mealie-mcp-server/blob/d027e1b4a314d781a322f1f91e37840f01464d77/src/tools/categories.ts#L7"
       },
-      "migrationStatus": "inventoried_static_not_implemented",
+      "migrationStatus": "implemented_contract_verified",
       "effect": "read",
       "description": "Lists and searches the household's recipe categories with pagination.",
       "descriptionSource": "'Lists and searches the household\\'s recipe categories with pagination.'",
@@ -3470,8 +3470,19 @@
         "additionalProperties": false
       },
       "runtimeOutputSchema": null,
-      "runtimeExamples": [],
-      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeExamples": [
+        {
+          "file": "tests/fixtures/compatibility/cases/categories.json",
+          "index": 0,
+          "scenario": "categories.basic"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/categories_tags.json",
+          "index": 0,
+          "scenario": "get_categories.basic"
+        }
+      ],
+      "runtimeCaptureStatus": "behavior_captured_and_python_verified",
       "runtimeOutputSchemaPresent": false
     },
     {
@@ -3484,7 +3495,7 @@
         "blobSha": "6afd8ee14c1a1e83c6e6348db62a22615179a850",
         "url": "https://github.com/timo-reymann/mealie-mcp-server/blob/d027e1b4a314d781a322f1f91e37840f01464d77/src/tools/categories.ts#L22"
       },
-      "migrationStatus": "inventoried_static_not_implemented",
+      "migrationStatus": "implemented_contract_verified",
       "effect": "read",
       "description": "Returns categories that have no recipes assigned.",
       "descriptionSource": "'Returns categories that have no recipes assigned.'",
@@ -3503,8 +3514,14 @@
         "additionalProperties": false
       },
       "runtimeOutputSchema": null,
-      "runtimeExamples": [],
-      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeExamples": [
+        {
+          "file": "tests/fixtures/compatibility/cases/categories_tags.json",
+          "index": 1,
+          "scenario": "get_empty_categories.basic"
+        }
+      ],
+      "runtimeCaptureStatus": "behavior_captured_and_python_verified",
       "runtimeOutputSchemaPresent": false
     },
     {
@@ -3517,7 +3534,7 @@
         "blobSha": "6afd8ee14c1a1e83c6e6348db62a22615179a850",
         "url": "https://github.com/timo-reymann/mealie-mcp-server/blob/d027e1b4a314d781a322f1f91e37840f01464d77/src/tools/categories.ts#L37"
       },
-      "migrationStatus": "inventoried_static_not_implemented",
+      "migrationStatus": "implemented_contract_verified",
       "effect": "write",
       "description": "Creates a new recipe category.",
       "descriptionSource": "'Creates a new recipe category.'",
@@ -3548,8 +3565,14 @@
         "additionalProperties": false
       },
       "runtimeOutputSchema": null,
-      "runtimeExamples": [],
-      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeExamples": [
+        {
+          "file": "tests/fixtures/compatibility/cases/categories_tags.json",
+          "index": 2,
+          "scenario": "create_category.basic"
+        }
+      ],
+      "runtimeCaptureStatus": "behavior_captured_and_python_verified",
       "runtimeOutputSchemaPresent": false
     },
     {
@@ -3562,7 +3585,7 @@
         "blobSha": "6afd8ee14c1a1e83c6e6348db62a22615179a850",
         "url": "https://github.com/timo-reymann/mealie-mcp-server/blob/d027e1b4a314d781a322f1f91e37840f01464d77/src/tools/categories.ts#L52"
       },
-      "migrationStatus": "inventoried_static_not_implemented",
+      "migrationStatus": "implemented_contract_verified",
       "effect": "read",
       "description": "Retrieves a single category by its UUID.",
       "descriptionSource": "'Retrieves a single category by its UUID.'",
@@ -3595,8 +3618,14 @@
         "additionalProperties": false
       },
       "runtimeOutputSchema": null,
-      "runtimeExamples": [],
-      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeExamples": [
+        {
+          "file": "tests/fixtures/compatibility/cases/categories_tags.json",
+          "index": 3,
+          "scenario": "get_category.basic"
+        }
+      ],
+      "runtimeCaptureStatus": "behavior_captured_and_python_verified",
       "runtimeOutputSchemaPresent": false
     },
     {
@@ -3609,7 +3638,7 @@
         "blobSha": "6afd8ee14c1a1e83c6e6348db62a22615179a850",
         "url": "https://github.com/timo-reymann/mealie-mcp-server/blob/d027e1b4a314d781a322f1f91e37840f01464d77/src/tools/categories.ts#L67"
       },
-      "migrationStatus": "inventoried_static_not_implemented",
+      "migrationStatus": "implemented_contract_verified",
       "effect": "read",
       "description": "Retrieves a single category by its URL slug.",
       "descriptionSource": "'Retrieves a single category by its URL slug.'",
@@ -3640,8 +3669,19 @@
         "additionalProperties": false
       },
       "runtimeOutputSchema": null,
-      "runtimeExamples": [],
-      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeExamples": [
+        {
+          "file": "tests/fixtures/compatibility/cases/categories_tags.json",
+          "index": 4,
+          "scenario": "get_category_by_slug.basic"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/categories_tags.json",
+          "index": 17,
+          "scenario": "get_category_by_slug.edge200"
+        }
+      ],
+      "runtimeCaptureStatus": "behavior_captured_and_python_verified",
       "runtimeOutputSchemaPresent": false
     },
     {
@@ -3654,7 +3694,7 @@
         "blobSha": "6afd8ee14c1a1e83c6e6348db62a22615179a850",
         "url": "https://github.com/timo-reymann/mealie-mcp-server/blob/d027e1b4a314d781a322f1f91e37840f01464d77/src/tools/categories.ts#L82"
       },
-      "migrationStatus": "inventoried_static_not_implemented",
+      "migrationStatus": "implemented_contract_verified",
       "effect": "write",
       "description": "Updates a category's name.",
       "descriptionSource": "'Updates a category\\'s name.'",
@@ -3694,8 +3734,14 @@
         "additionalProperties": false
       },
       "runtimeOutputSchema": null,
-      "runtimeExamples": [],
-      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeExamples": [
+        {
+          "file": "tests/fixtures/compatibility/cases/categories_tags.json",
+          "index": 5,
+          "scenario": "update_category.basic"
+        }
+      ],
+      "runtimeCaptureStatus": "behavior_captured_and_python_verified",
       "runtimeOutputSchemaPresent": false
     },
     {
@@ -3708,7 +3754,7 @@
         "blobSha": "6afd8ee14c1a1e83c6e6348db62a22615179a850",
         "url": "https://github.com/timo-reymann/mealie-mcp-server/blob/d027e1b4a314d781a322f1f91e37840f01464d77/src/tools/categories.ts#L99"
       },
-      "migrationStatus": "inventoried_static_not_implemented",
+      "migrationStatus": "implemented_contract_verified",
       "effect": "destructive",
       "description": "Deletes a category. Mealie may refuse if recipes still reference it.",
       "descriptionSource": "'Deletes a category. Mealie may refuse if recipes still reference it.'",
@@ -3741,8 +3787,19 @@
         "additionalProperties": false
       },
       "runtimeOutputSchema": null,
-      "runtimeExamples": [],
-      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeExamples": [
+        {
+          "file": "tests/fixtures/compatibility/cases/categories_tags.json",
+          "index": 6,
+          "scenario": "delete_category.basic"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/categories_tags.json",
+          "index": 14,
+          "scenario": "delete_category.edge400"
+        }
+      ],
+      "runtimeCaptureStatus": "behavior_captured_and_python_verified",
       "runtimeOutputSchemaPresent": false
     },
     {
@@ -3755,7 +3812,7 @@
         "blobSha": "188ade991c2cd4de1aa0e9b5941adac913382e8c",
         "url": "https://github.com/timo-reymann/mealie-mcp-server/blob/d027e1b4a314d781a322f1f91e37840f01464d77/src/tools/tags.ts#L7"
       },
-      "migrationStatus": "inventoried_static_not_implemented",
+      "migrationStatus": "implemented_contract_verified",
       "effect": "read",
       "description": "Lists and searches the household's recipe tags with pagination.",
       "descriptionSource": "'Lists and searches the household\\'s recipe tags with pagination.'",
@@ -3792,8 +3849,14 @@
         "additionalProperties": false
       },
       "runtimeOutputSchema": null,
-      "runtimeExamples": [],
-      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeExamples": [
+        {
+          "file": "tests/fixtures/compatibility/cases/categories_tags.json",
+          "index": 7,
+          "scenario": "get_tags.basic"
+        }
+      ],
+      "runtimeCaptureStatus": "behavior_captured_and_python_verified",
       "runtimeOutputSchemaPresent": false
     },
     {
@@ -3806,7 +3869,7 @@
         "blobSha": "188ade991c2cd4de1aa0e9b5941adac913382e8c",
         "url": "https://github.com/timo-reymann/mealie-mcp-server/blob/d027e1b4a314d781a322f1f91e37840f01464d77/src/tools/tags.ts#L22"
       },
-      "migrationStatus": "inventoried_static_not_implemented",
+      "migrationStatus": "implemented_contract_verified",
       "effect": "read",
       "description": "Returns tags that have no recipes assigned.",
       "descriptionSource": "'Returns tags that have no recipes assigned.'",
@@ -3825,8 +3888,14 @@
         "additionalProperties": false
       },
       "runtimeOutputSchema": null,
-      "runtimeExamples": [],
-      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeExamples": [
+        {
+          "file": "tests/fixtures/compatibility/cases/categories_tags.json",
+          "index": 8,
+          "scenario": "get_empty_tags.basic"
+        }
+      ],
+      "runtimeCaptureStatus": "behavior_captured_and_python_verified",
       "runtimeOutputSchemaPresent": false
     },
     {
@@ -3839,7 +3908,7 @@
         "blobSha": "188ade991c2cd4de1aa0e9b5941adac913382e8c",
         "url": "https://github.com/timo-reymann/mealie-mcp-server/blob/d027e1b4a314d781a322f1f91e37840f01464d77/src/tools/tags.ts#L37"
       },
-      "migrationStatus": "inventoried_static_not_implemented",
+      "migrationStatus": "implemented_contract_verified",
       "effect": "write",
       "description": "Creates a new recipe tag.",
       "descriptionSource": "'Creates a new recipe tag.'",
@@ -3870,8 +3939,14 @@
         "additionalProperties": false
       },
       "runtimeOutputSchema": null,
-      "runtimeExamples": [],
-      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeExamples": [
+        {
+          "file": "tests/fixtures/compatibility/cases/categories_tags.json",
+          "index": 9,
+          "scenario": "create_tag.basic"
+        }
+      ],
+      "runtimeCaptureStatus": "behavior_captured_and_python_verified",
       "runtimeOutputSchemaPresent": false
     },
     {
@@ -3884,7 +3959,7 @@
         "blobSha": "188ade991c2cd4de1aa0e9b5941adac913382e8c",
         "url": "https://github.com/timo-reymann/mealie-mcp-server/blob/d027e1b4a314d781a322f1f91e37840f01464d77/src/tools/tags.ts#L52"
       },
-      "migrationStatus": "inventoried_static_not_implemented",
+      "migrationStatus": "implemented_contract_verified",
       "effect": "read",
       "description": "Retrieves a single tag by its UUID.",
       "descriptionSource": "'Retrieves a single tag by its UUID.'",
@@ -3917,8 +3992,14 @@
         "additionalProperties": false
       },
       "runtimeOutputSchema": null,
-      "runtimeExamples": [],
-      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeExamples": [
+        {
+          "file": "tests/fixtures/compatibility/cases/categories_tags.json",
+          "index": 10,
+          "scenario": "get_tag.basic"
+        }
+      ],
+      "runtimeCaptureStatus": "behavior_captured_and_python_verified",
       "runtimeOutputSchemaPresent": false
     },
     {
@@ -3931,7 +4012,7 @@
         "blobSha": "188ade991c2cd4de1aa0e9b5941adac913382e8c",
         "url": "https://github.com/timo-reymann/mealie-mcp-server/blob/d027e1b4a314d781a322f1f91e37840f01464d77/src/tools/tags.ts#L67"
       },
-      "migrationStatus": "inventoried_static_not_implemented",
+      "migrationStatus": "implemented_contract_verified",
       "effect": "read",
       "description": "Retrieves a single tag by its URL slug.",
       "descriptionSource": "'Retrieves a single tag by its URL slug.'",
@@ -3962,8 +4043,14 @@
         "additionalProperties": false
       },
       "runtimeOutputSchema": null,
-      "runtimeExamples": [],
-      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeExamples": [
+        {
+          "file": "tests/fixtures/compatibility/cases/categories_tags.json",
+          "index": 11,
+          "scenario": "get_tag_by_slug.basic"
+        }
+      ],
+      "runtimeCaptureStatus": "behavior_captured_and_python_verified",
       "runtimeOutputSchemaPresent": false
     },
     {
@@ -3976,7 +4063,7 @@
         "blobSha": "188ade991c2cd4de1aa0e9b5941adac913382e8c",
         "url": "https://github.com/timo-reymann/mealie-mcp-server/blob/d027e1b4a314d781a322f1f91e37840f01464d77/src/tools/tags.ts#L82"
       },
-      "migrationStatus": "inventoried_static_not_implemented",
+      "migrationStatus": "implemented_contract_verified",
       "effect": "write",
       "description": "Updates a tag's name.",
       "descriptionSource": "'Updates a tag\\'s name.'",
@@ -4016,8 +4103,19 @@
         "additionalProperties": false
       },
       "runtimeOutputSchema": null,
-      "runtimeExamples": [],
-      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeExamples": [
+        {
+          "file": "tests/fixtures/compatibility/cases/categories_tags.json",
+          "index": 12,
+          "scenario": "update_tag.basic"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/categories_tags.json",
+          "index": 16,
+          "scenario": "update_tag.edge200"
+        }
+      ],
+      "runtimeCaptureStatus": "behavior_captured_and_python_verified",
       "runtimeOutputSchemaPresent": false
     },
     {
@@ -4030,7 +4128,7 @@
         "blobSha": "188ade991c2cd4de1aa0e9b5941adac913382e8c",
         "url": "https://github.com/timo-reymann/mealie-mcp-server/blob/d027e1b4a314d781a322f1f91e37840f01464d77/src/tools/tags.ts#L99"
       },
-      "migrationStatus": "inventoried_static_not_implemented",
+      "migrationStatus": "implemented_contract_verified",
       "effect": "destructive",
       "description": "Deletes a tag. Mealie may refuse if recipes still reference it.",
       "descriptionSource": "'Deletes a tag. Mealie may refuse if recipes still reference it.'",
@@ -4063,8 +4161,19 @@
         "additionalProperties": false
       },
       "runtimeOutputSchema": null,
-      "runtimeExamples": [],
-      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeExamples": [
+        {
+          "file": "tests/fixtures/compatibility/cases/categories_tags.json",
+          "index": 13,
+          "scenario": "delete_tag.basic"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/categories_tags.json",
+          "index": 15,
+          "scenario": "delete_tag.edge204"
+        }
+      ],
+      "runtimeCaptureStatus": "behavior_captured_and_python_verified",
       "runtimeOutputSchemaPresent": false
     },
     {

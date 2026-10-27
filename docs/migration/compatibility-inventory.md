@@ -1,6 +1,6 @@
 # Inventario de compatibilidad: Mealie MCP en Python
 
-Fecha: 2026-10-27. Estado: superficie inventariada y catálogo runtime capturado en P03; migración Python de herramientas pendiente.
+Fecha: 2026-10-27. Estado:14/78herramientas Python verificadas; ver implementation-state.json y evidence/P08.md.
 
 La referencia es [timo-reymann/mealie-mcp-server, commit d027e1b4a314d781a322f1f91e37840f01464d77](https://github.com/timo-reymann/mealie-mcp-server/tree/d027e1b4a314d781a322f1f91e37840f01464d77). El alcance es migrar lo que implementa este commit, incluidos sus flujos compuestos. No equivale a implementar todos los endpoints posibles de Mealie.
 
@@ -16,7 +16,7 @@ El directorio local estaba vacío y sin repositorio Git al comenzar. Este entreg
 - runtimeInputSchema y la presencia/ausencia de runtimeOutputSchema se capturaron en P03. runtimeExamples se completará por familia. La ausencia de outputSchema está marcada explícitamente, no se considera dato perdido.
 - Las referencias a tests se obtuvieron buscando el nombre completo de cada herramienta en los 42 archivos. Una referencia no demuestra cobertura ejecutada; su ausencia tampoco prueba que no haya pruebas de la API interna.
 - Los nombres públicos y el camelCase actual se conservan. Las listas de argumentos de las tablas incluyen obligatorios y opcionales: el esquema exacto y sus defaults se consultan en el JSON y se verificarán después en tools/list.
-- Estado de todos los registros: inventariado, sin implementar. Las notas indican qué conservar, no comportamiento ejecutado durante esta revisión.
+- migrationStatus y runtimeExamples del JSON identifican las familias implementadas y los casos ejecutados; las demás siguen pendientes.
 
 Archivos relacionados: [inventario JSON](compatibility-inventory.json), [diseño](../superpowers/specs/2026-10-27-python-migration-design.md), [licencia original](upstream-LICENSE.txt).
 

@@ -15,6 +15,8 @@ class ContractCase:
     scenario: str
     expected_requests: list[dict[str, Any]]
     expected_result: dict[str, Any]
+    documented_difference: str | None = None
+    expected_python_result: dict[str, Any] | None = None
 
 
 def load_cases(family: str) -> list[ContractCase]:
@@ -50,7 +52,11 @@ async def assert_contract_matches(server: Any, case: ContractCase, fake: Any) ->
 
     async with Client(server) as client:
         result = await client.call_tool(case.tool, case.arguments, raise_on_error=False)
-    expected = case.expected_result
+    if case.expected_python_result is not None:
+        assert case.documented_difference in {"D06", "D07"}
+        expected = case.expected_python_result
+    else:
+        expected = case.expected_result
     is_error = bool(expected.get("isError", False))
     assert result.is_error == is_error
     actual_blocks = [

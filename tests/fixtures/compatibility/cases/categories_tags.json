@@ -1,0 +1,448 @@
+[
+  {
+    "tool": "get_categories",
+    "arguments": {
+      "page": 1,
+      "perPage": 20
+    },
+    "scenario": "get_categories.basic",
+    "expected_requests": [
+      {
+        "method": "GET",
+        "path": "/api/organizers/categories",
+        "query": {
+          "page": [
+            "1"
+          ],
+          "perPage": [
+            "20"
+          ]
+        },
+        "body": null
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"items\":[{\"id\":\"10000000-0000-4000-8000-000000000001\",\"name\":\"Dinner\",\"slug\":\"dinner\",\"providerExtra\":{\"preserved\":true}}],\"total\":1,\"page\":1,\"size\":20}"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "get_empty_categories",
+    "arguments": {},
+    "scenario": "get_empty_categories.basic",
+    "expected_requests": [
+      {
+        "method": "GET",
+        "path": "/api/organizers/categories/empty",
+        "query": {},
+        "body": null
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"items\":[],\"total\":0}"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "create_category",
+    "arguments": {
+      "name": "Dinner"
+    },
+    "scenario": "create_category.basic",
+    "expected_requests": [
+      {
+        "method": "POST",
+        "path": "/api/organizers/categories",
+        "query": {},
+        "body": {
+          "name": "Dinner"
+        }
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"id\":\"10000000-0000-4000-8000-000000000001\",\"name\":\"Dinner\",\"slug\":\"dinner\",\"providerExtra\":{\"preserved\":true}}"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "get_category",
+    "arguments": {
+      "categoryId": "10000000-0000-4000-8000-000000000001"
+    },
+    "scenario": "get_category.basic",
+    "expected_requests": [
+      {
+        "method": "GET",
+        "path": "/api/organizers/categories/10000000-0000-4000-8000-000000000001",
+        "query": {},
+        "body": null
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"id\":\"10000000-0000-4000-8000-000000000001\",\"name\":\"Dinner\",\"slug\":\"dinner\",\"providerExtra\":{\"preserved\":true}}"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "get_category_by_slug",
+    "arguments": {
+      "categorySlug": "dinner"
+    },
+    "scenario": "get_category_by_slug.basic",
+    "expected_requests": [
+      {
+        "method": "GET",
+        "path": "/api/organizers/categories/slug/dinner",
+        "query": {},
+        "body": null
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"id\":\"10000000-0000-4000-8000-000000000001\",\"name\":\"Dinner\",\"slug\":\"dinner\",\"providerExtra\":{\"preserved\":true}}"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "update_category",
+    "arguments": {
+      "categoryId": "10000000-0000-4000-8000-000000000001",
+      "name": "Dinner"
+    },
+    "scenario": "update_category.basic",
+    "expected_requests": [
+      {
+        "method": "PUT",
+        "path": "/api/organizers/categories/10000000-0000-4000-8000-000000000001",
+        "query": {},
+        "body": {
+          "name": "Dinner"
+        }
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"id\":\"10000000-0000-4000-8000-000000000001\",\"name\":\"Dinner\",\"slug\":\"dinner\",\"providerExtra\":{\"preserved\":true}}"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "delete_category",
+    "arguments": {
+      "categoryId": "10000000-0000-4000-8000-000000000001"
+    },
+    "scenario": "delete_category.basic",
+    "expected_requests": [
+      {
+        "method": "DELETE",
+        "path": "/api/organizers/categories/10000000-0000-4000-8000-000000000001",
+        "query": {},
+        "body": null
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"id\":\"10000000-0000-4000-8000-000000000001\",\"name\":\"Dinner\",\"slug\":\"dinner\",\"providerExtra\":{\"preserved\":true}}"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "get_tags",
+    "arguments": {
+      "page": 1,
+      "perPage": 20
+    },
+    "scenario": "get_tags.basic",
+    "expected_requests": [
+      {
+        "method": "GET",
+        "path": "/api/organizers/tags",
+        "query": {
+          "page": [
+            "1"
+          ],
+          "perPage": [
+            "20"
+          ]
+        },
+        "body": null
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"items\":[{\"id\":\"10000000-0000-4000-8000-000000000001\",\"name\":\"Dinner\",\"slug\":\"dinner\",\"providerExtra\":{\"preserved\":true}}],\"total\":1,\"page\":1,\"size\":20}"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "get_empty_tags",
+    "arguments": {},
+    "scenario": "get_empty_tags.basic",
+    "expected_requests": [
+      {
+        "method": "GET",
+        "path": "/api/organizers/tags/empty",
+        "query": {},
+        "body": null
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"items\":[],\"total\":0}"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "create_tag",
+    "arguments": {
+      "name": "Dinner"
+    },
+    "scenario": "create_tag.basic",
+    "expected_requests": [
+      {
+        "method": "POST",
+        "path": "/api/organizers/tags",
+        "query": {},
+        "body": {
+          "name": "Dinner"
+        }
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"id\":\"10000000-0000-4000-8000-000000000001\",\"name\":\"Dinner\",\"slug\":\"dinner\",\"providerExtra\":{\"preserved\":true}}"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "get_tag",
+    "arguments": {
+      "tagId": "10000000-0000-4000-8000-000000000001"
+    },
+    "scenario": "get_tag.basic",
+    "expected_requests": [
+      {
+        "method": "GET",
+        "path": "/api/organizers/tags/10000000-0000-4000-8000-000000000001",
+        "query": {},
+        "body": null
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"id\":\"10000000-0000-4000-8000-000000000001\",\"name\":\"Dinner\",\"slug\":\"dinner\",\"providerExtra\":{\"preserved\":true}}"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "get_tag_by_slug",
+    "arguments": {
+      "tagSlug": "dinner"
+    },
+    "scenario": "get_tag_by_slug.basic",
+    "expected_requests": [
+      {
+        "method": "GET",
+        "path": "/api/organizers/tags/slug/dinner",
+        "query": {},
+        "body": null
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"id\":\"10000000-0000-4000-8000-000000000001\",\"name\":\"Dinner\",\"slug\":\"dinner\",\"providerExtra\":{\"preserved\":true}}"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "update_tag",
+    "arguments": {
+      "tagId": "10000000-0000-4000-8000-000000000001",
+      "name": "Dinner"
+    },
+    "scenario": "update_tag.basic",
+    "expected_requests": [
+      {
+        "method": "PUT",
+        "path": "/api/organizers/tags/10000000-0000-4000-8000-000000000001",
+        "query": {},
+        "body": {
+          "name": "Dinner"
+        }
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"id\":\"10000000-0000-4000-8000-000000000001\",\"name\":\"Dinner\",\"slug\":\"dinner\",\"providerExtra\":{\"preserved\":true}}"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "delete_tag",
+    "arguments": {
+      "tagId": "10000000-0000-4000-8000-000000000001"
+    },
+    "scenario": "delete_tag.basic",
+    "expected_requests": [
+      {
+        "method": "DELETE",
+        "path": "/api/organizers/tags/10000000-0000-4000-8000-000000000001",
+        "query": {},
+        "body": null
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"id\":\"10000000-0000-4000-8000-000000000001\",\"name\":\"Dinner\",\"slug\":\"dinner\",\"providerExtra\":{\"preserved\":true}}"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "delete_category",
+    "arguments": {
+      "categoryId": "10000000-0000-4000-8000-000000000001"
+    },
+    "scenario": "delete_category.edge400",
+    "expected_requests": [
+      {
+        "method": "DELETE",
+        "path": "/api/organizers/categories/10000000-0000-4000-8000-000000000001",
+        "query": {},
+        "body": null
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "Mealie API error 400: {\"detail\": \"Category in use\"}"
+        }
+      ],
+      "isError": true
+    },
+    "documented_difference": "D06",
+    "expected_python_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "Mealie API error 400."
+        }
+      ],
+      "isError": true
+    }
+  },
+  {
+    "tool": "delete_tag",
+    "arguments": {
+      "tagId": "10000000-0000-4000-8000-000000000001"
+    },
+    "scenario": "delete_tag.edge204",
+    "expected_requests": [
+      {
+        "method": "DELETE",
+        "path": "/api/organizers/tags/10000000-0000-4000-8000-000000000001",
+        "query": {},
+        "body": null
+      }
+    ],
+    "expected_result": {
+      "protocolError": "MCPError",
+      "message": "MCP error -32602: Invalid tools/call result: [\n  {\n    \"code\": \"invalid_union\",\n    \"errors\": [\n      [\n        {\n          \"expected\": \"string\",\n          \"code\": \"invalid_type\",\n          \"path\": [\n            \"text\"\n          ],\n          \"message\": \"Invalid input: expected string, received undefined\"\n        }\n      ],\n      [\n        {\n          \"code\": \"invalid_value\",\n          \"values\": [\n            \"image\"\n          ],\n          \"path\": [\n            \"type\"\n          ],\n          \"message\": \"Invalid input: expected \\\"image\\\"\"\n        },\n        {\n          \"expected\": \"string\",\n          \"code\": \"invalid_type\",\n          \"path\": [\n            \"data\"\n          ],\n          \"message\": \"Invalid input: expected string, received undefined\"\n        },\n        {\n          \"expected\": \"string\",\n          \"code\": \"invalid_type\",\n          \"path\": [\n            \"mimeType\"\n          ],\n          \"message\": \"Invalid input: expected string, received undefined\"\n        }\n      ],\n      [\n        {\n          \"code\": \"invalid_value\",\n          \"values\": [\n            \"audio\"\n          ],\n          \"path\": [\n            \"type\"\n          ],\n          \"message\": \"Invalid input: expected \\\"audio\\\"\"\n        },\n        {\n          \"expected\": \"string\",\n          \"code\": \"invalid_type\",\n          \"path\": [\n            \"data\"\n          ],\n          \"message\": \"Invalid input: expected string, received undefined\"\n        },\n        {\n          \"expected\": \"string\",\n          \"code\": \"invalid_type\",\n          \"path\": [\n            \"mimeType\"\n          ],\n          \"message\": \"Invalid input: expected string, received undefined\"\n        }\n      ],\n      [\n        {\n          \"expected\": \"string\",\n          \"code\": \"invalid_type\",\n          \"path\": [\n            \"name\"\n          ],\n          \"message\": \"Invalid input: expected string, received undefined\"\n        },\n        {\n          \"expected\": \"string\",\n          \"code\": \"invalid_type\",\n          \"path\": [\n            \"uri\"\n          ],\n          \"message\": \"Invalid input: expected string, received undefined\"\n        },\n        {\n          \"code\": \"invalid_value\",\n          \"values\": [\n            \"resource_link\"\n          ],\n          \"path\": [\n            \"type\"\n          ],\n          \"message\": \"Invalid input: expected \\\"resource_link\\\"\"\n        }\n      ],\n      [\n        {\n          \"code\": \"invalid_value\",\n          \"values\": [\n            \"resource\"\n          ],\n          \"path\": [\n            \"type\"\n          ],\n          \"message\": \"Invalid input: expected \\\"resource\\\"\"\n        },\n        {\n          \"code\": \"invalid_union\",\n          \"errors\": [\n            [\n              {\n                \"expected\": \"object\",\n                \"code\": \"invalid_type\",\n                \"path\": [],\n                \"message\": \"Invalid input: expected object, received undefined\"\n              }\n            ],\n            [\n              {\n                \"expected\": \"object\",\n                \"code\": \"invalid_type\",\n                \"path\": [],\n                \"message\": \"Invalid input: expected object, received undefined\"\n              }\n            ]\n          ],\n          \"path\": [\n            \"resource\"\n          ],\n          \"message\": \"Invalid input\"\n        }\n      ]\n    ],\n    \"path\": [\n      \"content\",\n      0\n    ],\n    \"message\": \"Invalid input\"\n  }\n]"
+    },
+    "documented_difference": "D07",
+    "expected_python_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "null"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "update_tag",
+    "arguments": {
+      "tagId": "10000000-0000-4000-8000-000000000001"
+    },
+    "scenario": "update_tag.edge200",
+    "expected_requests": [
+      {
+        "method": "PUT",
+        "path": "/api/organizers/tags/10000000-0000-4000-8000-000000000001",
+        "query": {},
+        "body": {}
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"id\":\"10000000-0000-4000-8000-000000000001\",\"name\":\"unchanged\"}"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "get_category_by_slug",
+    "arguments": {
+      "categorySlug": ".."
+    },
+    "scenario": "get_category_by_slug.edge200",
+    "expected_requests": [],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "Invalid slug."
+        }
+      ],
+      "isError": true
+    }
+  }
+]
