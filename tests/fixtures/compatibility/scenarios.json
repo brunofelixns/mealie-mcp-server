@@ -12634,5 +12634,1212 @@
         "status": 404
       }
     ]
+  },
+  "update_recipe_instructions.basic": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes/soup",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "own",
+          "slug": "soup",
+          "updatedAt": "2026-10-28T10:00:00Z",
+          "recipeIngredient": [
+            {
+              "referenceId": "11111111-1111-4111-8111-111111111111"
+            }
+          ],
+          "recipeInstructions": [
+            {
+              "id": "ephemeral",
+              "text": "Mix",
+              "title": "Sauce",
+              "summary": "Keep",
+              "ingredientReferences": [
+                {
+                  "referenceId": "11111111-1111-4111-8111-111111111111",
+                  "providerExtra": true
+                }
+              ],
+              "noteReferences": [
+                {
+                  "referenceId": "22222222-2222-4222-8222-222222222222",
+                  "providerExtra": true
+                }
+              ],
+              "providerExtra": {
+                "keep": true
+              }
+            },
+            {
+              "id": "last",
+              "text": "Eat",
+              "title": "",
+              "summary": "",
+              "ingredientReferences": [],
+              "noteReferences": []
+            }
+          ],
+          "other": {
+            "keep": true
+          }
+        },
+        "status": 200
+      },
+      {
+        "method": "PATCH",
+        "path": "/api/recipes/soup",
+        "query": {},
+        "body": {
+          "recipeInstructions": [
+            {
+              "text": " Stir ",
+              "title": "",
+              "summary": "",
+              "ingredientReferences": [
+                {
+                  "referenceId": "11111111-1111-4111-8111-111111111111"
+                }
+              ],
+              "noteReferences": [
+                {
+                  "referenceId": "22222222-2222-4222-8222-222222222222"
+                }
+              ]
+            }
+          ]
+        },
+        "response": {
+          "id": "own",
+          "slug": "soup",
+          "updatedAt": "new",
+          "recipeIngredient": [
+            {
+              "referenceId": "11111111-1111-4111-8111-111111111111"
+            }
+          ],
+          "recipeInstructions": [
+            {
+              "text": " Stir ",
+              "title": "",
+              "summary": "",
+              "ingredientReferences": [
+                {
+                  "referenceId": "11111111-1111-4111-8111-111111111111"
+                }
+              ],
+              "noteReferences": [
+                {
+                  "referenceId": "22222222-2222-4222-8222-222222222222"
+                }
+              ],
+              "id": "regenerated"
+            }
+          ],
+          "other": {
+            "keep": true
+          }
+        },
+        "status": 200
+      }
+    ]
+  },
+  "update_recipe_instructions_batch.basic": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes/soup",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "own",
+          "slug": "soup",
+          "updatedAt": "2026-10-28T10:00:00Z",
+          "recipeIngredient": [
+            {
+              "referenceId": "11111111-1111-4111-8111-111111111111"
+            }
+          ],
+          "recipeInstructions": [
+            {
+              "id": "ephemeral",
+              "text": "Mix",
+              "title": "Sauce",
+              "summary": "Keep",
+              "ingredientReferences": [
+                {
+                  "referenceId": "11111111-1111-4111-8111-111111111111",
+                  "providerExtra": true
+                }
+              ],
+              "noteReferences": [
+                {
+                  "referenceId": "22222222-2222-4222-8222-222222222222",
+                  "providerExtra": true
+                }
+              ],
+              "providerExtra": {
+                "keep": true
+              }
+            },
+            {
+              "id": "last",
+              "text": "Eat",
+              "title": "",
+              "summary": "",
+              "ingredientReferences": [],
+              "noteReferences": []
+            }
+          ],
+          "other": {
+            "keep": true
+          }
+        },
+        "status": 200
+      },
+      {
+        "method": "PATCH",
+        "path": "/api/recipes/soup",
+        "query": {},
+        "body": {
+          "recipeInstructions": [
+            {
+              "text": " Stir ",
+              "title": "",
+              "summary": "",
+              "ingredientReferences": [
+                {
+                  "referenceId": "11111111-1111-4111-8111-111111111111"
+                }
+              ],
+              "noteReferences": [
+                {
+                  "referenceId": "22222222-2222-4222-8222-222222222222"
+                }
+              ]
+            }
+          ]
+        },
+        "response": {
+          "id": "own",
+          "slug": "soup",
+          "updatedAt": "new",
+          "recipeIngredient": [
+            {
+              "referenceId": "11111111-1111-4111-8111-111111111111"
+            }
+          ],
+          "recipeInstructions": [
+            {
+              "text": " Stir ",
+              "title": "",
+              "summary": "",
+              "ingredientReferences": [
+                {
+                  "referenceId": "11111111-1111-4111-8111-111111111111"
+                }
+              ],
+              "noteReferences": [
+                {
+                  "referenceId": "22222222-2222-4222-8222-222222222222"
+                }
+              ],
+              "id": "regenerated"
+            }
+          ],
+          "other": {
+            "keep": true
+          }
+        },
+        "status": 200
+      }
+    ]
+  },
+  "update_recipe_instructions.no_op": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes/soup",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "own",
+          "slug": "soup",
+          "updatedAt": "2026-10-28T10:00:00Z",
+          "recipeIngredient": [
+            {
+              "referenceId": "11111111-1111-4111-8111-111111111111"
+            }
+          ],
+          "recipeInstructions": [
+            {
+              "id": "ephemeral",
+              "text": "Mix",
+              "title": "Sauce",
+              "summary": "Keep",
+              "ingredientReferences": [
+                {
+                  "referenceId": "11111111-1111-4111-8111-111111111111",
+                  "providerExtra": true
+                }
+              ],
+              "noteReferences": [
+                {
+                  "referenceId": "22222222-2222-4222-8222-222222222222",
+                  "providerExtra": true
+                }
+              ],
+              "providerExtra": {
+                "keep": true
+              }
+            },
+            {
+              "id": "last",
+              "text": "Eat",
+              "title": "",
+              "summary": "",
+              "ingredientReferences": [],
+              "noteReferences": []
+            }
+          ],
+          "other": {
+            "keep": true
+          }
+        },
+        "status": 200
+      }
+    ]
+  },
+  "update_recipe_instructions.stale": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes/soup",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "own",
+          "slug": "soup",
+          "updatedAt": "2026-10-28T10:00:00Z",
+          "recipeIngredient": [
+            {
+              "referenceId": "11111111-1111-4111-8111-111111111111"
+            }
+          ],
+          "recipeInstructions": [
+            {
+              "id": "ephemeral",
+              "text": "Mix",
+              "title": "Sauce",
+              "summary": "Keep",
+              "ingredientReferences": [
+                {
+                  "referenceId": "11111111-1111-4111-8111-111111111111",
+                  "providerExtra": true
+                }
+              ],
+              "noteReferences": [
+                {
+                  "referenceId": "22222222-2222-4222-8222-222222222222",
+                  "providerExtra": true
+                }
+              ],
+              "providerExtra": {
+                "keep": true
+              }
+            },
+            {
+              "id": "last",
+              "text": "Eat",
+              "title": "",
+              "summary": "",
+              "ingredientReferences": [],
+              "noteReferences": []
+            }
+          ],
+          "other": {
+            "keep": true
+          }
+        },
+        "status": 200
+      }
+    ]
+  },
+  "update_recipe_instructions.clear": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes/soup",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "own",
+          "slug": "soup",
+          "updatedAt": "2026-10-28T10:00:00Z",
+          "recipeIngredient": [
+            {
+              "referenceId": "11111111-1111-4111-8111-111111111111"
+            }
+          ],
+          "recipeInstructions": [
+            {
+              "id": "ephemeral",
+              "text": "Mix",
+              "title": "Sauce",
+              "summary": "Keep",
+              "ingredientReferences": [
+                {
+                  "referenceId": "11111111-1111-4111-8111-111111111111",
+                  "providerExtra": true
+                }
+              ],
+              "noteReferences": [
+                {
+                  "referenceId": "22222222-2222-4222-8222-222222222222",
+                  "providerExtra": true
+                }
+              ],
+              "providerExtra": {
+                "keep": true
+              }
+            },
+            {
+              "id": "last",
+              "text": "Eat",
+              "title": "",
+              "summary": "",
+              "ingredientReferences": [],
+              "noteReferences": []
+            }
+          ],
+          "other": {
+            "keep": true
+          }
+        },
+        "status": 200
+      },
+      {
+        "method": "PATCH",
+        "path": "/api/recipes/soup",
+        "query": {},
+        "body": {
+          "recipeInstructions": []
+        },
+        "response": {
+          "id": "own",
+          "slug": "soup",
+          "updatedAt": "new",
+          "recipeIngredient": [
+            {
+              "referenceId": "11111111-1111-4111-8111-111111111111"
+            }
+          ],
+          "recipeInstructions": [],
+          "other": {
+            "keep": true
+          }
+        },
+        "status": 200
+      }
+    ]
+  },
+  "update_recipe_instructions.delta": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes/soup",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "own",
+          "slug": "soup",
+          "updatedAt": "2026-10-28T10:00:00Z",
+          "recipeIngredient": [
+            {
+              "referenceId": "11111111-1111-4111-8111-111111111111"
+            }
+          ],
+          "recipeInstructions": [
+            {
+              "id": "ephemeral",
+              "text": "Mix",
+              "title": "Sauce",
+              "summary": "Keep",
+              "ingredientReferences": [
+                {
+                  "referenceId": "11111111-1111-4111-8111-111111111111",
+                  "providerExtra": true
+                }
+              ],
+              "noteReferences": [
+                {
+                  "referenceId": "22222222-2222-4222-8222-222222222222",
+                  "providerExtra": true
+                }
+              ],
+              "providerExtra": {
+                "keep": true
+              }
+            },
+            {
+              "id": "last",
+              "text": "Eat",
+              "title": "",
+              "summary": "",
+              "ingredientReferences": [],
+              "noteReferences": []
+            }
+          ],
+          "other": {
+            "keep": true
+          }
+        },
+        "status": 200
+      },
+      {
+        "method": "PATCH",
+        "path": "/api/recipes/soup",
+        "query": {},
+        "body": {
+          "recipeInstructions": [
+            {
+              "text": "Changed",
+              "title": "",
+              "summary": "Keep",
+              "ingredientReferences": [
+                {
+                  "referenceId": "11111111-1111-4111-8111-111111111111",
+                  "providerExtra": true
+                }
+              ],
+              "noteReferences": [
+                {
+                  "referenceId": "22222222-2222-4222-8222-222222222222",
+                  "providerExtra": true
+                }
+              ],
+              "providerExtra": {
+                "keep": true
+              }
+            },
+            {
+              "text": "New",
+              "title": "",
+              "summary": "",
+              "ingredientReferences": [],
+              "noteReferences": []
+            }
+          ]
+        },
+        "response": {
+          "id": "own",
+          "slug": "soup",
+          "updatedAt": "new",
+          "recipeIngredient": [
+            {
+              "referenceId": "11111111-1111-4111-8111-111111111111"
+            }
+          ],
+          "recipeInstructions": [
+            {
+              "text": "Changed",
+              "title": "",
+              "summary": "Keep",
+              "ingredientReferences": [
+                {
+                  "referenceId": "11111111-1111-4111-8111-111111111111",
+                  "providerExtra": true
+                }
+              ],
+              "noteReferences": [
+                {
+                  "referenceId": "22222222-2222-4222-8222-222222222222",
+                  "providerExtra": true
+                }
+              ],
+              "providerExtra": {
+                "keep": true
+              }
+            },
+            {
+              "text": "New",
+              "title": "",
+              "summary": "",
+              "ingredientReferences": [],
+              "noteReferences": []
+            }
+          ],
+          "other": {
+            "keep": true
+          }
+        },
+        "status": 200
+      }
+    ]
+  },
+  "update_recipe_instructions.unknown_reference": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes/soup",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "own",
+          "slug": "soup",
+          "updatedAt": "2026-10-28T10:00:00Z",
+          "recipeIngredient": [
+            {
+              "referenceId": "11111111-1111-4111-8111-111111111111"
+            }
+          ],
+          "recipeInstructions": [
+            {
+              "id": "ephemeral",
+              "text": "Mix",
+              "title": "Sauce",
+              "summary": "Keep",
+              "ingredientReferences": [
+                {
+                  "referenceId": "11111111-1111-4111-8111-111111111111",
+                  "providerExtra": true
+                }
+              ],
+              "noteReferences": [
+                {
+                  "referenceId": "22222222-2222-4222-8222-222222222222",
+                  "providerExtra": true
+                }
+              ],
+              "providerExtra": {
+                "keep": true
+              }
+            },
+            {
+              "id": "last",
+              "text": "Eat",
+              "title": "",
+              "summary": "",
+              "ingredientReferences": [],
+              "noteReferences": []
+            }
+          ],
+          "other": {
+            "keep": true
+          }
+        },
+        "status": 200
+      }
+    ]
+  },
+  "update_recipe_instructions.duplicate_reference": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes/soup",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "own",
+          "slug": "soup",
+          "updatedAt": "2026-10-28T10:00:00Z",
+          "recipeIngredient": [
+            {
+              "referenceId": "11111111-1111-4111-8111-111111111111"
+            }
+          ],
+          "recipeInstructions": [
+            {
+              "id": "ephemeral",
+              "text": "Mix",
+              "title": "Sauce",
+              "summary": "Keep",
+              "ingredientReferences": [
+                {
+                  "referenceId": "11111111-1111-4111-8111-111111111111",
+                  "providerExtra": true
+                }
+              ],
+              "noteReferences": [
+                {
+                  "referenceId": "22222222-2222-4222-8222-222222222222",
+                  "providerExtra": true
+                }
+              ],
+              "providerExtra": {
+                "keep": true
+              }
+            },
+            {
+              "id": "last",
+              "text": "Eat",
+              "title": "",
+              "summary": "",
+              "ingredientReferences": [],
+              "noteReferences": []
+            }
+          ],
+          "other": {
+            "keep": true
+          }
+        },
+        "status": 200
+      }
+    ]
+  },
+  "update_recipe_instructions.mixed": {
+    "requests": []
+  },
+  "update_recipe_instructions.no_fields": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes/soup",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "own",
+          "slug": "soup",
+          "updatedAt": "2026-10-28T10:00:00Z",
+          "recipeIngredient": [
+            {
+              "referenceId": "11111111-1111-4111-8111-111111111111"
+            }
+          ],
+          "recipeInstructions": [
+            {
+              "id": "ephemeral",
+              "text": "Mix",
+              "title": "Sauce",
+              "summary": "Keep",
+              "ingredientReferences": [
+                {
+                  "referenceId": "11111111-1111-4111-8111-111111111111",
+                  "providerExtra": true
+                }
+              ],
+              "noteReferences": [
+                {
+                  "referenceId": "22222222-2222-4222-8222-222222222222",
+                  "providerExtra": true
+                }
+              ],
+              "providerExtra": {
+                "keep": true
+              }
+            },
+            {
+              "id": "last",
+              "text": "Eat",
+              "title": "",
+              "summary": "",
+              "ingredientReferences": [],
+              "noteReferences": []
+            }
+          ],
+          "other": {
+            "keep": true
+          }
+        },
+        "status": 200
+      }
+    ]
+  },
+  "update_recipe_instructions.ambiguous_gap": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes/soup",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "own",
+          "slug": "soup",
+          "updatedAt": "2026-10-28T10:00:00Z",
+          "recipeIngredient": [
+            {
+              "referenceId": "11111111-1111-4111-8111-111111111111"
+            }
+          ],
+          "recipeInstructions": [
+            {
+              "id": "ephemeral",
+              "text": "Mix",
+              "title": "Sauce",
+              "summary": "Keep",
+              "ingredientReferences": [
+                {
+                  "referenceId": "11111111-1111-4111-8111-111111111111",
+                  "providerExtra": true
+                }
+              ],
+              "noteReferences": [
+                {
+                  "referenceId": "22222222-2222-4222-8222-222222222222",
+                  "providerExtra": true
+                }
+              ],
+              "providerExtra": {
+                "keep": true
+              }
+            },
+            {
+              "id": "last",
+              "text": "Eat",
+              "title": "",
+              "summary": "",
+              "ingredientReferences": [],
+              "noteReferences": []
+            }
+          ],
+          "other": {
+            "keep": true
+          }
+        },
+        "status": 200
+      }
+    ]
+  },
+  "update_recipe_instructions.rollback": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes/soup",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "own",
+          "slug": "soup",
+          "updatedAt": "2026-10-28T10:00:00Z",
+          "recipeIngredient": [
+            {
+              "referenceId": "11111111-1111-4111-8111-111111111111"
+            }
+          ],
+          "recipeInstructions": [
+            {
+              "id": "ephemeral",
+              "text": "Mix",
+              "title": "Sauce",
+              "summary": "Keep",
+              "ingredientReferences": [
+                {
+                  "referenceId": "11111111-1111-4111-8111-111111111111",
+                  "providerExtra": true
+                }
+              ],
+              "noteReferences": [
+                {
+                  "referenceId": "22222222-2222-4222-8222-222222222222",
+                  "providerExtra": true
+                }
+              ],
+              "providerExtra": {
+                "keep": true
+              }
+            },
+            {
+              "id": "last",
+              "text": "Eat",
+              "title": "",
+              "summary": "",
+              "ingredientReferences": [],
+              "noteReferences": []
+            }
+          ],
+          "other": {
+            "keep": true
+          }
+        },
+        "status": 200
+      },
+      {
+        "method": "PATCH",
+        "path": "/api/recipes/soup",
+        "query": {},
+        "body": {
+          "recipeInstructions": [
+            {
+              "text": " Stir ",
+              "title": "",
+              "summary": "",
+              "ingredientReferences": [
+                {
+                  "referenceId": "11111111-1111-4111-8111-111111111111"
+                }
+              ],
+              "noteReferences": [
+                {
+                  "referenceId": "22222222-2222-4222-8222-222222222222"
+                }
+              ]
+            }
+          ]
+        },
+        "response": {
+          "id": "own",
+          "slug": "soup",
+          "updatedAt": "new",
+          "recipeIngredient": [
+            {
+              "referenceId": "11111111-1111-4111-8111-111111111111"
+            }
+          ],
+          "recipeInstructions": [
+            {
+              "text": "Wrong",
+              "title": "",
+              "summary": "",
+              "ingredientReferences": [
+                {
+                  "referenceId": "11111111-1111-4111-8111-111111111111"
+                }
+              ],
+              "noteReferences": [
+                {
+                  "referenceId": "22222222-2222-4222-8222-222222222222"
+                }
+              ]
+            }
+          ],
+          "other": {
+            "keep": true
+          }
+        },
+        "status": 200
+      },
+      {
+        "method": "PATCH",
+        "path": "/api/recipes/soup",
+        "query": {},
+        "body": {
+          "recipeInstructions": [
+            {
+              "text": "Mix",
+              "title": "Sauce",
+              "summary": "Keep",
+              "ingredientReferences": [
+                {
+                  "referenceId": "11111111-1111-4111-8111-111111111111",
+                  "providerExtra": true
+                }
+              ],
+              "noteReferences": [
+                {
+                  "referenceId": "22222222-2222-4222-8222-222222222222",
+                  "providerExtra": true
+                }
+              ],
+              "providerExtra": {
+                "keep": true
+              }
+            },
+            {
+              "text": "Eat",
+              "title": "",
+              "summary": "",
+              "ingredientReferences": [],
+              "noteReferences": []
+            }
+          ]
+        },
+        "response": {
+          "id": "own",
+          "slug": "soup",
+          "updatedAt": "2026-10-28T10:00:00Z",
+          "recipeIngredient": [
+            {
+              "referenceId": "11111111-1111-4111-8111-111111111111"
+            }
+          ],
+          "recipeInstructions": [
+            {
+              "id": "ephemeral",
+              "text": "Mix",
+              "title": "Sauce",
+              "summary": "Keep",
+              "ingredientReferences": [
+                {
+                  "referenceId": "11111111-1111-4111-8111-111111111111",
+                  "providerExtra": true
+                }
+              ],
+              "noteReferences": [
+                {
+                  "referenceId": "22222222-2222-4222-8222-222222222222",
+                  "providerExtra": true
+                }
+              ],
+              "providerExtra": {
+                "keep": true
+              }
+            },
+            {
+              "id": "last",
+              "text": "Eat",
+              "title": "",
+              "summary": "",
+              "ingredientReferences": [],
+              "noteReferences": []
+            }
+          ],
+          "other": {
+            "keep": true
+          }
+        },
+        "status": 200
+      }
+    ]
+  },
+  "update_recipe_instructions.rollback_not_restored": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes/soup",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "own",
+          "slug": "soup",
+          "updatedAt": "2026-10-28T10:00:00Z",
+          "recipeIngredient": [
+            {
+              "referenceId": "11111111-1111-4111-8111-111111111111"
+            }
+          ],
+          "recipeInstructions": [
+            {
+              "id": "ephemeral",
+              "text": "Mix",
+              "title": "Sauce",
+              "summary": "Keep",
+              "ingredientReferences": [
+                {
+                  "referenceId": "11111111-1111-4111-8111-111111111111",
+                  "providerExtra": true
+                }
+              ],
+              "noteReferences": [
+                {
+                  "referenceId": "22222222-2222-4222-8222-222222222222",
+                  "providerExtra": true
+                }
+              ],
+              "providerExtra": {
+                "keep": true
+              }
+            },
+            {
+              "id": "last",
+              "text": "Eat",
+              "title": "",
+              "summary": "",
+              "ingredientReferences": [],
+              "noteReferences": []
+            }
+          ],
+          "other": {
+            "keep": true
+          }
+        },
+        "status": 200
+      },
+      {
+        "method": "PATCH",
+        "path": "/api/recipes/soup",
+        "query": {},
+        "body": {
+          "recipeInstructions": [
+            {
+              "text": " Stir ",
+              "title": "",
+              "summary": "",
+              "ingredientReferences": [
+                {
+                  "referenceId": "11111111-1111-4111-8111-111111111111"
+                }
+              ],
+              "noteReferences": [
+                {
+                  "referenceId": "22222222-2222-4222-8222-222222222222"
+                }
+              ]
+            }
+          ]
+        },
+        "response": {
+          "id": "own",
+          "slug": "soup",
+          "updatedAt": "new",
+          "recipeIngredient": [
+            {
+              "referenceId": "11111111-1111-4111-8111-111111111111"
+            }
+          ],
+          "recipeInstructions": [
+            {
+              "text": "Wrong",
+              "title": "",
+              "summary": "",
+              "ingredientReferences": [
+                {
+                  "referenceId": "11111111-1111-4111-8111-111111111111"
+                }
+              ],
+              "noteReferences": [
+                {
+                  "referenceId": "22222222-2222-4222-8222-222222222222"
+                }
+              ]
+            }
+          ],
+          "other": {
+            "keep": true
+          }
+        },
+        "status": 200
+      },
+      {
+        "method": "PATCH",
+        "path": "/api/recipes/soup",
+        "query": {},
+        "body": {
+          "recipeInstructions": [
+            {
+              "text": "Mix",
+              "title": "Sauce",
+              "summary": "Keep",
+              "ingredientReferences": [
+                {
+                  "referenceId": "11111111-1111-4111-8111-111111111111",
+                  "providerExtra": true
+                }
+              ],
+              "noteReferences": [
+                {
+                  "referenceId": "22222222-2222-4222-8222-222222222222",
+                  "providerExtra": true
+                }
+              ],
+              "providerExtra": {
+                "keep": true
+              }
+            },
+            {
+              "text": "Eat",
+              "title": "",
+              "summary": "",
+              "ingredientReferences": [],
+              "noteReferences": []
+            }
+          ]
+        },
+        "response": {
+          "id": "own",
+          "slug": "soup",
+          "updatedAt": "new",
+          "recipeIngredient": [
+            {
+              "referenceId": "11111111-1111-4111-8111-111111111111"
+            }
+          ],
+          "recipeInstructions": [
+            {
+              "text": "Wrong",
+              "title": "",
+              "summary": "",
+              "ingredientReferences": [
+                {
+                  "referenceId": "11111111-1111-4111-8111-111111111111"
+                }
+              ],
+              "noteReferences": [
+                {
+                  "referenceId": "22222222-2222-4222-8222-222222222222"
+                }
+              ]
+            }
+          ],
+          "other": {
+            "keep": true
+          }
+        },
+        "status": 200
+      }
+    ]
+  },
+  "update_recipe_instructions_batch.duplicate_slug": {
+    "requests": []
+  },
+  "update_recipe_instructions_batch.read_failed": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes/soup",
+        "query": {},
+        "body": null,
+        "response": {
+          "detail": "private"
+        },
+        "status": 404
+      }
+    ]
+  },
+  "update_recipe_instructions.unknown_index": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes/soup",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "own",
+          "slug": "soup",
+          "updatedAt": "2026-10-28T10:00:00Z",
+          "recipeIngredient": [
+            {
+              "referenceId": "11111111-1111-4111-8111-111111111111"
+            }
+          ],
+          "recipeInstructions": [
+            {
+              "id": "ephemeral",
+              "text": "Mix",
+              "title": "Sauce",
+              "summary": "Keep",
+              "ingredientReferences": [
+                {
+                  "referenceId": "11111111-1111-4111-8111-111111111111",
+                  "providerExtra": true
+                }
+              ],
+              "noteReferences": [
+                {
+                  "referenceId": "22222222-2222-4222-8222-222222222222",
+                  "providerExtra": true
+                }
+              ],
+              "providerExtra": {
+                "keep": true
+              }
+            },
+            {
+              "id": "last",
+              "text": "Eat",
+              "title": "",
+              "summary": "",
+              "ingredientReferences": [],
+              "noteReferences": []
+            }
+          ],
+          "other": {
+            "keep": true
+          }
+        },
+        "status": 200
+      }
+    ]
   }
 }

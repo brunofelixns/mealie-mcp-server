@@ -10,6 +10,10 @@ from mealie_mcp_server.models.inputs.recipe_ingredients import (
     UpdateRecipeIngredientsBatchInput,
     UpdateRecipeIngredientsInput,
 )
+from mealie_mcp_server.models.inputs.recipe_instructions import (
+    UpdateRecipeInstructionsBatchInput,
+    UpdateRecipeInstructionsInput,
+)
 from mealie_mcp_server.models.inputs.recipe_taxonomy import (
     PatchRecipeInput,
     UpdateRecipeTaxonomyBatchInput,
@@ -27,7 +31,12 @@ from mealie_mcp_server.models.inputs.recipes import (
     GetRecipesDetailedBatchInput,
     GetRecipesInput,
 )
-from mealie_mcp_server.services import recipe_equipment, recipe_ingredients, recipe_taxonomy
+from mealie_mcp_server.services import (
+    recipe_equipment,
+    recipe_ingredients,
+    recipe_instructions,
+    recipe_taxonomy,
+)
 from mealie_mcp_server.services.taxonomy_resolution import resolve_taxonomy_filter
 from mealie_mcp_server.tools.contracts import register_contract_tool
 from mealie_mcp_server.tools.helpers import success_result
@@ -235,4 +244,40 @@ def register_recipe_ingredients(server: FastMCP) -> None:
         catalog["update_recipe_ingredients_batch"],
         UpdateRecipeIngredientsBatchInput,
         update_recipe_ingredients_batch,
+    )
+
+
+async def update_recipe_instructions(
+    request: UpdateRecipeInstructionsInput, state: AppState
+) -> CallToolResult:
+    changes = provided_fields(request)
+    changes.pop("slug")
+    return success_result(
+        await recipe_instructions.update_recipe_instructions(state.client, request.slug, changes)
+    )
+
+
+async def update_recipe_instructions_batch(
+    request: UpdateRecipeInstructionsBatchInput, state: AppState
+) -> CallToolResult:
+    return success_result(
+        await recipe_instructions.update_recipe_instructions_batch(
+            state.client, [provided_fields(item) for item in request.updates]
+        )
+    )
+
+
+def register_recipe_instructions(server: FastMCP) -> None:
+    catalog = definitions()
+    register_contract_tool(
+        server,
+        catalog["update_recipe_instructions"],
+        UpdateRecipeInstructionsInput,
+        update_recipe_instructions,
+    )
+    register_contract_tool(
+        server,
+        catalog["update_recipe_instructions_batch"],
+        UpdateRecipeInstructionsBatchInput,
+        update_recipe_instructions_batch,
     )

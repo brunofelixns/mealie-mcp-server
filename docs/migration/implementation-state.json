@@ -577,7 +577,7 @@
           "tests": 568
         }
       ],
-      "commit": null
+      "commit": "3b4e32a74f17525859d14df1f49f4363092755fb"
     },
     {
       "id": "P17",
@@ -585,7 +585,7 @@
       "dependsOn": [
         "P16"
       ],
-      "status": "in_progress",
+      "status": "verified",
       "tools": [
         "update_recipe_instructions",
         "update_recipe_instructions_batch"
@@ -594,13 +594,20 @@
         "src/mealie_mcp_server/models/inputs/recipe_instructions.py",
         "src/mealie_mcp_server/services/recipe_instructions.py",
         "src/mealie_mcp_server/tools/recipes.py",
-        "tests/fixtures/compatibility/cases/recipe_instructions.json"
+        "tests/fixtures/compatibility/cases/recipe_instructions.json",
+        "src/mealie_mcp_server/tools/registry.py"
       ],
       "tests": [
         "tests/unit/test_recipe_instructions.py",
         "tests/contracts/test_recipe_instructions.py"
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "report": "docs/migration/evidence/P17.md",
+          "result": "passed",
+          "tests": 608
+        }
+      ],
       "commit": null
     },
     {
@@ -609,7 +616,7 @@
       "dependsOn": [
         "P17"
       ],
-      "status": "not_started",
+      "status": "in_progress",
       "tools": [
         "set_recipe_image",
         "set_recipe_image_from_file",

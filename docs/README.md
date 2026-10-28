@@ -1,6 +1,6 @@
 # Migración de Mealie MCP a Python
 
-Estado a2026-10-28: **implementación en curso (P01..P16 verificadas; P17 activa)**.
+Estado a2026-10-28: **implementación en curso (P01..P17 verificadas; P18 activa)**.
 
 ## Ruta de lectura
 
@@ -20,7 +20,7 @@ FastMCP, migración completa a Python, stdio local y HTTP remoto, token Bearer p
 
 Upstream fijado en d027e1b4a314d781a322f1f91e37840f01464d77. Se revisaron estáticamente los registros y42 archivos de pruebas originales. El diseño pasó una revisión independiente; el plan se revisó contra el diseño y el inventario.
 
-Las comprobaciones auxiliares de estos documentos se ejecutan en el host y se identifican como documentales. P01..P16 aportan evidencia de ejecución:1058tests originales y568Python pasan;71/78 herramientas portadas y verificadas. Ver el seguimiento para los límites y trabajo pendiente.
+Las comprobaciones auxiliares de estos documentos se ejecutan en el host y se identifican como documentales. P01..P17 aportan evidencia de ejecución:1058tests originales y608Python pasan;73/78 herramientas portadas y verificadas. Ver el seguimiento para los límites y trabajo pendiente.
 
 ## Cómo empezar después de revisar el plan
 

@@ -1,0 +1,744 @@
+[
+  {
+    "tool": "update_recipe_instructions",
+    "arguments": {
+      "slug": "soup",
+      "expectedUpdatedAt": "2026-10-28T10:00:00Z",
+      "instructions": [
+        {
+          "text": " Stir ",
+          "title": null,
+          "ingredientReferenceIds": [
+            "11111111-1111-4111-8111-111111111111"
+          ],
+          "noteReferenceIds": [
+            "22222222-2222-4222-8222-222222222222"
+          ]
+        }
+      ]
+    },
+    "scenario": "update_recipe_instructions.basic",
+    "expected_requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes/soup",
+        "query": {},
+        "body": null
+      },
+      {
+        "method": "PATCH",
+        "path": "/api/recipes/soup",
+        "query": {},
+        "body": {
+          "recipeInstructions": [
+            {
+              "text": " Stir ",
+              "title": "",
+              "summary": "",
+              "ingredientReferences": [
+                {
+                  "referenceId": "11111111-1111-4111-8111-111111111111"
+                }
+              ],
+              "noteReferences": [
+                {
+                  "referenceId": "22222222-2222-4222-8222-222222222222"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"id\":\"own\",\"slug\":\"soup\",\"updatedAt\":\"new\",\"recipeIngredient\":[{\"referenceId\":\"11111111-1111-4111-8111-111111111111\"}],\"recipeInstructions\":[{\"text\":\" Stir \",\"title\":\"\",\"summary\":\"\",\"ingredientReferences\":[{\"referenceId\":\"11111111-1111-4111-8111-111111111111\"}],\"noteReferences\":[{\"referenceId\":\"22222222-2222-4222-8222-222222222222\"}],\"id\":\"regenerated\"}],\"other\":{\"keep\":true}}"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "update_recipe_instructions_batch",
+    "arguments": {
+      "updates": [
+        {
+          "slug": "soup",
+          "expectedUpdatedAt": "2026-10-28T10:00:00Z",
+          "instructions": [
+            {
+              "text": " Stir ",
+              "title": null,
+              "ingredientReferenceIds": [
+                "11111111-1111-4111-8111-111111111111"
+              ],
+              "noteReferenceIds": [
+                "22222222-2222-4222-8222-222222222222"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "scenario": "update_recipe_instructions_batch.basic",
+    "expected_requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes/soup",
+        "query": {},
+        "body": null
+      },
+      {
+        "method": "PATCH",
+        "path": "/api/recipes/soup",
+        "query": {},
+        "body": {
+          "recipeInstructions": [
+            {
+              "text": " Stir ",
+              "title": "",
+              "summary": "",
+              "ingredientReferences": [
+                {
+                  "referenceId": "11111111-1111-4111-8111-111111111111"
+                }
+              ],
+              "noteReferences": [
+                {
+                  "referenceId": "22222222-2222-4222-8222-222222222222"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"requestedCount\":1,\"succeededCount\":1,\"failedCount\":0,\"results\":[{\"slug\":\"soup\",\"success\":true,\"instructionCount\":1,\"changed\":true}],\"apiRequestCount\":2}"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "update_recipe_instructions",
+    "arguments": {
+      "slug": "soup",
+      "expectedUpdatedAt": "2026-10-28T10:00:00Z",
+      "instructions": [
+        {
+          "text": "Mix",
+          "title": "Sauce",
+          "summary": "Keep",
+          "ingredientReferenceIds": [
+            "11111111-1111-4111-8111-111111111111"
+          ],
+          "noteReferenceIds": [
+            "22222222-2222-4222-8222-222222222222"
+          ]
+        },
+        {
+          "text": "Eat"
+        }
+      ]
+    },
+    "scenario": "update_recipe_instructions.no_op",
+    "expected_requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes/soup",
+        "query": {},
+        "body": null
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"id\":\"own\",\"slug\":\"soup\",\"updatedAt\":\"2026-10-28T10:00:00Z\",\"recipeIngredient\":[{\"referenceId\":\"11111111-1111-4111-8111-111111111111\"}],\"recipeInstructions\":[{\"id\":\"ephemeral\",\"text\":\"Mix\",\"title\":\"Sauce\",\"summary\":\"Keep\",\"ingredientReferences\":[{\"referenceId\":\"11111111-1111-4111-8111-111111111111\",\"providerExtra\":true}],\"noteReferences\":[{\"referenceId\":\"22222222-2222-4222-8222-222222222222\",\"providerExtra\":true}],\"providerExtra\":{\"keep\":true}},{\"id\":\"last\",\"text\":\"Eat\",\"title\":\"\",\"summary\":\"\",\"ingredientReferences\":[],\"noteReferences\":[]}],\"other\":{\"keep\":true}}"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "update_recipe_instructions",
+    "arguments": {
+      "slug": "soup",
+      "expectedUpdatedAt": "older",
+      "instructions": []
+    },
+    "scenario": "update_recipe_instructions.stale",
+    "expected_requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes/soup",
+        "query": {},
+        "body": null
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "Stale snapshot for recipe 'soup': expectedUpdatedAt 'older' does not match the recipe's current updatedAt '2026-10-28T10:00:00Z'. Nothing was written. Re-read the recipe with get_recipe_detailed and retry from the new snapshot (instruction indexes and ingredient referenceIds may have changed)."
+        }
+      ],
+      "isError": true
+    }
+  },
+  {
+    "tool": "update_recipe_instructions",
+    "arguments": {
+      "slug": "soup",
+      "expectedUpdatedAt": "2026-10-28T10:00:00Z",
+      "instructions": []
+    },
+    "scenario": "update_recipe_instructions.clear",
+    "expected_requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes/soup",
+        "query": {},
+        "body": null
+      },
+      {
+        "method": "PATCH",
+        "path": "/api/recipes/soup",
+        "query": {},
+        "body": {
+          "recipeInstructions": []
+        }
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"id\":\"own\",\"slug\":\"soup\",\"updatedAt\":\"new\",\"recipeIngredient\":[{\"referenceId\":\"11111111-1111-4111-8111-111111111111\"}],\"recipeInstructions\":[],\"other\":{\"keep\":true}}"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "update_recipe_instructions",
+    "arguments": {
+      "slug": "soup",
+      "expectedUpdatedAt": "2026-10-28T10:00:00Z",
+      "updateInstructions": [
+        {
+          "index": 0,
+          "text": "Changed",
+          "title": null
+        }
+      ],
+      "removeInstructionIndexes": [
+        1
+      ],
+      "addInstructions": [
+        {
+          "text": "New",
+          "insertAfterIndex": 0
+        }
+      ]
+    },
+    "scenario": "update_recipe_instructions.delta",
+    "expected_requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes/soup",
+        "query": {},
+        "body": null
+      },
+      {
+        "method": "PATCH",
+        "path": "/api/recipes/soup",
+        "query": {},
+        "body": {
+          "recipeInstructions": [
+            {
+              "text": "Changed",
+              "title": "",
+              "summary": "Keep",
+              "ingredientReferences": [
+                {
+                  "referenceId": "11111111-1111-4111-8111-111111111111",
+                  "providerExtra": true
+                }
+              ],
+              "noteReferences": [
+                {
+                  "referenceId": "22222222-2222-4222-8222-222222222222",
+                  "providerExtra": true
+                }
+              ],
+              "providerExtra": {
+                "keep": true
+              }
+            },
+            {
+              "text": "New",
+              "title": "",
+              "summary": "",
+              "ingredientReferences": [],
+              "noteReferences": []
+            }
+          ]
+        }
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"id\":\"own\",\"slug\":\"soup\",\"updatedAt\":\"new\",\"recipeIngredient\":[{\"referenceId\":\"11111111-1111-4111-8111-111111111111\"}],\"recipeInstructions\":[{\"text\":\"Changed\",\"title\":\"\",\"summary\":\"Keep\",\"ingredientReferences\":[{\"referenceId\":\"11111111-1111-4111-8111-111111111111\",\"providerExtra\":true}],\"noteReferences\":[{\"referenceId\":\"22222222-2222-4222-8222-222222222222\",\"providerExtra\":true}],\"providerExtra\":{\"keep\":true}},{\"text\":\"New\",\"title\":\"\",\"summary\":\"\",\"ingredientReferences\":[],\"noteReferences\":[]}],\"other\":{\"keep\":true}}"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "update_recipe_instructions",
+    "arguments": {
+      "slug": "soup",
+      "expectedUpdatedAt": "2026-10-28T10:00:00Z",
+      "instructions": [
+        {
+          "text": "X",
+          "ingredientReferenceIds": [
+            "33333333-3333-4333-8333-333333333333"
+          ]
+        }
+      ]
+    },
+    "scenario": "update_recipe_instructions.unknown_reference",
+    "expected_requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes/soup",
+        "query": {},
+        "body": null
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "Invalid instruction request, nothing was written: instructions[0]: ingredientReferenceId '33333333-3333-4333-8333-333333333333' does not exist on the recipe's current ingredients. If this ID came from the guarded recipe snapshot, the ingredient may have no durably stored referenceId: older Mealie rows can have a NULL reference_id, causing Mealie to synthesize a different UUID on every read. Pin the ingredient identities with update_recipe_ingredients using the complete-replacement form: send the recipe's full current ingredient collection and explicitly preserve/supply a referenceId for every continuing row. Then re-read the recipe and retry update_recipe_instructions using the newly returned updatedAt and referenceIds."
+        }
+      ],
+      "isError": true
+    }
+  },
+  {
+    "tool": "update_recipe_instructions",
+    "arguments": {
+      "slug": "soup",
+      "expectedUpdatedAt": "2026-10-28T10:00:00Z",
+      "instructions": [
+        {
+          "text": "X",
+          "ingredientReferenceIds": [
+            "11111111-1111-4111-8111-111111111111",
+            "11111111-1111-4111-8111-111111111111"
+          ]
+        }
+      ]
+    },
+    "scenario": "update_recipe_instructions.duplicate_reference",
+    "expected_requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes/soup",
+        "query": {},
+        "body": null
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "Invalid instruction request, nothing was written: instructions[0]: duplicate ingredientReferenceId '11111111-1111-4111-8111-111111111111'."
+        }
+      ],
+      "isError": true
+    }
+  },
+  {
+    "tool": "update_recipe_instructions",
+    "arguments": {
+      "slug": "soup",
+      "expectedUpdatedAt": "2026-10-28T10:00:00Z",
+      "instructions": [],
+      "addInstructions": []
+    },
+    "scenario": "update_recipe_instructions.mixed",
+    "expected_requests": [],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "Use either instructions (complete replacement) or the delta fields (addInstructions/updateInstructions/removeInstructionIndexes), not both."
+        }
+      ],
+      "isError": true
+    }
+  },
+  {
+    "tool": "update_recipe_instructions",
+    "arguments": {
+      "slug": "soup",
+      "expectedUpdatedAt": "2026-10-28T10:00:00Z",
+      "updateInstructions": [
+        {
+          "index": 0
+        }
+      ]
+    },
+    "scenario": "update_recipe_instructions.no_fields",
+    "expected_requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes/soup",
+        "query": {},
+        "body": null
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "Invalid instruction request, nothing was written: Update of index 0: changes no fields."
+        }
+      ],
+      "isError": true
+    }
+  },
+  {
+    "tool": "update_recipe_instructions",
+    "arguments": {
+      "slug": "soup",
+      "expectedUpdatedAt": "2026-10-28T10:00:00Z",
+      "addInstructions": [
+        {
+          "text": "A",
+          "insertAfterIndex": 0
+        },
+        {
+          "text": "B",
+          "insertBeforeIndex": 1
+        }
+      ]
+    },
+    "scenario": "update_recipe_instructions.ambiguous_gap",
+    "expected_requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes/soup",
+        "query": {},
+        "body": null
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "Invalid instruction request, nothing was written: Additions target the same gap (between instruction 0 and 1) through opposite anchors (insertAfterIndex and insertBeforeIndex) — ambiguous; use one direction."
+        }
+      ],
+      "isError": true
+    }
+  },
+  {
+    "tool": "update_recipe_instructions",
+    "arguments": {
+      "slug": "soup",
+      "expectedUpdatedAt": "2026-10-28T10:00:00Z",
+      "instructions": [
+        {
+          "text": " Stir ",
+          "title": null,
+          "ingredientReferenceIds": [
+            "11111111-1111-4111-8111-111111111111"
+          ],
+          "noteReferenceIds": [
+            "22222222-2222-4222-8222-222222222222"
+          ]
+        }
+      ]
+    },
+    "scenario": "update_recipe_instructions.rollback",
+    "expected_requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes/soup",
+        "query": {},
+        "body": null
+      },
+      {
+        "method": "PATCH",
+        "path": "/api/recipes/soup",
+        "query": {},
+        "body": {
+          "recipeInstructions": [
+            {
+              "text": " Stir ",
+              "title": "",
+              "summary": "",
+              "ingredientReferences": [
+                {
+                  "referenceId": "11111111-1111-4111-8111-111111111111"
+                }
+              ],
+              "noteReferences": [
+                {
+                  "referenceId": "22222222-2222-4222-8222-222222222222"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "method": "PATCH",
+        "path": "/api/recipes/soup",
+        "query": {},
+        "body": {
+          "recipeInstructions": [
+            {
+              "text": "Mix",
+              "title": "Sauce",
+              "summary": "Keep",
+              "ingredientReferences": [
+                {
+                  "referenceId": "11111111-1111-4111-8111-111111111111",
+                  "providerExtra": true
+                }
+              ],
+              "noteReferences": [
+                {
+                  "referenceId": "22222222-2222-4222-8222-222222222222",
+                  "providerExtra": true
+                }
+              ],
+              "providerExtra": {
+                "keep": true
+              }
+            },
+            {
+              "text": "Eat",
+              "title": "",
+              "summary": "",
+              "ingredientReferences": [],
+              "noteReferences": []
+            }
+          ]
+        }
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "Instruction verification failed after Mealie update: Instruction 0 text does not match the requested value. Original instructions were restored successfully (instruction ids were regenerated, which is expected)."
+        }
+      ],
+      "isError": true
+    }
+  },
+  {
+    "tool": "update_recipe_instructions",
+    "arguments": {
+      "slug": "soup",
+      "expectedUpdatedAt": "2026-10-28T10:00:00Z",
+      "instructions": [
+        {
+          "text": " Stir ",
+          "title": null,
+          "ingredientReferenceIds": [
+            "11111111-1111-4111-8111-111111111111"
+          ],
+          "noteReferenceIds": [
+            "22222222-2222-4222-8222-222222222222"
+          ]
+        }
+      ]
+    },
+    "scenario": "update_recipe_instructions.rollback_not_restored",
+    "expected_requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes/soup",
+        "query": {},
+        "body": null
+      },
+      {
+        "method": "PATCH",
+        "path": "/api/recipes/soup",
+        "query": {},
+        "body": {
+          "recipeInstructions": [
+            {
+              "text": " Stir ",
+              "title": "",
+              "summary": "",
+              "ingredientReferences": [
+                {
+                  "referenceId": "11111111-1111-4111-8111-111111111111"
+                }
+              ],
+              "noteReferences": [
+                {
+                  "referenceId": "22222222-2222-4222-8222-222222222222"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "method": "PATCH",
+        "path": "/api/recipes/soup",
+        "query": {},
+        "body": {
+          "recipeInstructions": [
+            {
+              "text": "Mix",
+              "title": "Sauce",
+              "summary": "Keep",
+              "ingredientReferences": [
+                {
+                  "referenceId": "11111111-1111-4111-8111-111111111111",
+                  "providerExtra": true
+                }
+              ],
+              "noteReferences": [
+                {
+                  "referenceId": "22222222-2222-4222-8222-222222222222",
+                  "providerExtra": true
+                }
+              ],
+              "providerExtra": {
+                "keep": true
+              }
+            },
+            {
+              "text": "Eat",
+              "title": "",
+              "summary": "",
+              "ingredientReferences": [],
+              "noteReferences": []
+            }
+          ]
+        }
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "Instruction verification failed after Mealie update: Instruction 0 text does not match the requested value. Rollback to the original instructions ALSO failed (Mealie's response after rollback did not match the original instructions: Expected 2 instruction(s) but Mealie persisted 1.) — recipe state may require manual inspection."
+        }
+      ],
+      "isError": true
+    }
+  },
+  {
+    "tool": "update_recipe_instructions_batch",
+    "arguments": {
+      "updates": [
+        {
+          "slug": "soup",
+          "expectedUpdatedAt": "2026-10-28T10:00:00Z",
+          "instructions": []
+        },
+        {
+          "slug": " soup ",
+          "expectedUpdatedAt": "2026-10-28T10:00:00Z",
+          "instructions": []
+        }
+      ]
+    },
+    "scenario": "update_recipe_instructions_batch.duplicate_slug",
+    "expected_requests": [],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "Duplicate recipe slug(s) in the same batch call: soup. Each recipe may appear at most once per batch — submit a second call for a repeat update."
+        }
+      ],
+      "isError": true
+    }
+  },
+  {
+    "tool": "update_recipe_instructions_batch",
+    "arguments": {
+      "updates": [
+        {
+          "slug": "soup",
+          "expectedUpdatedAt": "2026-10-28T10:00:00Z",
+          "instructions": []
+        }
+      ]
+    },
+    "scenario": "update_recipe_instructions_batch.read_failed",
+    "expected_requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes/soup",
+        "query": {},
+        "body": null
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"requestedCount\":1,\"succeededCount\":0,\"failedCount\":1,\"results\":[{\"slug\":\"soup\",\"success\":false,\"error\":{\"message\":\"Mealie API error 404: {\\\"detail\\\": \\\"private\\\"}\",\"status\":404}}],\"apiRequestCount\":1}"
+        }
+      ]
+    },
+    "documented_difference": "D06",
+    "expected_python_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"requestedCount\":1,\"succeededCount\":0,\"failedCount\":1,\"results\":[{\"slug\":\"soup\",\"success\":false,\"error\":{\"message\":\"Mealie API error 404.\",\"status\":404}}],\"apiRequestCount\":1}"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "update_recipe_instructions",
+    "arguments": {
+      "slug": "soup",
+      "expectedUpdatedAt": "2026-10-28T10:00:00Z",
+      "updateInstructions": [
+        {
+          "index": 2,
+          "text": "bad"
+        }
+      ]
+    },
+    "scenario": "update_recipe_instructions.unknown_index",
+    "expected_requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes/soup",
+        "query": {},
+        "body": null
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "Invalid instruction request, nothing was written: Update of index 2: index 2 does not exist (recipe has 2 instruction(s), valid indexes 0-1)."
+        }
+      ],
+      "isError": true
+    }
+  }
+]
