@@ -1,5 +1,7 @@
 # Contenedor de producción
 
+Para instalar un servicio desde una imagen ya publicada en GHCR, usar [docker/](../docker/README.md): incluye Compose sin build, plantilla .env, HTTP por defecto y un perfil stdio. Solo se copia esa carpeta al servidor; no se necesita el repositorio completo. Las secciones siguientes describen el build local y la variante con secretos de archivo.
+
 El Dockerfile tiene etapas development, builder y runtime. El runtime instala el wheel y sus dependencias de producción; conserva CA, tzdata e ICU72. No incorpora Node, compiladores, uv, pip, ensurepip, herramientas de tests ni secretos. Ejecuta como10001:10001 y admite raíz de solo lectura con /tmp temporal.
 
 ## Construcción y prueba
@@ -64,3 +66,9 @@ El escáner fijado por digest recibe una copia del archivo de imagen y genera in
 Revisar actualizaciones de imágenes y uv.lock explícitamente, reconstruir y repetir ambos transportes, payloads grandes y plataformas. PyICU/ICU forman parte de la compatibilidad de ordenación; cambiar Debian/ICU exige repetir el corpus de matching y golden tests.
 
 release.yaml solo publica por workflow_dispatch con publish=true, después de CI, pruebas de la imagen por arquitectura, escaneo y release_gate. Este último exige las24 tareas verificadas y que la versión solicitada coincida con pyproject.toml. Publica en el namespace GHCR del repositorio que ejecuta el workflow y compone un manifest multiarch; no publica al upstream por crear estos archivos. No se ha ejecutado ninguna publicación.
+
+## Verificación del despliegue independiente
+
+El bundle docker/ se ha probado con la imagen runtime local ya instalada, sin build ni mounts de código: dos tests reales pasan para HTTP con Bearer y credencial Mealie separada, y stdio sin token HTTP. Compose5.6.1 en el Dev Container ejecutó esas pruebas; Compose Desktop2.38.1 validó ambos servicios. Una copia aislada de la carpeta confirmó la carga automática de .env y que HTTP es el único servicio por defecto.
+
+Se verificó la exclusión de docker/.env de Git y de un contexto Docker real exportado con COPY, conservando ambas plantillas .env.example. Ruff, formato, mypy, generación documental y dos tests de documentación pasan. Artefactos locales: artifacts/deployment-compose-red.log, deployment-compose-green.log, deployment-context-check.json y deployment-doc-tests.log. Estas comprobaciones no descargan una imagen de GHCR ni prueban un registry privado o un endpoint público; esos pasos dependen de la publicación y configuración del operador.

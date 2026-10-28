@@ -31,6 +31,8 @@ uv run --frozen mealie-mcp-server --transport stdio
 
 ## HTTP e imagen de producción
 
+Para instalar el servicio desde una imagen publicada en GHCR, la carpeta [docker/](docker/README.md) contiene compose.yaml y .env.example; solo hay que configurar .env y ejecutar docker compose pull/up. No requiere construir la imagen ni copiar el código Python al servidor.
+
 HTTP exige un `MCP_AUTH_TOKEN` independiente de la API key Mealie, o su variante `_FILE`:
 
 ```sh
