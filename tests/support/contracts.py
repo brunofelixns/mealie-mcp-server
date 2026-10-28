@@ -18,6 +18,7 @@ class ContractCase:
     documented_difference: str | None = None
     expected_python_result: dict[str, Any] | None = None
     request_order: Literal["sequential", "concurrent"] = "sequential"
+    expected_python_requests: list[dict[str, Any]] | None = None
 
 
 def load_cases(family: str) -> list[ContractCase]:
@@ -80,5 +81,13 @@ async def assert_contract_matches(server: Any, case: ContractCase, fake: Any) ->
         expected["content"], is_error=is_error
     )
     assert _typed_json(result.structured_content) == _typed_json(expected.get("structuredContent"))
-    assert_requests_match(fake.recorded_requests, case.expected_requests, case.request_order)
+    requests = case.expected_requests
+    if case.expected_python_requests is not None:
+        allowed = {
+            "D10": {"update_shopping_list", "update_shopping_list_item"},
+            "D11": {"delete_shopping_list_items_bulk"},
+        }
+        assert case.tool in allowed.get(case.documented_difference, set())
+        requests = case.expected_python_requests
+    assert_requests_match(fake.recorded_requests, requests, case.request_order)
     assert not fake.errors

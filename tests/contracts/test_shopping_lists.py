@@ -1,9 +1,12 @@
+import json
+from dataclasses import replace
+
 import pytest
 from fastmcp import Client
 
 from mealie_mcp_server.config import load_settings
 from mealie_mcp_server.server import create_server
-from tests.support.contracts import assert_contract_matches, load_cases
+from tests.support.contracts import FIXTURES, assert_contract_matches, load_cases
 from tests.support.fake_mealie import FakeMealie
 
 CASES = load_cases("shopping_lists")
@@ -11,7 +14,33 @@ CASES = load_cases("shopping_lists")
 
 @pytest.mark.parametrize("case", CASES, ids=lambda case: case.scenario)
 async def test_shopping_lists_contract(case):
-    with FakeMealie(case.scenario) as fake:
+    scenario = case.scenario
+    if case.tool in {"update_shopping_list", "update_shopping_list_item"}:
+        # D10 keeps the captured upstream case intact and records Python's full PUT separately.
+        original = json.loads((FIXTURES / "scenarios.json").read_text())[scenario]["requests"][0]
+        current = {
+            **original["response"],
+            "groupId": "40000000-0000-4000-8000-000000000004",
+            "userId": "40000000-0000-4000-8000-000000000005",
+            "providerExtra": {"keep": True},
+        }
+        read = {"method": "GET", "path": original["path"], "query": {}, "body": None}
+        write = {**case.expected_requests[0], "body": {**current, **original["body"]}}
+        case = replace(case, documented_difference="D10", expected_python_requests=[read, write])
+        scenario = [
+            {**read, "response": current},
+            {**write, "response": original["response"], "status": original["status"]},
+        ]
+    elif case.tool == "delete_shopping_list_items_bulk":
+        query = {"ids": case.arguments["itemIds"]} if case.arguments["itemIds"] else {}
+        request = {**case.expected_requests[0], "query": query}
+        if request != case.expected_requests[0]:
+            original = json.loads((FIXTURES / "scenarios.json").read_text())[scenario]["requests"][
+                0
+            ]
+            case = replace(case, documented_difference="D11", expected_python_requests=[request])
+            scenario = [{**request, "response": original["response"], "status": original["status"]}]
+    with FakeMealie(scenario) as fake:
         settings = load_settings({"MEALIE_BASE_URL": fake.server_url, "MEALIE_API_KEY": "fixture"})
         await assert_contract_matches(create_server(settings), case, fake)
 

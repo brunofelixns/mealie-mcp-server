@@ -34,7 +34,14 @@ async def get_shopping_list(client: MealieClient, list_id: str) -> JsonValue:
 
 
 async def update_shopping_list(client: MealieClient, list_id: str, data: JsonObject) -> JsonValue:
-    return await client.request("PUT", _list_path(list_id), json=data)
+    return await _update_record(client, _list_path(list_id), data)
+
+
+async def _update_record(client: MealieClient, path: str, data: JsonObject) -> JsonValue:
+    current = await client.request("GET", path)
+    if not isinstance(current, dict):
+        raise ValueError("Invalid Mealie shopping response.")
+    return await client.request("PUT", path, json={**current, **data})
 
 
 async def delete_shopping_list(client: MealieClient, list_id: str) -> JsonValue:
@@ -95,7 +102,7 @@ async def create_shopping_list_items_bulk(
 async def update_shopping_list_item(
     client: MealieClient, item_id: str, data: JsonObject
 ) -> JsonValue:
-    return await client.request("PUT", _item_path(item_id), json=data)
+    return await _update_record(client, _item_path(item_id), data)
 
 
 async def delete_shopping_list_item(client: MealieClient, item_id: str) -> JsonValue:
@@ -103,4 +110,4 @@ async def delete_shopping_list_item(client: MealieClient, item_id: str) -> JsonV
 
 
 async def delete_shopping_list_items_bulk(client: MealieClient, item_ids: list[str]) -> JsonValue:
-    return await client.request("DELETE", ITEMS, params=[("ids", ",".join(item_ids))])
+    return await client.request("DELETE", ITEMS, params=[("ids", item_id) for item_id in item_ids])

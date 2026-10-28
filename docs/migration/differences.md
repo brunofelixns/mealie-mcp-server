@@ -14,6 +14,8 @@ Referencia: d027e1b4a314d781a322f1f91e37840f01464d77.
 | D07 | Texto JSON null válido si un DELETE devuelve204 | Original observado: MCPError-32602 por text undefined; DELETE no se repite | P08..P20 | Verificada en delete_tag.edge204 |
 | D08 | structuredContent/outputSchema por herramienta | Solo si conserva el contenido contractual y pasa comparación de clientes | P06/P20 | No se activa: se conserva la salida de texto original |
 | D09 | Texto de validación de argumentos identifica campo/regla sin copiar entradas | Validación estricta equivalente con JSON Schema/Pydantic; no exponer entradas ni secretos por mensajes del SDK | P06 | Verificada: tests/contracts/test_strict_inputs.py |
+| D10 | `update_shopping_list` y `update_shopping_list_item` leen el registro antes de enviar un PUT completo | Mealie3.29.0 exige identificadores que no son argumentos MCP y aplica valores predeterminados a campos omitidos; conservar identificadores, elementos y campos desconocidos | E2E local | Pruebas unitarias y contratos separados; verificación real registrada en docs/testing/local-e2e.md |
+| D11 | `delete_shopping_list_items_bulk` repite el parámetro `ids` por identificador, sin CSV | Mealie3.29.0 valida cada valor de la query como UUID y rechaza el CSV con422; un lote vacío omite la query y es un no-op del proveedor | E2E local | Pruebas unitarias de serialización y contratos separados; verificación real registrada en docs/testing/local-e2e.md |
 
 ## Regla para añadir una diferencia
 
@@ -21,4 +23,12 @@ Registrar herramienta/entrada, salida o efecto original observado, cambio propue
 
 No se aceptan como cambios implícitos: renombrar argumentos a snake_case, convertir null en omitido, imponer max25 al lote de taxonomía, ordenar patch_mealplan según input global, eliminar campos desconocidos de Mealie, quitar verificación/rollback, desactivar DNS fijado o delegar en un LLM del servidor.
 
-Los casos con diferencias guardan expected_result del original y expected_python_result separado, con documented_difference obligatorio. El comparador solo admite D06/D07 expresos; no borra estados, errores ni llamadas para hacer pasar pruebas.
+Los casos con diferencias guardan expected_result del original y expected_python_result separado, con documented_difference obligatorio. El comparador solo admite D06/D07 para salidas y expected_python_requests para D10 (dos actualizaciones de compra) o D11 (borrado de elementos en lote); no borra estados, errores ni llamadas para hacer pasar pruebas.
+
+## D10: actualización de compra con PUT completo
+
+El original envía únicamente los campos solicitados en el PUT. El OpenAPI de la instancia real Mealie3.29.0 exige `groupId`, `userId` e `id` para una lista y `shoppingListId` para un elemento; el PUT parcial original produce422. Python hace un GET del mismo registro, conserva sus campos y superpone solo los argumentos de actualización antes de un único PUT. Mantiene omisión, cadena vacía,0 y false, los argumentos públicos y la respuesta del proveedor. Si el GET falla o devuelve una forma inválida, no escribe; nunca reintenta una escritura fallida. Las capturas originales permanecen intactas y los contratos prueban por separado las llamadas Python. Como todo read-modify-write sin una precondición ofrecida por el proveedor, existe una ventana de concurrencia entre GET y PUT.
+
+## D11: identificadores repetidos en el borrado de compra
+
+El original concatena `itemIds` con comas en una única query `ids`. La API real espera un array de UUID, serializado como `?ids=uuid1&ids=uuid2`, y devuelve422 para el CSV. Python conserva el orden y el valor de cada identificador con pares de query repetidos; mantiene el único DELETE y su respuesta sin reintentos. Para `itemIds=[]` no envía `ids`: el servicio Mealie3.29.0 no borra elementos cuando la lista es vacía/None. Se conservan los fixtures originales, incluidas las formas CSV y vacía, con expectativas Python explícitas y separadas. El caso de un solo identificador y su diferencia D07 para204 no cambian.
