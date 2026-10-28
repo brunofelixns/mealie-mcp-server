@@ -3211,7 +3211,7 @@
         "blobSha": "e918b9b3470dae48d07d54970c00d32cfd81beac",
         "url": "https://github.com/timo-reymann/mealie-mcp-server/blob/d027e1b4a314d781a322f1f91e37840f01464d77/src/tools/recipes.ts#L1156"
       },
-      "migrationStatus": "inventoried_static_not_implemented",
+      "migrationStatus": "implemented_contract_verified",
       "effect": "write",
       "description": "Records when a recipe was last made. Without `timestamp` it records now. `timestamp` is an ISO 8601 date-time (e.g. 2026-09-29T18:45:00Z; without an offset it is local time) or a plain date (YYYY-MM-DD), which is stored as noon local time on that day so time-zone conversion cannot shift it to the previous day (today is clamped to now). Unparseable values and future times are rejected without calling Mealie. Mealie only moves a recipe's lastMade forward: a timestamp older than the current lastMade is accepted but leaves it unchanged.",
       "descriptionSource": "'Records when a recipe was last made. Without `timestamp` it records now. `timestamp` is an ISO 8601 date-time ' +\n    '(e.g. 2026-09-29T18:45:00Z; without an offset it is local time) or a plain date (YYYY-MM-DD), which is stored ' +\n    'as noon local time on that day so time-zone conversion cannot shift it to the previous day (today is clamped ' +\n    'to now). Unparseable values and future times are rejected without calling Mealie. Mealie only moves a recipe\\'s ' +\n    'lastMade forward: a timestamp older than the current lastMade is accepted but leaves it unchanged.'",
@@ -3252,8 +3252,34 @@
         "additionalProperties": false
       },
       "runtimeOutputSchema": null,
-      "runtimeExamples": [],
-      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeExamples": [
+        {
+          "file": "tests/fixtures/compatibility/cases/ratings_dates.json",
+          "index": 1,
+          "scenario": "mark_recipe_last_made.basic"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/ratings_dates.json",
+          "index": 8,
+          "scenario": "mark_recipe_last_made.plain_date"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/ratings_dates.json",
+          "index": 9,
+          "scenario": "mark_recipe_last_made.invalid_day"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/ratings_dates.json",
+          "index": 10,
+          "scenario": "mark_recipe_last_made.invalid_format"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/ratings_dates.json",
+          "index": 11,
+          "scenario": "mark_recipe_last_made.invalid_time"
+        }
+      ],
+      "runtimeCaptureStatus": "behavior_captured_and_python_verified",
       "runtimeOutputSchemaPresent": false
     },
     {
@@ -3386,7 +3412,7 @@
         "blobSha": "e918b9b3470dae48d07d54970c00d32cfd81beac",
         "url": "https://github.com/timo-reymann/mealie-mcp-server/blob/d027e1b4a314d781a322f1f91e37840f01464d77/src/tools/recipes.ts#L1194"
       },
-      "migrationStatus": "inventoried_static_not_implemented",
+      "migrationStatus": "implemented_contract_verified",
       "effect": "write",
       "description": "Sets the rating and/or favorite flag of a recipe for the user behind the API key. The rating is per user; the recipe's own `rating` field is the aggregate over all users (with a single rater they are equal). rating is ${RECIPE_RATING_MIN}–${RECIPE_RATING_MAX} in steps of ${RECIPE_RATING_STEP} (Mealie itself does not validate the range); null clears the caller's rating (stored as 0, reported as null); omit it to leave the rating unchanged. isFavorite alone changes only the favorite flag. At least one of the two is required. Returns { userRating: { recipeId, rating, isFavorite }, recipeRating } read back after the update.",
       "descriptionSource": "'Sets the rating and/or favorite flag of a recipe for the user behind the API key. The rating is per user; ' +\n      'the recipe\\'s own `rating` field is the aggregate over all users (with a single rater they are equal). ' +\n      `rating is ${RECIPE_RATING_MIN}–${RECIPE_RATING_MAX} in steps of ${RECIPE_RATING_STEP} (Mealie itself does not validate the range); ` +\n      'null clears the caller\\'s rating (stored as 0, reported as null); omit it to leave the rating unchanged. ' +\n      'isFavorite alone changes only the favorite flag. At least one of the two is required. ' +\n      'Returns { userRating: { recipeId, rating, isFavorite }, recipeRating } read back after the update.'",
@@ -3444,8 +3470,44 @@
         "additionalProperties": false
       },
       "runtimeOutputSchema": null,
-      "runtimeExamples": [],
-      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeExamples": [
+        {
+          "file": "tests/fixtures/compatibility/cases/ratings_dates.json",
+          "index": 0,
+          "scenario": "set_recipe_rating.basic"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/ratings_dates.json",
+          "index": 2,
+          "scenario": "set_recipe_rating.clear"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/ratings_dates.json",
+          "index": 3,
+          "scenario": "set_recipe_rating.favorite_only"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/ratings_dates.json",
+          "index": 4,
+          "scenario": "set_recipe_rating.min"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/ratings_dates.json",
+          "index": 5,
+          "scenario": "set_recipe_rating.max"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/ratings_dates.json",
+          "index": 6,
+          "scenario": "set_recipe_rating.no_fields"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/ratings_dates.json",
+          "index": 7,
+          "scenario": "set_recipe_rating.missing_user_id"
+        }
+      ],
+      "runtimeCaptureStatus": "behavior_captured_and_python_verified",
       "runtimeOutputSchemaPresent": false
     },
     {

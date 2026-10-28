@@ -10,7 +10,7 @@
 
 **Spec:** [Diseño completo](../specs/2026-10-27-python-migration-design.md). Leer también [inventario](../../migration/compatibility-inventory.md) e [inventario JSON](../../migration/compatibility-inventory.json).
 
-Fecha: 2026-10-27. Estado: implementación autorizada; P01..P18 verificadas y P19 en curso. Ver implementation-state.json para la evidencia. No se ha publicado ni desplegado un endpoint público.
+Fecha: 2026-10-27. Estado: implementación autorizada; P01..P19 verificadas y P20 en curso. Ver implementation-state.json para la evidencia. No se ha publicado ni desplegado un endpoint público.
 
 ## Global Constraints
 
@@ -519,7 +519,7 @@ uv run pytest tests/unit/test_safe_download.py tests/unit/test_recipe_image.py t
 <a id="p19"></a>
 ### P19: Migrar valoraciones, favoritos y fechas
 
-**Depende de:** P18. **Estado:** pendiente; ver registro de ejecución.
+**Depende de:** P18. **Estado:** verificada; ver registro de ejecución.
 
 **Archivos:** `src/mealie_mcp_server/mealie/api/users.py`, `src/mealie_mcp_server/services/recipe_rating.py`, `src/mealie_mcp_server/services/last_made.py`, `src/mealie_mcp_server/tools/recipes.py`, `tests/fixtures/compatibility/cases/ratings_dates.json`.
 **Tests:** `tests/unit/test_recipe_rating.py`, `tests/unit/test_last_made.py`, `tests/contracts/test_ratings_dates.py`.
@@ -528,17 +528,17 @@ uv run pytest tests/unit/test_safe_download.py tests/unit/test_recipe_image.py t
 
 **Herramientas (2):** `set_recipe_rating`, `mark_recipe_last_made`.
 
-- [ ] **1. Añadir las pruebas antes del código funcional.** test_rating_half_steps_0_5_to5_and_null_to_zero; test_favorite_only_preserves_rating; test_failed_self_lookup_not_cached; test_two_clients_do_not_share_user. test_date_noon_local_today_clamped_future_rejected; test_dst_madrid_and_utc_roundtrip; timestamp omitido=ahora, null sigue rechazado por input schema si original lo rechaza.
-- [ ] **2. Ejecutar el subconjunto indicado y observar RED.** El fallo esperado es el comportamiento/handler aún ausente o incorrecto; si falta infraestructura del harness, arreglarla antes de tomar el fallo como evidencia.
-- [ ] **3. Implementar las interfaces de esta tarea y sus fixtures.** Reutilizar los contratos anteriores; preservar los valores del diseño y el inventario. 2 herramientas; cache por credenciales y zona explícita, lectura final de rating y agregado como original.
+- [x] **1. Añadir las pruebas antes del código funcional.** test_rating_half_steps_0_5_to5_and_null_to_zero; test_favorite_only_preserves_rating; test_failed_self_lookup_not_cached; test_two_clients_do_not_share_user. test_date_noon_local_today_clamped_future_rejected; test_dst_madrid_and_utc_roundtrip; timestamp omitido=ahora, null sigue rechazado por input schema si original lo rechaza.
+- [x] **2. Ejecutar el subconjunto indicado y observar RED.** El fallo esperado es el comportamiento/handler aún ausente o incorrecto; si falta infraestructura del harness, arreglarla antes de tomar el fallo como evidencia.
+- [x] **3. Implementar las interfaces de esta tarea y sus fixtures.** Reutilizar los contratos anteriores; preservar los valores del diseño y el inventario. 2 herramientas; cache por credenciales y zona explícita, lectura final de rating y agregado como original.
 
-- [ ] **4. Verificar el resultado de esta tarea.** Ejecutar dentro del Dev Container; salida0 y todas las aserciones indicadas en verde. Para P01 el launcher y el contenedor auxiliar son la excepción de bootstrap explicada arriba.
+- [x] **4. Verificar el resultado de esta tarea.** Ejecutar dentro del Dev Container; salida0 y todas las aserciones indicadas en verde. Para P01 el launcher y el contenedor auxiliar son la excepción de bootstrap explicada arriba.
 
 ```bash
 uv run pytest tests/unit/test_recipe_rating.py tests/unit/test_last_made.py tests/contracts/test_ratings_dates.py -q
 ```
 
-- [ ] **5. Revisar, documentar y cerrar.** Comprobar el criterio de salida anterior y el diff; no ampliar la suite sin una nueva causa. Actualizar estado, diferencias si las hay y evidencia con comando/resultado/entorno. Commit de implementación sugerido: `feat: port user ratings and local date semantics`. Registrar su SHA en un commit documental posterior si hace falta; no intentar incluir el hash de un commit en sí mismo.
+- [x] **5. Revisar, documentar y cerrar.** Comprobar el criterio de salida anterior y el diff; no ampliar la suite sin una nueva causa. Actualizar estado, diferencias si las hay y evidencia con comando/resultado/entorno. Commit de implementación sugerido: `feat: port user ratings and local date semantics`. Registrar su SHA en un commit documental posterior si hace falta; no intentar incluir el hash de un commit en sí mismo.
 
 <a id="p20"></a>
 ### P20: Cerrar catálogo, prompt e instrucciones

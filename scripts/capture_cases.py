@@ -15,7 +15,7 @@ from tests.support.contracts import FIXTURES, assert_requests_match
 from tests.support.fake_mealie import FakeMealie
 
 
-async def capture(family: str, overwrite: bool) -> None:
+async def capture(family: str, overwrite: bool, fresh_client_per_case: bool = False) -> None:
     path = FIXTURES / "cases" / f"{family}.json"
     cases = json.loads(path.read_text())
     if not overwrite and any(case.get("expected_result") is not None for case in cases):
@@ -40,24 +40,33 @@ async def capture(family: str, overwrite: bool) -> None:
                 "dist/index.js",
             ],
         )
-        async with Client(parameters, mode="legacy", read_timeout_seconds=30) as client:
+
+        async def capture_one(client, case):
+            start = len(fake.recorded_requests)
+            try:
+                result = await client.call_tool(case["tool"], case["arguments"])
+                case["expected_result"] = dump(result)
+            except Exception as error:
+                if case.get("documented_difference") != "D07":
+                    raise
+                case["expected_result"] = {
+                    "protocolError": type(error).__name__,
+                    "message": str(error),
+                }
+            assert_requests_match(
+                fake.recorded_requests[start:],
+                case["expected_requests"],
+                case.get("request_order", "sequential"),
+            )
+
+        if fresh_client_per_case:
             for case in cases:
-                start = len(fake.recorded_requests)
-                try:
-                    result = await client.call_tool(case["tool"], case["arguments"])
-                    case["expected_result"] = dump(result)
-                except Exception as error:
-                    if case.get("documented_difference") != "D07":
-                        raise
-                    case["expected_result"] = {
-                        "protocolError": type(error).__name__,
-                        "message": str(error),
-                    }
-                assert_requests_match(
-                    fake.recorded_requests[start:],
-                    case["expected_requests"],
-                    case.get("request_order", "sequential"),
-                )
+                async with Client(parameters, mode="legacy", read_timeout_seconds=30) as client:
+                    await capture_one(client, case)
+        else:
+            async with Client(parameters, mode="legacy", read_timeout_seconds=30) as client:
+                for case in cases:
+                    await capture_one(client, case)
     path.write_text(json.dumps(cases, ensure_ascii=False, indent=2) + "\n")
     print(json.dumps({"family": family, "cases": len(cases), "commit": UPSTREAM_COMMIT}))
 
@@ -66,8 +75,9 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("family")
     parser.add_argument("--overwrite", action="store_true")
+    parser.add_argument("--fresh-client-per-case", action="store_true")
     args = parser.parse_args()
-    asyncio.run(capture(args.family, args.overwrite))
+    asyncio.run(capture(args.family, args.overwrite, args.fresh_client_per_case))
 
 
 if __name__ == "__main__":

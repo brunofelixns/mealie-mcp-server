@@ -1,0 +1,374 @@
+[
+  {
+    "zone": "UTC",
+    "input": null,
+    "now": "2026-10-28T06:00:00.987Z",
+    "label": "UTC-0"
+  },
+  {
+    "zone": "UTC",
+    "input": "2026-01-10",
+    "now": "2026-10-28T06:00:00.987Z",
+    "label": "UTC-1"
+  },
+  {
+    "zone": "UTC",
+    "input": "2026-10-28",
+    "now": "2026-10-28T06:00:00.987Z",
+    "label": "UTC-2"
+  },
+  {
+    "zone": "UTC",
+    "input": "2026-10-29",
+    "now": "2026-10-28T06:00:00.987Z",
+    "label": "UTC-3"
+  },
+  {
+    "zone": "UTC",
+    "input": "2026-10-28T22:00:00Z",
+    "now": "2026-10-28T06:00:00.987Z",
+    "label": "UTC-4"
+  },
+  {
+    "zone": "UTC",
+    "input": "March 5",
+    "now": "2026-10-28T06:00:00.987Z",
+    "label": "UTC-5"
+  },
+  {
+    "zone": "UTC",
+    "input": "2026-02-30",
+    "now": "2026-10-28T06:00:00.987Z",
+    "label": "UTC-6"
+  },
+  {
+    "zone": "UTC",
+    "input": "2026-01-10T25:00:00Z",
+    "now": "2026-10-28T06:00:00.987Z",
+    "label": "UTC-7"
+  },
+  {
+    "zone": "UTC",
+    "input": "2026-01-10T10:30",
+    "now": "2026-10-28T06:00:00.987Z",
+    "label": "UTC-8"
+  },
+  {
+    "zone": "UTC",
+    "input": "2026-01-10T10:30:00+02:00",
+    "now": "2026-10-28T06:00:00.987Z",
+    "label": "UTC-9"
+  },
+  {
+    "zone": "UTC",
+    "input": "2026-03-29T02:30:00",
+    "now": "2026-10-28T06:00:00.987Z",
+    "label": "UTC-10"
+  },
+  {
+    "zone": "UTC",
+    "input": "2026-10-25T02:30:00",
+    "now": "2026-10-28T06:00:00.987Z",
+    "label": "UTC-11"
+  },
+  {
+    "zone": "UTC",
+    "input": "2026-02-30T10:00:00Z",
+    "now": "2026-10-28T06:00:00.987Z",
+    "label": "UTC-12"
+  },
+  {
+    "zone": "UTC",
+    "input": "2026-01-10T24:00:00Z",
+    "now": "2026-10-28T06:00:00.987Z",
+    "label": "UTC-13"
+  },
+  {
+    "zone": "UTC",
+    "input": "2026-01-10T24:00:00.0001Z",
+    "now": "2026-10-28T06:00:00.987Z",
+    "label": "UTC-14"
+  },
+  {
+    "zone": "UTC",
+    "input": "2026-01-10T10:00:00.123456Z",
+    "now": "2026-10-28T06:00:00.987Z",
+    "label": "UTC-15"
+  },
+  {
+    "zone": "UTC",
+    "input": "2026-01-10T10:00:60Z",
+    "now": "2026-10-28T06:00:00.987Z",
+    "label": "UTC-16"
+  },
+  {
+    "zone": "UTC",
+    "input": "2026-01-10\n",
+    "now": "2026-10-28T06:00:00.987Z",
+    "label": "UTC-17"
+  },
+  {
+    "zone": "UTC",
+    "input": "2026-01-10\r\n",
+    "now": "2026-10-28T06:00:00.987Z",
+    "label": "UTC-18"
+  },
+  {
+    "zone": "UTC",
+    "input": "2026-01-10 ",
+    "now": "2026-10-28T06:00:00.987Z",
+    "label": "UTC-19"
+  },
+  {
+    "zone": "UTC",
+    "input": "2026-01-10T10:00:00Z\n",
+    "now": "2026-10-28T06:00:00.987Z",
+    "label": "UTC-20"
+  },
+  {
+    "zone": "UTC",
+    "input": "0000-01-01",
+    "now": "2026-10-28T06:00:00.987Z",
+    "label": "UTC-21"
+  },
+  {
+    "zone": "UTC",
+    "input": "0099-01-01",
+    "now": "2026-10-28T06:00:00.987Z",
+    "label": "UTC-22"
+  },
+  {
+    "zone": "UTC",
+    "input": "0100-01-01",
+    "now": "2026-10-28T06:00:00.987Z",
+    "label": "UTC-23"
+  },
+  {
+    "zone": "UTC",
+    "input": "0000-01-01T00:00:00Z",
+    "now": "2026-10-28T06:00:00.987Z",
+    "label": "UTC-24"
+  },
+  {
+    "zone": "UTC",
+    "input": "0000-01-01T00:00:00+02:00",
+    "now": "2026-10-28T06:00:00.987Z",
+    "label": "UTC-25"
+  },
+  {
+    "zone": "UTC",
+    "input": "0000-01-01T00:00:00",
+    "now": "2026-10-28T06:00:00.987Z",
+    "label": "UTC-26"
+  },
+  {
+    "zone": "UTC",
+    "input": "0099-01-01T00:00:00",
+    "now": "2026-10-28T06:00:00.987Z",
+    "label": "UTC-27"
+  },
+  {
+    "zone": "UTC",
+    "input": "2026-01-10T10:00:00+24:00",
+    "now": "2026-10-28T06:00:00.987Z",
+    "label": "UTC-28"
+  },
+  {
+    "zone": "UTC",
+    "input": "2026-13-01T10:00:00",
+    "now": "2026-10-28T06:00:00.987Z",
+    "label": "UTC-29"
+  },
+  {
+    "zone": "UTC",
+    "input": "2026-01-32T10:00:00",
+    "now": "2026-10-28T06:00:00.987Z",
+    "label": "UTC-30"
+  },
+  {
+    "zone": "Europe/Madrid",
+    "input": null,
+    "now": "2026-10-28T06:00:00.987Z",
+    "label": "Europe/Madrid-0"
+  },
+  {
+    "zone": "Europe/Madrid",
+    "input": "2026-01-10",
+    "now": "2026-10-28T06:00:00.987Z",
+    "label": "Europe/Madrid-1"
+  },
+  {
+    "zone": "Europe/Madrid",
+    "input": "2026-10-28",
+    "now": "2026-10-28T06:00:00.987Z",
+    "label": "Europe/Madrid-2"
+  },
+  {
+    "zone": "Europe/Madrid",
+    "input": "2026-10-29",
+    "now": "2026-10-28T06:00:00.987Z",
+    "label": "Europe/Madrid-3"
+  },
+  {
+    "zone": "Europe/Madrid",
+    "input": "2026-10-28T22:00:00Z",
+    "now": "2026-10-28T06:00:00.987Z",
+    "label": "Europe/Madrid-4"
+  },
+  {
+    "zone": "Europe/Madrid",
+    "input": "March 5",
+    "now": "2026-10-28T06:00:00.987Z",
+    "label": "Europe/Madrid-5"
+  },
+  {
+    "zone": "Europe/Madrid",
+    "input": "2026-02-30",
+    "now": "2026-10-28T06:00:00.987Z",
+    "label": "Europe/Madrid-6"
+  },
+  {
+    "zone": "Europe/Madrid",
+    "input": "2026-01-10T25:00:00Z",
+    "now": "2026-10-28T06:00:00.987Z",
+    "label": "Europe/Madrid-7"
+  },
+  {
+    "zone": "Europe/Madrid",
+    "input": "2026-01-10T10:30",
+    "now": "2026-10-28T06:00:00.987Z",
+    "label": "Europe/Madrid-8"
+  },
+  {
+    "zone": "Europe/Madrid",
+    "input": "2026-01-10T10:30:00+02:00",
+    "now": "2026-10-28T06:00:00.987Z",
+    "label": "Europe/Madrid-9"
+  },
+  {
+    "zone": "Europe/Madrid",
+    "input": "2026-03-29T02:30:00",
+    "now": "2026-10-28T06:00:00.987Z",
+    "label": "Europe/Madrid-10"
+  },
+  {
+    "zone": "Europe/Madrid",
+    "input": "2026-10-25T02:30:00",
+    "now": "2026-10-28T06:00:00.987Z",
+    "label": "Europe/Madrid-11"
+  },
+  {
+    "zone": "Europe/Madrid",
+    "input": "2026-02-30T10:00:00Z",
+    "now": "2026-10-28T06:00:00.987Z",
+    "label": "Europe/Madrid-12"
+  },
+  {
+    "zone": "Europe/Madrid",
+    "input": "2026-01-10T24:00:00Z",
+    "now": "2026-10-28T06:00:00.987Z",
+    "label": "Europe/Madrid-13"
+  },
+  {
+    "zone": "Europe/Madrid",
+    "input": "2026-01-10T24:00:00.0001Z",
+    "now": "2026-10-28T06:00:00.987Z",
+    "label": "Europe/Madrid-14"
+  },
+  {
+    "zone": "Europe/Madrid",
+    "input": "2026-01-10T10:00:00.123456Z",
+    "now": "2026-10-28T06:00:00.987Z",
+    "label": "Europe/Madrid-15"
+  },
+  {
+    "zone": "Europe/Madrid",
+    "input": "2026-01-10T10:00:60Z",
+    "now": "2026-10-28T06:00:00.987Z",
+    "label": "Europe/Madrid-16"
+  },
+  {
+    "zone": "Europe/Madrid",
+    "input": "2026-01-10\n",
+    "now": "2026-10-28T06:00:00.987Z",
+    "label": "Europe/Madrid-17"
+  },
+  {
+    "zone": "Europe/Madrid",
+    "input": "2026-01-10\r\n",
+    "now": "2026-10-28T06:00:00.987Z",
+    "label": "Europe/Madrid-18"
+  },
+  {
+    "zone": "Europe/Madrid",
+    "input": "2026-01-10 ",
+    "now": "2026-10-28T06:00:00.987Z",
+    "label": "Europe/Madrid-19"
+  },
+  {
+    "zone": "Europe/Madrid",
+    "input": "2026-01-10T10:00:00Z\n",
+    "now": "2026-10-28T06:00:00.987Z",
+    "label": "Europe/Madrid-20"
+  },
+  {
+    "zone": "Europe/Madrid",
+    "input": "0000-01-01",
+    "now": "2026-10-28T06:00:00.987Z",
+    "label": "Europe/Madrid-21"
+  },
+  {
+    "zone": "Europe/Madrid",
+    "input": "0099-01-01",
+    "now": "2026-10-28T06:00:00.987Z",
+    "label": "Europe/Madrid-22"
+  },
+  {
+    "zone": "Europe/Madrid",
+    "input": "0100-01-01",
+    "now": "2026-10-28T06:00:00.987Z",
+    "label": "Europe/Madrid-23"
+  },
+  {
+    "zone": "Europe/Madrid",
+    "input": "0000-01-01T00:00:00Z",
+    "now": "2026-10-28T06:00:00.987Z",
+    "label": "Europe/Madrid-24"
+  },
+  {
+    "zone": "Europe/Madrid",
+    "input": "0000-01-01T00:00:00+02:00",
+    "now": "2026-10-28T06:00:00.987Z",
+    "label": "Europe/Madrid-25"
+  },
+  {
+    "zone": "Europe/Madrid",
+    "input": "0000-01-01T00:00:00",
+    "now": "2026-10-28T06:00:00.987Z",
+    "label": "Europe/Madrid-26"
+  },
+  {
+    "zone": "Europe/Madrid",
+    "input": "0099-01-01T00:00:00",
+    "now": "2026-10-28T06:00:00.987Z",
+    "label": "Europe/Madrid-27"
+  },
+  {
+    "zone": "Europe/Madrid",
+    "input": "2026-01-10T10:00:00+24:00",
+    "now": "2026-10-28T06:00:00.987Z",
+    "label": "Europe/Madrid-28"
+  },
+  {
+    "zone": "Europe/Madrid",
+    "input": "2026-13-01T10:00:00",
+    "now": "2026-10-28T06:00:00.987Z",
+    "label": "Europe/Madrid-29"
+  },
+  {
+    "zone": "Europe/Madrid",
+    "input": "2026-01-32T10:00:00",
+    "now": "2026-10-28T06:00:00.987Z",
+    "label": "Europe/Madrid-30"
+  }
+]

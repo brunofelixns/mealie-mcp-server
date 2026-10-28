@@ -14020,5 +14020,318 @@
         }
       }
     ]
+  },
+  "set_recipe_rating.basic": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/users/self",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "u1",
+          "extra": true
+        },
+        "status": 200
+      },
+      {
+        "method": "POST",
+        "path": "/api/users/u1/ratings/soup",
+        "query": {},
+        "body": {
+          "rating": 4.5,
+          "isFavorite": false
+        },
+        "response": null,
+        "status": 204
+      },
+      {
+        "method": "GET",
+        "path": "/api/recipes/soup",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "r1",
+          "rating": 4.5
+        },
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/api/users/self/ratings/r1",
+        "query": {},
+        "body": null,
+        "response": {
+          "recipeId": "r1",
+          "rating": 4.5,
+          "isFavorite": false,
+          "extra": {
+            "keep": true
+          }
+        },
+        "status": 200
+      }
+    ]
+  },
+  "mark_recipe_last_made.basic": {
+    "requests": [
+      {
+        "method": "PATCH",
+        "path": "/api/recipes/soup/last-made",
+        "query": {},
+        "body": {
+          "timestamp": "2026-01-10T16:45:00.000Z"
+        },
+        "response": {
+          "slug": "soup",
+          "lastMade": "2026-01-10T16:45:00.000Z"
+        },
+        "status": 200
+      }
+    ]
+  },
+  "set_recipe_rating.clear": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/users/self",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "u1",
+          "extra": true
+        },
+        "status": 200
+      },
+      {
+        "method": "POST",
+        "path": "/api/users/u1/ratings/soup",
+        "query": {},
+        "body": {
+          "rating": 0
+        },
+        "response": null,
+        "status": 204
+      },
+      {
+        "method": "GET",
+        "path": "/api/recipes/soup",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "r1",
+          "rating": null
+        },
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/api/users/self/ratings/r1",
+        "query": {},
+        "body": null,
+        "response": {
+          "recipeId": "r1",
+          "rating": 0,
+          "isFavorite": false,
+          "extra": {
+            "keep": true
+          }
+        },
+        "status": 200
+      }
+    ]
+  },
+  "set_recipe_rating.favorite_only": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/users/self",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "u1",
+          "extra": true
+        },
+        "status": 200
+      },
+      {
+        "method": "POST",
+        "path": "/api/users/u1/ratings/soup",
+        "query": {},
+        "body": {
+          "isFavorite": false
+        },
+        "response": null,
+        "status": 204
+      },
+      {
+        "method": "GET",
+        "path": "/api/recipes/soup",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "r1",
+          "rating": 3.5
+        },
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/api/users/self/ratings/r1",
+        "query": {},
+        "body": null,
+        "response": {
+          "recipeId": "r1",
+          "rating": 3.5,
+          "isFavorite": false,
+          "extra": {
+            "keep": true
+          }
+        },
+        "status": 200
+      }
+    ]
+  },
+  "set_recipe_rating.min": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/users/self",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "u1",
+          "extra": true
+        },
+        "status": 200
+      },
+      {
+        "method": "POST",
+        "path": "/api/users/u1/ratings/soup",
+        "query": {},
+        "body": {
+          "rating": 0.5
+        },
+        "response": null,
+        "status": 204
+      },
+      {
+        "method": "GET",
+        "path": "/api/recipes/soup",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "r1",
+          "rating": 0.5
+        },
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/api/users/self/ratings/r1",
+        "query": {},
+        "body": null,
+        "response": {
+          "recipeId": "r1",
+          "rating": 0.5,
+          "isFavorite": false,
+          "extra": {
+            "keep": true
+          }
+        },
+        "status": 200
+      }
+    ]
+  },
+  "set_recipe_rating.max": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/users/self",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "u1",
+          "extra": true
+        },
+        "status": 200
+      },
+      {
+        "method": "POST",
+        "path": "/api/users/u1/ratings/soup",
+        "query": {},
+        "body": {
+          "rating": 5
+        },
+        "response": null,
+        "status": 204
+      },
+      {
+        "method": "GET",
+        "path": "/api/recipes/soup",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "r1",
+          "rating": 5
+        },
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/api/users/self/ratings/r1",
+        "query": {},
+        "body": null,
+        "response": {
+          "recipeId": "r1",
+          "rating": 5,
+          "isFavorite": false,
+          "extra": {
+            "keep": true
+          }
+        },
+        "status": 200
+      }
+    ]
+  },
+  "set_recipe_rating.no_fields": {
+    "requests": []
+  },
+  "set_recipe_rating.missing_user_id": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/users/self",
+        "query": {},
+        "body": null,
+        "response": {},
+        "status": 200
+      }
+    ]
+  },
+  "mark_recipe_last_made.plain_date": {
+    "requests": [
+      {
+        "method": "PATCH",
+        "path": "/api/recipes/soup/last-made",
+        "query": {},
+        "body": {
+          "timestamp": "2026-01-10T12:00:00.000Z"
+        },
+        "response": {
+          "lastMade": "2026-01-10T12:00:00.000Z"
+        },
+        "status": 200
+      }
+    ]
+  },
+  "mark_recipe_last_made.invalid_day": {
+    "requests": []
+  },
+  "mark_recipe_last_made.invalid_format": {
+    "requests": []
+  },
+  "mark_recipe_last_made.invalid_time": {
+    "requests": []
   }
 }

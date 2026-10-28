@@ -1,0 +1,372 @@
+[
+  {
+    "tool": "set_recipe_rating",
+    "arguments": {
+      "slug": "soup",
+      "rating": 4.5,
+      "isFavorite": false
+    },
+    "scenario": "set_recipe_rating.basic",
+    "expected_requests": [
+      {
+        "method": "GET",
+        "path": "/api/users/self",
+        "query": {},
+        "body": null
+      },
+      {
+        "method": "POST",
+        "path": "/api/users/u1/ratings/soup",
+        "query": {},
+        "body": {
+          "rating": 4.5,
+          "isFavorite": false
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/api/recipes/soup",
+        "query": {},
+        "body": null
+      },
+      {
+        "method": "GET",
+        "path": "/api/users/self/ratings/r1",
+        "query": {},
+        "body": null
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"userRating\":{\"recipeId\":\"r1\",\"rating\":4.5,\"isFavorite\":false,\"extra\":{\"keep\":true}},\"recipeRating\":4.5}"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "mark_recipe_last_made",
+    "arguments": {
+      "slug": "soup",
+      "timestamp": "2026-01-10T18:45:00+02:00"
+    },
+    "scenario": "mark_recipe_last_made.basic",
+    "expected_requests": [
+      {
+        "method": "PATCH",
+        "path": "/api/recipes/soup/last-made",
+        "query": {},
+        "body": {
+          "timestamp": "2026-01-10T16:45:00.000Z"
+        }
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"slug\":\"soup\",\"lastMade\":\"2026-01-10T16:45:00.000Z\"}"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "set_recipe_rating",
+    "arguments": {
+      "slug": "soup",
+      "rating": null
+    },
+    "scenario": "set_recipe_rating.clear",
+    "expected_requests": [
+      {
+        "method": "GET",
+        "path": "/api/users/self",
+        "query": {},
+        "body": null
+      },
+      {
+        "method": "POST",
+        "path": "/api/users/u1/ratings/soup",
+        "query": {},
+        "body": {
+          "rating": 0
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/api/recipes/soup",
+        "query": {},
+        "body": null
+      },
+      {
+        "method": "GET",
+        "path": "/api/users/self/ratings/r1",
+        "query": {},
+        "body": null
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"userRating\":{\"recipeId\":\"r1\",\"rating\":null,\"isFavorite\":false,\"extra\":{\"keep\":true}},\"recipeRating\":null}"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "set_recipe_rating",
+    "arguments": {
+      "slug": "soup",
+      "isFavorite": false
+    },
+    "scenario": "set_recipe_rating.favorite_only",
+    "expected_requests": [
+      {
+        "method": "GET",
+        "path": "/api/users/self",
+        "query": {},
+        "body": null
+      },
+      {
+        "method": "POST",
+        "path": "/api/users/u1/ratings/soup",
+        "query": {},
+        "body": {
+          "isFavorite": false
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/api/recipes/soup",
+        "query": {},
+        "body": null
+      },
+      {
+        "method": "GET",
+        "path": "/api/users/self/ratings/r1",
+        "query": {},
+        "body": null
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"userRating\":{\"recipeId\":\"r1\",\"rating\":3.5,\"isFavorite\":false,\"extra\":{\"keep\":true}},\"recipeRating\":3.5}"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "set_recipe_rating",
+    "arguments": {
+      "slug": "soup",
+      "rating": 0.5
+    },
+    "scenario": "set_recipe_rating.min",
+    "expected_requests": [
+      {
+        "method": "GET",
+        "path": "/api/users/self",
+        "query": {},
+        "body": null
+      },
+      {
+        "method": "POST",
+        "path": "/api/users/u1/ratings/soup",
+        "query": {},
+        "body": {
+          "rating": 0.5
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/api/recipes/soup",
+        "query": {},
+        "body": null
+      },
+      {
+        "method": "GET",
+        "path": "/api/users/self/ratings/r1",
+        "query": {},
+        "body": null
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"userRating\":{\"recipeId\":\"r1\",\"rating\":0.5,\"isFavorite\":false,\"extra\":{\"keep\":true}},\"recipeRating\":0.5}"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "set_recipe_rating",
+    "arguments": {
+      "slug": "soup",
+      "rating": 5
+    },
+    "scenario": "set_recipe_rating.max",
+    "expected_requests": [
+      {
+        "method": "GET",
+        "path": "/api/users/self",
+        "query": {},
+        "body": null
+      },
+      {
+        "method": "POST",
+        "path": "/api/users/u1/ratings/soup",
+        "query": {},
+        "body": {
+          "rating": 5
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/api/recipes/soup",
+        "query": {},
+        "body": null
+      },
+      {
+        "method": "GET",
+        "path": "/api/users/self/ratings/r1",
+        "query": {},
+        "body": null
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"userRating\":{\"recipeId\":\"r1\",\"rating\":5,\"isFavorite\":false,\"extra\":{\"keep\":true}},\"recipeRating\":5}"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "set_recipe_rating",
+    "arguments": {
+      "slug": "soup"
+    },
+    "scenario": "set_recipe_rating.no_fields",
+    "expected_requests": [],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "Provide at least one of rating or isFavorite."
+        }
+      ],
+      "isError": true
+    }
+  },
+  {
+    "tool": "set_recipe_rating",
+    "arguments": {
+      "slug": "soup",
+      "isFavorite": true
+    },
+    "scenario": "set_recipe_rating.missing_user_id",
+    "expected_requests": [
+      {
+        "method": "GET",
+        "path": "/api/users/self",
+        "query": {},
+        "body": null
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "GET /api/users/self returned no user id."
+        }
+      ],
+      "isError": true
+    }
+  },
+  {
+    "tool": "mark_recipe_last_made",
+    "arguments": {
+      "slug": "soup",
+      "timestamp": "2026-01-10"
+    },
+    "scenario": "mark_recipe_last_made.plain_date",
+    "expected_requests": [
+      {
+        "method": "PATCH",
+        "path": "/api/recipes/soup/last-made",
+        "query": {},
+        "body": {
+          "timestamp": "2026-01-10T12:00:00.000Z"
+        }
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"lastMade\":\"2026-01-10T12:00:00.000Z\"}"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "mark_recipe_last_made",
+    "arguments": {
+      "slug": "soup",
+      "timestamp": "2026-02-30"
+    },
+    "scenario": "mark_recipe_last_made.invalid_day",
+    "expected_requests": [],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "Invalid timestamp \"2026-02-30\": expected an ISO 8601 date-time (2026-09-29T18:45:00Z) or a date (YYYY-MM-DD)."
+        }
+      ],
+      "isError": true
+    }
+  },
+  {
+    "tool": "mark_recipe_last_made",
+    "arguments": {
+      "slug": "soup",
+      "timestamp": "March 5"
+    },
+    "scenario": "mark_recipe_last_made.invalid_format",
+    "expected_requests": [],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "Invalid timestamp \"March 5\": expected an ISO 8601 date-time (2026-09-29T18:45:00Z) or a date (YYYY-MM-DD)."
+        }
+      ],
+      "isError": true
+    }
+  },
+  {
+    "tool": "mark_recipe_last_made",
+    "arguments": {
+      "slug": "soup",
+      "timestamp": "2026-01-10T25:00:00Z"
+    },
+    "scenario": "mark_recipe_last_made.invalid_time",
+    "expected_requests": [],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "Invalid timestamp \"2026-01-10T25:00:00Z\": expected an ISO 8601 date-time (2026-09-29T18:45:00Z) or a date (YYYY-MM-DD)."
+        }
+      ],
+      "isError": true
+    }
+  }
+]

@@ -1,4 +1,6 @@
+from datetime import UTC, datetime
 from typing import TYPE_CHECKING
+from zoneinfo import ZoneInfo
 
 from fastmcp import FastMCP
 from mcp.types import CallToolResult
@@ -6,6 +8,10 @@ from pydantic import JsonValue
 
 from mealie_mcp_server.mealie.api import recipes as api
 from mealie_mcp_server.models.common import provided_fields
+from mealie_mcp_server.models.inputs.ratings_dates import (
+    MarkRecipeLastMadeInput,
+    SetRecipeRatingInput,
+)
 from mealie_mcp_server.models.inputs.recipe_image import (
     SetRecipeImageFromFileInput,
     SetRecipeImageFromUrlInput,
@@ -40,8 +46,10 @@ from mealie_mcp_server.services import (
     recipe_equipment,
     recipe_ingredients,
     recipe_instructions,
+    recipe_rating,
     recipe_taxonomy,
 )
+from mealie_mcp_server.services.last_made import resolve_last_made_timestamp
 from mealie_mcp_server.services.taxonomy_resolution import resolve_taxonomy_filter
 from mealie_mcp_server.support import recipe_image
 from mealie_mcp_server.tools.contracts import register_contract_tool
@@ -331,4 +339,31 @@ def register_recipe_images(server: FastMCP) -> None:
         catalog["set_recipe_image_from_url"],
         SetRecipeImageFromUrlInput,
         set_recipe_image_from_url,
+    )
+
+
+async def set_recipe_rating(request: SetRecipeRatingInput, state: AppState) -> CallToolResult:
+    changes = provided_fields(request)
+    changes.pop("slug")
+    return success_result(
+        await recipe_rating.set_recipe_rating(state.client, request.slug, changes)
+    )
+
+
+async def mark_recipe_last_made(
+    request: MarkRecipeLastMadeInput, state: AppState
+) -> CallToolResult:
+    timestamp = resolve_last_made_timestamp(
+        request.timestamp, now=datetime.now(UTC), zone=ZoneInfo(state.settings.tz)
+    )
+    return success_result(await api.update_recipe_last_made(state.client, request.slug, timestamp))
+
+
+def register_ratings_dates(server: FastMCP) -> None:
+    catalog = definitions()
+    register_contract_tool(
+        server, catalog["set_recipe_rating"], SetRecipeRatingInput, set_recipe_rating
+    )
+    register_contract_tool(
+        server, catalog["mark_recipe_last_made"], MarkRecipeLastMadeInput, mark_recipe_last_made
     )

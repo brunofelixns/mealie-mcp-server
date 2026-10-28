@@ -648,7 +648,7 @@
           "tests": 693
         }
       ],
-      "commit": null
+      "commit": "a8582eec5ce887f5ee90a0e43613f9756c791a2d"
     },
     {
       "id": "P19",
@@ -656,7 +656,7 @@
       "dependsOn": [
         "P18"
       ],
-      "status": "in_progress",
+      "status": "verified",
       "tools": [
         "set_recipe_rating",
         "mark_recipe_last_made"
@@ -666,14 +666,29 @@
         "src/mealie_mcp_server/services/recipe_rating.py",
         "src/mealie_mcp_server/services/last_made.py",
         "src/mealie_mcp_server/tools/recipes.py",
-        "tests/fixtures/compatibility/cases/ratings_dates.json"
+        "tests/fixtures/compatibility/cases/ratings_dates.json",
+        "src/mealie_mcp_server/models/inputs/ratings_dates.py",
+        "src/mealie_mcp_server/mealie/client.py",
+        "src/mealie_mcp_server/mealie/api/recipes.py",
+        "src/mealie_mcp_server/tools/registry.py",
+        "scripts/capture_cases.py",
+        "scripts/capture_last_made.py",
+        "tests/reference/last-made-oracle.mjs",
+        "tests/fixtures/compatibility/last-made-inputs.json",
+        "tests/fixtures/compatibility/last-made-reference.json"
       ],
       "tests": [
         "tests/unit/test_recipe_rating.py",
         "tests/unit/test_last_made.py",
         "tests/contracts/test_ratings_dates.py"
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "report": "docs/migration/evidence/P19.md",
+          "result": "passed",
+          "tests": 787
+        }
+      ],
       "commit": null
     },
     {
@@ -682,7 +697,7 @@
       "dependsOn": [
         "P19"
       ],
-      "status": "not_started",
+      "status": "in_progress",
       "tools": [],
       "files": [
         "src/mealie_mcp_server/tools/registry.py",

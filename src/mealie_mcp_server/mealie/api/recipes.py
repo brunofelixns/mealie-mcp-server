@@ -84,3 +84,11 @@ async def set_recipe_image_from_url(client: MealieClient, slug: str, url: str) -
     return await client.request(
         "POST", "/api/recipes/" + encode_path_segment(slug, "slug") + "/image", json={"url": url}
     )
+
+
+async def update_recipe_last_made(client: MealieClient, slug: str, timestamp: str) -> JsonValue:
+    return await client.request(
+        "PATCH",
+        "/api/recipes/" + encode_path_segment(slug, "slug") + "/last-made",
+        json={"timestamp": timestamp},
+    )

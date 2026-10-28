@@ -1,5 +1,6 @@
 """Bounded, credential-scoped asynchronous access to Mealie."""
 
+import asyncio
 import json as jsonlib
 import math
 from collections.abc import Mapping
@@ -83,6 +84,7 @@ class MealieClient:
         self._transport = transport
         self._http: httpx.AsyncClient | None = None
         self._origin = _origin(httpx.URL(settings.mealie_base_url))
+        self.self_user_id_task: asyncio.Task[str] | None = None
 
     async def __aenter__(self) -> Self:
         if self._http is not None:
@@ -107,6 +109,10 @@ class MealieClient:
     ) -> None:
         if self._http is not None:
             try:
+                cached, self.self_user_id_task = self.self_user_id_task, None
+                if cached is not None and not cached.done():
+                    cached.cancel()
+                    await asyncio.gather(cached, return_exceptions=True)
                 await self._http.aclose()
             finally:
                 self._http = None

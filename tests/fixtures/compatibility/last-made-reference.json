@@ -1,0 +1,439 @@
+{
+  "upstreamCommit": "d027e1b4a314d781a322f1f91e37840f01464d77",
+  "cases": [
+    {
+      "zone": "UTC",
+      "input": null,
+      "now": "2026-10-28T06:00:00.987Z",
+      "label": "UTC-0",
+      "expected": "2026-10-28T06:00:00.987Z"
+    },
+    {
+      "zone": "UTC",
+      "input": "2026-01-10",
+      "now": "2026-10-28T06:00:00.987Z",
+      "label": "UTC-1",
+      "expected": "2026-01-10T12:00:00.000Z"
+    },
+    {
+      "zone": "UTC",
+      "input": "2026-10-28",
+      "now": "2026-10-28T06:00:00.987Z",
+      "label": "UTC-2",
+      "expected": "2026-10-28T06:00:00.987Z"
+    },
+    {
+      "zone": "UTC",
+      "input": "2026-10-29",
+      "now": "2026-10-28T06:00:00.987Z",
+      "label": "UTC-3",
+      "error": "Invalid timestamp \"2026-10-29\": last-made cannot be in the future."
+    },
+    {
+      "zone": "UTC",
+      "input": "2026-10-28T22:00:00Z",
+      "now": "2026-10-28T06:00:00.987Z",
+      "label": "UTC-4",
+      "error": "Invalid timestamp \"2026-10-28T22:00:00Z\": last-made cannot be in the future."
+    },
+    {
+      "zone": "UTC",
+      "input": "March 5",
+      "now": "2026-10-28T06:00:00.987Z",
+      "label": "UTC-5",
+      "error": "Invalid timestamp \"March 5\": expected an ISO 8601 date-time (2026-09-29T18:45:00Z) or a date (YYYY-MM-DD)."
+    },
+    {
+      "zone": "UTC",
+      "input": "2026-02-30",
+      "now": "2026-10-28T06:00:00.987Z",
+      "label": "UTC-6",
+      "error": "Invalid timestamp \"2026-02-30\": expected an ISO 8601 date-time (2026-09-29T18:45:00Z) or a date (YYYY-MM-DD)."
+    },
+    {
+      "zone": "UTC",
+      "input": "2026-01-10T25:00:00Z",
+      "now": "2026-10-28T06:00:00.987Z",
+      "label": "UTC-7",
+      "error": "Invalid timestamp \"2026-01-10T25:00:00Z\": expected an ISO 8601 date-time (2026-09-29T18:45:00Z) or a date (YYYY-MM-DD)."
+    },
+    {
+      "zone": "UTC",
+      "input": "2026-01-10T10:30",
+      "now": "2026-10-28T06:00:00.987Z",
+      "label": "UTC-8",
+      "expected": "2026-01-10T10:30:00.000Z"
+    },
+    {
+      "zone": "UTC",
+      "input": "2026-01-10T10:30:00+02:00",
+      "now": "2026-10-28T06:00:00.987Z",
+      "label": "UTC-9",
+      "expected": "2026-01-10T08:30:00.000Z"
+    },
+    {
+      "zone": "UTC",
+      "input": "2026-03-29T02:30:00",
+      "now": "2026-10-28T06:00:00.987Z",
+      "label": "UTC-10",
+      "expected": "2026-03-29T02:30:00.000Z"
+    },
+    {
+      "zone": "UTC",
+      "input": "2026-10-25T02:30:00",
+      "now": "2026-10-28T06:00:00.987Z",
+      "label": "UTC-11",
+      "expected": "2026-10-25T02:30:00.000Z"
+    },
+    {
+      "zone": "UTC",
+      "input": "2026-02-30T10:00:00Z",
+      "now": "2026-10-28T06:00:00.987Z",
+      "label": "UTC-12",
+      "expected": "2026-03-02T10:00:00.000Z"
+    },
+    {
+      "zone": "UTC",
+      "input": "2026-01-10T24:00:00Z",
+      "now": "2026-10-28T06:00:00.987Z",
+      "label": "UTC-13",
+      "expected": "2026-01-11T00:00:00.000Z"
+    },
+    {
+      "zone": "UTC",
+      "input": "2026-01-10T24:00:00.0001Z",
+      "now": "2026-10-28T06:00:00.987Z",
+      "label": "UTC-14",
+      "error": "Invalid timestamp \"2026-01-10T24:00:00.0001Z\": expected an ISO 8601 date-time (2026-09-29T18:45:00Z) or a date (YYYY-MM-DD)."
+    },
+    {
+      "zone": "UTC",
+      "input": "2026-01-10T10:00:00.123456Z",
+      "now": "2026-10-28T06:00:00.987Z",
+      "label": "UTC-15",
+      "expected": "2026-01-10T10:00:00.123Z"
+    },
+    {
+      "zone": "UTC",
+      "input": "2026-01-10T10:00:60Z",
+      "now": "2026-10-28T06:00:00.987Z",
+      "label": "UTC-16",
+      "error": "Invalid timestamp \"2026-01-10T10:00:60Z\": expected an ISO 8601 date-time (2026-09-29T18:45:00Z) or a date (YYYY-MM-DD)."
+    },
+    {
+      "zone": "UTC",
+      "input": "2026-01-10\n",
+      "now": "2026-10-28T06:00:00.987Z",
+      "label": "UTC-17",
+      "error": "Invalid timestamp \"2026-01-10\\n\": expected an ISO 8601 date-time (2026-09-29T18:45:00Z) or a date (YYYY-MM-DD)."
+    },
+    {
+      "zone": "UTC",
+      "input": "2026-01-10\r\n",
+      "now": "2026-10-28T06:00:00.987Z",
+      "label": "UTC-18",
+      "error": "Invalid timestamp \"2026-01-10\\r\\n\": expected an ISO 8601 date-time (2026-09-29T18:45:00Z) or a date (YYYY-MM-DD)."
+    },
+    {
+      "zone": "UTC",
+      "input": "2026-01-10 ",
+      "now": "2026-10-28T06:00:00.987Z",
+      "label": "UTC-19",
+      "error": "Invalid timestamp \"2026-01-10 \": expected an ISO 8601 date-time (2026-09-29T18:45:00Z) or a date (YYYY-MM-DD)."
+    },
+    {
+      "zone": "UTC",
+      "input": "2026-01-10T10:00:00Z\n",
+      "now": "2026-10-28T06:00:00.987Z",
+      "label": "UTC-20",
+      "error": "Invalid timestamp \"2026-01-10T10:00:00Z\\n\": expected an ISO 8601 date-time (2026-09-29T18:45:00Z) or a date (YYYY-MM-DD)."
+    },
+    {
+      "zone": "UTC",
+      "input": "0000-01-01",
+      "now": "2026-10-28T06:00:00.987Z",
+      "label": "UTC-21",
+      "error": "Invalid timestamp \"0000-01-01\": expected an ISO 8601 date-time (2026-09-29T18:45:00Z) or a date (YYYY-MM-DD)."
+    },
+    {
+      "zone": "UTC",
+      "input": "0099-01-01",
+      "now": "2026-10-28T06:00:00.987Z",
+      "label": "UTC-22",
+      "error": "Invalid timestamp \"0099-01-01\": expected an ISO 8601 date-time (2026-09-29T18:45:00Z) or a date (YYYY-MM-DD)."
+    },
+    {
+      "zone": "UTC",
+      "input": "0100-01-01",
+      "now": "2026-10-28T06:00:00.987Z",
+      "label": "UTC-23",
+      "expected": "0100-01-01T12:00:00.000Z"
+    },
+    {
+      "zone": "UTC",
+      "input": "0000-01-01T00:00:00Z",
+      "now": "2026-10-28T06:00:00.987Z",
+      "label": "UTC-24",
+      "expected": "0000-01-01T00:00:00.000Z"
+    },
+    {
+      "zone": "UTC",
+      "input": "0000-01-01T00:00:00+02:00",
+      "now": "2026-10-28T06:00:00.987Z",
+      "label": "UTC-25",
+      "expected": "-000001-12-31T22:00:00.000Z"
+    },
+    {
+      "zone": "UTC",
+      "input": "0000-01-01T00:00:00",
+      "now": "2026-10-28T06:00:00.987Z",
+      "label": "UTC-26",
+      "expected": "0000-01-01T00:00:00.000Z"
+    },
+    {
+      "zone": "UTC",
+      "input": "0099-01-01T00:00:00",
+      "now": "2026-10-28T06:00:00.987Z",
+      "label": "UTC-27",
+      "expected": "0099-01-01T00:00:00.000Z"
+    },
+    {
+      "zone": "UTC",
+      "input": "2026-01-10T10:00:00+24:00",
+      "now": "2026-10-28T06:00:00.987Z",
+      "label": "UTC-28",
+      "error": "Invalid timestamp \"2026-01-10T10:00:00+24:00\": expected an ISO 8601 date-time (2026-09-29T18:45:00Z) or a date (YYYY-MM-DD)."
+    },
+    {
+      "zone": "UTC",
+      "input": "2026-13-01T10:00:00",
+      "now": "2026-10-28T06:00:00.987Z",
+      "label": "UTC-29",
+      "error": "Invalid timestamp \"2026-13-01T10:00:00\": expected an ISO 8601 date-time (2026-09-29T18:45:00Z) or a date (YYYY-MM-DD)."
+    },
+    {
+      "zone": "UTC",
+      "input": "2026-01-32T10:00:00",
+      "now": "2026-10-28T06:00:00.987Z",
+      "label": "UTC-30",
+      "error": "Invalid timestamp \"2026-01-32T10:00:00\": expected an ISO 8601 date-time (2026-09-29T18:45:00Z) or a date (YYYY-MM-DD)."
+    },
+    {
+      "zone": "Europe/Madrid",
+      "input": null,
+      "now": "2026-10-28T06:00:00.987Z",
+      "label": "Europe/Madrid-0",
+      "expected": "2026-10-28T06:00:00.987Z"
+    },
+    {
+      "zone": "Europe/Madrid",
+      "input": "2026-01-10",
+      "now": "2026-10-28T06:00:00.987Z",
+      "label": "Europe/Madrid-1",
+      "expected": "2026-01-10T11:00:00.000Z"
+    },
+    {
+      "zone": "Europe/Madrid",
+      "input": "2026-10-28",
+      "now": "2026-10-28T06:00:00.987Z",
+      "label": "Europe/Madrid-2",
+      "expected": "2026-10-28T06:00:00.987Z"
+    },
+    {
+      "zone": "Europe/Madrid",
+      "input": "2026-10-29",
+      "now": "2026-10-28T06:00:00.987Z",
+      "label": "Europe/Madrid-3",
+      "error": "Invalid timestamp \"2026-10-29\": last-made cannot be in the future."
+    },
+    {
+      "zone": "Europe/Madrid",
+      "input": "2026-10-28T22:00:00Z",
+      "now": "2026-10-28T06:00:00.987Z",
+      "label": "Europe/Madrid-4",
+      "error": "Invalid timestamp \"2026-10-28T22:00:00Z\": last-made cannot be in the future."
+    },
+    {
+      "zone": "Europe/Madrid",
+      "input": "March 5",
+      "now": "2026-10-28T06:00:00.987Z",
+      "label": "Europe/Madrid-5",
+      "error": "Invalid timestamp \"March 5\": expected an ISO 8601 date-time (2026-09-29T18:45:00Z) or a date (YYYY-MM-DD)."
+    },
+    {
+      "zone": "Europe/Madrid",
+      "input": "2026-02-30",
+      "now": "2026-10-28T06:00:00.987Z",
+      "label": "Europe/Madrid-6",
+      "error": "Invalid timestamp \"2026-02-30\": expected an ISO 8601 date-time (2026-09-29T18:45:00Z) or a date (YYYY-MM-DD)."
+    },
+    {
+      "zone": "Europe/Madrid",
+      "input": "2026-01-10T25:00:00Z",
+      "now": "2026-10-28T06:00:00.987Z",
+      "label": "Europe/Madrid-7",
+      "error": "Invalid timestamp \"2026-01-10T25:00:00Z\": expected an ISO 8601 date-time (2026-09-29T18:45:00Z) or a date (YYYY-MM-DD)."
+    },
+    {
+      "zone": "Europe/Madrid",
+      "input": "2026-01-10T10:30",
+      "now": "2026-10-28T06:00:00.987Z",
+      "label": "Europe/Madrid-8",
+      "expected": "2026-01-10T09:30:00.000Z"
+    },
+    {
+      "zone": "Europe/Madrid",
+      "input": "2026-01-10T10:30:00+02:00",
+      "now": "2026-10-28T06:00:00.987Z",
+      "label": "Europe/Madrid-9",
+      "expected": "2026-01-10T08:30:00.000Z"
+    },
+    {
+      "zone": "Europe/Madrid",
+      "input": "2026-03-29T02:30:00",
+      "now": "2026-10-28T06:00:00.987Z",
+      "label": "Europe/Madrid-10",
+      "expected": "2026-03-29T01:30:00.000Z"
+    },
+    {
+      "zone": "Europe/Madrid",
+      "input": "2026-10-25T02:30:00",
+      "now": "2026-10-28T06:00:00.987Z",
+      "label": "Europe/Madrid-11",
+      "expected": "2026-10-25T00:30:00.000Z"
+    },
+    {
+      "zone": "Europe/Madrid",
+      "input": "2026-02-30T10:00:00Z",
+      "now": "2026-10-28T06:00:00.987Z",
+      "label": "Europe/Madrid-12",
+      "expected": "2026-03-02T10:00:00.000Z"
+    },
+    {
+      "zone": "Europe/Madrid",
+      "input": "2026-01-10T24:00:00Z",
+      "now": "2026-10-28T06:00:00.987Z",
+      "label": "Europe/Madrid-13",
+      "expected": "2026-01-11T00:00:00.000Z"
+    },
+    {
+      "zone": "Europe/Madrid",
+      "input": "2026-01-10T24:00:00.0001Z",
+      "now": "2026-10-28T06:00:00.987Z",
+      "label": "Europe/Madrid-14",
+      "error": "Invalid timestamp \"2026-01-10T24:00:00.0001Z\": expected an ISO 8601 date-time (2026-09-29T18:45:00Z) or a date (YYYY-MM-DD)."
+    },
+    {
+      "zone": "Europe/Madrid",
+      "input": "2026-01-10T10:00:00.123456Z",
+      "now": "2026-10-28T06:00:00.987Z",
+      "label": "Europe/Madrid-15",
+      "expected": "2026-01-10T10:00:00.123Z"
+    },
+    {
+      "zone": "Europe/Madrid",
+      "input": "2026-01-10T10:00:60Z",
+      "now": "2026-10-28T06:00:00.987Z",
+      "label": "Europe/Madrid-16",
+      "error": "Invalid timestamp \"2026-01-10T10:00:60Z\": expected an ISO 8601 date-time (2026-09-29T18:45:00Z) or a date (YYYY-MM-DD)."
+    },
+    {
+      "zone": "Europe/Madrid",
+      "input": "2026-01-10\n",
+      "now": "2026-10-28T06:00:00.987Z",
+      "label": "Europe/Madrid-17",
+      "error": "Invalid timestamp \"2026-01-10\\n\": expected an ISO 8601 date-time (2026-09-29T18:45:00Z) or a date (YYYY-MM-DD)."
+    },
+    {
+      "zone": "Europe/Madrid",
+      "input": "2026-01-10\r\n",
+      "now": "2026-10-28T06:00:00.987Z",
+      "label": "Europe/Madrid-18",
+      "error": "Invalid timestamp \"2026-01-10\\r\\n\": expected an ISO 8601 date-time (2026-09-29T18:45:00Z) or a date (YYYY-MM-DD)."
+    },
+    {
+      "zone": "Europe/Madrid",
+      "input": "2026-01-10 ",
+      "now": "2026-10-28T06:00:00.987Z",
+      "label": "Europe/Madrid-19",
+      "error": "Invalid timestamp \"2026-01-10 \": expected an ISO 8601 date-time (2026-09-29T18:45:00Z) or a date (YYYY-MM-DD)."
+    },
+    {
+      "zone": "Europe/Madrid",
+      "input": "2026-01-10T10:00:00Z\n",
+      "now": "2026-10-28T06:00:00.987Z",
+      "label": "Europe/Madrid-20",
+      "error": "Invalid timestamp \"2026-01-10T10:00:00Z\\n\": expected an ISO 8601 date-time (2026-09-29T18:45:00Z) or a date (YYYY-MM-DD)."
+    },
+    {
+      "zone": "Europe/Madrid",
+      "input": "0000-01-01",
+      "now": "2026-10-28T06:00:00.987Z",
+      "label": "Europe/Madrid-21",
+      "error": "Invalid timestamp \"0000-01-01\": expected an ISO 8601 date-time (2026-09-29T18:45:00Z) or a date (YYYY-MM-DD)."
+    },
+    {
+      "zone": "Europe/Madrid",
+      "input": "0099-01-01",
+      "now": "2026-10-28T06:00:00.987Z",
+      "label": "Europe/Madrid-22",
+      "error": "Invalid timestamp \"0099-01-01\": expected an ISO 8601 date-time (2026-09-29T18:45:00Z) or a date (YYYY-MM-DD)."
+    },
+    {
+      "zone": "Europe/Madrid",
+      "input": "0100-01-01",
+      "now": "2026-10-28T06:00:00.987Z",
+      "label": "Europe/Madrid-23",
+      "expected": "0100-01-01T12:14:44.000Z"
+    },
+    {
+      "zone": "Europe/Madrid",
+      "input": "0000-01-01T00:00:00Z",
+      "now": "2026-10-28T06:00:00.987Z",
+      "label": "Europe/Madrid-24",
+      "expected": "0000-01-01T00:00:00.000Z"
+    },
+    {
+      "zone": "Europe/Madrid",
+      "input": "0000-01-01T00:00:00+02:00",
+      "now": "2026-10-28T06:00:00.987Z",
+      "label": "Europe/Madrid-25",
+      "expected": "-000001-12-31T22:00:00.000Z"
+    },
+    {
+      "zone": "Europe/Madrid",
+      "input": "0000-01-01T00:00:00",
+      "now": "2026-10-28T06:00:00.987Z",
+      "label": "Europe/Madrid-26",
+      "expected": "0000-01-01T00:14:44.000Z"
+    },
+    {
+      "zone": "Europe/Madrid",
+      "input": "0099-01-01T00:00:00",
+      "now": "2026-10-28T06:00:00.987Z",
+      "label": "Europe/Madrid-27",
+      "expected": "0099-01-01T00:14:44.000Z"
+    },
+    {
+      "zone": "Europe/Madrid",
+      "input": "2026-01-10T10:00:00+24:00",
+      "now": "2026-10-28T06:00:00.987Z",
+      "label": "Europe/Madrid-28",
+      "error": "Invalid timestamp \"2026-01-10T10:00:00+24:00\": expected an ISO 8601 date-time (2026-09-29T18:45:00Z) or a date (YYYY-MM-DD)."
+    },
+    {
+      "zone": "Europe/Madrid",
+      "input": "2026-13-01T10:00:00",
+      "now": "2026-10-28T06:00:00.987Z",
+      "label": "Europe/Madrid-29",
+      "error": "Invalid timestamp \"2026-13-01T10:00:00\": expected an ISO 8601 date-time (2026-09-29T18:45:00Z) or a date (YYYY-MM-DD)."
+    },
+    {
+      "zone": "Europe/Madrid",
+      "input": "2026-01-32T10:00:00",
+      "now": "2026-10-28T06:00:00.987Z",
+      "label": "Europe/Madrid-30",
+      "error": "Invalid timestamp \"2026-01-32T10:00:00\": expected an ISO 8601 date-time (2026-09-29T18:45:00Z) or a date (YYYY-MM-DD)."
+    }
+  ]
+}
