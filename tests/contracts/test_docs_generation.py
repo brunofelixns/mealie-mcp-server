@@ -1,4 +1,5 @@
 import json
+import re
 import shutil
 import subprocess
 import sys
@@ -6,6 +7,44 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 SCRIPT = ROOT / "scripts/generate_docs.py"
+
+
+def test_generated_readme_includes_each_tool_once_and_family_counts_sum_to_78():
+    catalog = json.loads((ROOT / "src/mealie_mcp_server/resources/tool-catalog.json").read_text())
+    section = (
+        (ROOT / "README.md")
+        .read_text()
+        .split("<!-- BEGIN GENERATED TOOLS -->", 1)[1]
+        .split("<!-- END GENERATED TOOLS -->", 1)[0]
+    )
+    for tool in catalog["tools"]:
+        assert section.count("`" + tool["name"] + "`") == 1, tool["name"]
+    coverage = (ROOT / "docs/api-coverage.md").read_text()
+    counts = [int(count) for count in re.findall(r"^\| [^|]+ \| (\d+) \|$", coverage, re.M)]
+    assert len(counts) == 8 and all(count > 0 for count in counts)
+    assert sum(counts) == len(catalog["tools"]) == 78
+
+
+def test_generator_rejects_unknown_family_without_replacing_readme(tmp_path):
+    for relative in (
+        "pyproject.toml",
+        "src/mealie_mcp_server/resources/tool-catalog.json",
+        "docs/migration/compatibility-inventory.json",
+    ):
+        destination = tmp_path / relative
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copyfile(ROOT / relative, destination)
+    original = "Manual\n<!-- BEGIN GENERATED TOOLS -->\nold\n<!-- END GENERATED TOOLS -->\n"
+    (tmp_path / "README.md").write_text(original)
+    inventory_path = tmp_path / "docs/migration/compatibility-inventory.json"
+    inventory = json.loads(inventory_path.read_text())
+    inventory["tools"][0]["group"] = "unknown-family"
+    inventory_path.write_text(json.dumps(inventory))
+    result = subprocess.run(
+        [sys.executable, str(SCRIPT), "--root", str(tmp_path)], capture_output=True, text=True
+    )
+    assert result.returncode != 0 and "Unsupported documentation groups" in result.stderr
+    assert (tmp_path / "README.md").read_text() == original
 
 
 def test_generated_docs_are_current_and_describe_all_public_inputs():

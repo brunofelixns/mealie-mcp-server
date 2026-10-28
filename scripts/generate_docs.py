@@ -13,10 +13,10 @@ GROUPS = {
     "mealplans": "Planificación",
     "categories": "Categorías",
     "tags": "Etiquetas",
-    "shopping-lists": "Compras",
+    "shopping_lists": "Compras",
     "foods": "Alimentos",
     "units": "Unidades",
-    "tools": "Equipamiento",
+    "equipment": "Equipamiento",
 }
 BEGIN, END = "<!-- BEGIN GENERATED TOOLS -->", "<!-- END GENERATED TOOLS -->"
 
@@ -28,11 +28,16 @@ def render(root: Path) -> dict[Path, str]:
     owners = {tool["name"]: tool["group"] for tool in inventory["tools"]}
     assert len(tools) == len({tool["name"] for tool in tools}) == 78
     assert set(owners) == {tool["name"] for tool in tools}
+    unsupported = set(owners.values()) - GROUPS.keys()
+    if unsupported:
+        raise ValueError("Unsupported documentation groups: " + ", ".join(sorted(unsupported)))
     version = tomllib.loads((root / "pyproject.toml").read_text())["project"]["version"]
     section = [
         f"## Herramientas disponibles ({len(tools)})",
         "",
-        f"Versión Python {version}; un prompt weekly-meal-plan y cero resources propios.",
+        f"Catálogo de la versión {version}. "
+        "Consulta los [esquemas completos](docs/tools.md) y "
+        "la [cobertura de API](docs/api-coverage.md).",
         "",
     ]
     coverage = [
@@ -60,13 +65,19 @@ def render(root: Path) -> dict[Path, str]:
         )
         for group in GROUPS
     }
+    section.extend(["| Familia | Herramientas |", "|---|---:|"])
+    section.extend(f"| {title} | {len(grouped[group])} |" for group, title in GROUPS.items())
+    section.extend([f"| **Total** | **{len(tools)}** |", ""])
     for group, title in GROUPS.items():
         members = grouped[group]
         section.extend(
             [
-                f"### {title} ({len(members)})",
+                "<details>",
+                f"<summary><strong>{title}</strong> · {len(members)} herramientas</summary>",
                 "",
                 ", ".join("`" + tool["name"] + "`" for tool in members),
+                "",
+                "</details>",
                 "",
             ]
         )

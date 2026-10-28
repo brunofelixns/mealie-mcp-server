@@ -8,10 +8,10 @@ Generado con `uv run python scripts/generate_docs.py`. Catálogo explícito de 7
 | Planificación | 6 |
 | Categorías | 7 |
 | Etiquetas | 7 |
-| Compras | 0 |
+| Compras | 13 |
 | Alimentos | 7 |
 | Unidades | 6 |
-| Equipamiento | 0 |
+| Equipamiento | 6 |
 | **Total** | **78** |
 
 ## `get_recipes`
