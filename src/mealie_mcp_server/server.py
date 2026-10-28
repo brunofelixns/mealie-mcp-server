@@ -9,6 +9,7 @@ from typing import Any
 from fastmcp import FastMCP
 
 from mealie_mcp_server import version
+from mealie_mcp_server.auth import PersonalTokenVerifier
 from mealie_mcp_server.config import Settings
 from mealie_mcp_server.mealie.client import MealieClient
 from mealie_mcp_server.prompts import register_prompts
@@ -44,6 +45,9 @@ def create_server(
         instructions=instructions,
         lifespan=lifespan,
         tasks=False,
+        auth=PersonalTokenVerifier(settings.mcp_auth_token.get_secret_value())
+        if settings.transport == "http" and settings.mcp_auth_token is not None
+        else None,
     )
     register_all_tools(server)
     register_prompts(server)

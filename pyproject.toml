@@ -19,6 +19,8 @@ dependencies = [
   "pydantic-settings>=2,<3",
   "jsonschema>=4.25,<5",
   "pyicu>=2.16,<3",
+  "starlette>=1,<2",
+  "uvicorn>=0.54,<1",
 ]
 
 [dependency-groups]

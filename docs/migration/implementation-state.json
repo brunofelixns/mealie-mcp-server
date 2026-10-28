@@ -751,7 +751,7 @@
           "tests": 814
         }
       ],
-      "commit": null
+      "commit": "7d08e1a8e1321bc257e9450c9aedd31f42dbc36d"
     },
     {
       "id": "P22",
@@ -759,7 +759,7 @@
       "dependsOn": [
         "P21"
       ],
-      "status": "in_progress",
+      "status": "verified",
       "tools": [],
       "files": [
         "src/mealie_mcp_server/auth.py",
@@ -767,14 +767,27 @@
         "src/mealie_mcp_server/server.py",
         "src/mealie_mcp_server/cli.py",
         "docs/http-deployment.md",
-        "docs/configuration.md"
+        "docs/configuration.md",
+        "src/mealie_mcp_server/http.py",
+        "src/mealie_mcp_server/config.py",
+        "pyproject.toml",
+        "uv.lock",
+        "tests/support/http_server.py",
+        "tests/support/fake_mealie.py"
       ],
       "tests": [
         "tests/unit/test_auth.py",
         "tests/integration/test_http.py",
-        "tests/integration/test_http_cancellation.py"
+        "tests/integration/test_http_cancellation.py",
+        "tests/integration/test_http_cli.py"
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "report": "docs/migration/evidence/P22.md",
+          "result": "passed",
+          "tests": 831
+        }
+      ],
       "commit": null
     },
     {
@@ -783,7 +796,7 @@
       "dependsOn": [
         "P22"
       ],
-      "status": "not_started",
+      "status": "in_progress",
       "tools": [],
       "files": [
         "Dockerfile",

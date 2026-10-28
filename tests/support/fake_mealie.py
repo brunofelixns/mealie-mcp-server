@@ -24,6 +24,7 @@ class FakeMealie:
         )
         self.recorded_requests: list[dict[str, Any]] = []
         self.errors: list[str] = []
+        self.authorization_headers: list[str | None] = []
         self.connection_closed = threading.Event()
         self._lock = threading.Lock()
         owner = self
@@ -74,6 +75,7 @@ class FakeMealie:
                 if length and body is None:
                     received["has_body"] = True
                 with owner._lock:
+                    owner.authorization_headers.append(self.headers.get("Authorization"))
                     owner.recorded_requests.append(received)
                     match = next(
                         (

@@ -10,7 +10,7 @@
 
 **Spec:** [Diseño completo](../specs/2026-10-27-python-migration-design.md). Leer también [inventario](../../migration/compatibility-inventory.md) e [inventario JSON](../../migration/compatibility-inventory.json).
 
-Fecha: 2026-10-27. Estado: implementación autorizada; P01..P21 verificadas y P22 en curso. Ver implementation-state.json para la evidencia. No se ha publicado ni desplegado un endpoint público.
+Fecha: 2026-10-27. Estado: implementación autorizada; P01..P22 verificadas y P23 en curso. Ver implementation-state.json para la evidencia. No se ha publicado ni desplegado un endpoint público.
 
 ## Global Constraints
 
@@ -587,24 +587,24 @@ uv run pytest tests/unit/test_cli.py tests/integration/test_stdio.py -q
 <a id="p22"></a>
 ### P22: Completar HTTP con Bearer personal y salud
 
-**Depende de:** P21. **Estado:** pendiente; ver registro de ejecución.
+**Depende de:** P21. **Estado:** verificada; ver registro de ejecución.
 
 **Archivos:** `src/mealie_mcp_server/auth.py`, `src/mealie_mcp_server/health.py`, `src/mealie_mcp_server/server.py`, `src/mealie_mcp_server/cli.py`, `docs/http-deployment.md`, `docs/configuration.md`.
 **Tests:** `tests/unit/test_auth.py`, `tests/integration/test_http.py`, `tests/integration/test_http_cancellation.py`.
 
 **Interfaces:** consume CLI/factory/clientes P21; token y hosts P04. Produce PersonalTokenVerifier configurado por secreto; create_http_app(server: FastMCP, settings: Settings) -> ASGIApp; /mcp, /healthz y /readyz.
 
-- [ ] **1. Añadir las pruebas antes del código funcional.** test_missing_wrong_token_401; test_token_never_forwarded_to_mealie; test_forbidden_origin_host; test_http_body32mib_allows_image10mib; test_health_does_not_call_mealie; test_ready_only_after_lifespan; test_http_catalog_equals_stdio; test_both_protocol_eras_and_large_results; test_disconnect_no_retry_and_bounded_verification.
-- [ ] **2. Ejecutar el subconjunto indicado y observar RED.** El fallo esperado es el comportamiento/handler aún ausente o incorrecto; si falta infraestructura del harness, arreglarla antes de tomar el fallo como evidencia.
-- [ ] **3. Implementar las interfaces de esta tarea y sus fixtures.** Reutilizar los contratos anteriores; preservar los valores del diseño y el inventario. HTTP sin token no arranca; digest en tiempo constante; Bearer independiente; un worker; SSE correcto; salud mínima fuera del auth de MCP; documentar proxy/TLS sin anunciar OAuth.
+- [x] **1. Añadir las pruebas antes del código funcional.** test_missing_wrong_token_401; test_token_never_forwarded_to_mealie; test_forbidden_origin_host; test_http_body32mib_allows_image10mib; test_health_does_not_call_mealie; test_ready_only_after_lifespan; test_http_catalog_equals_stdio; test_both_protocol_eras_and_large_results; test_disconnect_no_retry_and_bounded_verification.
+- [x] **2. Ejecutar el subconjunto indicado y observar RED.** El fallo esperado es el comportamiento/handler aún ausente o incorrecto; si falta infraestructura del harness, arreglarla antes de tomar el fallo como evidencia.
+- [x] **3. Implementar las interfaces de esta tarea y sus fixtures.** Reutilizar los contratos anteriores; preservar los valores del diseño y el inventario. HTTP sin token no arranca; digest en tiempo constante; Bearer independiente; un worker; SSE correcto; salud mínima fuera del auth de MCP; documentar proxy/TLS sin anunciar OAuth.
 
-- [ ] **4. Verificar el resultado de esta tarea.** Ejecutar dentro del Dev Container; salida0 y todas las aserciones indicadas en verde. Para P01 el launcher y el contenedor auxiliar son la excepción de bootstrap explicada arriba.
+- [x] **4. Verificar el resultado de esta tarea.** Ejecutar dentro del Dev Container; salida0 y todas las aserciones indicadas en verde. Para P01 el launcher y el contenedor auxiliar son la excepción de bootstrap explicada arriba.
 
 ```bash
 uv run pytest tests/unit/test_auth.py tests/integration/test_http.py tests/integration/test_http_cancellation.py -q
 ```
 
-- [ ] **5. Revisar, documentar y cerrar.** Comprobar el criterio de salida anterior y el diff; no ampliar la suite sin una nueva causa. Actualizar estado, diferencias si las hay y evidencia con comando/resultado/entorno. Commit de implementación sugerido: `feat: add authenticated Streamable HTTP transport`. Registrar su SHA en un commit documental posterior si hace falta; no intentar incluir el hash de un commit en sí mismo.
+- [x] **5. Revisar, documentar y cerrar.** Comprobar el criterio de salida anterior y el diff; no ampliar la suite sin una nueva causa. Actualizar estado, diferencias si las hay y evidencia con comando/resultado/entorno. Commit de implementación sugerido: `feat: add authenticated Streamable HTTP transport`. Registrar su SHA en un commit documental posterior si hace falta; no intentar incluir el hash de un commit en sí mismo.
 
 <a id="p23"></a>
 ### P23: Construir y verificar la imagen de producción

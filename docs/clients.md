@@ -33,4 +33,4 @@ Las variables deben existir en el entorno del cliente. No añadir `-t`: un TTY a
 
 El token HTTP no se exige ni se lee en stdio. EOF, SIGTERM y SIGINT cierran el cliente HTTP de Mealie. Un puente POSIX de entrada acotado transforma las señales en EOF porque la lectura de stdin del SDK 2.3.0 usa un hilo no cancelable; no modifica APIs privadas del SDK. La ejecución nativa de Windows no está validada: utilizar el contenedor Linux.
 
-La imagen de producción y la conexión HTTP se documentan en las siguientes fases de implementación.
+Para HTTP, conectar a `https://mcp.example.com/mcp` con la cabecera `Authorization: Bearer <token-personal>`. Las políticas y ejemplos están en [despliegue HTTP](http-deployment.md). La imagen de producción se verifica en P23.

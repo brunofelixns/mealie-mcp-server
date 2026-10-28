@@ -75,3 +75,11 @@ Task P19: complete — suite787/787, Ruff/mypy passed; evidencia evidence/P19.md
 Task P20: complete — suite801/801, Ruff/mypy passed; evidencia evidence/P20.md. P21 en curso.
 
 Task P21: complete — suite814/814, Ruff/mypy passed; evidencia evidence/P21.md. P22 en curso.
+
+Ruling: stdio usa un puente POSIX acotado para traducir señales a EOF — el lector AsyncFile del SDK no responde a cancelación — el runtime validado es Linux en contenedor; Windows nativo queda sin validar.
+
+Ruling: configurar el limitador público del manager HTTP después de startup — FastMCP4.1.4 no expone el límite4MiB del SDK2.3.0 y la imagen10MiB es obligatoria — una actualización que cambie la distribución de la ruta falla al arrancar; los tests cubren ambas eras.
+
+Ruling: conservar la salida143 de Uvicorn tras SIGTERM — la señal se reemite después del cleanup — distinguir señal esperada de fallo, verificando también cierre y logs seguros.
+
+Task P22: complete — suite831/831, Ruff/mypy passed; evidencia evidence/P22.md. P23 en curso.

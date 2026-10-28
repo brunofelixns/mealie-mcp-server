@@ -45,6 +45,7 @@ class Settings(BaseSettings):
     port: int = Field(default=8000, ge=1, le=65535)
     mcp_auth_token: SecretStr | None = None
     public_url: str | None = None
+    require_https: bool = False
     allowed_hosts: tuple[str, ...] = ("localhost", "127.0.0.1", "[::1]")
     allowed_origins: tuple[str, ...] = ()
     debug: bool = False
@@ -80,6 +81,10 @@ class Settings(BaseSettings):
         if not key or any(character in key for character in "\r\n"):
             raise ValueError("MEALIE_API_KEY must be a non-empty header-safe value.")
         if self.transport == "http":
+            if self.require_https and (
+                not self.public_url or urlsplit(self.public_url).scheme != "https"
+            ):
+                raise ValueError("MCP_PUBLIC_URL must use HTTPS when MCP_REQUIRE_HTTPS is enabled.")
             token = self.mcp_auth_token.get_secret_value() if self.mcp_auth_token else ""
             if len(token) < 32 or any(
                 ord(character) < 33 or ord(character) > 126 for character in token
@@ -102,6 +107,7 @@ ENV_FIELDS = {
     "MCP_HOST": "host",
     "MCP_PORT": "port",
     "MCP_PUBLIC_URL": "public_url",
+    "MCP_REQUIRE_HTTPS": "require_https",
     "MEALIE_MCP_DEBUG": "debug",
     "LOG_LEVEL": "log_level",
     "TZ": "tz",
