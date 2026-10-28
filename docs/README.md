@@ -2,7 +2,7 @@
 
 Migración completa de las78 herramientas y el prompt weekly-meal-plan a FastMCP. Admite stdio local y Streamable HTTP con token Bearer personal independiente de la API key de Mealie. Desarrollo y verificación en Dev Container; imagen de producción para amd64 y arm64.
 
-El cierre P24 está en verificación. [Avance](migration/progress.md), [estado JSON](migration/implementation-state.json) y [aceptación](migration/acceptance.md) distinguen lo ejecutado de las limitaciones y de la publicación pendiente.
+La implementación y verificación local están completas (24/24). [Avance](migration/progress.md), [estado JSON](migration/implementation-state.json) y [aceptación](migration/acceptance.md) distinguen lo ejecutado de las limitaciones y de la publicación pendiente.
 
 | Necesidad | Documento |
 |---|---|

@@ -1,0 +1,61 @@
+{
+  "date": "2026-10-28",
+  "phase": "P23",
+  "registryPublished": false,
+  "images": [
+    {
+      "architecture": "amd64",
+      "execution": "native x86_64",
+      "tag": "mealie-mcp-server:local",
+      "buildRevisionLabel": "c70f1bb-dirty",
+      "imageManifestDigest": "sha256:db05be7abb3158aafa6755bde8a67e1a0b483bec19bb9e5fcd075319cc2e659d",
+      "indexDigest": "sha256:f7b20589243c8aa91399bdc3bd0b89d558feb3cf60536e2d6592838e9bde9c44",
+      "configDigest": "sha256:09a4e39f3d66672b453aa3ee232bdb29068f38bbc52ec98280084b11651ff384",
+      "ociArchive": "artifacts/P23-runtime-amd64.tar",
+      "attestationPredicateTypes": [
+        "https://spdx.dev/Document",
+        "https://slsa.dev/provenance/v0.2"
+      ],
+      "scan": {
+        "scanner": "aquasec/trivy:0.76.1@sha256:790fd66d1697395d8693d1acaa1ea702406a20f109b6fc7bac8db623eca6c06c",
+        "image": "mealie-mcp-server:local",
+        "platform": "linux/amd64",
+        "report": "artifacts/P23-amd64-final-scan.json",
+        "sbom": "artifacts/P23-amd64-final-scan.sbom.cdx.json",
+        "sbomComponents": 163,
+        "vulnerabilities": 242,
+        "critical": 2,
+        "high": 59,
+        "secretFindings": 0,
+        "fixableHighCritical": 0
+      }
+    },
+    {
+      "architecture": "arm64",
+      "execution": "emulated ARM64 on x86_64 (Docker Desktop)",
+      "tag": "mealie-mcp-server:local-arm64",
+      "buildRevisionLabel": "c70f1bb-dirty",
+      "imageManifestDigest": "sha256:98ea3c0de365541df37dfdc92f25b6c2f7da860b15ca9de0d8526dc9f3670538",
+      "indexDigest": "sha256:30d9cf58dbf0b414d0678eefc0922444f89704531f971d2721536e092431fb22",
+      "configDigest": "sha256:ee52fa4b04a1b32c81382b91b567ab42b8a01a2330d734180ab566494336fb69",
+      "ociArchive": "artifacts/P23-runtime-arm64.tar",
+      "attestationPredicateTypes": [
+        "https://spdx.dev/Document",
+        "https://slsa.dev/provenance/v0.2"
+      ],
+      "scan": {
+        "scanner": "aquasec/trivy:0.76.1@sha256:790fd66d1697395d8693d1acaa1ea702406a20f109b6fc7bac8db623eca6c06c",
+        "image": "mealie-mcp-server:local-arm64",
+        "platform": "linux/arm64",
+        "report": "artifacts/P23-arm64-final-scan.json",
+        "sbom": "artifacts/P23-arm64-final-scan.sbom.cdx.json",
+        "sbomComponents": 163,
+        "vulnerabilities": 242,
+        "critical": 2,
+        "high": 59,
+        "secretFindings": 0,
+        "fixableHighCritical": 0
+      }
+    }
+  ]
+}

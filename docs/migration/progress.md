@@ -1,6 +1,6 @@
 # Avance de la migración
 
-Fecha de preparación: 2026-10-27. Estado: **implementación en curso**.
+Fecha de preparación: 2026-10-27. Estado: **migración completa, verificada localmente (24/24)**.
 
 Plan: [24 tareas detalladas](../superpowers/plans/2026-10-27-python-migration.md).
 Fuente de estado: [implementation-state.json](implementation-state.json).
@@ -11,10 +11,10 @@ Diferencias: [registro](differences.md).
 ## Situación actual
 
 - Documentados: inventario de78 herramientas, un prompt, diseño y plan.
-- Implementación:23/24 tareas verificadas; P24 en curso;78 herramientas portadas y verificadas.
-- Pruebas ejecutadas:1058originales y841Python pasan; sin Mealie de producción.
+- Implementación:24/24 tareas verificadas;78 herramientas portadas y verificadas.
+- Pruebas ejecutadas:1058originales y929Python pasan;5 smokes por arquitectura y Mealie3.29.0 desechable verificados; sin Mealie de producción.
 - Dev Container creado/abierto: verificado en P01.
-- Imagen de producción construida: pendiente.
+- Imágenes de producción construidas y probadas: mealie-mcp-server:local (amd64), mealie-mcp-server:local-arm64 (ARM emulada).
 - Publicación y endpoint remoto: pendientes; se decidirá destino después de las pruebas locales.
 - Método de ejecución: secuencial nativo, autorizado al comenzar.
 
@@ -47,7 +47,7 @@ La tabla refleja el estado del JSON. Ambos se actualizan en el mismo cambio docu
 | [P21](../superpowers/plans/2026-10-27-python-migration.md#p21) | Completar CLI y stdio real | P20 | Verificada |
 | [P22](../superpowers/plans/2026-10-27-python-migration.md#p22) | Completar HTTP con Bearer personal y salud | P21 | Verificada |
 | [P23](../superpowers/plans/2026-10-27-python-migration.md#p23) | Construir y verificar la imagen de producción | P22 | Verificada |
-| [P24](../superpowers/plans/2026-10-27-python-migration.md#p24) | Cerrar integración, documentación, retirada TS y aceptación | P23 | En curso |
+| [P24](../superpowers/plans/2026-10-27-python-migration.md#p24) | Cerrar integración, documentación, retirada TS y aceptación | P23 | Verificada |
 
 ## Regla de avance
 
@@ -63,3 +63,7 @@ La tabla refleja el estado del JSON. Ambos se actualizan en el mismo cambio docu
 ## Qué significa migración completa
 
 Las78 herramientas tienen paridad y pruebas; prompt/instrucciones preservados; ambos transportes y protocolos probados; Dev Container reproducible; wheel e imagen final ejecutables; integración desechable y documentación actualizada; retirada de runtime/scripts propios Node/TS; informe de aceptación con resultados. Un endpoint publicado no se considera probado por haber pasado tests locales.
+
+## Entrega final
+
+Código probado: edc067df15930cdbacad8c1449221a11871cf45d. [Aceptación](acceptance.md) contiene resultados, hashes, límites de seguridad y operación. [Revisión independiente](evidence/final-review.md): sin Critical/Important/Minor accionables. Cobertura95,982974% líneas y87,472284% ramas. No hay publicación ni endpoint público; las imágenes conservan2 avisos CRITICAL y59 HIGH Debian sin corrección disponible.

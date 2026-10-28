@@ -10,7 +10,7 @@
 
 **Spec:** [Diseño completo](../specs/2026-10-27-python-migration-design.md). Leer también [inventario](../../migration/compatibility-inventory.md) e [inventario JSON](../../migration/compatibility-inventory.json).
 
-Fecha: 2026-10-27. Estado: implementación autorizada; P01..P23 verificadas y P24 en curso. Ver implementation-state.json para la evidencia. No se ha publicado ni desplegado un endpoint público.
+Fecha: 2026-10-27. Estado: implementación autorizada; P01..P24 verificadas localmente. Ver implementation-state.json para la evidencia. No se ha publicado ni desplegado un endpoint público.
 
 ## Global Constraints
 
@@ -633,18 +633,18 @@ uv run pytest tests/containers -q
 <a id="p24"></a>
 ### P24: Cerrar integración, documentación, retirada TS y aceptación
 
-**Depende de:** P23. **Estado:** pendiente; ver registro de ejecución.
+**Depende de:** P23. **Estado:** verificada; ver evidencia P24 y aceptación.
 
 **Archivos:** `compose.integration.yaml`, `tests/integration/test_mealie_roundtrip.py`, `scripts/generate_docs.py`, `scripts/check_compatibility.py`, `README.md`, `API_COVERAGE.md`, `ARCHITECTURE.md`, `WORKFLOWS.md`, `CONTRIBUTING.md`, `docs/README.md`, `docs/migration/acceptance.md`, `docs/migration/differences.md`, `docs/migration/progress.md`, `renovate.json`, `sonarcloud.properties`, `opencode.json`, `.github/workflows/ci.yaml`, `.github/workflows/release.yaml`.
 **Tests:** `tests/contracts/test_docs_generation.py`, `tests/integration/test_mealie_roundtrip.py`.
 
 **Interfaces:** consume P01..P23 y todos los contratos C01..C16. Produce generate_docs.main(argv: Sequence[str] | None = None) -> int con --check; check_compatibility.main(argv: Sequence[str] | None = None) -> int; informe reproducible y entrega Python completa.
 
-- [ ] **1. Añadir las pruebas antes del código funcional.** test_mealie_disposable_end_to_end: crear receta/alimento/unidad, escribir ingredientes/instrucciones/taxonomía, leer y comprobar referencias, imagen/rating/plan/lista y limpieza solo del proyecto de test. test_docs_match_registry: --check detecta drift. test_branch_threshold_independent rechaza90% líneas/84% ramas aunque el porcentaje combinado pase. Contratos78 positivos+78 rechazos y todos los escenarios profundos del original; ejecutar conformidad en runner externo.
-- [ ] **2. Ejecutar el subconjunto indicado y observar RED.** El fallo esperado es el comportamiento/handler aún ausente o incorrecto; si falta infraestructura del harness, arreglarla antes de tomar el fallo como evidencia.
-- [ ] **3. Implementar las interfaces de esta tarea y sus fixtures.** Reutilizar los contratos anteriores; preservar los valores del diseño y el inventario. >=90% líneas y >=85% ramas mediante comprobador que lee coverage.json; no sustituirlo por --cov-fail-under global. Guardar versiones/imagen Mealie fijada, resultados y limitaciones. Retirar runner TS temporal del CI ordinario y cualquier JS/Node propio permanente; conservar fixtures/procedencia/licencia e historia. Revisar cambios completos, checkout limpio y smoke de imagen final. Publicación/endpoint público quedan pendientes de destino y autorización.
+- [x] **1. Añadir las pruebas antes del código funcional.** test_mealie_disposable_end_to_end: crear receta/alimento/unidad, escribir ingredientes/instrucciones/taxonomía, leer y comprobar referencias, imagen/rating/plan/lista y limpieza solo del proyecto de test. test_docs_match_registry: --check detecta drift. test_branch_threshold_independent rechaza90% líneas/84% ramas aunque el porcentaje combinado pase. Contratos78 positivos+78 rechazos y todos los escenarios profundos del original; ejecutar conformidad en runner externo.
+- [x] **2. Ejecutar el subconjunto indicado y observar RED.** El fallo esperado es el comportamiento/handler aún ausente o incorrecto; si falta infraestructura del harness, arreglarla antes de tomar el fallo como evidencia.
+- [x] **3. Implementar las interfaces de esta tarea y sus fixtures.** Reutilizar los contratos anteriores; preservar los valores del diseño y el inventario. >=90% líneas y >=85% ramas mediante comprobador que lee coverage.json; no sustituirlo por --cov-fail-under global. Guardar versiones/imagen Mealie fijada, resultados y limitaciones. Retirar runner TS temporal del CI ordinario y cualquier JS/Node propio permanente; conservar fixtures/procedencia/licencia e historia. Revisar cambios completos, checkout limpio y smoke de imagen final. Publicación/endpoint público quedan pendientes de destino y autorización.
 
-- [ ] **4. Verificar el resultado de esta tarea.** Ejecutar dentro del Dev Container; salida0 y todas las aserciones indicadas en verde. Para P01 el launcher y el contenedor auxiliar son la excepción de bootstrap explicada arriba.
+- [x] **4. Verificar el resultado de esta tarea.** Ejecutar dentro del Dev Container; salida0 y todas las aserciones indicadas en verde. Para P01 el launcher y el contenedor auxiliar son la excepción de bootstrap explicada arriba.
 
 ```bash
 uv run ruff check .
@@ -657,7 +657,7 @@ uv build
 docker compose -f compose.integration.yaml up --abort-on-container-exit --exit-code-from tests
 ```
 
-- [ ] **5. Revisar, documentar y cerrar.** Comprobar el criterio de salida anterior y el diff; no ampliar la suite sin una nueva causa. Actualizar estado, diferencias si las hay y evidencia con comando/resultado/entorno. Commit de implementación sugerido: `docs: finalize Python migration acceptance and delivery`. Registrar su SHA en un commit documental posterior si hace falta; no intentar incluir el hash de un commit en sí mismo.
+- [x] **5. Revisar, documentar y cerrar.** Comprobar el criterio de salida anterior y el diff; no ampliar la suite sin una nueva causa. Actualizar estado, diferencias si las hay y evidencia con comando/resultado/entorno. Commit de implementación sugerido: `docs: finalize Python migration acceptance and delivery`. Registrar su SHA en un commit documental posterior si hace falta; no intentar incluir el hash de un commit en sí mismo.
 
 ## Trazabilidad de contratos y cobertura original
 

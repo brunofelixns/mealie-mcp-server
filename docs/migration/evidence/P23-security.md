@@ -23,4 +23,4 @@ Los dos CRITICAL reportados son:
 
 Se mantiene la base fijada y ICU72 por la compatibilidad de ordenación ya demostrada. Una actualización de Debian/ICU debe volver a validar ese contrato y las dos arquitecturas; no se presenta como una actualización hecha durante esta tarea. El aislamiento no root, filesystem de solo lectura, ausencia de compiladores/pip y separación de credenciales reduce superficie operativa, pero no corrige esos paquetes del sistema.
 
-Los hashes exactos se registran en [runtime-images.json](runtime-images.json). Los informes son una observación fechada de esas imágenes y esa DB; no garantizan el resultado de un build futuro ni de un dominio/proxy de producción. Ninguna imagen se ha publicado.
+Los hashes exactos se registran en [P23-runtime-images.json](P23-runtime-images.json). Los informes son una observación fechada de esas imágenes y esa DB; no garantizan el resultado de un build futuro ni de un dominio/proxy de producción. Ninguna imagen se ha publicado.

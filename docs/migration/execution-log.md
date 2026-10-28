@@ -97,3 +97,19 @@ P24: suite929/929,3 deseleccionados, cobertura95,982974% líneas/87,472284% rama
 Ruling: reducir el drenaje Uvicorn a3s —40+35 de recuperación+5 de pool superaban stop_grace_period45 — requests largas reciben cancelación durante parada; las mutaciones emitidas conservan su limpieza protegida de35s y el presupuesto total es43s.
 
 Ruling: registrar la conformidad externa como limitada, sin quitar Bearer — el runner npm0.1.16 no admite cabeceras y server-initialize recibe401; tampoco ofrece2026-07-28 — no se afirma certificación externa ni compatibilidad universal; SDK oficial/FastMCP de ambas eras tienen pruebas propias.
+
+Final review: revisión con contexto nuevo de d027e1b4..edc067df, solo lectura. Critical0, Important0, Minor0 accionables; cinco focos revisados. Informe evidence/final-review.md. No hay fixes ni minors diferidos.
+
+Final: Ruling: exposición pública fuera de esta entrega local — no existe dominio/proxy/destino y los CVEs están declarados — coste si se ignora: exposición de avisos conocidos sin evaluar su entorno.
+
+Final: Ruling: ninguna certificación externa MCP — el runner probado no transmite Bearer ni incluye2026-07-28 — coste: clientes concretos siguen sin validación propia.
+
+Final: Ruling: Actions/publicación configurados, sin resultado remoto — no se ejecutaron contra GitHub/GHCR — coste: posibles diferencias de runner, permisos y registry al primer uso.
+
+Final: Ruling: cerrar ARM y documentación con evidencia del implementador — la revisión independiente terminó antes de esos resultados — coste: ARM local se prueba emulado, sin prometer hardware nativo.
+
+Final: Ruling: mantener los límites upstream de recuperación y concurrencia — no hay recuperación durable ante SIGKILL/caída ni CAS transaccional en la API usada — coste: una caída dura interrumpe cleanup y una edición concurrente puede competir entre lectura y PATCH.
+
+Task P24: complete — código edc067df15930cdbacad8c1449221a11871cf45d; suite929/929,3 deseleccionados; cobertura95,982974%/87,472284%; imagen5/5 amd64 y5/5 arm64 emulada; Mealie real1/1 Compose; Ruff/mypy/docs/checker/build verificados. Revisión independiente sin hallazgos accionables. Estado24/24; no existe P25. Evidencia evidence/P24.md y acceptance.md. Publicación y endpoint público no realizados.
+
+P24 cierre documental: se detecta y retira también .pnp.cjs (loader Yarn generado, sin uso Python). Los archivos que forman el wheel y las capas runtime no cambian respecto al commit probado. Se conserva .env.template como plantilla básica compatible; .env.example es la guía completa actual. Los únicos scripts Node restantes pertenecen a la auditoría opcional tests/reference.

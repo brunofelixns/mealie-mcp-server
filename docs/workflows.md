@@ -31,3 +31,11 @@ set_recipe_rating modifica el rating/favorito del usuario autenticado, separado 
 El cliente puede desconectarse después de una escritura que Mealie ya aceptó. Las mutaciones verificadas completan su comprobación/restauración con plazo acotado; no repetir a ciegas una petición cuyo resultado se desconoce. No existe recuperación duradera después de matar el proceso.
 
 Las credenciales Mealie y Bearer personal son independientes. stdio usa solo la primera; HTTP exige ambas. [Clientes](clients.md), [HTTP](http-deployment.md) y [contenedores](containers.md) describen configuración, límites y shutdown. Consultar el [informe de aceptación](migration/acceptance.md) para distinguir lo probado localmente de un despliegue público.
+
+## CI y publicación
+
+`.github/workflows/ci.yaml` utiliza el Dev Container en runners amd64 y arm64 nativos. Instala desde el lock frozen, comprueba Ruff/mypy y documentación, construye runtime con SBOM/provenance, ejecuta pytest con JUnit/cobertura y el checker78/78, integra Mealie desechable y analiza la imagen. Cada paso de shell falla al primer error. Conserva logs, métricas, reportes y wheel; no necesita Node para el producto ni la suite ordinaria.
+
+`release.yaml` se invoca manualmente. Solo publica si publish=true, coincide la versión y release_gate confirma24 tareas verificadas; depende de CI y repite smoke/scan por plataforma antes de componer el manifest GHCR. Las credenciales de publicación no entran en el build. Los ficheros de workflows están configurados y validados localmente, pero no se han ejecutado en GitHub ni se ha publicado un artefacto remoto.
+
+Renovate propone cambios sin automerge. Revisar dependencias, bases e ICU con el corpus de contratos y ambos transportes; no actualizar snapshots para ocultar diferencias. Los comandos y requisitos de entorno están en [desarrollo](development.md).
