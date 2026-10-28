@@ -293,6 +293,8 @@ La suite incluye pruebas reales de la imagen runtime: constrúyela primero como 
 
 El proyecto usa modelos estrictos, pruebas de contrato frente a capturas originales, tests con sockets reales e imágenes instaladas, Ruff y mypy. Las mutaciones verificadas tienen recuperación acotada ante cancelación; consultar el estado de Mealie antes de repetir una escritura cuyo resultado se desconoce.
 
+Para probar las **78 herramientas con Mealie real en Docker**, por stdio y HTTP con Bearer, ejecutar `uv run python -m tests.e2e.runner` dentro del Dev Container. El entorno es local y desechable; los cuatro recorridos y el rechazo de descargas privadas se explican en [pruebas E2E](docs/testing/local-e2e.md).
+
 El runtime se prueba con usuario sin privilegios, raíz de solo lectura y ambas arquitecturas; ARM local se verificó mediante emulación. Los resultados medidos están en el [informe de aceptación](docs/migration/acceptance.md). El último escaneo documentado conserva avisos críticos y altos de Debian: consulta [el análisis](docs/migration/evidence/P23-security.md) y sus límites antes de exponer un servicio público.
 
 ## Licencia y procedencia

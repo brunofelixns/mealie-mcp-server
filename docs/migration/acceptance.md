@@ -6,6 +6,8 @@ Referencias: [plan](../superpowers/plans/2026-10-27-python-migration.md), [estad
 
 La [limpieza posterior](cleanup.md) retira las herramientas Node temporales y restos de estructura. Los resultados P24 siguientes describen la entrega antes de esa limpieza. Verificación posterior:929 tests pasan,1 deseleccionado, checker78/78 y cobertura95,982974% líneas/87,472284% ramas; detalle y artefactos en el registro de limpieza.
 
+La [ampliación E2E posterior](../testing/local-e2e.md) sustituye el cliente de integración en memoria por Mealie y MCP reales en Docker:78 herramientas por cada combinación stdio/HTTP y dos eras de protocolo. Su [matriz](../testing/local-e2e-tool-matrix.md), [resultados](../testing/local-e2e-progress.md) y diferencias D10/D11 se registran por separado para conservar esta evidencia histórica.
+
 ## Identificación de la entrega
 
 | Campo | Valor |

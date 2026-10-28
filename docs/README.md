@@ -7,6 +7,7 @@ La implementación y verificación local están completas (24/24). [Avance](migr
 | Necesidad | Documento |
 |---|---|
 | Preparar el entorno y ejecutar checks | [Desarrollo](development.md) |
+| Probar las78 herramientas con Mealie real en Docker | [E2E local](testing/local-e2e.md) |
 | Variables y credenciales | [Configuración](configuration.md) |
 | Conectar clientes stdio/HTTP | [Clientes](clients.md) |
 | Proteger el endpoint remoto | [Despliegue HTTP](http-deployment.md) |

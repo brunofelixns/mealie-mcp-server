@@ -34,10 +34,7 @@ jobs:
             uv run pytest --cov=mealie_mcp_server --cov-branch --cov-report=json:artifacts/coverage.json --cov-report=xml:artifacts/coverage.xml --junitxml=artifacts/pytest.xml
             uv run python scripts/check_compatibility.py --require-all --coverage-json artifacts/coverage.json --junit-xml artifacts/pytest.xml
             uv run python scripts/generate_docs.py --check
-            trap 'docker compose -f compose.integration.yaml down --volumes >/dev/null 2>&1 || true' EXIT
-            docker compose -f compose.integration.yaml up --build --abort-on-container-exit --exit-code-from tests > artifacts/mealie-integration.log 2>&1
-            integration_container=$(docker compose -f compose.integration.yaml ps --all --quiet tests)
-            docker cp "$integration_container:/workspaces/mealie-mcp-server/artifacts/P24-live-summary.json" artifacts/mealie-live-summary.json
+            uv run python -m tests.e2e.runner --image mealie-mcp-server:local --no-build > artifacts/mealie-integration.log 2>&1
             uv run python scripts/scan_runtime.py mealie-mcp-server:local --platform linux/${{ matrix.arch }} --output artifacts/runtime-security.json --enforce
             uv build
       - name: Retain verification evidence
@@ -50,5 +47,6 @@ jobs:
             artifacts/*.log
             artifacts/*.txt
             artifacts/*.xml
+            artifacts/e2e/**
             dist/*.whl
           retention-days: 14

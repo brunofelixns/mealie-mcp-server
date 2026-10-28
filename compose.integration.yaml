@@ -1,6 +1,21 @@
 name: mealie-mcp-integration
+
+x-runtime: &runtime
+  image: ${MCP_E2E_IMAGE:?Run uv run python -m tests.e2e.runner}
+  pull_policy: never
+  init: true
+  user: "10001:10001"
+  read_only: true
+  tmpfs: ["/tmp:rw,noexec,nosuid,size=64m"]
+  cap_drop: [ALL]
+  security_opt: [no-new-privileges:true]
+  stop_grace_period: 45s
+  labels:
+    io.mealie-mcp.e2e: disposable
+
 services:
   mealie:
+    container_name: ${MCP_E2E_MEALIE_HOST:?Use the E2E controller}
     image: ghcr.io/mealie-recipes/mealie:v3.29.0@sha256:78eb28b8776d0bad40c5e605c72b3f4f5976793e491558c7dcbdfc04c835d4bc
     init: true
     environment:
@@ -9,22 +24,56 @@ services:
       BASE_URL: http://mealie:9000
       HOST_IP: ""
       LOG_LEVEL: warning
+      # The disposable provider may fetch only this local fixture host.
+      HTTP_ALLOW_LIST: assets
     volumes:
       - integration-data:/app/data
-  tests:
-    build:
-      context: .
-      target: integration-tests
+    labels:
+      io.mealie-mcp.e2e: disposable
+
+  assets:
+    <<: *runtime
+    entrypoint: [/opt/venv/bin/python, -m, http.server, "8080", --directory, /assets]
+    volumes: [fixture-assets:/assets:ro]
+
+  mcp-http:
+    <<: *runtime
+    container_name: ${MCP_E2E_HTTP_HOST:?Use the E2E controller}
+    command: [--transport, http, --host, 0.0.0.0, --port, "8000"]
     depends_on:
       mealie:
         condition: service_healthy
     environment:
-      MEALIE_LIVE_URL: http://mealie:9000
-      MEALIE_LIVE_ALLOW_WRITES: disposable-only
-    command: [uv, run, pytest, tests/integration/test_mealie_roundtrip.py, -m, live, -q]
+      MEALIE_BASE_URL: http://mealie:9000
+      MEALIE_API_KEY_FILE: /run/secrets/mealie_api_key
+      MCP_AUTH_TOKEN_FILE: /run/secrets/mcp_auth_token
+      MCP_PUBLIC_URL: http://${MCP_E2E_HTTP_HOST}:8000/mcp
+      MCP_REQUIRE_HTTPS: "false"
+      TZ: UTC
+    volumes: [credentials:/run/secrets:ro]
+    healthcheck:
+      test: [CMD, /opt/venv/bin/python, -c, "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/readyz', timeout=2).close()"]
+      interval: 1s
+      timeout: 3s
+      start_period: 10s
+      retries: 60
+
+  mcp-stdio:
+    <<: *runtime
+    profiles: [stdio]
+    stdin_open: true
+    tty: false
+    command: [--transport, stdio]
+    environment:
+      MEALIE_BASE_URL: http://mealie:9000
+      MEALIE_API_KEY_FILE: /run/secrets/mealie_api_key
+      TZ: UTC
+    volumes: [credentials:/run/secrets:ro]
+
 networks:
   default:
-    external: true
-    name: mealie-mcp-development_default
+    internal: true
 volumes:
   integration-data:
+  credentials:
+  fixture-assets:

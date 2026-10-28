@@ -27,16 +27,13 @@ Construir primero la imagen runtime como indica [contenedores](containers.md): l
 
 ## Integración real desechable
 
-Con la red del Dev Container disponible:
+Desde el terminal del Dev Container, con Docker Desktop disponible:
 
 ```bash
-docker compose -f compose.integration.yaml up --build --abort-on-container-exit --exit-code-from tests
-integration_container=$(docker compose -f compose.integration.yaml ps --all --quiet tests)
-docker cp "$integration_container:/workspaces/mealie-mcp-server/artifacts/P24-live-summary.json" artifacts/mealie-live-summary.json
-docker compose -f compose.integration.yaml down --volumes
+uv run python -m tests.e2e.runner
 ```
 
-Este proyecto Compose fija Mealie3.29.0 por digest, crea su volumen exclusivo y no publica puertos. El test exige `MEALIE_LIVE_ALLOW_WRITES=disposable-only`, inicia sesión con la cuenta inicial de esa instancia y crea datos sintéticos. Nunca apuntarlo a una instancia personal o productiva. Comprueba recetas, ingredientes/instrucciones y referencias, taxonomía, imagen, valoración/favorito, última preparación, planificación y compra. La limpieza `down --volumes` pertenece solo a mealie-mcp-integration; no borra la red externa del Dev Container.
+El controlador construye el runtime y crea un proyecto Compose único con Mealie3.29.0 fijado por digest. Ejecuta las78 herramientas y78 rechazos de argumentos por cada combinación stdio/HTTP y MCP2026-07-28/2025-11-25, con Bearer independiente en HTTP. Usa red interna, sin puertos publicados ni credenciales personales, y elimina sus contenedores/volúmenes incluso si fallan las pruebas. La descarga privada por archivo se verifica como rechazo SSRF esperado; las otras77 herramientas requieren operaciones positivas. Consultar el [runbook E2E](testing/local-e2e.md) para requisitos, evidencias, limpieza tras interrupciones y límites.
 
 ## Referencia de compatibilidad
 
