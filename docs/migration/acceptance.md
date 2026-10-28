@@ -4,6 +4,8 @@ Estado a2026-10-28: **migración Python completa y verificada localmente;24/24 t
 
 Referencias: [plan](../superpowers/plans/2026-10-27-python-migration.md), [estado](implementation-state.json), [inventario](compatibility-inventory.md), [diferencias](differences.md), [evidencia P24](evidence/P24.md) y [revisión independiente](evidence/final-review.md).
 
+La [limpieza posterior](cleanup.md) retira las herramientas Node temporales y restos de estructura. Los resultados P24 siguientes describen la entrega antes de esa limpieza. Verificación posterior:929 tests pasan,1 deseleccionado, checker78/78 y cobertura95,982974% líneas/87,472284% ramas; detalle y artefactos en el registro de limpieza.
+
 ## Identificación de la entrega
 
 | Campo | Valor |
@@ -77,7 +79,7 @@ Referencias: [plan](../superpowers/plans/2026-10-27-python-migration.md), [estad
 
 - [x] README, API_COVERAGE, WORKFLOWS, ARCHITECTURE, CONTRIBUTING y docs actualizados.
 - [x] CI/release Python, clientes, Renovate y coverage coherentes; ejecución remota pendiente.
-- [x] Producto TypeScript/JS, runner Node ordinario y workflows anteriores retirados. La referencia opcional de auditoría permanece aislada.
+- [x] Producto TypeScript/JS y workflows anteriores retirados. Tras la limpieza final se retira también el runner Node opcional; se conserva su baseline declarativo y el historial Git.
 - [x] Licencia/procedencia y baseline declarativo conservados.
 - [x] Estado24/24 y límites explícitos; release_gate local pasa sin publicar.
 - [x] Imágenes locales disponibles y guía de uso completa.

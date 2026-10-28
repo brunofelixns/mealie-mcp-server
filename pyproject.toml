@@ -47,9 +47,8 @@ include = ["src/mealie_mcp_server", "pyproject.toml", "README.md", "LICENSE", "u
 testpaths = ["tests"]
 asyncio_mode = "auto"
 asyncio_default_fixture_loop_scope = "function"
-addopts = "-ra --import-mode=importlib -m 'not reference and not live'"
+addopts = "-ra --import-mode=importlib -m 'not live'"
 markers = [
-  "reference: optional audit against the immutable upstream Node oracle",
   "live: writes only to an explicitly configured disposable Mealie instance",
 ]
 

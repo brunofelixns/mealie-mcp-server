@@ -18,6 +18,7 @@ La implementación y verificación local están completas (24/24). [Avance](migr
 | Contratos originales y trazabilidad | [Inventario](migration/compatibility-inventory.md) |
 | Cambios explícitos frente al original | [Diferencias](migration/differences.md) |
 | Resultados y límites de la entrega | [Aceptación](migration/acceptance.md) |
+| Retirada de herramientas temporales y restos TS | [Limpieza final](migration/cleanup.md) |
 | Escaneo y avisos del sistema base | [Seguridad de imagen](migration/evidence/P23-security.md) |
 
 El [diseño aprobado](superpowers/specs/2026-10-27-python-migration-design.md) y el [plan de24 tareas](superpowers/plans/2026-10-27-python-migration.md) conservan las decisiones y criterios originales. El [ledger](migration/execution-log.md) registra su ejecución. Upstream está fijado en d027e1b4a314d781a322f1f91e37840f01464d77; se conserva su [licencia](migration/upstream-LICENSE.txt).

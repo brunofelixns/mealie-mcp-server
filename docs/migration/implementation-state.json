@@ -1029,5 +1029,44 @@
     "src/__tests__/tools-tools.test.ts": "P10",
     "src/__tests__/units-api.test.ts": "P09",
     "src/__tests__/units-tools.test.ts": "P09"
+  },
+  "postMigrationCleanup": {
+    "requestedBy": "user",
+    "status": "verified",
+    "report": "docs/migration/cleanup.md",
+    "historicalToolingCommit": "17173ce73092290af7a6af42a7bbac2596e589d1",
+    "removedTrackedFiles": 10,
+    "removedEmptyDirectories": 7,
+    "removedLocalScratchFiles": 26,
+    "removedLocalScratchDirectory": ".superpowers",
+    "historicalLogsRelocated": [
+      "artifacts/migration-P02-devcontainer-reopen.log",
+      "artifacts/migration-P09-devcontainer-rebuild.log"
+    ],
+    "retainedCompatibilityFixtures": true,
+    "productionCodeChanged": false,
+    "productionDependenciesChanged": false,
+    "tests": 929,
+    "deselected": 1,
+    "coverage": {
+      "lines": 95.9829741952647,
+      "branches": 87.47228381374723
+    },
+    "positiveTools": 78,
+    "negativeTools": 78,
+    "junit": "artifacts/cleanup-pytest.xml",
+    "compatibilityReport": "artifacts/cleanup-compatibility.json",
+    "checks": [
+      "frozen sync",
+      "ruff",
+      "format",
+      "mypy",
+      "pytest",
+      "compatibility with executed JUnit",
+      "documentation drift and local links",
+      "wheel and sdist",
+      "Compose configuration",
+      "release gate"
+    ]
   }
 }

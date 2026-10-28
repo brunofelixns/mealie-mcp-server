@@ -38,15 +38,11 @@ docker compose -f compose.integration.yaml down --volumes
 
 Este proyecto Compose fija Mealie3.29.0 por digest, crea su volumen exclusivo y no publica puertos. El test exige `MEALIE_LIVE_ALLOW_WRITES=disposable-only`, inicia sesión con la cuenta inicial de esa instancia y crea datos sintéticos. Nunca apuntarlo a una instancia personal o productiva. Comprueba recetas, ingredientes/instrucciones y referencias, taxonomía, imagen, valoración/favorito, última preparación, planificación y compra. La limpieza `down --volumes` pertenece solo a mealie-mcp-integration; no borra la red externa del Dev Container.
 
-## Auditoría opcional de la referencia
+## Referencia de compatibilidad
 
-```bash
-docker compose -f tests/reference/compose.yaml build
-docker compose -f tests/reference/compose.yaml run --rm reference
-uv run pytest tests/contracts/test_reference_catalog.py -m reference -q
-```
+Las capturas declarativas originales de tests/fixtures/compatibility, su procedencia y la licencia se conservan y se verifican mediante las pruebas Python. Node no es necesario para desarrollo, tests ni producción. Los runners temporales y sus scripts de captura se retiraron; su versión histórica está identificada en [baseline.md](migration/baseline.md).
 
-Node queda aislado en ese runner de auditoría fijado al commit upstream, fuera del producto, su instalación y el CI ordinario. Las capturas declarativas, su procedencia y la licencia se conservan. El caso positivo de imagen por archivo usa un downloader Python inyectado; no se presenta como captura positiva original.
+El caso positivo de imagen por archivo usa un downloader Python inyectado; no se presenta como captura positiva original. La [limpieza final](migration/cleanup.md) registra qué se retiró y las comprobaciones posteriores.
 
 Para cambios funcionales, añadir primero una prueba de comportamiento, preservar el contrato de src/mealie_mcp_server/resources/tool-catalog.json y registrar diferencias intencionadas en [differences.md](migration/differences.md). No modificar expectativas de referencia para ocultar regresiones.
 

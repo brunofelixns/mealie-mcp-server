@@ -17,7 +17,7 @@ uv run pytest
 uv run python scripts/generate_docs.py --check
 ```
 
-La suite normal usa fixtures declarativas y tests Python. La auditoría opcional del upstream Node está separada y no forma parte del producto ni del CI ordinario. Ver [desarrollo](docs/development.md) y [aceptación](docs/migration/acceptance.md).
+La suite usa fixtures declarativas y tests Python. Las capturas originales se conservan; los runners temporales Node se retiraron al cerrar la migración. Ver [desarrollo](docs/development.md) y [aceptación](docs/migration/acceptance.md).
 
 ## Arranque local por stdio
 

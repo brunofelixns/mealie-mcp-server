@@ -67,3 +67,5 @@ Las78 herramientas tienen paridad y pruebas; prompt/instrucciones preservados; a
 ## Entrega final
 
 Código probado: edc067df15930cdbacad8c1449221a11871cf45d. [Aceptación](acceptance.md) contiene resultados, hashes, límites de seguridad y operación. [Revisión independiente](evidence/final-review.md): sin Critical/Important/Minor accionables. Cobertura95,982974% líneas y87,472284% ramas. No hay publicación ni endpoint público; las imágenes conservan2 avisos CRITICAL y59 HIGH Debian sin corrección disponible.
+
+Limpieza posterior solicitada por el usuario: completada. Runners Node/capturadores/plantilla duplicada/carpetas vacías y auxiliares locales retirados; baseline conservado. Suite actual929/929,1 deseleccionado, cobertura95,982974%/87,472284%. [Detalle](cleanup.md).

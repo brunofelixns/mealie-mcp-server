@@ -33,6 +33,8 @@ Fecha: 2026-10-27. Estado: implementación autorizada; P01..P24 verificadas loca
 
 ## Review Focus
 
+Nota posterior al cierre: las rutas de captura/runner Node de P03 y otras tareas identifican herramientas históricas. Se retiraron por petición del usuario en la [limpieza final](../../migration/cleanup.md); los fixtures y pruebas Python se conservan.
+
 1. Bootstrap circular: abrir el Dev Container sin uv.lock y sin ejecutar Python en el host; P01/P02 prueban apertura inicial y reinstalación frozen.
 2. Cambio de namespace/red: Mealie en host/subruta o Docker, sin filtrar Authorization a otro origen; P05 prueba URL base con subruta y redirects, P23 prueba red real.
 3. Desconexión tras una escritura: no duplicar ni dejar sin verificar silenciosamente; P16/P17/P22 prueban cancelación antes/después del PATCH y cleanup acotado.

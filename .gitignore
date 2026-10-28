@@ -1,17 +1,9 @@
-node_modules/
 dist/
-coverage/
 .coverage
 .coverage.*
 htmlcov/
 .env
 *.log
-.vite/
-.yarn/install-state.gz
-.yarn/build-state.yml
-.yarn/unplugged/
-.pnp.loader.mjs
-package-lock.json
 .idea/
 .venv/
 __pycache__/
@@ -25,5 +17,3 @@ artifacts/
 .env.*
 !.env.example
 secrets/
-
-
