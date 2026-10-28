@@ -1,0 +1,736 @@
+[
+  {
+    "tool": "get_shopping_lists",
+    "arguments": {
+      "page": 1,
+      "perPage": 20
+    },
+    "scenario": "get_shopping_lists.basic",
+    "expected_requests": [
+      {
+        "method": "GET",
+        "path": "/api/households/shopping/lists",
+        "query": {
+          "page": [
+            "1"
+          ],
+          "perPage": [
+            "20"
+          ]
+        },
+        "body": null
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"items\":[{\"id\":\"40000000-0000-4000-8000-000000000001\",\"name\":\" Weekly \",\"providerExtra\":{\"keep\":true}}],\"total\":1}"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "create_shopping_list",
+    "arguments": {
+      "name": " Weekly "
+    },
+    "scenario": "create_shopping_list.basic",
+    "expected_requests": [
+      {
+        "method": "POST",
+        "path": "/api/households/shopping/lists",
+        "query": {},
+        "body": {
+          "name": " Weekly "
+        }
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"id\":\"40000000-0000-4000-8000-000000000001\",\"name\":\" Weekly \",\"providerExtra\":{\"keep\":true}}"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "get_shopping_list",
+    "arguments": {
+      "listId": "40000000-0000-4000-8000-000000000001"
+    },
+    "scenario": "get_shopping_list.basic",
+    "expected_requests": [
+      {
+        "method": "GET",
+        "path": "/api/households/shopping/lists/40000000-0000-4000-8000-000000000001",
+        "query": {},
+        "body": null
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"id\":\"40000000-0000-4000-8000-000000000001\",\"name\":\" Weekly \",\"providerExtra\":{\"keep\":true}}"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "update_shopping_list",
+    "arguments": {
+      "listId": "40000000-0000-4000-8000-000000000001",
+      "name": ""
+    },
+    "scenario": "update_shopping_list.basic",
+    "expected_requests": [
+      {
+        "method": "PUT",
+        "path": "/api/households/shopping/lists/40000000-0000-4000-8000-000000000001",
+        "query": {},
+        "body": {
+          "name": ""
+        }
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"id\":\"40000000-0000-4000-8000-000000000001\",\"name\":\"\",\"providerExtra\":{\"keep\":true}}"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "delete_shopping_list",
+    "arguments": {
+      "listId": "40000000-0000-4000-8000-000000000001"
+    },
+    "scenario": "delete_shopping_list.basic",
+    "expected_requests": [
+      {
+        "method": "DELETE",
+        "path": "/api/households/shopping/lists/40000000-0000-4000-8000-000000000001",
+        "query": {},
+        "body": null
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"id\":\"40000000-0000-4000-8000-000000000001\"}"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "add_recipe_to_shopping_list",
+    "arguments": {
+      "listId": "40000000-0000-4000-8000-000000000001",
+      "recipeId": "40000000-0000-4000-8000-000000000003",
+      "recipeIncrementQuantity": 2
+    },
+    "scenario": "add_recipe_to_shopping_list.basic",
+    "expected_requests": [
+      {
+        "method": "POST",
+        "path": "/api/households/shopping/lists/40000000-0000-4000-8000-000000000001/recipe/40000000-0000-4000-8000-000000000003",
+        "query": {},
+        "body": {
+          "recipeIncrementQuantity": 2
+        }
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"id\":\"40000000-0000-4000-8000-000000000001\",\"name\":\" Weekly \",\"providerExtra\":{\"keep\":true}}"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "remove_recipe_from_shopping_list",
+    "arguments": {
+      "listId": "40000000-0000-4000-8000-000000000001",
+      "recipeId": "40000000-0000-4000-8000-000000000003"
+    },
+    "scenario": "remove_recipe_from_shopping_list.basic",
+    "expected_requests": [
+      {
+        "method": "POST",
+        "path": "/api/households/shopping/lists/40000000-0000-4000-8000-000000000001/recipe/40000000-0000-4000-8000-000000000003/delete",
+        "query": {},
+        "body": null
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"id\":\"40000000-0000-4000-8000-000000000001\",\"name\":\" Weekly \",\"providerExtra\":{\"keep\":true}}"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "get_shopping_list_items",
+    "arguments": {
+      "page": 1,
+      "perPage": 20,
+      "search": "salt"
+    },
+    "scenario": "get_shopping_list_items.basic",
+    "expected_requests": [
+      {
+        "method": "GET",
+        "path": "/api/households/shopping/items",
+        "query": {
+          "page": [
+            "1"
+          ],
+          "perPage": [
+            "20"
+          ],
+          "search": [
+            "salt"
+          ]
+        },
+        "body": null
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"items\":[{\"id\":\"40000000-0000-4000-8000-000000000002\",\"shoppingListId\":\"40000000-0000-4000-8000-000000000001\",\"note\":\"Salt\",\"quantity\":0,\"checked\":false}],\"total\":1}"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "create_shopping_list_item",
+    "arguments": {
+      "shoppingListId": "40000000-0000-4000-8000-000000000001",
+      "note": "Salt",
+      "quantity": 0,
+      "unitId": "unit",
+      "foodId": "food",
+      "labelId": "label"
+    },
+    "scenario": "create_shopping_list_item.basic",
+    "expected_requests": [
+      {
+        "method": "POST",
+        "path": "/api/households/shopping/items",
+        "query": {},
+        "body": {
+          "shoppingListId": "40000000-0000-4000-8000-000000000001",
+          "note": "Salt",
+          "quantity": 0,
+          "unitId": "unit",
+          "foodId": "food",
+          "labelId": "label"
+        }
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"id\":\"40000000-0000-4000-8000-000000000002\",\"shoppingListId\":\"40000000-0000-4000-8000-000000000001\",\"note\":\"Salt\",\"quantity\":0,\"checked\":false}"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "create_shopping_list_items_bulk",
+    "arguments": {
+      "items": [
+        {
+          "shoppingListId": "40000000-0000-4000-8000-000000000001",
+          "id": null,
+          "note": null,
+          "display": "Custom",
+          "quantity": 0,
+          "checked": false,
+          "position": 1.0,
+          "unitId": null,
+          "foodId": null,
+          "labelId": null,
+          "unit": {
+            "unknown": {
+              "preserve": [
+                0,
+                false,
+                null
+              ]
+            }
+          },
+          "food": null,
+          "referencedRecipe": {
+            "custom": true
+          },
+          "extras": {
+            "arbitrary": "kept"
+          },
+          "recipeReferences": [
+            {
+              "recipeId": "plain-string-id",
+              "recipeQuantity": 0,
+              "recipeScale": null,
+              "recipeNote": null
+            }
+          ]
+        }
+      ]
+    },
+    "scenario": "create_shopping_list_items_bulk.basic",
+    "expected_requests": [
+      {
+        "method": "POST",
+        "path": "/api/households/shopping/items/create-bulk",
+        "query": {},
+        "body": [
+          {
+            "shoppingListId": "40000000-0000-4000-8000-000000000001",
+            "id": null,
+            "note": null,
+            "display": "Custom",
+            "quantity": 0,
+            "checked": false,
+            "position": 1.0,
+            "unitId": null,
+            "foodId": null,
+            "labelId": null,
+            "unit": {
+              "unknown": {
+                "preserve": [
+                  0,
+                  false,
+                  null
+                ]
+              }
+            },
+            "food": null,
+            "referencedRecipe": {
+              "custom": true
+            },
+            "extras": {
+              "arbitrary": "kept"
+            },
+            "recipeReferences": [
+              {
+                "recipeId": "plain-string-id",
+                "recipeQuantity": 0,
+                "recipeScale": null,
+                "recipeNote": null
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "[{\"id\":\"40000000-0000-4000-8000-000000000002\",\"shoppingListId\":\"40000000-0000-4000-8000-000000000001\",\"note\":null,\"quantity\":0,\"checked\":false}]"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "update_shopping_list_item",
+    "arguments": {
+      "itemId": "40000000-0000-4000-8000-000000000002",
+      "note": "",
+      "quantity": 0,
+      "checked": false
+    },
+    "scenario": "update_shopping_list_item.basic",
+    "expected_requests": [
+      {
+        "method": "PUT",
+        "path": "/api/households/shopping/items/40000000-0000-4000-8000-000000000002",
+        "query": {},
+        "body": {
+          "note": "",
+          "quantity": 0,
+          "checked": false
+        }
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"id\":\"40000000-0000-4000-8000-000000000002\",\"shoppingListId\":\"40000000-0000-4000-8000-000000000001\",\"note\":\"Salt\",\"quantity\":0,\"checked\":false}"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "delete_shopping_list_item",
+    "arguments": {
+      "itemId": "40000000-0000-4000-8000-000000000002"
+    },
+    "scenario": "delete_shopping_list_item.basic",
+    "expected_requests": [
+      {
+        "method": "DELETE",
+        "path": "/api/households/shopping/items/40000000-0000-4000-8000-000000000002",
+        "query": {},
+        "body": null
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"id\":\"40000000-0000-4000-8000-000000000002\"}"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "delete_shopping_list_items_bulk",
+    "arguments": {
+      "itemIds": [
+        "40000000-0000-4000-8000-000000000002",
+        "other"
+      ]
+    },
+    "scenario": "delete_shopping_list_items_bulk.basic",
+    "expected_requests": [
+      {
+        "method": "DELETE",
+        "path": "/api/households/shopping/items",
+        "query": {
+          "ids": [
+            "40000000-0000-4000-8000-000000000002,other"
+          ]
+        },
+        "body": null
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"deleted\":2}"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "add_recipe_to_shopping_list",
+    "arguments": {
+      "listId": "40000000-0000-4000-8000-000000000001",
+      "recipeId": "40000000-0000-4000-8000-000000000003"
+    },
+    "scenario": "add_recipe_to_shopping_list.omitted",
+    "expected_requests": [
+      {
+        "method": "POST",
+        "path": "/api/households/shopping/lists/40000000-0000-4000-8000-000000000001/recipe/40000000-0000-4000-8000-000000000003",
+        "query": {},
+        "body": null
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"id\":\"40000000-0000-4000-8000-000000000001\",\"name\":\" Weekly \",\"providerExtra\":{\"keep\":true}}"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "add_recipe_to_shopping_list",
+    "arguments": {
+      "listId": "40000000-0000-4000-8000-000000000001",
+      "recipeId": "40000000-0000-4000-8000-000000000003",
+      "recipeIncrementQuantity": 0
+    },
+    "scenario": "add_recipe_to_shopping_list.zero",
+    "expected_requests": [
+      {
+        "method": "POST",
+        "path": "/api/households/shopping/lists/40000000-0000-4000-8000-000000000001/recipe/40000000-0000-4000-8000-000000000003",
+        "query": {},
+        "body": {
+          "recipeIncrementQuantity": 0
+        }
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"id\":\"40000000-0000-4000-8000-000000000001\",\"name\":\" Weekly \",\"providerExtra\":{\"keep\":true}}"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "update_shopping_list",
+    "arguments": {
+      "listId": "40000000-0000-4000-8000-000000000001"
+    },
+    "scenario": "update_shopping_list.omitted",
+    "expected_requests": [
+      {
+        "method": "PUT",
+        "path": "/api/households/shopping/lists/40000000-0000-4000-8000-000000000001",
+        "query": {},
+        "body": {}
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"id\":\"40000000-0000-4000-8000-000000000001\",\"name\":\" Weekly \",\"providerExtra\":{\"keep\":true}}"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "update_shopping_list_item",
+    "arguments": {
+      "itemId": "40000000-0000-4000-8000-000000000002"
+    },
+    "scenario": "update_shopping_list_item.omitted",
+    "expected_requests": [
+      {
+        "method": "PUT",
+        "path": "/api/households/shopping/items/40000000-0000-4000-8000-000000000002",
+        "query": {},
+        "body": {}
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"id\":\"40000000-0000-4000-8000-000000000002\",\"shoppingListId\":\"40000000-0000-4000-8000-000000000001\",\"note\":\"Salt\",\"quantity\":0,\"checked\":false}"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "create_shopping_list_items_bulk",
+    "arguments": {
+      "items": []
+    },
+    "scenario": "create_shopping_list_items_bulk.empty",
+    "expected_requests": [
+      {
+        "method": "POST",
+        "path": "/api/households/shopping/items/create-bulk",
+        "query": {},
+        "body": []
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "[]"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "delete_shopping_list_items_bulk",
+    "arguments": {
+      "itemIds": []
+    },
+    "scenario": "delete_shopping_list_items_bulk.empty",
+    "expected_requests": [
+      {
+        "method": "DELETE",
+        "path": "/api/households/shopping/items",
+        "query": {
+          "ids": [
+            ""
+          ]
+        },
+        "body": null
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"deleted\":0}"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "delete_shopping_list_items_bulk",
+    "arguments": {
+      "itemIds": [
+        "a/b",
+        "with comma"
+      ]
+    },
+    "scenario": "delete_shopping_list_items_bulk.csv",
+    "expected_requests": [
+      {
+        "method": "DELETE",
+        "path": "/api/households/shopping/items",
+        "query": {
+          "ids": [
+            "a/b,with comma"
+          ]
+        },
+        "body": null
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"deleted\":2}"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "delete_shopping_list",
+    "arguments": {
+      "listId": "40000000-0000-4000-8000-000000000001"
+    },
+    "scenario": "delete_shopping_list.204",
+    "expected_requests": [
+      {
+        "method": "DELETE",
+        "path": "/api/households/shopping/lists/40000000-0000-4000-8000-000000000001",
+        "query": {},
+        "body": null
+      }
+    ],
+    "expected_result": {
+      "protocolError": "MCPError",
+      "message": "MCP error -32602: Invalid tools/call result: [\n  {\n    \"code\": \"invalid_union\",\n    \"errors\": [\n      [\n        {\n          \"expected\": \"string\",\n          \"code\": \"invalid_type\",\n          \"path\": [\n            \"text\"\n          ],\n          \"message\": \"Invalid input: expected string, received undefined\"\n        }\n      ],\n      [\n        {\n          \"code\": \"invalid_value\",\n          \"values\": [\n            \"image\"\n          ],\n          \"path\": [\n            \"type\"\n          ],\n          \"message\": \"Invalid input: expected \\\"image\\\"\"\n        },\n        {\n          \"expected\": \"string\",\n          \"code\": \"invalid_type\",\n          \"path\": [\n            \"data\"\n          ],\n          \"message\": \"Invalid input: expected string, received undefined\"\n        },\n        {\n          \"expected\": \"string\",\n          \"code\": \"invalid_type\",\n          \"path\": [\n            \"mimeType\"\n          ],\n          \"message\": \"Invalid input: expected string, received undefined\"\n        }\n      ],\n      [\n        {\n          \"code\": \"invalid_value\",\n          \"values\": [\n            \"audio\"\n          ],\n          \"path\": [\n            \"type\"\n          ],\n          \"message\": \"Invalid input: expected \\\"audio\\\"\"\n        },\n        {\n          \"expected\": \"string\",\n          \"code\": \"invalid_type\",\n          \"path\": [\n            \"data\"\n          ],\n          \"message\": \"Invalid input: expected string, received undefined\"\n        },\n        {\n          \"expected\": \"string\",\n          \"code\": \"invalid_type\",\n          \"path\": [\n            \"mimeType\"\n          ],\n          \"message\": \"Invalid input: expected string, received undefined\"\n        }\n      ],\n      [\n        {\n          \"expected\": \"string\",\n          \"code\": \"invalid_type\",\n          \"path\": [\n            \"name\"\n          ],\n          \"message\": \"Invalid input: expected string, received undefined\"\n        },\n        {\n          \"expected\": \"string\",\n          \"code\": \"invalid_type\",\n          \"path\": [\n            \"uri\"\n          ],\n          \"message\": \"Invalid input: expected string, received undefined\"\n        },\n        {\n          \"code\": \"invalid_value\",\n          \"values\": [\n            \"resource_link\"\n          ],\n          \"path\": [\n            \"type\"\n          ],\n          \"message\": \"Invalid input: expected \\\"resource_link\\\"\"\n        }\n      ],\n      [\n        {\n          \"code\": \"invalid_value\",\n          \"values\": [\n            \"resource\"\n          ],\n          \"path\": [\n            \"type\"\n          ],\n          \"message\": \"Invalid input: expected \\\"resource\\\"\"\n        },\n        {\n          \"code\": \"invalid_union\",\n          \"errors\": [\n            [\n              {\n                \"expected\": \"object\",\n                \"code\": \"invalid_type\",\n                \"path\": [],\n                \"message\": \"Invalid input: expected object, received undefined\"\n              }\n            ],\n            [\n              {\n                \"expected\": \"object\",\n                \"code\": \"invalid_type\",\n                \"path\": [],\n                \"message\": \"Invalid input: expected object, received undefined\"\n              }\n            ]\n          ],\n          \"path\": [\n            \"resource\"\n          ],\n          \"message\": \"Invalid input\"\n        }\n      ]\n    ],\n    \"path\": [\n      \"content\",\n      0\n    ],\n    \"message\": \"Invalid input\"\n  }\n]"
+    },
+    "documented_difference": "D07",
+    "expected_python_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "null"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "delete_shopping_list_item",
+    "arguments": {
+      "itemId": "40000000-0000-4000-8000-000000000002"
+    },
+    "scenario": "delete_shopping_list_item.204",
+    "expected_requests": [
+      {
+        "method": "DELETE",
+        "path": "/api/households/shopping/items/40000000-0000-4000-8000-000000000002",
+        "query": {},
+        "body": null
+      }
+    ],
+    "expected_result": {
+      "protocolError": "MCPError",
+      "message": "MCP error -32602: Invalid tools/call result: [\n  {\n    \"code\": \"invalid_union\",\n    \"errors\": [\n      [\n        {\n          \"expected\": \"string\",\n          \"code\": \"invalid_type\",\n          \"path\": [\n            \"text\"\n          ],\n          \"message\": \"Invalid input: expected string, received undefined\"\n        }\n      ],\n      [\n        {\n          \"code\": \"invalid_value\",\n          \"values\": [\n            \"image\"\n          ],\n          \"path\": [\n            \"type\"\n          ],\n          \"message\": \"Invalid input: expected \\\"image\\\"\"\n        },\n        {\n          \"expected\": \"string\",\n          \"code\": \"invalid_type\",\n          \"path\": [\n            \"data\"\n          ],\n          \"message\": \"Invalid input: expected string, received undefined\"\n        },\n        {\n          \"expected\": \"string\",\n          \"code\": \"invalid_type\",\n          \"path\": [\n            \"mimeType\"\n          ],\n          \"message\": \"Invalid input: expected string, received undefined\"\n        }\n      ],\n      [\n        {\n          \"code\": \"invalid_value\",\n          \"values\": [\n            \"audio\"\n          ],\n          \"path\": [\n            \"type\"\n          ],\n          \"message\": \"Invalid input: expected \\\"audio\\\"\"\n        },\n        {\n          \"expected\": \"string\",\n          \"code\": \"invalid_type\",\n          \"path\": [\n            \"data\"\n          ],\n          \"message\": \"Invalid input: expected string, received undefined\"\n        },\n        {\n          \"expected\": \"string\",\n          \"code\": \"invalid_type\",\n          \"path\": [\n            \"mimeType\"\n          ],\n          \"message\": \"Invalid input: expected string, received undefined\"\n        }\n      ],\n      [\n        {\n          \"expected\": \"string\",\n          \"code\": \"invalid_type\",\n          \"path\": [\n            \"name\"\n          ],\n          \"message\": \"Invalid input: expected string, received undefined\"\n        },\n        {\n          \"expected\": \"string\",\n          \"code\": \"invalid_type\",\n          \"path\": [\n            \"uri\"\n          ],\n          \"message\": \"Invalid input: expected string, received undefined\"\n        },\n        {\n          \"code\": \"invalid_value\",\n          \"values\": [\n            \"resource_link\"\n          ],\n          \"path\": [\n            \"type\"\n          ],\n          \"message\": \"Invalid input: expected \\\"resource_link\\\"\"\n        }\n      ],\n      [\n        {\n          \"code\": \"invalid_value\",\n          \"values\": [\n            \"resource\"\n          ],\n          \"path\": [\n            \"type\"\n          ],\n          \"message\": \"Invalid input: expected \\\"resource\\\"\"\n        },\n        {\n          \"code\": \"invalid_union\",\n          \"errors\": [\n            [\n              {\n                \"expected\": \"object\",\n                \"code\": \"invalid_type\",\n                \"path\": [],\n                \"message\": \"Invalid input: expected object, received undefined\"\n              }\n            ],\n            [\n              {\n                \"expected\": \"object\",\n                \"code\": \"invalid_type\",\n                \"path\": [],\n                \"message\": \"Invalid input: expected object, received undefined\"\n              }\n            ]\n          ],\n          \"path\": [\n            \"resource\"\n          ],\n          \"message\": \"Invalid input\"\n        }\n      ]\n    ],\n    \"path\": [\n      \"content\",\n      0\n    ],\n    \"message\": \"Invalid input\"\n  }\n]"
+    },
+    "documented_difference": "D07",
+    "expected_python_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "null"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "delete_shopping_list_items_bulk",
+    "arguments": {
+      "itemIds": [
+        "40000000-0000-4000-8000-000000000002"
+      ]
+    },
+    "scenario": "delete_shopping_list_items_bulk.204",
+    "expected_requests": [
+      {
+        "method": "DELETE",
+        "path": "/api/households/shopping/items",
+        "query": {
+          "ids": [
+            "40000000-0000-4000-8000-000000000002"
+          ]
+        },
+        "body": null
+      }
+    ],
+    "expected_result": {
+      "protocolError": "MCPError",
+      "message": "MCP error -32602: Invalid tools/call result: [\n  {\n    \"code\": \"invalid_union\",\n    \"errors\": [\n      [\n        {\n          \"expected\": \"string\",\n          \"code\": \"invalid_type\",\n          \"path\": [\n            \"text\"\n          ],\n          \"message\": \"Invalid input: expected string, received undefined\"\n        }\n      ],\n      [\n        {\n          \"code\": \"invalid_value\",\n          \"values\": [\n            \"image\"\n          ],\n          \"path\": [\n            \"type\"\n          ],\n          \"message\": \"Invalid input: expected \\\"image\\\"\"\n        },\n        {\n          \"expected\": \"string\",\n          \"code\": \"invalid_type\",\n          \"path\": [\n            \"data\"\n          ],\n          \"message\": \"Invalid input: expected string, received undefined\"\n        },\n        {\n          \"expected\": \"string\",\n          \"code\": \"invalid_type\",\n          \"path\": [\n            \"mimeType\"\n          ],\n          \"message\": \"Invalid input: expected string, received undefined\"\n        }\n      ],\n      [\n        {\n          \"code\": \"invalid_value\",\n          \"values\": [\n            \"audio\"\n          ],\n          \"path\": [\n            \"type\"\n          ],\n          \"message\": \"Invalid input: expected \\\"audio\\\"\"\n        },\n        {\n          \"expected\": \"string\",\n          \"code\": \"invalid_type\",\n          \"path\": [\n            \"data\"\n          ],\n          \"message\": \"Invalid input: expected string, received undefined\"\n        },\n        {\n          \"expected\": \"string\",\n          \"code\": \"invalid_type\",\n          \"path\": [\n            \"mimeType\"\n          ],\n          \"message\": \"Invalid input: expected string, received undefined\"\n        }\n      ],\n      [\n        {\n          \"expected\": \"string\",\n          \"code\": \"invalid_type\",\n          \"path\": [\n            \"name\"\n          ],\n          \"message\": \"Invalid input: expected string, received undefined\"\n        },\n        {\n          \"expected\": \"string\",\n          \"code\": \"invalid_type\",\n          \"path\": [\n            \"uri\"\n          ],\n          \"message\": \"Invalid input: expected string, received undefined\"\n        },\n        {\n          \"code\": \"invalid_value\",\n          \"values\": [\n            \"resource_link\"\n          ],\n          \"path\": [\n            \"type\"\n          ],\n          \"message\": \"Invalid input: expected \\\"resource_link\\\"\"\n        }\n      ],\n      [\n        {\n          \"code\": \"invalid_value\",\n          \"values\": [\n            \"resource\"\n          ],\n          \"path\": [\n            \"type\"\n          ],\n          \"message\": \"Invalid input: expected \\\"resource\\\"\"\n        },\n        {\n          \"code\": \"invalid_union\",\n          \"errors\": [\n            [\n              {\n                \"expected\": \"object\",\n                \"code\": \"invalid_type\",\n                \"path\": [],\n                \"message\": \"Invalid input: expected object, received undefined\"\n              }\n            ],\n            [\n              {\n                \"expected\": \"object\",\n                \"code\": \"invalid_type\",\n                \"path\": [],\n                \"message\": \"Invalid input: expected object, received undefined\"\n              }\n            ]\n          ],\n          \"path\": [\n            \"resource\"\n          ],\n          \"message\": \"Invalid input\"\n        }\n      ]\n    ],\n    \"path\": [\n      \"content\",\n      0\n    ],\n    \"message\": \"Invalid input\"\n  }\n]"
+    },
+    "documented_difference": "D07",
+    "expected_python_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "null"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "create_shopping_list_item",
+    "arguments": {
+      "shoppingListId": "40000000-0000-4000-8000-000000000001",
+      "note": "duplicate"
+    },
+    "scenario": "create_shopping_list_item.error",
+    "expected_requests": [
+      {
+        "method": "POST",
+        "path": "/api/households/shopping/items",
+        "query": {},
+        "body": {
+          "shoppingListId": "40000000-0000-4000-8000-000000000001",
+          "note": "duplicate"
+        }
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "Mealie API error 400: {\"detail\": \"private error body\"}"
+        }
+      ],
+      "isError": true
+    },
+    "documented_difference": "D06",
+    "expected_python_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "Mealie API error 400."
+        }
+      ],
+      "isError": true
+    }
+  }
+]

@@ -4186,7 +4186,7 @@
         "blobSha": "05a37fadabdfcb45740ba956a8b7c1cdc5a31a45",
         "url": "https://github.com/timo-reymann/mealie-mcp-server/blob/d027e1b4a314d781a322f1f91e37840f01464d77/src/tools/shopping-lists.ts#L36"
       },
-      "migrationStatus": "inventoried_static_not_implemented",
+      "migrationStatus": "implemented_contract_verified",
       "effect": "read",
       "description": "Lists the household's shopping lists with pagination.",
       "descriptionSource": "'Lists the household\\'s shopping lists with pagination.'",
@@ -4223,8 +4223,14 @@
         "additionalProperties": false
       },
       "runtimeOutputSchema": null,
-      "runtimeExamples": [],
-      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeExamples": [
+        {
+          "file": "tests/fixtures/compatibility/cases/shopping_lists.json",
+          "index": 0,
+          "scenario": "get_shopping_lists.basic"
+        }
+      ],
+      "runtimeCaptureStatus": "behavior_captured_and_python_verified",
       "runtimeOutputSchemaPresent": false
     },
     {
@@ -4237,7 +4243,7 @@
         "blobSha": "05a37fadabdfcb45740ba956a8b7c1cdc5a31a45",
         "url": "https://github.com/timo-reymann/mealie-mcp-server/blob/d027e1b4a314d781a322f1f91e37840f01464d77/src/tools/shopping-lists.ts#L51"
       },
-      "migrationStatus": "inventoried_static_not_implemented",
+      "migrationStatus": "implemented_contract_verified",
       "effect": "write",
       "description": "Creates a new shopping list.",
       "descriptionSource": "'Creates a new shopping list.'",
@@ -4268,8 +4274,14 @@
         "additionalProperties": false
       },
       "runtimeOutputSchema": null,
-      "runtimeExamples": [],
-      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeExamples": [
+        {
+          "file": "tests/fixtures/compatibility/cases/shopping_lists.json",
+          "index": 1,
+          "scenario": "create_shopping_list.basic"
+        }
+      ],
+      "runtimeCaptureStatus": "behavior_captured_and_python_verified",
       "runtimeOutputSchemaPresent": false
     },
     {
@@ -4282,7 +4294,7 @@
         "blobSha": "05a37fadabdfcb45740ba956a8b7c1cdc5a31a45",
         "url": "https://github.com/timo-reymann/mealie-mcp-server/blob/d027e1b4a314d781a322f1f91e37840f01464d77/src/tools/shopping-lists.ts#L66"
       },
-      "migrationStatus": "inventoried_static_not_implemented",
+      "migrationStatus": "implemented_contract_verified",
       "effect": "read",
       "description": "Retrieves a shopping list by its UUID.",
       "descriptionSource": "'Retrieves a shopping list by its UUID.'",
@@ -4315,8 +4327,14 @@
         "additionalProperties": false
       },
       "runtimeOutputSchema": null,
-      "runtimeExamples": [],
-      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeExamples": [
+        {
+          "file": "tests/fixtures/compatibility/cases/shopping_lists.json",
+          "index": 2,
+          "scenario": "get_shopping_list.basic"
+        }
+      ],
+      "runtimeCaptureStatus": "behavior_captured_and_python_verified",
       "runtimeOutputSchemaPresent": false
     },
     {
@@ -4329,7 +4347,7 @@
         "blobSha": "05a37fadabdfcb45740ba956a8b7c1cdc5a31a45",
         "url": "https://github.com/timo-reymann/mealie-mcp-server/blob/d027e1b4a314d781a322f1f91e37840f01464d77/src/tools/shopping-lists.ts#L81"
       },
-      "migrationStatus": "inventoried_static_not_implemented",
+      "migrationStatus": "implemented_contract_verified",
       "effect": "write",
       "description": "Updates a shopping list's name.",
       "descriptionSource": "'Updates a shopping list\\'s name.'",
@@ -4369,8 +4387,19 @@
         "additionalProperties": false
       },
       "runtimeOutputSchema": null,
-      "runtimeExamples": [],
-      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeExamples": [
+        {
+          "file": "tests/fixtures/compatibility/cases/shopping_lists.json",
+          "index": 3,
+          "scenario": "update_shopping_list.basic"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/shopping_lists.json",
+          "index": 15,
+          "scenario": "update_shopping_list.omitted"
+        }
+      ],
+      "runtimeCaptureStatus": "behavior_captured_and_python_verified",
       "runtimeOutputSchemaPresent": false
     },
     {
@@ -4383,7 +4412,7 @@
         "blobSha": "05a37fadabdfcb45740ba956a8b7c1cdc5a31a45",
         "url": "https://github.com/timo-reymann/mealie-mcp-server/blob/d027e1b4a314d781a322f1f91e37840f01464d77/src/tools/shopping-lists.ts#L98"
       },
-      "migrationStatus": "inventoried_static_not_implemented",
+      "migrationStatus": "implemented_contract_verified",
       "effect": "destructive",
       "description": "Deletes a shopping list.",
       "descriptionSource": "'Deletes a shopping list.'",
@@ -4416,8 +4445,19 @@
         "additionalProperties": false
       },
       "runtimeOutputSchema": null,
-      "runtimeExamples": [],
-      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeExamples": [
+        {
+          "file": "tests/fixtures/compatibility/cases/shopping_lists.json",
+          "index": 4,
+          "scenario": "delete_shopping_list.basic"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/shopping_lists.json",
+          "index": 20,
+          "scenario": "delete_shopping_list.204"
+        }
+      ],
+      "runtimeCaptureStatus": "behavior_captured_and_python_verified",
       "runtimeOutputSchemaPresent": false
     },
     {
@@ -4430,7 +4470,7 @@
         "blobSha": "05a37fadabdfcb45740ba956a8b7c1cdc5a31a45",
         "url": "https://github.com/timo-reymann/mealie-mcp-server/blob/d027e1b4a314d781a322f1f91e37840f01464d77/src/tools/shopping-lists.ts#L113"
       },
-      "migrationStatus": "inventoried_static_not_implemented",
+      "migrationStatus": "implemented_contract_verified",
       "effect": "write",
       "description": "Adds a recipe's ingredients to a shopping list.",
       "descriptionSource": "'Adds a recipe\\'s ingredients to a shopping list.'",
@@ -4480,8 +4520,24 @@
         "additionalProperties": false
       },
       "runtimeOutputSchema": null,
-      "runtimeExamples": [],
-      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeExamples": [
+        {
+          "file": "tests/fixtures/compatibility/cases/shopping_lists.json",
+          "index": 5,
+          "scenario": "add_recipe_to_shopping_list.basic"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/shopping_lists.json",
+          "index": 13,
+          "scenario": "add_recipe_to_shopping_list.omitted"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/shopping_lists.json",
+          "index": 14,
+          "scenario": "add_recipe_to_shopping_list.zero"
+        }
+      ],
+      "runtimeCaptureStatus": "behavior_captured_and_python_verified",
       "runtimeOutputSchemaPresent": false
     },
     {
@@ -4494,7 +4550,7 @@
         "blobSha": "05a37fadabdfcb45740ba956a8b7c1cdc5a31a45",
         "url": "https://github.com/timo-reymann/mealie-mcp-server/blob/d027e1b4a314d781a322f1f91e37840f01464d77/src/tools/shopping-lists.ts#L128"
       },
-      "migrationStatus": "inventoried_static_not_implemented",
+      "migrationStatus": "implemented_contract_verified",
       "effect": "write",
       "description": "Removes a recipe's ingredients from a shopping list.",
       "descriptionSource": "'Removes a recipe\\'s ingredients from a shopping list.'",
@@ -4537,8 +4593,14 @@
         "additionalProperties": false
       },
       "runtimeOutputSchema": null,
-      "runtimeExamples": [],
-      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeExamples": [
+        {
+          "file": "tests/fixtures/compatibility/cases/shopping_lists.json",
+          "index": 6,
+          "scenario": "remove_recipe_from_shopping_list.basic"
+        }
+      ],
+      "runtimeCaptureStatus": "behavior_captured_and_python_verified",
       "runtimeOutputSchemaPresent": false
     },
     {
@@ -4551,7 +4613,7 @@
         "blobSha": "05a37fadabdfcb45740ba956a8b7c1cdc5a31a45",
         "url": "https://github.com/timo-reymann/mealie-mcp-server/blob/d027e1b4a314d781a322f1f91e37840f01464d77/src/tools/shopping-lists.ts#L143"
       },
-      "migrationStatus": "inventoried_static_not_implemented",
+      "migrationStatus": "implemented_contract_verified",
       "effect": "read",
       "description": "Lists all shopping list items across lists with pagination.",
       "descriptionSource": "'Lists all shopping list items across lists with pagination.'",
@@ -4593,8 +4655,14 @@
         "additionalProperties": false
       },
       "runtimeOutputSchema": null,
-      "runtimeExamples": [],
-      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeExamples": [
+        {
+          "file": "tests/fixtures/compatibility/cases/shopping_lists.json",
+          "index": 7,
+          "scenario": "get_shopping_list_items.basic"
+        }
+      ],
+      "runtimeCaptureStatus": "behavior_captured_and_python_verified",
       "runtimeOutputSchemaPresent": false
     },
     {
@@ -4607,7 +4675,7 @@
         "blobSha": "05a37fadabdfcb45740ba956a8b7c1cdc5a31a45",
         "url": "https://github.com/timo-reymann/mealie-mcp-server/blob/d027e1b4a314d781a322f1f91e37840f01464d77/src/tools/shopping-lists.ts#L158"
       },
-      "migrationStatus": "inventoried_static_not_implemented",
+      "migrationStatus": "implemented_contract_verified",
       "effect": "write",
       "description": "Creates a single shopping list item.",
       "descriptionSource": "'Creates a single shopping list item.'",
@@ -4676,8 +4744,19 @@
         "additionalProperties": false
       },
       "runtimeOutputSchema": null,
-      "runtimeExamples": [],
-      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeExamples": [
+        {
+          "file": "tests/fixtures/compatibility/cases/shopping_lists.json",
+          "index": 8,
+          "scenario": "create_shopping_list_item.basic"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/shopping_lists.json",
+          "index": 23,
+          "scenario": "create_shopping_list_item.error"
+        }
+      ],
+      "runtimeCaptureStatus": "behavior_captured_and_python_verified",
       "runtimeOutputSchemaPresent": false
     },
     {
@@ -4690,7 +4769,7 @@
         "blobSha": "05a37fadabdfcb45740ba956a8b7c1cdc5a31a45",
         "url": "https://github.com/timo-reymann/mealie-mcp-server/blob/d027e1b4a314d781a322f1f91e37840f01464d77/src/tools/shopping-lists.ts#L180"
       },
-      "migrationStatus": "inventoried_static_not_implemented",
+      "migrationStatus": "implemented_contract_verified",
       "effect": "write",
       "description": "Creates multiple shopping list items at once.",
       "descriptionSource": "'Creates multiple shopping list items at once.'",
@@ -4866,8 +4945,19 @@
         "additionalProperties": false
       },
       "runtimeOutputSchema": null,
-      "runtimeExamples": [],
-      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeExamples": [
+        {
+          "file": "tests/fixtures/compatibility/cases/shopping_lists.json",
+          "index": 9,
+          "scenario": "create_shopping_list_items_bulk.basic"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/shopping_lists.json",
+          "index": 17,
+          "scenario": "create_shopping_list_items_bulk.empty"
+        }
+      ],
+      "runtimeCaptureStatus": "behavior_captured_and_python_verified",
       "runtimeOutputSchemaPresent": false
     },
     {
@@ -4880,7 +4970,7 @@
         "blobSha": "05a37fadabdfcb45740ba956a8b7c1cdc5a31a45",
         "url": "https://github.com/timo-reymann/mealie-mcp-server/blob/d027e1b4a314d781a322f1f91e37840f01464d77/src/tools/shopping-lists.ts#L195"
       },
-      "migrationStatus": "inventoried_static_not_implemented",
+      "migrationStatus": "implemented_contract_verified",
       "effect": "write",
       "description": "Updates a shopping list item's note, quantity, or checked status.",
       "descriptionSource": "'Updates a shopping list item\\'s note, quantity, or checked status.'",
@@ -4934,8 +5024,19 @@
         "additionalProperties": false
       },
       "runtimeOutputSchema": null,
-      "runtimeExamples": [],
-      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeExamples": [
+        {
+          "file": "tests/fixtures/compatibility/cases/shopping_lists.json",
+          "index": 10,
+          "scenario": "update_shopping_list_item.basic"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/shopping_lists.json",
+          "index": 16,
+          "scenario": "update_shopping_list_item.omitted"
+        }
+      ],
+      "runtimeCaptureStatus": "behavior_captured_and_python_verified",
       "runtimeOutputSchemaPresent": false
     },
     {
@@ -4948,7 +5049,7 @@
         "blobSha": "05a37fadabdfcb45740ba956a8b7c1cdc5a31a45",
         "url": "https://github.com/timo-reymann/mealie-mcp-server/blob/d027e1b4a314d781a322f1f91e37840f01464d77/src/tools/shopping-lists.ts#L214"
       },
-      "migrationStatus": "inventoried_static_not_implemented",
+      "migrationStatus": "implemented_contract_verified",
       "effect": "destructive",
       "description": "Deletes a single shopping list item.",
       "descriptionSource": "'Deletes a single shopping list item.'",
@@ -4981,8 +5082,19 @@
         "additionalProperties": false
       },
       "runtimeOutputSchema": null,
-      "runtimeExamples": [],
-      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeExamples": [
+        {
+          "file": "tests/fixtures/compatibility/cases/shopping_lists.json",
+          "index": 11,
+          "scenario": "delete_shopping_list_item.basic"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/shopping_lists.json",
+          "index": 21,
+          "scenario": "delete_shopping_list_item.204"
+        }
+      ],
+      "runtimeCaptureStatus": "behavior_captured_and_python_verified",
       "runtimeOutputSchemaPresent": false
     },
     {
@@ -4995,7 +5107,7 @@
         "blobSha": "05a37fadabdfcb45740ba956a8b7c1cdc5a31a45",
         "url": "https://github.com/timo-reymann/mealie-mcp-server/blob/d027e1b4a314d781a322f1f91e37840f01464d77/src/tools/shopping-lists.ts#L229"
       },
-      "migrationStatus": "inventoried_static_not_implemented",
+      "migrationStatus": "implemented_contract_verified",
       "effect": "destructive",
       "description": "Deletes multiple shopping list items at once.",
       "descriptionSource": "'Deletes multiple shopping list items at once.'",
@@ -5029,8 +5141,29 @@
         "additionalProperties": false
       },
       "runtimeOutputSchema": null,
-      "runtimeExamples": [],
-      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeExamples": [
+        {
+          "file": "tests/fixtures/compatibility/cases/shopping_lists.json",
+          "index": 12,
+          "scenario": "delete_shopping_list_items_bulk.basic"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/shopping_lists.json",
+          "index": 18,
+          "scenario": "delete_shopping_list_items_bulk.empty"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/shopping_lists.json",
+          "index": 19,
+          "scenario": "delete_shopping_list_items_bulk.csv"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/shopping_lists.json",
+          "index": 22,
+          "scenario": "delete_shopping_list_items_bulk.204"
+        }
+      ],
+      "runtimeCaptureStatus": "behavior_captured_and_python_verified",
       "runtimeOutputSchemaPresent": false
     },
     {

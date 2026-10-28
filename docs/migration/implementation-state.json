@@ -350,7 +350,7 @@
           "tests": 247
         }
       ],
-      "commit": null
+      "commit": "99b92af56b012c0eba84f51e109dd7bce5dc9dfc"
     },
     {
       "id": "P11",
@@ -358,7 +358,7 @@
       "dependsOn": [
         "P10"
       ],
-      "status": "in_progress",
+      "status": "verified",
       "tools": [
         "get_shopping_lists",
         "create_shopping_list",
@@ -383,7 +383,13 @@
       "tests": [
         "tests/contracts/test_shopping_lists.py"
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "report": "docs/migration/evidence/P11.md",
+          "result": "passed",
+          "tests": 290
+        }
+      ],
       "commit": null
     },
     {
@@ -392,7 +398,7 @@
       "dependsOn": [
         "P11"
       ],
-      "status": "not_started",
+      "status": "in_progress",
       "tools": [
         "get_recipes",
         "get_recipe_detailed",

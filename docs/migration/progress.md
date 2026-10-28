@@ -11,8 +11,8 @@ Diferencias: [registro](differences.md).
 ## Situación actual
 
 - Documentados: inventario de78 herramientas, un prompt, diseño y plan.
-- Implementación:10/24 tareas verificadas; P11 en curso;33 herramientas portadas y verificadas.
-- Pruebas ejecutadas:1058originales y247Python pasan; sin Mealie de producción.
+- Implementación:11/24 tareas verificadas; P12 en curso;46 herramientas portadas y verificadas.
+- Pruebas ejecutadas:1058originales y290Python pasan; sin Mealie de producción.
 - Dev Container creado/abierto: verificado en P01.
 - Imagen de producción construida: pendiente.
 - Publicación y endpoint remoto: pendientes; se decidirá destino después de las pruebas locales.
@@ -34,8 +34,8 @@ La tabla es la vista inicial del JSON. Durante la ejecución se actualizan ambos
 | [P08](../superpowers/plans/2026-10-27-python-migration.md#p08) | Migrar categorías y etiquetas | P07 | Verificada |
 | [P09](../superpowers/plans/2026-10-27-python-migration.md#p09) | Migrar alimentos y unidades | P08 | Verificada |
 | [P10](../superpowers/plans/2026-10-27-python-migration.md#p10) | Migrar el catálogo de utensilios | P09 | Verificada |
-| [P11](../superpowers/plans/2026-10-27-python-migration.md#p11) | Migrar listas de compra e items | P10 | En curso |
-| [P12](../superpowers/plans/2026-10-27-python-migration.md#p12) | Migrar el núcleo de recetas | P11 | Pendiente |
+| [P11](../superpowers/plans/2026-10-27-python-migration.md#p11) | Migrar listas de compra e items | P10 | Verificada |
+| [P12](../superpowers/plans/2026-10-27-python-migration.md#p12) | Migrar el núcleo de recetas | P11 | En curso |
 | [P13](../superpowers/plans/2026-10-27-python-migration.md#p13) | Migrar taxonomía y utensilios de recetas, incluido patch_recipe | P12 | Pendiente |
 | [P14](../superpowers/plans/2026-10-27-python-migration.md#p14) | Migrar planes de comidas y operaciones por fases | P13 | Pendiente |
 | [P15](../superpowers/plans/2026-10-27-python-migration.md#p15) | Migrar búsqueda por ingredientes, cursores y colas de auditoría | P14 | Pendiente |

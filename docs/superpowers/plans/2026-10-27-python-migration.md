@@ -10,7 +10,7 @@
 
 **Spec:** [Diseño completo](../specs/2026-10-27-python-migration-design.md). Leer también [inventario](../../migration/compatibility-inventory.md) e [inventario JSON](../../migration/compatibility-inventory.json).
 
-Fecha: 2026-10-27. Estado: implementación autorizada; P01..P10 verificadas y P11 en curso. Ver implementation-state.json para la evidencia. No se ha publicado ni desplegado un endpoint público.
+Fecha: 2026-10-27. Estado: implementación autorizada; P01..P11 verificadas y P12 en curso. Ver implementation-state.json para la evidencia. No se ha publicado ni desplegado un endpoint público.
 
 ## Global Constraints
 
@@ -327,7 +327,7 @@ uv run pytest tests/unit/test_equipment_api.py tests/contracts/test_equipment.py
 <a id="p11"></a>
 ### P11: Migrar listas de compra e items
 
-**Depende de:** P10. **Estado:** pendiente; ver registro de ejecución.
+**Depende de:** P10. **Estado:** verificada; ver registro de ejecución.
 
 **Archivos:** `src/mealie_mcp_server/mealie/api/shopping_lists.py`, `src/mealie_mcp_server/models/inputs/shopping_lists.py`, `src/mealie_mcp_server/tools/shopping_lists.py`, `tests/fixtures/compatibility/cases/shopping_lists.json`.
 **Tests:** `tests/contracts/test_shopping_lists.py`.
@@ -336,17 +336,17 @@ uv run pytest tests/unit/test_equipment_api.py tests/contracts/test_equipment.py
 
 **Herramientas (13):** `get_shopping_lists`, `create_shopping_list`, `get_shopping_list`, `update_shopping_list`, `delete_shopping_list`, `add_recipe_to_shopping_list`, `remove_recipe_from_shopping_list`, `get_shopping_list_items`, `create_shopping_list_item`, `create_shopping_list_items_bulk`, `update_shopping_list_item`, `delete_shopping_list_item`, `delete_shopping_list_items_bulk`.
 
-- [ ] **1. Añadir las pruebas antes del código funcional.** test_shopping_lists_contract para13 herramientas; test_remove_recipe_uses_post_delete_suffix; test_delete_bulk_uses_csv_query_not_json_body; test_false_zero_and_omission: checked=False/quantity=0 llegan al PUT; get_shopping_list_items no acepta listId. Cubrir éxito/error y 204 reales por cada delete.
-- [ ] **2. Ejecutar el subconjunto indicado y observar RED.** El fallo esperado es el comportamiento/handler aún ausente o incorrecto; si falta infraestructura del harness, arreglarla antes de tomar el fallo como evidencia.
-- [ ] **3. Implementar las interfaces de esta tarea y sus fixtures.** Reutilizar los contratos anteriores; preservar los valores del diseño y el inventario. 13 herramientas, incluyendo huecos de referencia literal del original; semántica bulk del endpoint preservada, sin trasplantar respuesta de lotes de recetas.
+- [x] **1. Añadir las pruebas antes del código funcional.** test_shopping_lists_contract para13 herramientas; test_remove_recipe_uses_post_delete_suffix; test_delete_bulk_uses_csv_query_not_json_body; test_false_zero_and_omission: checked=False/quantity=0 llegan al PUT; get_shopping_list_items no acepta listId. Cubrir éxito/error y 204 reales por cada delete.
+- [x] **2. Ejecutar el subconjunto indicado y observar RED.** El fallo esperado es el comportamiento/handler aún ausente o incorrecto; si falta infraestructura del harness, arreglarla antes de tomar el fallo como evidencia.
+- [x] **3. Implementar las interfaces de esta tarea y sus fixtures.** Reutilizar los contratos anteriores; preservar los valores del diseño y el inventario. 13 herramientas, incluyendo huecos de referencia literal del original; semántica bulk del endpoint preservada, sin trasplantar respuesta de lotes de recetas.
 
-- [ ] **4. Verificar el resultado de esta tarea.** Ejecutar dentro del Dev Container; salida0 y todas las aserciones indicadas en verde. Para P01 el launcher y el contenedor auxiliar son la excepción de bootstrap explicada arriba.
+- [x] **4. Verificar el resultado de esta tarea.** Ejecutar dentro del Dev Container; salida0 y todas las aserciones indicadas en verde. Para P01 el launcher y el contenedor auxiliar son la excepción de bootstrap explicada arriba.
 
 ```bash
 uv run pytest tests/contracts/test_shopping_lists.py -q
 ```
 
-- [ ] **5. Revisar, documentar y cerrar.** Comprobar el criterio de salida anterior y el diff; no ampliar la suite sin una nueva causa. Actualizar estado, diferencias si las hay y evidencia con comando/resultado/entorno. Commit de implementación sugerido: `feat: port shopping list tools`. Registrar su SHA en un commit documental posterior si hace falta; no intentar incluir el hash de un commit en sí mismo.
+- [x] **5. Revisar, documentar y cerrar.** Comprobar el criterio de salida anterior y el diff; no ampliar la suite sin una nueva causa. Actualizar estado, diferencias si las hay y evidencia con comando/resultado/entorno. Commit de implementación sugerido: `feat: port shopping list tools`. Registrar su SHA en un commit documental posterior si hace falta; no intentar incluir el hash de un commit en sí mismo.
 
 <a id="p12"></a>
 ### P12: Migrar el núcleo de recetas
