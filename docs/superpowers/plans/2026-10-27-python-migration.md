@@ -10,7 +10,7 @@
 
 **Spec:** [Diseño completo](../specs/2026-10-27-python-migration-design.md). Leer también [inventario](../../migration/compatibility-inventory.md) e [inventario JSON](../../migration/compatibility-inventory.json).
 
-Fecha: 2026-10-27. Estado: implementación autorizada; P01..P14 verificadas y P15 en curso. Ver implementation-state.json para la evidencia. No se ha publicado ni desplegado un endpoint público.
+Fecha: 2026-10-27. Estado: implementación autorizada; P01..P15 verificadas y P16 en curso. Ver implementation-state.json para la evidencia. No se ha publicado ni desplegado un endpoint público.
 
 ## Global Constraints
 
@@ -423,26 +423,26 @@ uv run pytest tests/unit/test_mealplans_api.py tests/contracts/test_mealplans.py
 <a id="p15"></a>
 ### P15: Migrar búsqueda por ingredientes, cursores y colas de auditoría
 
-**Depende de:** P14. **Estado:** pendiente; ver registro de ejecución.
+**Depende de:** P14. **Estado:** verificada; ver registro de ejecución.
 
-**Archivos:** `src/mealie_mcp_server/services/recipe_discovery.py`, `src/mealie_mcp_server/services/ingredient_resolution.py`, `src/mealie_mcp_server/support/recipe_scan.py`, `src/mealie_mcp_server/services/recipe_audit.py`, `src/mealie_mcp_server/services/recipe_classification.py`, `src/mealie_mcp_server/services/recipe_ingredient_parsing.py`, `src/mealie_mcp_server/services/recipe_enrichment.py`, `src/mealie_mcp_server/tools/recipes.py`, `tests/fixtures/compatibility/cases/recipe_queues.json`.
+**Archivos:** `src/mealie_mcp_server/services/recipe_discovery.py`, `src/mealie_mcp_server/services/ingredient_resolution.py`, `src/mealie_mcp_server/support/recipe_scan.py`, `src/mealie_mcp_server/services/recipe_audit.py`, `src/mealie_mcp_server/services/recipe_classification.py`, `src/mealie_mcp_server/services/recipe_ingredient_parsing.py`, `src/mealie_mcp_server/services/recipe_enrichment.py`, `src/mealie_mcp_server/tools/recipe_queues.py`, `src/mealie_mcp_server/models/inputs/recipe_queues.py`, `src/mealie_mcp_server/tools/registry.py`, `tests/fixtures/compatibility/cases/recipe_queues.json`.
 **Tests:** `tests/unit/test_recipe_discovery.py`, `tests/unit/test_recipe_scan.py`, `tests/unit/test_recipe_audit.py`, `tests/contracts/test_recipe_queues.py`.
 
-**Interfaces:** consume P07/P09/P12; snapshots de cursores P03. Produce encode_cursor(cursor: ScanCursor) -> str; decode_cursor(raw: str) -> ScanCursor; scan_recipes_stable(client: MealieClient, cursor: ScanCursor | None) -> AsyncIterator[JsonObject]; audit_recipe(recipe: JsonObject) -> JsonObject; cuatro herramientas.
+**Interfaces:** consume P07/P09/P12; snapshots de cursores P03. Produce encode_cursor(cursor: ScanCursor) -> str; decode_cursor(raw: str) -> ScanCursor; scan_recipes_stable(client: MealieClient, cursor: ScanCursor | None) -> AsyncGenerator[ScannedRecipe]; audit_recipe(recipe: JsonObject) -> RecipeEnrichmentAudit; cuatro herramientas.
 
 **Herramientas (4):** `find_recipes_for_ingredients`, `get_recipes_for_classification`, `get_recipes_for_ingredient_parsing`, `get_recipes_for_data_enrichment`.
 
-- [ ] **1. Añadir las pruebas antes del código funcional.** test_cursor_cross_language_v1; test_same_created_at_stable_id_order; test_invalid_cursor_rejected; test_sparse_page_deadline_keeps_has_more: defaults25/max50, batch de detalle20, deadline20s; test_filters_replace_defaults_empty_rejected; test_sections_not_unparsed; test_no_unit_countable_partial_is_only_signal; read-only: assert recorded_writes == [].
-- [ ] **2. Ejecutar el subconjunto indicado y observar RED.** El fallo esperado es el comportamiento/handler aún ausente o incorrecto; si falta infraestructura del harness, arreglarla antes de tomar el fallo como evidencia.
-- [ ] **3. Implementar las interfaces de esta tarea y sus fixtures.** Reutilizar los contratos anteriores; preservar los valores del diseño y el inventario. 4 herramientas; fallback y procedencia reproducibles; ningún LLM ni conversión semántica; no prometer snapshot transaccional ante borrados concurrentes.
+- [x] **1. Añadir las pruebas antes del código funcional.** test_cursor_cross_language_v1; test_same_created_at_stable_id_order; test_invalid_cursor_rejected; test_sparse_page_deadline_keeps_has_more: defaults25/max50, batch de detalle20, deadline20s; test_filters_replace_defaults_empty_rejected; test_sections_not_unparsed; test_no_unit_countable_partial_is_only_signal; read-only: assert recorded_writes == [].
+- [x] **2. Ejecutar el subconjunto indicado y observar RED.** El fallo esperado es el comportamiento/handler aún ausente o incorrecto; si falta infraestructura del harness, arreglarla antes de tomar el fallo como evidencia.
+- [x] **3. Implementar las interfaces de esta tarea y sus fixtures.** Reutilizar los contratos anteriores; preservar los valores del diseño y el inventario. 4 herramientas; fallback y procedencia reproducibles; ningún LLM ni conversión semántica; no prometer snapshot transaccional ante borrados concurrentes.
 
-- [ ] **4. Verificar el resultado de esta tarea.** Ejecutar dentro del Dev Container; salida0 y todas las aserciones indicadas en verde. Para P01 el launcher y el contenedor auxiliar son la excepción de bootstrap explicada arriba.
+- [x] **4. Verificar el resultado de esta tarea.** Ejecutar dentro del Dev Container; salida0 y todas las aserciones indicadas en verde. Para P01 el launcher y el contenedor auxiliar son la excepción de bootstrap explicada arriba.
 
 ```bash
 uv run pytest tests/unit/test_recipe_discovery.py tests/unit/test_recipe_scan.py tests/unit/test_recipe_audit.py tests/contracts/test_recipe_queues.py -q
 ```
 
-- [ ] **5. Revisar, documentar y cerrar.** Comprobar el criterio de salida anterior y el diff; no ampliar la suite sin una nueva causa. Actualizar estado, diferencias si las hay y evidencia con comando/resultado/entorno. Commit de implementación sugerido: `feat: port stable recipe discovery and audit queues`. Registrar su SHA en un commit documental posterior si hace falta; no intentar incluir el hash de un commit en sí mismo.
+- [x] **5. Revisar, documentar y cerrar.** Comprobar el criterio de salida anterior y el diff; no ampliar la suite sin una nueva causa. Actualizar estado, diferencias si las hay y evidencia con comando/resultado/entorno. Commit de implementación sugerido: `feat: port stable recipe discovery and audit queues`. Registrar su SHA en un commit documental posterior si hace falta; no intentar incluir el hash de un commit en sí mismo.
 
 <a id="p16"></a>
 ### P16: Migrar escrituras de ingredientes y recuperación

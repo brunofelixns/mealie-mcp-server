@@ -28,7 +28,12 @@ async def get_recipes(
 
 
 async def get_recipe(client: MealieClient, slug: str) -> JsonObject:
-    return _object(await client.request("GET", "/api/recipes/" + encode_path_segment(slug, "slug")))
+    return _object(await get_recipe_value(client, slug))
+
+
+async def get_recipe_value(client: MealieClient, slug: str) -> JsonValue:
+    """Leave the response shape to audit callers that report malformed details as data."""
+    return await client.request("GET", "/api/recipes/" + encode_path_segment(slug, "slug"))
 
 
 async def get_recipes_batch(client: MealieClient, slugs: list[str]) -> JsonObject:

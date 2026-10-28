@@ -227,7 +227,7 @@
         "blobSha": "e918b9b3470dae48d07d54970c00d32cfd81beac",
         "url": "https://github.com/timo-reymann/mealie-mcp-server/blob/d027e1b4a314d781a322f1f91e37840f01464d77/src/tools/recipes.ts#L375"
       },
-      "migrationStatus": "inventoried_static_not_implemented",
+      "migrationStatus": "implemented_contract_verified",
       "effect": "read",
       "description": "Finds recipes that contain one or more requested ingredients. Ingredient names are resolved against Mealie's food taxonomy internally — never pass Mealie food UUIDs, just human-readable names like \"branzino\" or \"chicken thighs\". Use this for exact or approximate ingredient-based recipe discovery, e.g. deciding what to cook with an ingredient on hand. If an ingredient has no useful matches (see resolvedIngredients/unresolvedIngredients/matchSource in the response), the MCP will not guess a substitute on your behalf — retry this same tool with broader or substitutable ingredient terms you choose (e.g. \"branzino\" with no matches -> retry with \"sea bass\", \"whole fish\", or \"snapper\"), then use get_recipe_detailed or get_recipes_batch to inspect the most promising candidates.",
       "descriptionSource": "'Finds recipes that contain one or more requested ingredients. Ingredient names are resolved against ' +\n      \"Mealie's food taxonomy internally — never pass Mealie food UUIDs, just human-readable names like \" +\n      '\"branzino\" or \"chicken thighs\". Use this for exact or approximate ingredient-based recipe discovery, ' +\n      'e.g. deciding what to cook with an ingredient on hand. If an ingredient has no useful matches (see ' +\n      'resolvedIngredients/unresolvedIngredients/matchSource in the response), the MCP will not guess a ' +\n      'substitute on your behalf — retry this same tool with broader or substitutable ingredient terms you ' +\n      'choose (e.g. \"branzino\" with no matches -> retry with \"sea bass\", \"whole fish\", or \"snapper\"), then use ' +\n      'get_recipe_detailed or get_recipes_batch to inspect the most promising candidates.'",
@@ -322,8 +322,59 @@
         "additionalProperties": false
       },
       "runtimeOutputSchema": null,
-      "runtimeExamples": [],
-      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeExamples": [
+        {
+          "file": "tests/fixtures/compatibility/cases/recipe_queues.json",
+          "index": 3,
+          "scenario": "find_recipes_for_ingredients.basic"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/recipe_queues.json",
+          "index": 26,
+          "scenario": "find_recipes_for_ingredients.text_fallback"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/recipe_queues.json",
+          "index": 27,
+          "scenario": "find_recipes_for_ingredients.food_and"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/recipe_queues.json",
+          "index": 28,
+          "scenario": "find_recipes_for_ingredients.deduplicate_case_sensitive"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/recipe_queues.json",
+          "index": 29,
+          "scenario": "find_recipes_for_ingredients.plural"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/recipe_queues.json",
+          "index": 30,
+          "scenario": "find_recipes_for_ingredients.ambiguous"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/recipe_queues.json",
+          "index": 31,
+          "scenario": "find_recipes_for_ingredients.resolved_text_fallback"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/recipe_queues.json",
+          "index": 32,
+          "scenario": "find_recipes_for_ingredients.clamp"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/recipe_queues.json",
+          "index": 33,
+          "scenario": "find_recipes_for_ingredients.taxonomy_excluded"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/recipe_queues.json",
+          "index": 34,
+          "scenario": "find_recipes_for_ingredients.blank"
+        }
+      ],
+      "runtimeCaptureStatus": "behavior_captured_and_python_verified",
       "runtimeOutputSchemaPresent": false
     },
     {
@@ -583,7 +634,7 @@
         "blobSha": "e918b9b3470dae48d07d54970c00d32cfd81beac",
         "url": "https://github.com/timo-reymann/mealie-mcp-server/blob/d027e1b4a314d781a322f1f91e37840f01464d77/src/tools/recipes.ts#L490"
       },
-      "migrationStatus": "inventoried_static_not_implemented",
+      "migrationStatus": "implemented_contract_verified",
       "effect": "read",
       "description": "Compact, paginated, READ-ONLY feed of recipes for assigning Categories and Tags. Returns only the fields useful for classification (name, description, times, servings, source URL, ingredients, instructions) plus each recipe's EXISTING categories and tags — include and preserve those when classifying; do not drop or overwrite them. By default only recipes missing at least one taxonomy collection are returned (taxonomyState \"missing_either\"); use \"missing_both\", \"missing_categories\", \"missing_tags\", or \"any\" to change that. Pass the response's nextCursor back unchanged as the next call's cursor to continue; stop once hasMore is false. Pagination is stable against concurrent taxonomy edits — a recipe that gains categories/tags between calls will not cause other recipes to be skipped. A failure reading one recipe is reported in failures and does not fail the rest of the page. This tool never creates or modifies anything — it does not assign taxonomy, create categories/tags, or change any recipe. To apply classifications, call update_recipe_taxonomy_batch separately (preferably in batches of about five recipes), normally with mode \"merge\" and createMissing: false unless the user explicitly asks to replace collections or auto-create new categories/tags.",
       "descriptionSource": "'Compact, paginated, READ-ONLY feed of recipes for assigning Categories and Tags. Returns only the ' +\n      'fields useful for classification (name, description, times, servings, source URL, ingredients, ' +\n      'instructions) plus each recipe\\'s EXISTING categories and tags — include and preserve those when ' +\n      'classifying; do not drop or overwrite them. By default only recipes missing at least one taxonomy ' +\n      'collection are returned (taxonomyState \"missing_either\"); use \"missing_both\", \"missing_categories\", ' +\n      '\"missing_tags\", or \"any\" to change that. Pass the response\\'s nextCursor back unchanged as the next ' +\n      'call\\'s cursor to continue; stop once hasMore is false. Pagination is stable against concurrent ' +\n      'taxonomy edits — a recipe that gains categories/tags between calls will not cause other recipes to be ' +\n      'skipped. A failure reading one recipe is reported in failures and does not fail the rest of the page. ' +\n      'This tool never creates or modifies anything — it does not assign taxonomy, create categories/tags, or ' +\n      'change any recipe. To apply classifications, call update_recipe_taxonomy_batch separately (preferably ' +\n      'in batches of about five recipes), normally with mode \"merge\" and createMissing: false unless the user ' +\n      'explicitly asks to replace collections or auto-create new categories/tags.'",
@@ -640,8 +691,54 @@
         "additionalProperties": false
       },
       "runtimeOutputSchema": null,
-      "runtimeExamples": [],
-      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeExamples": [
+        {
+          "file": "tests/fixtures/compatibility/cases/recipe_queues.json",
+          "index": 0,
+          "scenario": "get_recipes_for_classification.basic"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/recipe_queues.json",
+          "index": 4,
+          "scenario": "get_recipes_for_classification.missing_either"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/recipe_queues.json",
+          "index": 5,
+          "scenario": "get_recipes_for_classification.missing_both"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/recipe_queues.json",
+          "index": 6,
+          "scenario": "get_recipes_for_classification.missing_categories"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/recipe_queues.json",
+          "index": 7,
+          "scenario": "get_recipes_for_classification.missing_tags"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/recipe_queues.json",
+          "index": 8,
+          "scenario": "get_recipes_for_classification.any"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/recipe_queues.json",
+          "index": 12,
+          "scenario": "get_recipes_for_classification.limit"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/recipe_queues.json",
+          "index": 14,
+          "scenario": "get_recipes_for_classification.invalid_cursor"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/recipe_queues.json",
+          "index": 15,
+          "scenario": "get_recipes_for_classification.empty"
+        }
+      ],
+      "runtimeCaptureStatus": "behavior_captured_and_python_verified",
       "runtimeOutputSchemaPresent": false
     },
     {
@@ -654,7 +751,7 @@
         "blobSha": "e918b9b3470dae48d07d54970c00d32cfd81beac",
         "url": "https://github.com/timo-reymann/mealie-mcp-server/blob/d027e1b4a314d781a322f1f91e37840f01464d77/src/tools/recipes.ts#L548"
       },
-      "migrationStatus": "inventoried_static_not_implemented",
+      "migrationStatus": "implemented_contract_verified",
       "effect": "read",
       "description": "Compact, paginated, READ-ONLY work queue of recipes whose ingredients may need structured parsing. This tool identifies candidate recipes using only their EXISTING stored schema state — it never parses or interprets ingredient language itself: it does not call Mealie's NLP ingredient parser, does not guess a food/unit association, and never modifies any recipe, food, unit, alias, or ingredient. It returns each ingredient's current stored state (quantity, unit id/name, food id/name, note, display, originalText, title, referenceId) plus recipe instructions (title, text, ingredientReferences) as context — turning that into structured data (e.g. \"2 tablespoons chopped fresh parsley leaves\" -> quantity 2, unit tablespoon, food parsley, note \"chopped fresh\") is entirely the calling model's job. Instructions are included because they can disambiguate an otherwise-ambiguous ingredient line or reveal how a compound quantity is actually used (e.g. whether \"3 cups + 2 tbsp flour\" is one combined amount or two separate uses) — this tool does not decide that, it only supplies the text. Each ingredient includes a deterministic, schema-only \"parsingState\": \"section\" (a pure Mealie ingredient-section heading: a non-empty title with no food, unit, positive quantity, note, display, or originalText other than the title itself — never counted as needing parsing; a title on a row that also carries an ingredient payload does NOT make it a section and the row is classified by its own state), \"unparsed\" (no food is associated — the primary, high-confidence signal), \"partial\" (a food is associated but no unit, while quantity is a positive number — NOTE: this also matches legitimately unit-less countable foods like \"4 eggs\" or \"2 lemons\", since Mealie's schema has no field distinguishing that from an incompletely-structured row; treat \"partial\" as a coarse audit signal, not a confirmed defect), or \"structured\" (fully resolved, or has no meaningful quantity to need a unit). Each recipe also includes an ingredientParsingState summary (unparsedCount/partialCount/structuredCount/sectionCount/totalCount); sectionCount independently counts every row with a non-empty title, so a titled real ingredient counts in both its parsing count and sectionCount and the counts need not sum to totalCount. Use \"state\" to choose the queue: \"unparsed_only\" (default) — recipes with at least one unparsed ingredient; \"partially_parsed\" — recipes with at least one partial ingredient; \"any\" — every scanned recipe, for auditing. Every scanned recipe needs a full detail fetch (Mealie's recipe list endpoint does not expose ingredients), fetched with bounded concurrency in small batches — a failure reading one recipe is reported in failures and does not fail the rest of the page. Because of that per-recipe fetch cost, a sparse queue may need to scan far more recipes than it returns to fill a page; returnedCount can come in below the requested limit even when hasMore is true, if an internal time budget is reached first — this is expected, not an error, and the response is still safe to use as-is. Pass the response's nextCursor back unchanged as the next call's cursor to continue; stop once hasMore is false. Pagination is stable against concurrent recipe edits, the same way get_recipes_for_classification is. When you later write changes: use get_food_matches and get_unit_matches to find existing canonical food/unit candidates for the concepts you interpreted (this tool never looks them up or creates them itself), then call update_recipe_ingredients with the complete, corrected ingredient collection for that recipe. Existing referenceIds are stable identifiers for ingredient rows and may be referenced by recipe instructions — preserve them when an existing ingredient row continues to represent the same ingredient. Recipe instruction ids returned here are NOT stable — Mealie recreates recipeInstructions (and assigns fresh ids) on every recipe update, including update_recipe_ingredients — do not depend on an instruction id read here still being valid after a write.",
       "descriptionSource": "'Compact, paginated, READ-ONLY work queue of recipes whose ingredients may need structured parsing. This ' +\n      'tool identifies candidate recipes using only their EXISTING stored schema state — it never parses or ' +\n      'interprets ingredient language itself: it does not call Mealie\\'s NLP ingredient parser, does not guess a ' +\n      'food/unit association, and never modifies any recipe, food, unit, alias, or ingredient. It returns each ' +\n      'ingredient\\'s current stored state (quantity, unit id/name, food id/name, note, display, originalText, ' +\n      'title, referenceId) plus recipe instructions (title, text, ingredientReferences) as context — turning ' +\n      'that into structured data (e.g. \"2 tablespoons chopped fresh parsley leaves\" -> quantity 2, unit ' +\n      'tablespoon, food parsley, note \"chopped fresh\") is entirely the calling model\\'s job. Instructions are ' +\n      'included because they can disambiguate an otherwise-ambiguous ingredient line or reveal how a compound ' +\n      'quantity is actually used (e.g. whether \"3 cups + 2 tbsp flour\" is one combined amount or two separate ' +\n      'uses) — this tool does not decide that, it only supplies the text. Each ingredient includes a ' +\n      'deterministic, schema-only \"parsingState\": \"section\" (a pure Mealie ingredient-section heading: a ' +\n      'non-empty title with no food, unit, positive quantity, note, display, or originalText other than the title itself — never counted as ' +\n      'needing parsing; a title on a row that also carries an ingredient payload does NOT make it a section and ' +\n      'the row is classified by its own state), \"unparsed\" (no food is associated — the primary, ' +\n      'high-confidence signal), \"partial\" (a food is associated but no unit, while quantity is a positive number ' +\n      '— NOTE: this also matches legitimately unit-less countable foods like \"4 eggs\" or \"2 lemons\", since ' +\n      'Mealie\\'s schema has no field distinguishing that from an incompletely-structured row; treat \"partial\" as ' +\n      'a coarse audit signal, not a confirmed defect), or \"structured\" (fully resolved, or has no meaningful ' +\n      'quantity to need a unit). Each recipe also includes an ingredientParsingState summary ' +\n      '(unparsedCount/partialCount/structuredCount/sectionCount/totalCount); sectionCount independently counts ' +\n      'every row with a non-empty title, so a titled real ingredient counts in both its parsing count and ' +\n      'sectionCount and the counts need not sum to totalCount. Use \"state\" to choose the queue: ' +\n      '\"unparsed_only\" (default) — recipes with at least one unparsed ingredient; \"partially_parsed\" — recipes ' +\n      'with at least one partial ingredient; \"any\" — every scanned recipe, for auditing. Every scanned recipe ' +\n      'needs a full detail fetch (Mealie\\'s recipe list endpoint does not expose ingredients), fetched with ' +\n      'bounded concurrency in small batches — a failure reading one recipe is reported in failures and does not ' +\n      'fail the rest of the page. Because of that per-recipe fetch cost, a sparse queue may need to scan far ' +\n      'more recipes than it returns to fill a page; returnedCount can come in below the requested limit even ' +\n      'when hasMore is true, if an internal time budget is reached first — this is expected, not an error, and ' +\n      'the response is still safe to use as-is. Pass the response\\'s nextCursor back unchanged as the next ' +\n      'call\\'s cursor to continue; stop once hasMore is false. Pagination is stable against concurrent recipe ' +\n      'edits, the same way get_recipes_for_classification is. When you later write changes: use get_food_matches ' +\n      'and get_unit_matches to find existing canonical food/unit candidates for the concepts you interpreted ' +\n      '(this tool never looks them up or creates them itself), then call update_recipe_ingredients with the ' +\n      'complete, corrected ingredient collection for that recipe. Existing referenceIds are stable identifiers ' +\n      'for ingredient rows and may be referenced by recipe instructions — preserve them when an existing ' +\n      'ingredient row continues to represent the same ingredient. Recipe instruction ids returned here are NOT ' +\n      'stable — Mealie recreates recipeInstructions (and assigns fresh ids) on every recipe update, including ' +\n      'update_recipe_ingredients — do not depend on an instruction id read here still being valid after a write.'",
@@ -711,8 +808,44 @@
         "additionalProperties": false
       },
       "runtimeOutputSchema": null,
-      "runtimeExamples": [],
-      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeExamples": [
+        {
+          "file": "tests/fixtures/compatibility/cases/recipe_queues.json",
+          "index": 1,
+          "scenario": "get_recipes_for_ingredient_parsing.basic"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/recipe_queues.json",
+          "index": 9,
+          "scenario": "get_recipes_for_ingredient_parsing.unparsed_only"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/recipe_queues.json",
+          "index": 10,
+          "scenario": "get_recipes_for_ingredient_parsing.partially_parsed"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/recipe_queues.json",
+          "index": 11,
+          "scenario": "get_recipes_for_ingredient_parsing.any"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/recipe_queues.json",
+          "index": 13,
+          "scenario": "get_recipes_for_ingredient_parsing.resume"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/recipe_queues.json",
+          "index": 16,
+          "scenario": "get_recipes_for_ingredient_parsing.invalid_cursor"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/recipe_queues.json",
+          "index": 17,
+          "scenario": "get_recipes_for_ingredient_parsing.empty"
+        }
+      ],
+      "runtimeCaptureStatus": "behavior_captured_and_python_verified",
       "runtimeOutputSchemaPresent": false
     },
     {
@@ -725,7 +858,7 @@
         "blobSha": "e918b9b3470dae48d07d54970c00d32cfd81beac",
         "url": "https://github.com/timo-reymann/mealie-mcp-server/blob/d027e1b4a314d781a322f1f91e37840f01464d77/src/tools/recipes.ts#L633"
       },
-      "migrationStatus": "inventoried_static_not_implemented",
+      "migrationStatus": "implemented_contract_verified",
       "effect": "read",
       "description": "Compact, paginated, READ-ONLY holistic work queue of recipes that match deterministic enrichment-review conditions across several dimensions at once: ingredient parsing, ingredient section headings, instruction-to-ingredient links, Tools, Categories, Tags, and image. It reports stored-schema facts and filters on them; it never decides what should change. A match is a review signal, NOT a verdict — e.g. \"4 eggs\" legitimately has no unit, a recipe may not need sections or equipment, and existing Categories/Tags may already be correct. Use matchedDimensions, the recipe context, and the audit counts to decide what actually warrants a change, preserve correct existing data, and apply changes with the focused write tools (update_recipe_ingredients, update_recipe_instructions, update_recipe_tools, update_recipe_taxonomy and their batch forms, and the recipe image tools). When to use it: for a clearly scoped single task prefer the focused queue (get_recipes_for_ingredient_parsing, get_recipes_for_classification); use this queue for several enrichment dimensions in one pass or for broad \"clean up / enrich my recipes\" requests with its default filters, paging until hasMore is false unless the user narrows scope. Never broaden a specific request into comprehensive cleanup. Filters: ingredientParsing (\"unparsed\" = some non-heading ingredient has no food — pure section headings excluded; \"partial\" = some ingredient has a food and positive quantity but no unit — coarse signal; \"unparsed_or_partial\"), ingredientSections (true = has section headings; false = has ingredients but no section headings — recipes with zero ingredients never match false), instructionIngredientLinks (\"missing\" = has instructions but none reference an ingredient; \"dangling\" = an instruction reference matches no current ingredient referenceId; \"missing_or_dangling\"), tools / categories / tags / image (true = present, false = absent). If filters is omitted, the defaults are ingredientParsing \"unparsed_or_partial\", ingredientSections false, instructionIngredientLinks \"missing_or_dangling\", tools false, categories false, tags false, image false. If filters is provided it is the COMPLETE active set — it is not merged with the defaults — and an empty filters object is rejected. match \"any\" (default) returns recipes matching at least one active filter; \"all\" requires every active filter. Recipes are scanned oldest-created first (createdAt, then id). Each item includes createdAt and updatedAt (use updatedAt as expectedUpdatedAt for guarded writers), ingredients with parsingState, instructions with ingredientReferenceIds, tools, categories, tags, the audit facts, and matchedDimensions (the active dimensions this recipe matched). Instruction ids are not exposed and are not stable identity — Mealie regenerates them on every recipe update. Every scanned recipe needs a full detail fetch (bounded concurrency); a failure reading one recipe is reported in failures without failing the page. A sparse queue may return fewer than limit items while hasMore is true if the internal time budget is reached — this is expected. Pass nextCursor back unchanged to continue; stop once hasMore is false.",
       "descriptionSource": "'Compact, paginated, READ-ONLY holistic work queue of recipes that match deterministic enrichment-review ' +\n      'conditions across several dimensions at once: ingredient parsing, ingredient section headings, ' +\n      'instruction-to-ingredient links, Tools, Categories, Tags, and image. It reports stored-schema facts and ' +\n      'filters on them; it never decides what should change. A match is a review signal, NOT a verdict — e.g. ' +\n      '\"4 eggs\" legitimately has no unit, a recipe may not need sections or equipment, and existing Categories/' +\n      'Tags may already be correct. Use matchedDimensions, the recipe context, and the audit counts to decide ' +\n      'what actually warrants a change, preserve correct existing data, and apply changes with the focused ' +\n      'write tools (update_recipe_ingredients, update_recipe_instructions, update_recipe_tools, ' +\n      'update_recipe_taxonomy and their batch forms, and the recipe image tools). When to use it: for a clearly ' +\n      'scoped single task prefer the focused queue (get_recipes_for_ingredient_parsing, ' +\n      'get_recipes_for_classification); use this queue for several enrichment dimensions in one pass or for ' +\n      'broad \"clean up / enrich my recipes\" requests with its default filters, paging until hasMore is false ' +\n      'unless the user narrows scope. Never broaden a specific request into comprehensive cleanup. Filters: ' +\n      'ingredientParsing (\"unparsed\" = some non-heading ingredient has no food — pure section headings excluded; \"partial\" = some ingredient has a food and ' +\n      'positive quantity but no unit — coarse signal; \"unparsed_or_partial\"), ingredientSections (true = has ' +\n      'section headings; false = has ingredients but no section headings — recipes with zero ingredients never ' +\n      'match false), instructionIngredientLinks (\"missing\" = has instructions but none reference an ingredient; ' +\n      '\"dangling\" = an instruction reference matches no current ingredient referenceId; \"missing_or_dangling\"), ' +\n      'tools / categories / tags / image (true = present, false = absent). If filters is omitted, the defaults are ' +\n      'ingredientParsing \"unparsed_or_partial\", ingredientSections false, instructionIngredientLinks ' +\n      '\"missing_or_dangling\", tools false, categories false, tags false, image false. If filters is provided it ' +\n      'is the COMPLETE active set — it is not merged with the defaults — and an empty filters object is rejected. match \"any\" (default) returns ' +\n      'recipes matching at least one active filter; \"all\" requires every active filter. Recipes are scanned ' +\n      'oldest-created first (createdAt, then id). Each item includes createdAt and updatedAt (use updatedAt as ' +\n      'expectedUpdatedAt for guarded writers), ingredients with parsingState, instructions with ' +\n      'ingredientReferenceIds, tools, categories, tags, the audit facts, and matchedDimensions (the active ' +\n      'dimensions this recipe matched). Instruction ids are not exposed and are not stable identity — Mealie ' +\n      'regenerates them on every recipe update. Every scanned recipe needs a full detail fetch (bounded ' +\n      'concurrency); a failure reading one recipe is reported in failures without failing the page. A sparse ' +\n      'queue may return fewer than limit items while hasMore is true if the internal time budget is reached — ' +\n      'this is expected. Pass nextCursor back unchanged to continue; stop once hasMore is false.'",
@@ -821,8 +954,54 @@
         "additionalProperties": false
       },
       "runtimeOutputSchema": null,
-      "runtimeExamples": [],
-      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeExamples": [
+        {
+          "file": "tests/fixtures/compatibility/cases/recipe_queues.json",
+          "index": 2,
+          "scenario": "get_recipes_for_data_enrichment.basic"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/recipe_queues.json",
+          "index": 18,
+          "scenario": "get_recipes_for_data_enrichment.invalid_cursor"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/recipe_queues.json",
+          "index": 19,
+          "scenario": "get_recipes_for_data_enrichment.empty"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/recipe_queues.json",
+          "index": 20,
+          "scenario": "get_recipes_for_data_enrichment.replace_defaults"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/recipe_queues.json",
+          "index": 21,
+          "scenario": "get_recipes_for_data_enrichment.all"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/recipe_queues.json",
+          "index": 22,
+          "scenario": "get_recipes_for_data_enrichment.sections"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/recipe_queues.json",
+          "index": 23,
+          "scenario": "get_recipes_for_data_enrichment.dangling"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/recipe_queues.json",
+          "index": 24,
+          "scenario": "get_recipes_for_data_enrichment.partial"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/recipe_queues.json",
+          "index": 25,
+          "scenario": "get_recipes_for_data_enrichment.empty_filters"
+        }
+      ],
+      "runtimeCaptureStatus": "behavior_captured_and_python_verified",
       "runtimeOutputSchemaPresent": false
     },
     {

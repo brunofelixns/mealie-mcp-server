@@ -61,3 +61,5 @@ Task P12: complete — suite328/328, Ruff/mypy passed; evidencia evidence/P12.md
 Task P13: complete — suite403/403, Ruff/mypy passed; evidencia evidence/P13.md. P14 en curso.
 
 Task P14: complete — suite436/436, Ruff/mypy passed; evidencia evidence/P14.md. P15 en curso.
+
+Task P15: complete — suite521/521, Ruff/mypy passed; evidencia evidence/P15.md. P16 en curso.

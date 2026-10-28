@@ -500,7 +500,7 @@
           "tests": 436
         }
       ],
-      "commit": null
+      "commit": "cf781a3722b1db5c30e8f9f242ad8bacc6d1b7b6"
     },
     {
       "id": "P15",
@@ -508,7 +508,7 @@
       "dependsOn": [
         "P14"
       ],
-      "status": "in_progress",
+      "status": "verified",
       "tools": [
         "find_recipes_for_ingredients",
         "get_recipes_for_classification",
@@ -523,8 +523,12 @@
         "src/mealie_mcp_server/services/recipe_classification.py",
         "src/mealie_mcp_server/services/recipe_ingredient_parsing.py",
         "src/mealie_mcp_server/services/recipe_enrichment.py",
-        "src/mealie_mcp_server/tools/recipes.py",
-        "tests/fixtures/compatibility/cases/recipe_queues.json"
+        "tests/fixtures/compatibility/cases/recipe_queues.json",
+        "src/mealie_mcp_server/models/inputs/recipe_queues.py",
+        "src/mealie_mcp_server/tools/recipe_queues.py",
+        "src/mealie_mcp_server/tools/registry.py",
+        "src/mealie_mcp_server/mealie/api/recipes.py",
+        "src/mealie_mcp_server/mealie/client.py"
       ],
       "tests": [
         "tests/unit/test_recipe_discovery.py",
@@ -532,7 +536,13 @@
         "tests/unit/test_recipe_audit.py",
         "tests/contracts/test_recipe_queues.py"
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "report": "docs/migration/evidence/P15.md",
+          "result": "passed",
+          "tests": 521
+        }
+      ],
       "commit": null
     },
     {
@@ -541,7 +551,7 @@
       "dependsOn": [
         "P15"
       ],
-      "status": "not_started",
+      "status": "in_progress",
       "tools": [
         "update_recipe_ingredients",
         "update_recipe_ingredients_batch"

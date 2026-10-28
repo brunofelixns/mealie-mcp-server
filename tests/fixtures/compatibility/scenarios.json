@@ -6540,5 +6540,5029 @@
         "status": 200
       }
     ]
+  },
+  "get_recipes_for_classification.basic": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes",
+        "query": {
+          "page": [
+            "1"
+          ],
+          "perPage": [
+            "50"
+          ],
+          "orderBy": [
+            "createdAt"
+          ],
+          "orderDirection": [
+            "asc"
+          ]
+        },
+        "body": null,
+        "response": {
+          "items": [
+            {
+              "id": "a",
+              "slug": "soup",
+              "name": " Soup ",
+              "createdAt": "2026-10-28",
+              "updatedAt": "2026-10-28T10:00:00Z",
+              "description": " desc ",
+              "recipeServings": 0,
+              "recipeYield": " 2 bowls ",
+              "totalTime": " PT30M ",
+              "orgURL": " https://example.test/soup ",
+              "recipeCategory": [
+                {
+                  "id": 1,
+                  "name": " Dinner ",
+                  "slug": " dinner "
+                }
+              ],
+              "tags": [],
+              "tools": [
+                {
+                  "id": 2,
+                  "name": " Pot "
+                }
+              ],
+              "image": " ",
+              "recipeIngredient": [
+                {
+                  "referenceId": "section",
+                  "title": " Sauce ",
+                  "originalText": "Sauce"
+                },
+                {
+                  "referenceId": "raw",
+                  "display": " 2 eggs ",
+                  "note": "discarded"
+                },
+                {
+                  "referenceId": 3,
+                  "food": {
+                    "id": "egg",
+                    "name": " Egg "
+                  },
+                  "unit": null,
+                  "quantity": 2,
+                  "title": " Eggs "
+                },
+                {
+                  "referenceId": "salt",
+                  "food": {},
+                  "unit": {},
+                  "quantity": 0
+                },
+                {
+                  "originalText": " original "
+                },
+                {}
+              ],
+              "recipeInstructions": [
+                {
+                  "id": "unstable",
+                  "title": " Prepare ",
+                  "text": " Stir ",
+                  "ingredientReferences": [
+                    {
+                      "referenceId": "raw"
+                    },
+                    {
+                      "referenceId": "dangling"
+                    }
+                  ]
+                },
+                {
+                  "title": "Prepare",
+                  "text": " Eat "
+                },
+                {
+                  "title": "",
+                  "text": ""
+                },
+                {
+                  "title": "Prepare",
+                  "text": "Repeat"
+                }
+              ]
+            }
+          ],
+          "total": 1
+        },
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/api/recipes/soup",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "a",
+          "slug": "soup",
+          "name": " Soup ",
+          "createdAt": "2026-10-28",
+          "updatedAt": "2026-10-28T10:00:00Z",
+          "description": " desc ",
+          "recipeServings": 0,
+          "recipeYield": " 2 bowls ",
+          "totalTime": " PT30M ",
+          "orgURL": " https://example.test/soup ",
+          "recipeCategory": [
+            {
+              "id": 1,
+              "name": " Dinner ",
+              "slug": " dinner "
+            }
+          ],
+          "tags": [],
+          "tools": [
+            {
+              "id": 2,
+              "name": " Pot "
+            }
+          ],
+          "image": " ",
+          "recipeIngredient": [
+            {
+              "referenceId": "section",
+              "title": " Sauce ",
+              "originalText": "Sauce"
+            },
+            {
+              "referenceId": "raw",
+              "display": " 2 eggs ",
+              "note": "discarded"
+            },
+            {
+              "referenceId": 3,
+              "food": {
+                "id": "egg",
+                "name": " Egg "
+              },
+              "unit": null,
+              "quantity": 2,
+              "title": " Eggs "
+            },
+            {
+              "referenceId": "salt",
+              "food": {},
+              "unit": {},
+              "quantity": 0
+            },
+            {
+              "originalText": " original "
+            },
+            {}
+          ],
+          "recipeInstructions": [
+            {
+              "id": "unstable",
+              "title": " Prepare ",
+              "text": " Stir ",
+              "ingredientReferences": [
+                {
+                  "referenceId": "raw"
+                },
+                {
+                  "referenceId": "dangling"
+                }
+              ]
+            },
+            {
+              "title": "Prepare",
+              "text": " Eat "
+            },
+            {
+              "title": "",
+              "text": ""
+            },
+            {
+              "title": "Prepare",
+              "text": "Repeat"
+            }
+          ]
+        },
+        "status": 200
+      }
+    ]
+  },
+  "get_recipes_for_ingredient_parsing.basic": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes",
+        "query": {
+          "page": [
+            "1"
+          ],
+          "perPage": [
+            "50"
+          ],
+          "orderBy": [
+            "createdAt"
+          ],
+          "orderDirection": [
+            "asc"
+          ]
+        },
+        "body": null,
+        "response": {
+          "items": [
+            {
+              "id": "a",
+              "slug": "soup",
+              "name": " Soup ",
+              "createdAt": "2026-10-28",
+              "updatedAt": "2026-10-28T10:00:00Z",
+              "description": " desc ",
+              "recipeServings": 0,
+              "recipeYield": " 2 bowls ",
+              "totalTime": " PT30M ",
+              "orgURL": " https://example.test/soup ",
+              "recipeCategory": [
+                {
+                  "id": 1,
+                  "name": " Dinner ",
+                  "slug": " dinner "
+                }
+              ],
+              "tags": [],
+              "tools": [
+                {
+                  "id": 2,
+                  "name": " Pot "
+                }
+              ],
+              "image": " ",
+              "recipeIngredient": [
+                {
+                  "referenceId": "section",
+                  "title": " Sauce ",
+                  "originalText": "Sauce"
+                },
+                {
+                  "referenceId": "raw",
+                  "display": " 2 eggs ",
+                  "note": "discarded"
+                },
+                {
+                  "referenceId": 3,
+                  "food": {
+                    "id": "egg",
+                    "name": " Egg "
+                  },
+                  "unit": null,
+                  "quantity": 2,
+                  "title": " Eggs "
+                },
+                {
+                  "referenceId": "salt",
+                  "food": {},
+                  "unit": {},
+                  "quantity": 0
+                },
+                {
+                  "originalText": " original "
+                },
+                {}
+              ],
+              "recipeInstructions": [
+                {
+                  "id": "unstable",
+                  "title": " Prepare ",
+                  "text": " Stir ",
+                  "ingredientReferences": [
+                    {
+                      "referenceId": "raw"
+                    },
+                    {
+                      "referenceId": "dangling"
+                    }
+                  ]
+                },
+                {
+                  "title": "Prepare",
+                  "text": " Eat "
+                },
+                {
+                  "title": "",
+                  "text": ""
+                },
+                {
+                  "title": "Prepare",
+                  "text": "Repeat"
+                }
+              ]
+            }
+          ],
+          "total": 1
+        },
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/api/recipes/soup",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "a",
+          "slug": "soup",
+          "name": " Soup ",
+          "createdAt": "2026-10-28",
+          "updatedAt": "2026-10-28T10:00:00Z",
+          "description": " desc ",
+          "recipeServings": 0,
+          "recipeYield": " 2 bowls ",
+          "totalTime": " PT30M ",
+          "orgURL": " https://example.test/soup ",
+          "recipeCategory": [
+            {
+              "id": 1,
+              "name": " Dinner ",
+              "slug": " dinner "
+            }
+          ],
+          "tags": [],
+          "tools": [
+            {
+              "id": 2,
+              "name": " Pot "
+            }
+          ],
+          "image": " ",
+          "recipeIngredient": [
+            {
+              "referenceId": "section",
+              "title": " Sauce ",
+              "originalText": "Sauce"
+            },
+            {
+              "referenceId": "raw",
+              "display": " 2 eggs ",
+              "note": "discarded"
+            },
+            {
+              "referenceId": 3,
+              "food": {
+                "id": "egg",
+                "name": " Egg "
+              },
+              "unit": null,
+              "quantity": 2,
+              "title": " Eggs "
+            },
+            {
+              "referenceId": "salt",
+              "food": {},
+              "unit": {},
+              "quantity": 0
+            },
+            {
+              "originalText": " original "
+            },
+            {}
+          ],
+          "recipeInstructions": [
+            {
+              "id": "unstable",
+              "title": " Prepare ",
+              "text": " Stir ",
+              "ingredientReferences": [
+                {
+                  "referenceId": "raw"
+                },
+                {
+                  "referenceId": "dangling"
+                }
+              ]
+            },
+            {
+              "title": "Prepare",
+              "text": " Eat "
+            },
+            {
+              "title": "",
+              "text": ""
+            },
+            {
+              "title": "Prepare",
+              "text": "Repeat"
+            }
+          ]
+        },
+        "status": 200
+      }
+    ]
+  },
+  "get_recipes_for_data_enrichment.basic": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes",
+        "query": {
+          "page": [
+            "1"
+          ],
+          "perPage": [
+            "50"
+          ],
+          "orderBy": [
+            "createdAt"
+          ],
+          "orderDirection": [
+            "asc"
+          ]
+        },
+        "body": null,
+        "response": {
+          "items": [
+            {
+              "id": "a",
+              "slug": "soup",
+              "name": " Soup ",
+              "createdAt": "2026-10-28",
+              "updatedAt": "2026-10-28T10:00:00Z",
+              "description": " desc ",
+              "recipeServings": 0,
+              "recipeYield": " 2 bowls ",
+              "totalTime": " PT30M ",
+              "orgURL": " https://example.test/soup ",
+              "recipeCategory": [
+                {
+                  "id": 1,
+                  "name": " Dinner ",
+                  "slug": " dinner "
+                }
+              ],
+              "tags": [],
+              "tools": [
+                {
+                  "id": 2,
+                  "name": " Pot "
+                }
+              ],
+              "image": " ",
+              "recipeIngredient": [
+                {
+                  "referenceId": "section",
+                  "title": " Sauce ",
+                  "originalText": "Sauce"
+                },
+                {
+                  "referenceId": "raw",
+                  "display": " 2 eggs ",
+                  "note": "discarded"
+                },
+                {
+                  "referenceId": 3,
+                  "food": {
+                    "id": "egg",
+                    "name": " Egg "
+                  },
+                  "unit": null,
+                  "quantity": 2,
+                  "title": " Eggs "
+                },
+                {
+                  "referenceId": "salt",
+                  "food": {},
+                  "unit": {},
+                  "quantity": 0
+                },
+                {
+                  "originalText": " original "
+                },
+                {}
+              ],
+              "recipeInstructions": [
+                {
+                  "id": "unstable",
+                  "title": " Prepare ",
+                  "text": " Stir ",
+                  "ingredientReferences": [
+                    {
+                      "referenceId": "raw"
+                    },
+                    {
+                      "referenceId": "dangling"
+                    }
+                  ]
+                },
+                {
+                  "title": "Prepare",
+                  "text": " Eat "
+                },
+                {
+                  "title": "",
+                  "text": ""
+                },
+                {
+                  "title": "Prepare",
+                  "text": "Repeat"
+                }
+              ]
+            }
+          ],
+          "total": 1
+        },
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/api/recipes/soup",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "a",
+          "slug": "soup",
+          "name": " Soup ",
+          "createdAt": "2026-10-28",
+          "updatedAt": "2026-10-28T10:00:00Z",
+          "description": " desc ",
+          "recipeServings": 0,
+          "recipeYield": " 2 bowls ",
+          "totalTime": " PT30M ",
+          "orgURL": " https://example.test/soup ",
+          "recipeCategory": [
+            {
+              "id": 1,
+              "name": " Dinner ",
+              "slug": " dinner "
+            }
+          ],
+          "tags": [],
+          "tools": [
+            {
+              "id": 2,
+              "name": " Pot "
+            }
+          ],
+          "image": " ",
+          "recipeIngredient": [
+            {
+              "referenceId": "section",
+              "title": " Sauce ",
+              "originalText": "Sauce"
+            },
+            {
+              "referenceId": "raw",
+              "display": " 2 eggs ",
+              "note": "discarded"
+            },
+            {
+              "referenceId": 3,
+              "food": {
+                "id": "egg",
+                "name": " Egg "
+              },
+              "unit": null,
+              "quantity": 2,
+              "title": " Eggs "
+            },
+            {
+              "referenceId": "salt",
+              "food": {},
+              "unit": {},
+              "quantity": 0
+            },
+            {
+              "originalText": " original "
+            },
+            {}
+          ],
+          "recipeInstructions": [
+            {
+              "id": "unstable",
+              "title": " Prepare ",
+              "text": " Stir ",
+              "ingredientReferences": [
+                {
+                  "referenceId": "raw"
+                },
+                {
+                  "referenceId": "dangling"
+                }
+              ]
+            },
+            {
+              "title": "Prepare",
+              "text": " Eat "
+            },
+            {
+              "title": "",
+              "text": ""
+            },
+            {
+              "title": "Prepare",
+              "text": "Repeat"
+            }
+          ]
+        },
+        "status": 200
+      }
+    ]
+  },
+  "find_recipes_for_ingredients.basic": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/foods",
+        "query": {
+          "search": [
+            "salmon"
+          ],
+          "perPage": [
+            "25"
+          ]
+        },
+        "body": null,
+        "response": {
+          "items": [
+            {
+              "id": "f1",
+              "name": "Salmon"
+            }
+          ],
+          "total": 1
+        },
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/api/recipes/suggestions",
+        "query": {
+          "foods": [
+            "f1"
+          ],
+          "limit": [
+            "10"
+          ],
+          "maxMissingFoods": [
+            "1000"
+          ],
+          "includeFoodsOnHand": [
+            "false"
+          ],
+          "includeToolsOnHand": [
+            "false"
+          ]
+        },
+        "body": null,
+        "response": {
+          "items": [
+            {
+              "recipe": {
+                "name": "Salad",
+                "slug": "salad",
+                "description": "",
+                "recipeCategory": [],
+                "tags": [],
+                "totalTime": "PT5M"
+              },
+              "missingFoods": [
+                {
+                  "name": "Oil"
+                },
+                {
+                  "name": ""
+                }
+              ],
+              "missingTools": []
+            }
+          ]
+        },
+        "status": 200
+      }
+    ]
+  },
+  "get_recipes_for_classification.missing_either": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes",
+        "query": {
+          "page": [
+            "1"
+          ],
+          "perPage": [
+            "50"
+          ],
+          "orderBy": [
+            "createdAt"
+          ],
+          "orderDirection": [
+            "asc"
+          ]
+        },
+        "body": null,
+        "response": {
+          "items": [
+            {
+              "id": "b",
+              "slug": "complete",
+              "name": "Complete",
+              "createdAt": "2026-10-28",
+              "recipeCategory": [
+                {
+                  "id": "cat"
+                }
+              ],
+              "tags": [
+                {
+                  "id": "tag"
+                }
+              ],
+              "image": "img",
+              "tools": [
+                {}
+              ],
+              "recipeIngredient": [
+                {
+                  "food": {},
+                  "unit": {}
+                }
+              ]
+            },
+            {
+              "id": "a",
+              "slug": "soup",
+              "name": " Soup ",
+              "createdAt": "2026-10-28",
+              "updatedAt": "2026-10-28T10:00:00Z",
+              "description": " desc ",
+              "recipeServings": 0,
+              "recipeYield": " 2 bowls ",
+              "totalTime": " PT30M ",
+              "orgURL": " https://example.test/soup ",
+              "recipeCategory": [
+                {
+                  "id": 1,
+                  "name": " Dinner ",
+                  "slug": " dinner "
+                }
+              ],
+              "tags": [],
+              "tools": [
+                {
+                  "id": 2,
+                  "name": " Pot "
+                }
+              ],
+              "image": " ",
+              "recipeIngredient": [
+                {
+                  "referenceId": "section",
+                  "title": " Sauce ",
+                  "originalText": "Sauce"
+                },
+                {
+                  "referenceId": "raw",
+                  "display": " 2 eggs ",
+                  "note": "discarded"
+                },
+                {
+                  "referenceId": 3,
+                  "food": {
+                    "id": "egg",
+                    "name": " Egg "
+                  },
+                  "unit": null,
+                  "quantity": 2,
+                  "title": " Eggs "
+                },
+                {
+                  "referenceId": "salt",
+                  "food": {},
+                  "unit": {},
+                  "quantity": 0
+                },
+                {
+                  "originalText": " original "
+                },
+                {}
+              ],
+              "recipeInstructions": [
+                {
+                  "id": "unstable",
+                  "title": " Prepare ",
+                  "text": " Stir ",
+                  "ingredientReferences": [
+                    {
+                      "referenceId": "raw"
+                    },
+                    {
+                      "referenceId": "dangling"
+                    }
+                  ]
+                },
+                {
+                  "title": "Prepare",
+                  "text": " Eat "
+                },
+                {
+                  "title": "",
+                  "text": ""
+                },
+                {
+                  "title": "Prepare",
+                  "text": "Repeat"
+                }
+              ]
+            }
+          ],
+          "total": 2
+        },
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/api/recipes/soup",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "a",
+          "slug": "soup",
+          "name": " Soup ",
+          "createdAt": "2026-10-28",
+          "updatedAt": "2026-10-28T10:00:00Z",
+          "description": " desc ",
+          "recipeServings": 0,
+          "recipeYield": " 2 bowls ",
+          "totalTime": " PT30M ",
+          "orgURL": " https://example.test/soup ",
+          "recipeCategory": [
+            {
+              "id": 1,
+              "name": " Dinner ",
+              "slug": " dinner "
+            }
+          ],
+          "tags": [],
+          "tools": [
+            {
+              "id": 2,
+              "name": " Pot "
+            }
+          ],
+          "image": " ",
+          "recipeIngredient": [
+            {
+              "referenceId": "section",
+              "title": " Sauce ",
+              "originalText": "Sauce"
+            },
+            {
+              "referenceId": "raw",
+              "display": " 2 eggs ",
+              "note": "discarded"
+            },
+            {
+              "referenceId": 3,
+              "food": {
+                "id": "egg",
+                "name": " Egg "
+              },
+              "unit": null,
+              "quantity": 2,
+              "title": " Eggs "
+            },
+            {
+              "referenceId": "salt",
+              "food": {},
+              "unit": {},
+              "quantity": 0
+            },
+            {
+              "originalText": " original "
+            },
+            {}
+          ],
+          "recipeInstructions": [
+            {
+              "id": "unstable",
+              "title": " Prepare ",
+              "text": " Stir ",
+              "ingredientReferences": [
+                {
+                  "referenceId": "raw"
+                },
+                {
+                  "referenceId": "dangling"
+                }
+              ]
+            },
+            {
+              "title": "Prepare",
+              "text": " Eat "
+            },
+            {
+              "title": "",
+              "text": ""
+            },
+            {
+              "title": "Prepare",
+              "text": "Repeat"
+            }
+          ]
+        },
+        "status": 200
+      }
+    ]
+  },
+  "get_recipes_for_classification.missing_both": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes",
+        "query": {
+          "page": [
+            "1"
+          ],
+          "perPage": [
+            "50"
+          ],
+          "orderBy": [
+            "createdAt"
+          ],
+          "orderDirection": [
+            "asc"
+          ]
+        },
+        "body": null,
+        "response": {
+          "items": [
+            {
+              "id": "b",
+              "slug": "complete",
+              "name": "Complete",
+              "createdAt": "2026-10-28",
+              "recipeCategory": [
+                {
+                  "id": "cat"
+                }
+              ],
+              "tags": [
+                {
+                  "id": "tag"
+                }
+              ],
+              "image": "img",
+              "tools": [
+                {}
+              ],
+              "recipeIngredient": [
+                {
+                  "food": {},
+                  "unit": {}
+                }
+              ]
+            },
+            {
+              "id": "a",
+              "slug": "soup",
+              "name": " Soup ",
+              "createdAt": "2026-10-28",
+              "updatedAt": "2026-10-28T10:00:00Z",
+              "description": " desc ",
+              "recipeServings": 0,
+              "recipeYield": " 2 bowls ",
+              "totalTime": " PT30M ",
+              "orgURL": " https://example.test/soup ",
+              "recipeCategory": [
+                {
+                  "id": 1,
+                  "name": " Dinner ",
+                  "slug": " dinner "
+                }
+              ],
+              "tags": [],
+              "tools": [
+                {
+                  "id": 2,
+                  "name": " Pot "
+                }
+              ],
+              "image": " ",
+              "recipeIngredient": [
+                {
+                  "referenceId": "section",
+                  "title": " Sauce ",
+                  "originalText": "Sauce"
+                },
+                {
+                  "referenceId": "raw",
+                  "display": " 2 eggs ",
+                  "note": "discarded"
+                },
+                {
+                  "referenceId": 3,
+                  "food": {
+                    "id": "egg",
+                    "name": " Egg "
+                  },
+                  "unit": null,
+                  "quantity": 2,
+                  "title": " Eggs "
+                },
+                {
+                  "referenceId": "salt",
+                  "food": {},
+                  "unit": {},
+                  "quantity": 0
+                },
+                {
+                  "originalText": " original "
+                },
+                {}
+              ],
+              "recipeInstructions": [
+                {
+                  "id": "unstable",
+                  "title": " Prepare ",
+                  "text": " Stir ",
+                  "ingredientReferences": [
+                    {
+                      "referenceId": "raw"
+                    },
+                    {
+                      "referenceId": "dangling"
+                    }
+                  ]
+                },
+                {
+                  "title": "Prepare",
+                  "text": " Eat "
+                },
+                {
+                  "title": "",
+                  "text": ""
+                },
+                {
+                  "title": "Prepare",
+                  "text": "Repeat"
+                }
+              ]
+            }
+          ],
+          "total": 2
+        },
+        "status": 200
+      }
+    ]
+  },
+  "get_recipes_for_classification.missing_categories": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes",
+        "query": {
+          "page": [
+            "1"
+          ],
+          "perPage": [
+            "50"
+          ],
+          "orderBy": [
+            "createdAt"
+          ],
+          "orderDirection": [
+            "asc"
+          ]
+        },
+        "body": null,
+        "response": {
+          "items": [
+            {
+              "id": "b",
+              "slug": "complete",
+              "name": "Complete",
+              "createdAt": "2026-10-28",
+              "recipeCategory": [
+                {
+                  "id": "cat"
+                }
+              ],
+              "tags": [
+                {
+                  "id": "tag"
+                }
+              ],
+              "image": "img",
+              "tools": [
+                {}
+              ],
+              "recipeIngredient": [
+                {
+                  "food": {},
+                  "unit": {}
+                }
+              ]
+            },
+            {
+              "id": "a",
+              "slug": "soup",
+              "name": " Soup ",
+              "createdAt": "2026-10-28",
+              "updatedAt": "2026-10-28T10:00:00Z",
+              "description": " desc ",
+              "recipeServings": 0,
+              "recipeYield": " 2 bowls ",
+              "totalTime": " PT30M ",
+              "orgURL": " https://example.test/soup ",
+              "recipeCategory": [
+                {
+                  "id": 1,
+                  "name": " Dinner ",
+                  "slug": " dinner "
+                }
+              ],
+              "tags": [],
+              "tools": [
+                {
+                  "id": 2,
+                  "name": " Pot "
+                }
+              ],
+              "image": " ",
+              "recipeIngredient": [
+                {
+                  "referenceId": "section",
+                  "title": " Sauce ",
+                  "originalText": "Sauce"
+                },
+                {
+                  "referenceId": "raw",
+                  "display": " 2 eggs ",
+                  "note": "discarded"
+                },
+                {
+                  "referenceId": 3,
+                  "food": {
+                    "id": "egg",
+                    "name": " Egg "
+                  },
+                  "unit": null,
+                  "quantity": 2,
+                  "title": " Eggs "
+                },
+                {
+                  "referenceId": "salt",
+                  "food": {},
+                  "unit": {},
+                  "quantity": 0
+                },
+                {
+                  "originalText": " original "
+                },
+                {}
+              ],
+              "recipeInstructions": [
+                {
+                  "id": "unstable",
+                  "title": " Prepare ",
+                  "text": " Stir ",
+                  "ingredientReferences": [
+                    {
+                      "referenceId": "raw"
+                    },
+                    {
+                      "referenceId": "dangling"
+                    }
+                  ]
+                },
+                {
+                  "title": "Prepare",
+                  "text": " Eat "
+                },
+                {
+                  "title": "",
+                  "text": ""
+                },
+                {
+                  "title": "Prepare",
+                  "text": "Repeat"
+                }
+              ]
+            }
+          ],
+          "total": 2
+        },
+        "status": 200
+      }
+    ]
+  },
+  "get_recipes_for_classification.missing_tags": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes",
+        "query": {
+          "page": [
+            "1"
+          ],
+          "perPage": [
+            "50"
+          ],
+          "orderBy": [
+            "createdAt"
+          ],
+          "orderDirection": [
+            "asc"
+          ]
+        },
+        "body": null,
+        "response": {
+          "items": [
+            {
+              "id": "b",
+              "slug": "complete",
+              "name": "Complete",
+              "createdAt": "2026-10-28",
+              "recipeCategory": [
+                {
+                  "id": "cat"
+                }
+              ],
+              "tags": [
+                {
+                  "id": "tag"
+                }
+              ],
+              "image": "img",
+              "tools": [
+                {}
+              ],
+              "recipeIngredient": [
+                {
+                  "food": {},
+                  "unit": {}
+                }
+              ]
+            },
+            {
+              "id": "a",
+              "slug": "soup",
+              "name": " Soup ",
+              "createdAt": "2026-10-28",
+              "updatedAt": "2026-10-28T10:00:00Z",
+              "description": " desc ",
+              "recipeServings": 0,
+              "recipeYield": " 2 bowls ",
+              "totalTime": " PT30M ",
+              "orgURL": " https://example.test/soup ",
+              "recipeCategory": [
+                {
+                  "id": 1,
+                  "name": " Dinner ",
+                  "slug": " dinner "
+                }
+              ],
+              "tags": [],
+              "tools": [
+                {
+                  "id": 2,
+                  "name": " Pot "
+                }
+              ],
+              "image": " ",
+              "recipeIngredient": [
+                {
+                  "referenceId": "section",
+                  "title": " Sauce ",
+                  "originalText": "Sauce"
+                },
+                {
+                  "referenceId": "raw",
+                  "display": " 2 eggs ",
+                  "note": "discarded"
+                },
+                {
+                  "referenceId": 3,
+                  "food": {
+                    "id": "egg",
+                    "name": " Egg "
+                  },
+                  "unit": null,
+                  "quantity": 2,
+                  "title": " Eggs "
+                },
+                {
+                  "referenceId": "salt",
+                  "food": {},
+                  "unit": {},
+                  "quantity": 0
+                },
+                {
+                  "originalText": " original "
+                },
+                {}
+              ],
+              "recipeInstructions": [
+                {
+                  "id": "unstable",
+                  "title": " Prepare ",
+                  "text": " Stir ",
+                  "ingredientReferences": [
+                    {
+                      "referenceId": "raw"
+                    },
+                    {
+                      "referenceId": "dangling"
+                    }
+                  ]
+                },
+                {
+                  "title": "Prepare",
+                  "text": " Eat "
+                },
+                {
+                  "title": "",
+                  "text": ""
+                },
+                {
+                  "title": "Prepare",
+                  "text": "Repeat"
+                }
+              ]
+            }
+          ],
+          "total": 2
+        },
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/api/recipes/soup",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "a",
+          "slug": "soup",
+          "name": " Soup ",
+          "createdAt": "2026-10-28",
+          "updatedAt": "2026-10-28T10:00:00Z",
+          "description": " desc ",
+          "recipeServings": 0,
+          "recipeYield": " 2 bowls ",
+          "totalTime": " PT30M ",
+          "orgURL": " https://example.test/soup ",
+          "recipeCategory": [
+            {
+              "id": 1,
+              "name": " Dinner ",
+              "slug": " dinner "
+            }
+          ],
+          "tags": [],
+          "tools": [
+            {
+              "id": 2,
+              "name": " Pot "
+            }
+          ],
+          "image": " ",
+          "recipeIngredient": [
+            {
+              "referenceId": "section",
+              "title": " Sauce ",
+              "originalText": "Sauce"
+            },
+            {
+              "referenceId": "raw",
+              "display": " 2 eggs ",
+              "note": "discarded"
+            },
+            {
+              "referenceId": 3,
+              "food": {
+                "id": "egg",
+                "name": " Egg "
+              },
+              "unit": null,
+              "quantity": 2,
+              "title": " Eggs "
+            },
+            {
+              "referenceId": "salt",
+              "food": {},
+              "unit": {},
+              "quantity": 0
+            },
+            {
+              "originalText": " original "
+            },
+            {}
+          ],
+          "recipeInstructions": [
+            {
+              "id": "unstable",
+              "title": " Prepare ",
+              "text": " Stir ",
+              "ingredientReferences": [
+                {
+                  "referenceId": "raw"
+                },
+                {
+                  "referenceId": "dangling"
+                }
+              ]
+            },
+            {
+              "title": "Prepare",
+              "text": " Eat "
+            },
+            {
+              "title": "",
+              "text": ""
+            },
+            {
+              "title": "Prepare",
+              "text": "Repeat"
+            }
+          ]
+        },
+        "status": 200
+      }
+    ]
+  },
+  "get_recipes_for_classification.any": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes",
+        "query": {
+          "page": [
+            "1"
+          ],
+          "perPage": [
+            "50"
+          ],
+          "orderBy": [
+            "createdAt"
+          ],
+          "orderDirection": [
+            "asc"
+          ]
+        },
+        "body": null,
+        "response": {
+          "items": [
+            {
+              "id": "b",
+              "slug": "complete",
+              "name": "Complete",
+              "createdAt": "2026-10-28",
+              "recipeCategory": [
+                {
+                  "id": "cat"
+                }
+              ],
+              "tags": [
+                {
+                  "id": "tag"
+                }
+              ],
+              "image": "img",
+              "tools": [
+                {}
+              ],
+              "recipeIngredient": [
+                {
+                  "food": {},
+                  "unit": {}
+                }
+              ]
+            },
+            {
+              "id": "a",
+              "slug": "soup",
+              "name": " Soup ",
+              "createdAt": "2026-10-28",
+              "updatedAt": "2026-10-28T10:00:00Z",
+              "description": " desc ",
+              "recipeServings": 0,
+              "recipeYield": " 2 bowls ",
+              "totalTime": " PT30M ",
+              "orgURL": " https://example.test/soup ",
+              "recipeCategory": [
+                {
+                  "id": 1,
+                  "name": " Dinner ",
+                  "slug": " dinner "
+                }
+              ],
+              "tags": [],
+              "tools": [
+                {
+                  "id": 2,
+                  "name": " Pot "
+                }
+              ],
+              "image": " ",
+              "recipeIngredient": [
+                {
+                  "referenceId": "section",
+                  "title": " Sauce ",
+                  "originalText": "Sauce"
+                },
+                {
+                  "referenceId": "raw",
+                  "display": " 2 eggs ",
+                  "note": "discarded"
+                },
+                {
+                  "referenceId": 3,
+                  "food": {
+                    "id": "egg",
+                    "name": " Egg "
+                  },
+                  "unit": null,
+                  "quantity": 2,
+                  "title": " Eggs "
+                },
+                {
+                  "referenceId": "salt",
+                  "food": {},
+                  "unit": {},
+                  "quantity": 0
+                },
+                {
+                  "originalText": " original "
+                },
+                {}
+              ],
+              "recipeInstructions": [
+                {
+                  "id": "unstable",
+                  "title": " Prepare ",
+                  "text": " Stir ",
+                  "ingredientReferences": [
+                    {
+                      "referenceId": "raw"
+                    },
+                    {
+                      "referenceId": "dangling"
+                    }
+                  ]
+                },
+                {
+                  "title": "Prepare",
+                  "text": " Eat "
+                },
+                {
+                  "title": "",
+                  "text": ""
+                },
+                {
+                  "title": "Prepare",
+                  "text": "Repeat"
+                }
+              ]
+            }
+          ],
+          "total": 2
+        },
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/api/recipes/soup",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "a",
+          "slug": "soup",
+          "name": " Soup ",
+          "createdAt": "2026-10-28",
+          "updatedAt": "2026-10-28T10:00:00Z",
+          "description": " desc ",
+          "recipeServings": 0,
+          "recipeYield": " 2 bowls ",
+          "totalTime": " PT30M ",
+          "orgURL": " https://example.test/soup ",
+          "recipeCategory": [
+            {
+              "id": 1,
+              "name": " Dinner ",
+              "slug": " dinner "
+            }
+          ],
+          "tags": [],
+          "tools": [
+            {
+              "id": 2,
+              "name": " Pot "
+            }
+          ],
+          "image": " ",
+          "recipeIngredient": [
+            {
+              "referenceId": "section",
+              "title": " Sauce ",
+              "originalText": "Sauce"
+            },
+            {
+              "referenceId": "raw",
+              "display": " 2 eggs ",
+              "note": "discarded"
+            },
+            {
+              "referenceId": 3,
+              "food": {
+                "id": "egg",
+                "name": " Egg "
+              },
+              "unit": null,
+              "quantity": 2,
+              "title": " Eggs "
+            },
+            {
+              "referenceId": "salt",
+              "food": {},
+              "unit": {},
+              "quantity": 0
+            },
+            {
+              "originalText": " original "
+            },
+            {}
+          ],
+          "recipeInstructions": [
+            {
+              "id": "unstable",
+              "title": " Prepare ",
+              "text": " Stir ",
+              "ingredientReferences": [
+                {
+                  "referenceId": "raw"
+                },
+                {
+                  "referenceId": "dangling"
+                }
+              ]
+            },
+            {
+              "title": "Prepare",
+              "text": " Eat "
+            },
+            {
+              "title": "",
+              "text": ""
+            },
+            {
+              "title": "Prepare",
+              "text": "Repeat"
+            }
+          ]
+        },
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/api/recipes/complete",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "b",
+          "slug": "complete",
+          "name": "Complete",
+          "createdAt": "2026-10-28",
+          "recipeCategory": [
+            {
+              "id": "cat"
+            }
+          ],
+          "tags": [
+            {
+              "id": "tag"
+            }
+          ],
+          "image": "img",
+          "tools": [
+            {}
+          ],
+          "recipeIngredient": [
+            {
+              "food": {},
+              "unit": {}
+            }
+          ]
+        },
+        "status": 200
+      }
+    ]
+  },
+  "get_recipes_for_ingredient_parsing.unparsed_only": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes",
+        "query": {
+          "page": [
+            "1"
+          ],
+          "perPage": [
+            "50"
+          ],
+          "orderBy": [
+            "createdAt"
+          ],
+          "orderDirection": [
+            "asc"
+          ]
+        },
+        "body": null,
+        "response": {
+          "items": [
+            {
+              "id": "a",
+              "slug": "soup",
+              "name": " Soup ",
+              "createdAt": "2026-10-28",
+              "updatedAt": "2026-10-28T10:00:00Z",
+              "description": " desc ",
+              "recipeServings": 0,
+              "recipeYield": " 2 bowls ",
+              "totalTime": " PT30M ",
+              "orgURL": " https://example.test/soup ",
+              "recipeCategory": [
+                {
+                  "id": 1,
+                  "name": " Dinner ",
+                  "slug": " dinner "
+                }
+              ],
+              "tags": [],
+              "tools": [
+                {
+                  "id": 2,
+                  "name": " Pot "
+                }
+              ],
+              "image": " ",
+              "recipeIngredient": [
+                {
+                  "referenceId": "section",
+                  "title": " Sauce ",
+                  "originalText": "Sauce"
+                },
+                {
+                  "referenceId": "raw",
+                  "display": " 2 eggs ",
+                  "note": "discarded"
+                },
+                {
+                  "referenceId": 3,
+                  "food": {
+                    "id": "egg",
+                    "name": " Egg "
+                  },
+                  "unit": null,
+                  "quantity": 2,
+                  "title": " Eggs "
+                },
+                {
+                  "referenceId": "salt",
+                  "food": {},
+                  "unit": {},
+                  "quantity": 0
+                },
+                {
+                  "originalText": " original "
+                },
+                {}
+              ],
+              "recipeInstructions": [
+                {
+                  "id": "unstable",
+                  "title": " Prepare ",
+                  "text": " Stir ",
+                  "ingredientReferences": [
+                    {
+                      "referenceId": "raw"
+                    },
+                    {
+                      "referenceId": "dangling"
+                    }
+                  ]
+                },
+                {
+                  "title": "Prepare",
+                  "text": " Eat "
+                },
+                {
+                  "title": "",
+                  "text": ""
+                },
+                {
+                  "title": "Prepare",
+                  "text": "Repeat"
+                }
+              ]
+            },
+            {
+              "id": "b",
+              "slug": "complete",
+              "name": "Complete",
+              "createdAt": "2026-10-28",
+              "recipeCategory": [
+                {
+                  "id": "cat"
+                }
+              ],
+              "tags": [
+                {
+                  "id": "tag"
+                }
+              ],
+              "image": "img",
+              "tools": [
+                {}
+              ],
+              "recipeIngredient": [
+                {
+                  "food": {},
+                  "unit": {}
+                }
+              ]
+            }
+          ],
+          "total": 2
+        },
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/api/recipes/soup",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "a",
+          "slug": "soup",
+          "name": " Soup ",
+          "createdAt": "2026-10-28",
+          "updatedAt": "2026-10-28T10:00:00Z",
+          "description": " desc ",
+          "recipeServings": 0,
+          "recipeYield": " 2 bowls ",
+          "totalTime": " PT30M ",
+          "orgURL": " https://example.test/soup ",
+          "recipeCategory": [
+            {
+              "id": 1,
+              "name": " Dinner ",
+              "slug": " dinner "
+            }
+          ],
+          "tags": [],
+          "tools": [
+            {
+              "id": 2,
+              "name": " Pot "
+            }
+          ],
+          "image": " ",
+          "recipeIngredient": [
+            {
+              "referenceId": "section",
+              "title": " Sauce ",
+              "originalText": "Sauce"
+            },
+            {
+              "referenceId": "raw",
+              "display": " 2 eggs ",
+              "note": "discarded"
+            },
+            {
+              "referenceId": 3,
+              "food": {
+                "id": "egg",
+                "name": " Egg "
+              },
+              "unit": null,
+              "quantity": 2,
+              "title": " Eggs "
+            },
+            {
+              "referenceId": "salt",
+              "food": {},
+              "unit": {},
+              "quantity": 0
+            },
+            {
+              "originalText": " original "
+            },
+            {}
+          ],
+          "recipeInstructions": [
+            {
+              "id": "unstable",
+              "title": " Prepare ",
+              "text": " Stir ",
+              "ingredientReferences": [
+                {
+                  "referenceId": "raw"
+                },
+                {
+                  "referenceId": "dangling"
+                }
+              ]
+            },
+            {
+              "title": "Prepare",
+              "text": " Eat "
+            },
+            {
+              "title": "",
+              "text": ""
+            },
+            {
+              "title": "Prepare",
+              "text": "Repeat"
+            }
+          ]
+        },
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/api/recipes/complete",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "b",
+          "slug": "complete",
+          "name": "Complete",
+          "createdAt": "2026-10-28",
+          "recipeCategory": [
+            {
+              "id": "cat"
+            }
+          ],
+          "tags": [
+            {
+              "id": "tag"
+            }
+          ],
+          "image": "img",
+          "tools": [
+            {}
+          ],
+          "recipeIngredient": [
+            {
+              "food": {},
+              "unit": {}
+            }
+          ]
+        },
+        "status": 200
+      }
+    ]
+  },
+  "get_recipes_for_ingredient_parsing.partially_parsed": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes",
+        "query": {
+          "page": [
+            "1"
+          ],
+          "perPage": [
+            "50"
+          ],
+          "orderBy": [
+            "createdAt"
+          ],
+          "orderDirection": [
+            "asc"
+          ]
+        },
+        "body": null,
+        "response": {
+          "items": [
+            {
+              "id": "a",
+              "slug": "soup",
+              "name": " Soup ",
+              "createdAt": "2026-10-28",
+              "updatedAt": "2026-10-28T10:00:00Z",
+              "description": " desc ",
+              "recipeServings": 0,
+              "recipeYield": " 2 bowls ",
+              "totalTime": " PT30M ",
+              "orgURL": " https://example.test/soup ",
+              "recipeCategory": [
+                {
+                  "id": 1,
+                  "name": " Dinner ",
+                  "slug": " dinner "
+                }
+              ],
+              "tags": [],
+              "tools": [
+                {
+                  "id": 2,
+                  "name": " Pot "
+                }
+              ],
+              "image": " ",
+              "recipeIngredient": [
+                {
+                  "referenceId": "section",
+                  "title": " Sauce ",
+                  "originalText": "Sauce"
+                },
+                {
+                  "referenceId": "raw",
+                  "display": " 2 eggs ",
+                  "note": "discarded"
+                },
+                {
+                  "referenceId": 3,
+                  "food": {
+                    "id": "egg",
+                    "name": " Egg "
+                  },
+                  "unit": null,
+                  "quantity": 2,
+                  "title": " Eggs "
+                },
+                {
+                  "referenceId": "salt",
+                  "food": {},
+                  "unit": {},
+                  "quantity": 0
+                },
+                {
+                  "originalText": " original "
+                },
+                {}
+              ],
+              "recipeInstructions": [
+                {
+                  "id": "unstable",
+                  "title": " Prepare ",
+                  "text": " Stir ",
+                  "ingredientReferences": [
+                    {
+                      "referenceId": "raw"
+                    },
+                    {
+                      "referenceId": "dangling"
+                    }
+                  ]
+                },
+                {
+                  "title": "Prepare",
+                  "text": " Eat "
+                },
+                {
+                  "title": "",
+                  "text": ""
+                },
+                {
+                  "title": "Prepare",
+                  "text": "Repeat"
+                }
+              ]
+            },
+            {
+              "id": "b",
+              "slug": "complete",
+              "name": "Complete",
+              "createdAt": "2026-10-28",
+              "recipeCategory": [
+                {
+                  "id": "cat"
+                }
+              ],
+              "tags": [
+                {
+                  "id": "tag"
+                }
+              ],
+              "image": "img",
+              "tools": [
+                {}
+              ],
+              "recipeIngredient": [
+                {
+                  "food": {},
+                  "unit": {}
+                }
+              ]
+            }
+          ],
+          "total": 2
+        },
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/api/recipes/soup",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "a",
+          "slug": "soup",
+          "name": " Soup ",
+          "createdAt": "2026-10-28",
+          "updatedAt": "2026-10-28T10:00:00Z",
+          "description": " desc ",
+          "recipeServings": 0,
+          "recipeYield": " 2 bowls ",
+          "totalTime": " PT30M ",
+          "orgURL": " https://example.test/soup ",
+          "recipeCategory": [
+            {
+              "id": 1,
+              "name": " Dinner ",
+              "slug": " dinner "
+            }
+          ],
+          "tags": [],
+          "tools": [
+            {
+              "id": 2,
+              "name": " Pot "
+            }
+          ],
+          "image": " ",
+          "recipeIngredient": [
+            {
+              "referenceId": "section",
+              "title": " Sauce ",
+              "originalText": "Sauce"
+            },
+            {
+              "referenceId": "raw",
+              "display": " 2 eggs ",
+              "note": "discarded"
+            },
+            {
+              "referenceId": 3,
+              "food": {
+                "id": "egg",
+                "name": " Egg "
+              },
+              "unit": null,
+              "quantity": 2,
+              "title": " Eggs "
+            },
+            {
+              "referenceId": "salt",
+              "food": {},
+              "unit": {},
+              "quantity": 0
+            },
+            {
+              "originalText": " original "
+            },
+            {}
+          ],
+          "recipeInstructions": [
+            {
+              "id": "unstable",
+              "title": " Prepare ",
+              "text": " Stir ",
+              "ingredientReferences": [
+                {
+                  "referenceId": "raw"
+                },
+                {
+                  "referenceId": "dangling"
+                }
+              ]
+            },
+            {
+              "title": "Prepare",
+              "text": " Eat "
+            },
+            {
+              "title": "",
+              "text": ""
+            },
+            {
+              "title": "Prepare",
+              "text": "Repeat"
+            }
+          ]
+        },
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/api/recipes/complete",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "b",
+          "slug": "complete",
+          "name": "Complete",
+          "createdAt": "2026-10-28",
+          "recipeCategory": [
+            {
+              "id": "cat"
+            }
+          ],
+          "tags": [
+            {
+              "id": "tag"
+            }
+          ],
+          "image": "img",
+          "tools": [
+            {}
+          ],
+          "recipeIngredient": [
+            {
+              "food": {},
+              "unit": {}
+            }
+          ]
+        },
+        "status": 200
+      }
+    ]
+  },
+  "get_recipes_for_ingredient_parsing.any": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes",
+        "query": {
+          "page": [
+            "1"
+          ],
+          "perPage": [
+            "50"
+          ],
+          "orderBy": [
+            "createdAt"
+          ],
+          "orderDirection": [
+            "asc"
+          ]
+        },
+        "body": null,
+        "response": {
+          "items": [
+            {
+              "id": "a",
+              "slug": "soup",
+              "name": " Soup ",
+              "createdAt": "2026-10-28",
+              "updatedAt": "2026-10-28T10:00:00Z",
+              "description": " desc ",
+              "recipeServings": 0,
+              "recipeYield": " 2 bowls ",
+              "totalTime": " PT30M ",
+              "orgURL": " https://example.test/soup ",
+              "recipeCategory": [
+                {
+                  "id": 1,
+                  "name": " Dinner ",
+                  "slug": " dinner "
+                }
+              ],
+              "tags": [],
+              "tools": [
+                {
+                  "id": 2,
+                  "name": " Pot "
+                }
+              ],
+              "image": " ",
+              "recipeIngredient": [
+                {
+                  "referenceId": "section",
+                  "title": " Sauce ",
+                  "originalText": "Sauce"
+                },
+                {
+                  "referenceId": "raw",
+                  "display": " 2 eggs ",
+                  "note": "discarded"
+                },
+                {
+                  "referenceId": 3,
+                  "food": {
+                    "id": "egg",
+                    "name": " Egg "
+                  },
+                  "unit": null,
+                  "quantity": 2,
+                  "title": " Eggs "
+                },
+                {
+                  "referenceId": "salt",
+                  "food": {},
+                  "unit": {},
+                  "quantity": 0
+                },
+                {
+                  "originalText": " original "
+                },
+                {}
+              ],
+              "recipeInstructions": [
+                {
+                  "id": "unstable",
+                  "title": " Prepare ",
+                  "text": " Stir ",
+                  "ingredientReferences": [
+                    {
+                      "referenceId": "raw"
+                    },
+                    {
+                      "referenceId": "dangling"
+                    }
+                  ]
+                },
+                {
+                  "title": "Prepare",
+                  "text": " Eat "
+                },
+                {
+                  "title": "",
+                  "text": ""
+                },
+                {
+                  "title": "Prepare",
+                  "text": "Repeat"
+                }
+              ]
+            },
+            {
+              "id": "b",
+              "slug": "complete",
+              "name": "Complete",
+              "createdAt": "2026-10-28",
+              "recipeCategory": [
+                {
+                  "id": "cat"
+                }
+              ],
+              "tags": [
+                {
+                  "id": "tag"
+                }
+              ],
+              "image": "img",
+              "tools": [
+                {}
+              ],
+              "recipeIngredient": [
+                {
+                  "food": {},
+                  "unit": {}
+                }
+              ]
+            }
+          ],
+          "total": 2
+        },
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/api/recipes/soup",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "a",
+          "slug": "soup",
+          "name": " Soup ",
+          "createdAt": "2026-10-28",
+          "updatedAt": "2026-10-28T10:00:00Z",
+          "description": " desc ",
+          "recipeServings": 0,
+          "recipeYield": " 2 bowls ",
+          "totalTime": " PT30M ",
+          "orgURL": " https://example.test/soup ",
+          "recipeCategory": [
+            {
+              "id": 1,
+              "name": " Dinner ",
+              "slug": " dinner "
+            }
+          ],
+          "tags": [],
+          "tools": [
+            {
+              "id": 2,
+              "name": " Pot "
+            }
+          ],
+          "image": " ",
+          "recipeIngredient": [
+            {
+              "referenceId": "section",
+              "title": " Sauce ",
+              "originalText": "Sauce"
+            },
+            {
+              "referenceId": "raw",
+              "display": " 2 eggs ",
+              "note": "discarded"
+            },
+            {
+              "referenceId": 3,
+              "food": {
+                "id": "egg",
+                "name": " Egg "
+              },
+              "unit": null,
+              "quantity": 2,
+              "title": " Eggs "
+            },
+            {
+              "referenceId": "salt",
+              "food": {},
+              "unit": {},
+              "quantity": 0
+            },
+            {
+              "originalText": " original "
+            },
+            {}
+          ],
+          "recipeInstructions": [
+            {
+              "id": "unstable",
+              "title": " Prepare ",
+              "text": " Stir ",
+              "ingredientReferences": [
+                {
+                  "referenceId": "raw"
+                },
+                {
+                  "referenceId": "dangling"
+                }
+              ]
+            },
+            {
+              "title": "Prepare",
+              "text": " Eat "
+            },
+            {
+              "title": "",
+              "text": ""
+            },
+            {
+              "title": "Prepare",
+              "text": "Repeat"
+            }
+          ]
+        },
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/api/recipes/complete",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "b",
+          "slug": "complete",
+          "name": "Complete",
+          "createdAt": "2026-10-28",
+          "recipeCategory": [
+            {
+              "id": "cat"
+            }
+          ],
+          "tags": [
+            {
+              "id": "tag"
+            }
+          ],
+          "image": "img",
+          "tools": [
+            {}
+          ],
+          "recipeIngredient": [
+            {
+              "food": {},
+              "unit": {}
+            }
+          ]
+        },
+        "status": 200
+      }
+    ]
+  },
+  "get_recipes_for_classification.limit": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes",
+        "query": {
+          "page": [
+            "1"
+          ],
+          "perPage": [
+            "50"
+          ],
+          "orderBy": [
+            "createdAt"
+          ],
+          "orderDirection": [
+            "asc"
+          ]
+        },
+        "body": null,
+        "response": {
+          "items": [
+            {
+              "id": "b",
+              "slug": "complete",
+              "name": "Complete",
+              "createdAt": "2026-10-28",
+              "recipeCategory": [
+                {
+                  "id": "cat"
+                }
+              ],
+              "tags": [
+                {
+                  "id": "tag"
+                }
+              ],
+              "image": "img",
+              "tools": [
+                {}
+              ],
+              "recipeIngredient": [
+                {
+                  "food": {},
+                  "unit": {}
+                }
+              ]
+            },
+            {
+              "id": "a",
+              "slug": "soup",
+              "name": " Soup ",
+              "createdAt": "2026-10-28",
+              "updatedAt": "2026-10-28T10:00:00Z",
+              "description": " desc ",
+              "recipeServings": 0,
+              "recipeYield": " 2 bowls ",
+              "totalTime": " PT30M ",
+              "orgURL": " https://example.test/soup ",
+              "recipeCategory": [
+                {
+                  "id": 1,
+                  "name": " Dinner ",
+                  "slug": " dinner "
+                }
+              ],
+              "tags": [],
+              "tools": [
+                {
+                  "id": 2,
+                  "name": " Pot "
+                }
+              ],
+              "image": " ",
+              "recipeIngredient": [
+                {
+                  "referenceId": "section",
+                  "title": " Sauce ",
+                  "originalText": "Sauce"
+                },
+                {
+                  "referenceId": "raw",
+                  "display": " 2 eggs ",
+                  "note": "discarded"
+                },
+                {
+                  "referenceId": 3,
+                  "food": {
+                    "id": "egg",
+                    "name": " Egg "
+                  },
+                  "unit": null,
+                  "quantity": 2,
+                  "title": " Eggs "
+                },
+                {
+                  "referenceId": "salt",
+                  "food": {},
+                  "unit": {},
+                  "quantity": 0
+                },
+                {
+                  "originalText": " original "
+                },
+                {}
+              ],
+              "recipeInstructions": [
+                {
+                  "id": "unstable",
+                  "title": " Prepare ",
+                  "text": " Stir ",
+                  "ingredientReferences": [
+                    {
+                      "referenceId": "raw"
+                    },
+                    {
+                      "referenceId": "dangling"
+                    }
+                  ]
+                },
+                {
+                  "title": "Prepare",
+                  "text": " Eat "
+                },
+                {
+                  "title": "",
+                  "text": ""
+                },
+                {
+                  "title": "Prepare",
+                  "text": "Repeat"
+                }
+              ]
+            }
+          ],
+          "total": 2
+        },
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/api/recipes/soup",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "a",
+          "slug": "soup",
+          "name": " Soup ",
+          "createdAt": "2026-10-28",
+          "updatedAt": "2026-10-28T10:00:00Z",
+          "description": " desc ",
+          "recipeServings": 0,
+          "recipeYield": " 2 bowls ",
+          "totalTime": " PT30M ",
+          "orgURL": " https://example.test/soup ",
+          "recipeCategory": [
+            {
+              "id": 1,
+              "name": " Dinner ",
+              "slug": " dinner "
+            }
+          ],
+          "tags": [],
+          "tools": [
+            {
+              "id": 2,
+              "name": " Pot "
+            }
+          ],
+          "image": " ",
+          "recipeIngredient": [
+            {
+              "referenceId": "section",
+              "title": " Sauce ",
+              "originalText": "Sauce"
+            },
+            {
+              "referenceId": "raw",
+              "display": " 2 eggs ",
+              "note": "discarded"
+            },
+            {
+              "referenceId": 3,
+              "food": {
+                "id": "egg",
+                "name": " Egg "
+              },
+              "unit": null,
+              "quantity": 2,
+              "title": " Eggs "
+            },
+            {
+              "referenceId": "salt",
+              "food": {},
+              "unit": {},
+              "quantity": 0
+            },
+            {
+              "originalText": " original "
+            },
+            {}
+          ],
+          "recipeInstructions": [
+            {
+              "id": "unstable",
+              "title": " Prepare ",
+              "text": " Stir ",
+              "ingredientReferences": [
+                {
+                  "referenceId": "raw"
+                },
+                {
+                  "referenceId": "dangling"
+                }
+              ]
+            },
+            {
+              "title": "Prepare",
+              "text": " Eat "
+            },
+            {
+              "title": "",
+              "text": ""
+            },
+            {
+              "title": "Prepare",
+              "text": "Repeat"
+            }
+          ]
+        },
+        "status": 200
+      }
+    ]
+  },
+  "get_recipes_for_ingredient_parsing.resume": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes",
+        "query": {
+          "page": [
+            "1"
+          ],
+          "perPage": [
+            "50"
+          ],
+          "orderBy": [
+            "createdAt"
+          ],
+          "orderDirection": [
+            "asc"
+          ]
+        },
+        "body": null,
+        "response": {
+          "items": [
+            {
+              "id": "b",
+              "slug": "complete",
+              "name": "Complete",
+              "createdAt": "2026-10-28",
+              "recipeCategory": [
+                {
+                  "id": "cat"
+                }
+              ],
+              "tags": [
+                {
+                  "id": "tag"
+                }
+              ],
+              "image": "img",
+              "tools": [
+                {}
+              ],
+              "recipeIngredient": [
+                {
+                  "food": {},
+                  "unit": {}
+                }
+              ]
+            },
+            {
+              "id": "a",
+              "slug": "soup",
+              "name": " Soup ",
+              "createdAt": "2026-10-28",
+              "updatedAt": "2026-10-28T10:00:00Z",
+              "description": " desc ",
+              "recipeServings": 0,
+              "recipeYield": " 2 bowls ",
+              "totalTime": " PT30M ",
+              "orgURL": " https://example.test/soup ",
+              "recipeCategory": [
+                {
+                  "id": 1,
+                  "name": " Dinner ",
+                  "slug": " dinner "
+                }
+              ],
+              "tags": [],
+              "tools": [
+                {
+                  "id": 2,
+                  "name": " Pot "
+                }
+              ],
+              "image": " ",
+              "recipeIngredient": [
+                {
+                  "referenceId": "section",
+                  "title": " Sauce ",
+                  "originalText": "Sauce"
+                },
+                {
+                  "referenceId": "raw",
+                  "display": " 2 eggs ",
+                  "note": "discarded"
+                },
+                {
+                  "referenceId": 3,
+                  "food": {
+                    "id": "egg",
+                    "name": " Egg "
+                  },
+                  "unit": null,
+                  "quantity": 2,
+                  "title": " Eggs "
+                },
+                {
+                  "referenceId": "salt",
+                  "food": {},
+                  "unit": {},
+                  "quantity": 0
+                },
+                {
+                  "originalText": " original "
+                },
+                {}
+              ],
+              "recipeInstructions": [
+                {
+                  "id": "unstable",
+                  "title": " Prepare ",
+                  "text": " Stir ",
+                  "ingredientReferences": [
+                    {
+                      "referenceId": "raw"
+                    },
+                    {
+                      "referenceId": "dangling"
+                    }
+                  ]
+                },
+                {
+                  "title": "Prepare",
+                  "text": " Eat "
+                },
+                {
+                  "title": "",
+                  "text": ""
+                },
+                {
+                  "title": "Prepare",
+                  "text": "Repeat"
+                }
+              ]
+            }
+          ],
+          "total": 2
+        },
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/api/recipes/complete",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "b",
+          "slug": "complete",
+          "name": "Complete",
+          "createdAt": "2026-10-28",
+          "recipeCategory": [
+            {
+              "id": "cat"
+            }
+          ],
+          "tags": [
+            {
+              "id": "tag"
+            }
+          ],
+          "image": "img",
+          "tools": [
+            {}
+          ],
+          "recipeIngredient": [
+            {
+              "food": {},
+              "unit": {}
+            }
+          ]
+        },
+        "status": 200
+      }
+    ]
+  },
+  "get_recipes_for_classification.invalid_cursor": {
+    "requests": []
+  },
+  "get_recipes_for_classification.empty": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes",
+        "query": {
+          "page": [
+            "1"
+          ],
+          "perPage": [
+            "50"
+          ],
+          "orderBy": [
+            "createdAt"
+          ],
+          "orderDirection": [
+            "asc"
+          ]
+        },
+        "body": null,
+        "response": {
+          "items": [],
+          "total": 0
+        },
+        "status": 200
+      }
+    ]
+  },
+  "get_recipes_for_ingredient_parsing.invalid_cursor": {
+    "requests": []
+  },
+  "get_recipes_for_ingredient_parsing.empty": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes",
+        "query": {
+          "page": [
+            "1"
+          ],
+          "perPage": [
+            "50"
+          ],
+          "orderBy": [
+            "createdAt"
+          ],
+          "orderDirection": [
+            "asc"
+          ]
+        },
+        "body": null,
+        "response": {
+          "items": [],
+          "total": 0
+        },
+        "status": 200
+      }
+    ]
+  },
+  "get_recipes_for_data_enrichment.invalid_cursor": {
+    "requests": []
+  },
+  "get_recipes_for_data_enrichment.empty": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes",
+        "query": {
+          "page": [
+            "1"
+          ],
+          "perPage": [
+            "50"
+          ],
+          "orderBy": [
+            "createdAt"
+          ],
+          "orderDirection": [
+            "asc"
+          ]
+        },
+        "body": null,
+        "response": {
+          "items": [],
+          "total": 0
+        },
+        "status": 200
+      }
+    ]
+  },
+  "get_recipes_for_data_enrichment.replace_defaults": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes",
+        "query": {
+          "page": [
+            "1"
+          ],
+          "perPage": [
+            "50"
+          ],
+          "orderBy": [
+            "createdAt"
+          ],
+          "orderDirection": [
+            "asc"
+          ]
+        },
+        "body": null,
+        "response": {
+          "items": [
+            {
+              "id": "a",
+              "slug": "soup",
+              "name": " Soup ",
+              "createdAt": "2026-10-28",
+              "updatedAt": "2026-10-28T10:00:00Z",
+              "description": " desc ",
+              "recipeServings": 0,
+              "recipeYield": " 2 bowls ",
+              "totalTime": " PT30M ",
+              "orgURL": " https://example.test/soup ",
+              "recipeCategory": [
+                {
+                  "id": 1,
+                  "name": " Dinner ",
+                  "slug": " dinner "
+                }
+              ],
+              "tags": [],
+              "tools": [
+                {
+                  "id": 2,
+                  "name": " Pot "
+                }
+              ],
+              "image": " ",
+              "recipeIngredient": [
+                {
+                  "referenceId": "section",
+                  "title": " Sauce ",
+                  "originalText": "Sauce"
+                },
+                {
+                  "referenceId": "raw",
+                  "display": " 2 eggs ",
+                  "note": "discarded"
+                },
+                {
+                  "referenceId": 3,
+                  "food": {
+                    "id": "egg",
+                    "name": " Egg "
+                  },
+                  "unit": null,
+                  "quantity": 2,
+                  "title": " Eggs "
+                },
+                {
+                  "referenceId": "salt",
+                  "food": {},
+                  "unit": {},
+                  "quantity": 0
+                },
+                {
+                  "originalText": " original "
+                },
+                {}
+              ],
+              "recipeInstructions": [
+                {
+                  "id": "unstable",
+                  "title": " Prepare ",
+                  "text": " Stir ",
+                  "ingredientReferences": [
+                    {
+                      "referenceId": "raw"
+                    },
+                    {
+                      "referenceId": "dangling"
+                    }
+                  ]
+                },
+                {
+                  "title": "Prepare",
+                  "text": " Eat "
+                },
+                {
+                  "title": "",
+                  "text": ""
+                },
+                {
+                  "title": "Prepare",
+                  "text": "Repeat"
+                }
+              ]
+            },
+            {
+              "id": "b",
+              "slug": "complete",
+              "name": "Complete",
+              "createdAt": "2026-10-28",
+              "recipeCategory": [
+                {
+                  "id": "cat"
+                }
+              ],
+              "tags": [
+                {
+                  "id": "tag"
+                }
+              ],
+              "image": "img",
+              "tools": [
+                {}
+              ],
+              "recipeIngredient": [
+                {
+                  "food": {},
+                  "unit": {}
+                }
+              ]
+            }
+          ],
+          "total": 2
+        },
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/api/recipes/soup",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "a",
+          "slug": "soup",
+          "name": " Soup ",
+          "createdAt": "2026-10-28",
+          "updatedAt": "2026-10-28T10:00:00Z",
+          "description": " desc ",
+          "recipeServings": 0,
+          "recipeYield": " 2 bowls ",
+          "totalTime": " PT30M ",
+          "orgURL": " https://example.test/soup ",
+          "recipeCategory": [
+            {
+              "id": 1,
+              "name": " Dinner ",
+              "slug": " dinner "
+            }
+          ],
+          "tags": [],
+          "tools": [
+            {
+              "id": 2,
+              "name": " Pot "
+            }
+          ],
+          "image": " ",
+          "recipeIngredient": [
+            {
+              "referenceId": "section",
+              "title": " Sauce ",
+              "originalText": "Sauce"
+            },
+            {
+              "referenceId": "raw",
+              "display": " 2 eggs ",
+              "note": "discarded"
+            },
+            {
+              "referenceId": 3,
+              "food": {
+                "id": "egg",
+                "name": " Egg "
+              },
+              "unit": null,
+              "quantity": 2,
+              "title": " Eggs "
+            },
+            {
+              "referenceId": "salt",
+              "food": {},
+              "unit": {},
+              "quantity": 0
+            },
+            {
+              "originalText": " original "
+            },
+            {}
+          ],
+          "recipeInstructions": [
+            {
+              "id": "unstable",
+              "title": " Prepare ",
+              "text": " Stir ",
+              "ingredientReferences": [
+                {
+                  "referenceId": "raw"
+                },
+                {
+                  "referenceId": "dangling"
+                }
+              ]
+            },
+            {
+              "title": "Prepare",
+              "text": " Eat "
+            },
+            {
+              "title": "",
+              "text": ""
+            },
+            {
+              "title": "Prepare",
+              "text": "Repeat"
+            }
+          ]
+        },
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/api/recipes/complete",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "b",
+          "slug": "complete",
+          "name": "Complete",
+          "createdAt": "2026-10-28",
+          "recipeCategory": [
+            {
+              "id": "cat"
+            }
+          ],
+          "tags": [
+            {
+              "id": "tag"
+            }
+          ],
+          "image": "img",
+          "tools": [
+            {}
+          ],
+          "recipeIngredient": [
+            {
+              "food": {},
+              "unit": {}
+            }
+          ]
+        },
+        "status": 200
+      }
+    ]
+  },
+  "get_recipes_for_data_enrichment.all": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes",
+        "query": {
+          "page": [
+            "1"
+          ],
+          "perPage": [
+            "50"
+          ],
+          "orderBy": [
+            "createdAt"
+          ],
+          "orderDirection": [
+            "asc"
+          ]
+        },
+        "body": null,
+        "response": {
+          "items": [
+            {
+              "id": "a",
+              "slug": "soup",
+              "name": " Soup ",
+              "createdAt": "2026-10-28",
+              "updatedAt": "2026-10-28T10:00:00Z",
+              "description": " desc ",
+              "recipeServings": 0,
+              "recipeYield": " 2 bowls ",
+              "totalTime": " PT30M ",
+              "orgURL": " https://example.test/soup ",
+              "recipeCategory": [
+                {
+                  "id": 1,
+                  "name": " Dinner ",
+                  "slug": " dinner "
+                }
+              ],
+              "tags": [],
+              "tools": [
+                {
+                  "id": 2,
+                  "name": " Pot "
+                }
+              ],
+              "image": " ",
+              "recipeIngredient": [
+                {
+                  "referenceId": "section",
+                  "title": " Sauce ",
+                  "originalText": "Sauce"
+                },
+                {
+                  "referenceId": "raw",
+                  "display": " 2 eggs ",
+                  "note": "discarded"
+                },
+                {
+                  "referenceId": 3,
+                  "food": {
+                    "id": "egg",
+                    "name": " Egg "
+                  },
+                  "unit": null,
+                  "quantity": 2,
+                  "title": " Eggs "
+                },
+                {
+                  "referenceId": "salt",
+                  "food": {},
+                  "unit": {},
+                  "quantity": 0
+                },
+                {
+                  "originalText": " original "
+                },
+                {}
+              ],
+              "recipeInstructions": [
+                {
+                  "id": "unstable",
+                  "title": " Prepare ",
+                  "text": " Stir ",
+                  "ingredientReferences": [
+                    {
+                      "referenceId": "raw"
+                    },
+                    {
+                      "referenceId": "dangling"
+                    }
+                  ]
+                },
+                {
+                  "title": "Prepare",
+                  "text": " Eat "
+                },
+                {
+                  "title": "",
+                  "text": ""
+                },
+                {
+                  "title": "Prepare",
+                  "text": "Repeat"
+                }
+              ]
+            },
+            {
+              "id": "b",
+              "slug": "complete",
+              "name": "Complete",
+              "createdAt": "2026-10-28",
+              "recipeCategory": [
+                {
+                  "id": "cat"
+                }
+              ],
+              "tags": [
+                {
+                  "id": "tag"
+                }
+              ],
+              "image": "img",
+              "tools": [
+                {}
+              ],
+              "recipeIngredient": [
+                {
+                  "food": {},
+                  "unit": {}
+                }
+              ]
+            }
+          ],
+          "total": 2
+        },
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/api/recipes/soup",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "a",
+          "slug": "soup",
+          "name": " Soup ",
+          "createdAt": "2026-10-28",
+          "updatedAt": "2026-10-28T10:00:00Z",
+          "description": " desc ",
+          "recipeServings": 0,
+          "recipeYield": " 2 bowls ",
+          "totalTime": " PT30M ",
+          "orgURL": " https://example.test/soup ",
+          "recipeCategory": [
+            {
+              "id": 1,
+              "name": " Dinner ",
+              "slug": " dinner "
+            }
+          ],
+          "tags": [],
+          "tools": [
+            {
+              "id": 2,
+              "name": " Pot "
+            }
+          ],
+          "image": " ",
+          "recipeIngredient": [
+            {
+              "referenceId": "section",
+              "title": " Sauce ",
+              "originalText": "Sauce"
+            },
+            {
+              "referenceId": "raw",
+              "display": " 2 eggs ",
+              "note": "discarded"
+            },
+            {
+              "referenceId": 3,
+              "food": {
+                "id": "egg",
+                "name": " Egg "
+              },
+              "unit": null,
+              "quantity": 2,
+              "title": " Eggs "
+            },
+            {
+              "referenceId": "salt",
+              "food": {},
+              "unit": {},
+              "quantity": 0
+            },
+            {
+              "originalText": " original "
+            },
+            {}
+          ],
+          "recipeInstructions": [
+            {
+              "id": "unstable",
+              "title": " Prepare ",
+              "text": " Stir ",
+              "ingredientReferences": [
+                {
+                  "referenceId": "raw"
+                },
+                {
+                  "referenceId": "dangling"
+                }
+              ]
+            },
+            {
+              "title": "Prepare",
+              "text": " Eat "
+            },
+            {
+              "title": "",
+              "text": ""
+            },
+            {
+              "title": "Prepare",
+              "text": "Repeat"
+            }
+          ]
+        },
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/api/recipes/complete",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "b",
+          "slug": "complete",
+          "name": "Complete",
+          "createdAt": "2026-10-28",
+          "recipeCategory": [
+            {
+              "id": "cat"
+            }
+          ],
+          "tags": [
+            {
+              "id": "tag"
+            }
+          ],
+          "image": "img",
+          "tools": [
+            {}
+          ],
+          "recipeIngredient": [
+            {
+              "food": {},
+              "unit": {}
+            }
+          ]
+        },
+        "status": 200
+      }
+    ]
+  },
+  "get_recipes_for_data_enrichment.sections": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes",
+        "query": {
+          "page": [
+            "1"
+          ],
+          "perPage": [
+            "50"
+          ],
+          "orderBy": [
+            "createdAt"
+          ],
+          "orderDirection": [
+            "asc"
+          ]
+        },
+        "body": null,
+        "response": {
+          "items": [
+            {
+              "id": "a",
+              "slug": "soup",
+              "name": " Soup ",
+              "createdAt": "2026-10-28",
+              "updatedAt": "2026-10-28T10:00:00Z",
+              "description": " desc ",
+              "recipeServings": 0,
+              "recipeYield": " 2 bowls ",
+              "totalTime": " PT30M ",
+              "orgURL": " https://example.test/soup ",
+              "recipeCategory": [
+                {
+                  "id": 1,
+                  "name": " Dinner ",
+                  "slug": " dinner "
+                }
+              ],
+              "tags": [],
+              "tools": [
+                {
+                  "id": 2,
+                  "name": " Pot "
+                }
+              ],
+              "image": " ",
+              "recipeIngredient": [
+                {
+                  "referenceId": "section",
+                  "title": " Sauce ",
+                  "originalText": "Sauce"
+                },
+                {
+                  "referenceId": "raw",
+                  "display": " 2 eggs ",
+                  "note": "discarded"
+                },
+                {
+                  "referenceId": 3,
+                  "food": {
+                    "id": "egg",
+                    "name": " Egg "
+                  },
+                  "unit": null,
+                  "quantity": 2,
+                  "title": " Eggs "
+                },
+                {
+                  "referenceId": "salt",
+                  "food": {},
+                  "unit": {},
+                  "quantity": 0
+                },
+                {
+                  "originalText": " original "
+                },
+                {}
+              ],
+              "recipeInstructions": [
+                {
+                  "id": "unstable",
+                  "title": " Prepare ",
+                  "text": " Stir ",
+                  "ingredientReferences": [
+                    {
+                      "referenceId": "raw"
+                    },
+                    {
+                      "referenceId": "dangling"
+                    }
+                  ]
+                },
+                {
+                  "title": "Prepare",
+                  "text": " Eat "
+                },
+                {
+                  "title": "",
+                  "text": ""
+                },
+                {
+                  "title": "Prepare",
+                  "text": "Repeat"
+                }
+              ]
+            },
+            {
+              "id": "b",
+              "slug": "complete",
+              "name": "Complete",
+              "createdAt": "2026-10-28",
+              "recipeCategory": [
+                {
+                  "id": "cat"
+                }
+              ],
+              "tags": [
+                {
+                  "id": "tag"
+                }
+              ],
+              "image": "img",
+              "tools": [
+                {}
+              ],
+              "recipeIngredient": [
+                {
+                  "food": {},
+                  "unit": {}
+                }
+              ]
+            }
+          ],
+          "total": 2
+        },
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/api/recipes/soup",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "a",
+          "slug": "soup",
+          "name": " Soup ",
+          "createdAt": "2026-10-28",
+          "updatedAt": "2026-10-28T10:00:00Z",
+          "description": " desc ",
+          "recipeServings": 0,
+          "recipeYield": " 2 bowls ",
+          "totalTime": " PT30M ",
+          "orgURL": " https://example.test/soup ",
+          "recipeCategory": [
+            {
+              "id": 1,
+              "name": " Dinner ",
+              "slug": " dinner "
+            }
+          ],
+          "tags": [],
+          "tools": [
+            {
+              "id": 2,
+              "name": " Pot "
+            }
+          ],
+          "image": " ",
+          "recipeIngredient": [
+            {
+              "referenceId": "section",
+              "title": " Sauce ",
+              "originalText": "Sauce"
+            },
+            {
+              "referenceId": "raw",
+              "display": " 2 eggs ",
+              "note": "discarded"
+            },
+            {
+              "referenceId": 3,
+              "food": {
+                "id": "egg",
+                "name": " Egg "
+              },
+              "unit": null,
+              "quantity": 2,
+              "title": " Eggs "
+            },
+            {
+              "referenceId": "salt",
+              "food": {},
+              "unit": {},
+              "quantity": 0
+            },
+            {
+              "originalText": " original "
+            },
+            {}
+          ],
+          "recipeInstructions": [
+            {
+              "id": "unstable",
+              "title": " Prepare ",
+              "text": " Stir ",
+              "ingredientReferences": [
+                {
+                  "referenceId": "raw"
+                },
+                {
+                  "referenceId": "dangling"
+                }
+              ]
+            },
+            {
+              "title": "Prepare",
+              "text": " Eat "
+            },
+            {
+              "title": "",
+              "text": ""
+            },
+            {
+              "title": "Prepare",
+              "text": "Repeat"
+            }
+          ]
+        },
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/api/recipes/complete",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "b",
+          "slug": "complete",
+          "name": "Complete",
+          "createdAt": "2026-10-28",
+          "recipeCategory": [
+            {
+              "id": "cat"
+            }
+          ],
+          "tags": [
+            {
+              "id": "tag"
+            }
+          ],
+          "image": "img",
+          "tools": [
+            {}
+          ],
+          "recipeIngredient": [
+            {
+              "food": {},
+              "unit": {}
+            }
+          ]
+        },
+        "status": 200
+      }
+    ]
+  },
+  "get_recipes_for_data_enrichment.dangling": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes",
+        "query": {
+          "page": [
+            "1"
+          ],
+          "perPage": [
+            "50"
+          ],
+          "orderBy": [
+            "createdAt"
+          ],
+          "orderDirection": [
+            "asc"
+          ]
+        },
+        "body": null,
+        "response": {
+          "items": [
+            {
+              "id": "a",
+              "slug": "soup",
+              "name": " Soup ",
+              "createdAt": "2026-10-28",
+              "updatedAt": "2026-10-28T10:00:00Z",
+              "description": " desc ",
+              "recipeServings": 0,
+              "recipeYield": " 2 bowls ",
+              "totalTime": " PT30M ",
+              "orgURL": " https://example.test/soup ",
+              "recipeCategory": [
+                {
+                  "id": 1,
+                  "name": " Dinner ",
+                  "slug": " dinner "
+                }
+              ],
+              "tags": [],
+              "tools": [
+                {
+                  "id": 2,
+                  "name": " Pot "
+                }
+              ],
+              "image": " ",
+              "recipeIngredient": [
+                {
+                  "referenceId": "section",
+                  "title": " Sauce ",
+                  "originalText": "Sauce"
+                },
+                {
+                  "referenceId": "raw",
+                  "display": " 2 eggs ",
+                  "note": "discarded"
+                },
+                {
+                  "referenceId": 3,
+                  "food": {
+                    "id": "egg",
+                    "name": " Egg "
+                  },
+                  "unit": null,
+                  "quantity": 2,
+                  "title": " Eggs "
+                },
+                {
+                  "referenceId": "salt",
+                  "food": {},
+                  "unit": {},
+                  "quantity": 0
+                },
+                {
+                  "originalText": " original "
+                },
+                {}
+              ],
+              "recipeInstructions": [
+                {
+                  "id": "unstable",
+                  "title": " Prepare ",
+                  "text": " Stir ",
+                  "ingredientReferences": [
+                    {
+                      "referenceId": "raw"
+                    },
+                    {
+                      "referenceId": "dangling"
+                    }
+                  ]
+                },
+                {
+                  "title": "Prepare",
+                  "text": " Eat "
+                },
+                {
+                  "title": "",
+                  "text": ""
+                },
+                {
+                  "title": "Prepare",
+                  "text": "Repeat"
+                }
+              ]
+            },
+            {
+              "id": "b",
+              "slug": "complete",
+              "name": "Complete",
+              "createdAt": "2026-10-28",
+              "recipeCategory": [
+                {
+                  "id": "cat"
+                }
+              ],
+              "tags": [
+                {
+                  "id": "tag"
+                }
+              ],
+              "image": "img",
+              "tools": [
+                {}
+              ],
+              "recipeIngredient": [
+                {
+                  "food": {},
+                  "unit": {}
+                }
+              ]
+            }
+          ],
+          "total": 2
+        },
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/api/recipes/soup",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "a",
+          "slug": "soup",
+          "name": " Soup ",
+          "createdAt": "2026-10-28",
+          "updatedAt": "2026-10-28T10:00:00Z",
+          "description": " desc ",
+          "recipeServings": 0,
+          "recipeYield": " 2 bowls ",
+          "totalTime": " PT30M ",
+          "orgURL": " https://example.test/soup ",
+          "recipeCategory": [
+            {
+              "id": 1,
+              "name": " Dinner ",
+              "slug": " dinner "
+            }
+          ],
+          "tags": [],
+          "tools": [
+            {
+              "id": 2,
+              "name": " Pot "
+            }
+          ],
+          "image": " ",
+          "recipeIngredient": [
+            {
+              "referenceId": "section",
+              "title": " Sauce ",
+              "originalText": "Sauce"
+            },
+            {
+              "referenceId": "raw",
+              "display": " 2 eggs ",
+              "note": "discarded"
+            },
+            {
+              "referenceId": 3,
+              "food": {
+                "id": "egg",
+                "name": " Egg "
+              },
+              "unit": null,
+              "quantity": 2,
+              "title": " Eggs "
+            },
+            {
+              "referenceId": "salt",
+              "food": {},
+              "unit": {},
+              "quantity": 0
+            },
+            {
+              "originalText": " original "
+            },
+            {}
+          ],
+          "recipeInstructions": [
+            {
+              "id": "unstable",
+              "title": " Prepare ",
+              "text": " Stir ",
+              "ingredientReferences": [
+                {
+                  "referenceId": "raw"
+                },
+                {
+                  "referenceId": "dangling"
+                }
+              ]
+            },
+            {
+              "title": "Prepare",
+              "text": " Eat "
+            },
+            {
+              "title": "",
+              "text": ""
+            },
+            {
+              "title": "Prepare",
+              "text": "Repeat"
+            }
+          ]
+        },
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/api/recipes/complete",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "b",
+          "slug": "complete",
+          "name": "Complete",
+          "createdAt": "2026-10-28",
+          "recipeCategory": [
+            {
+              "id": "cat"
+            }
+          ],
+          "tags": [
+            {
+              "id": "tag"
+            }
+          ],
+          "image": "img",
+          "tools": [
+            {}
+          ],
+          "recipeIngredient": [
+            {
+              "food": {},
+              "unit": {}
+            }
+          ]
+        },
+        "status": 200
+      }
+    ]
+  },
+  "get_recipes_for_data_enrichment.partial": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes",
+        "query": {
+          "page": [
+            "1"
+          ],
+          "perPage": [
+            "50"
+          ],
+          "orderBy": [
+            "createdAt"
+          ],
+          "orderDirection": [
+            "asc"
+          ]
+        },
+        "body": null,
+        "response": {
+          "items": [
+            {
+              "id": "a",
+              "slug": "soup",
+              "name": " Soup ",
+              "createdAt": "2026-10-28",
+              "updatedAt": "2026-10-28T10:00:00Z",
+              "description": " desc ",
+              "recipeServings": 0,
+              "recipeYield": " 2 bowls ",
+              "totalTime": " PT30M ",
+              "orgURL": " https://example.test/soup ",
+              "recipeCategory": [
+                {
+                  "id": 1,
+                  "name": " Dinner ",
+                  "slug": " dinner "
+                }
+              ],
+              "tags": [],
+              "tools": [
+                {
+                  "id": 2,
+                  "name": " Pot "
+                }
+              ],
+              "image": " ",
+              "recipeIngredient": [
+                {
+                  "referenceId": "section",
+                  "title": " Sauce ",
+                  "originalText": "Sauce"
+                },
+                {
+                  "referenceId": "raw",
+                  "display": " 2 eggs ",
+                  "note": "discarded"
+                },
+                {
+                  "referenceId": 3,
+                  "food": {
+                    "id": "egg",
+                    "name": " Egg "
+                  },
+                  "unit": null,
+                  "quantity": 2,
+                  "title": " Eggs "
+                },
+                {
+                  "referenceId": "salt",
+                  "food": {},
+                  "unit": {},
+                  "quantity": 0
+                },
+                {
+                  "originalText": " original "
+                },
+                {}
+              ],
+              "recipeInstructions": [
+                {
+                  "id": "unstable",
+                  "title": " Prepare ",
+                  "text": " Stir ",
+                  "ingredientReferences": [
+                    {
+                      "referenceId": "raw"
+                    },
+                    {
+                      "referenceId": "dangling"
+                    }
+                  ]
+                },
+                {
+                  "title": "Prepare",
+                  "text": " Eat "
+                },
+                {
+                  "title": "",
+                  "text": ""
+                },
+                {
+                  "title": "Prepare",
+                  "text": "Repeat"
+                }
+              ]
+            },
+            {
+              "id": "b",
+              "slug": "complete",
+              "name": "Complete",
+              "createdAt": "2026-10-28",
+              "recipeCategory": [
+                {
+                  "id": "cat"
+                }
+              ],
+              "tags": [
+                {
+                  "id": "tag"
+                }
+              ],
+              "image": "img",
+              "tools": [
+                {}
+              ],
+              "recipeIngredient": [
+                {
+                  "food": {},
+                  "unit": {}
+                }
+              ]
+            }
+          ],
+          "total": 2
+        },
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/api/recipes/soup",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "a",
+          "slug": "soup",
+          "name": " Soup ",
+          "createdAt": "2026-10-28",
+          "updatedAt": "2026-10-28T10:00:00Z",
+          "description": " desc ",
+          "recipeServings": 0,
+          "recipeYield": " 2 bowls ",
+          "totalTime": " PT30M ",
+          "orgURL": " https://example.test/soup ",
+          "recipeCategory": [
+            {
+              "id": 1,
+              "name": " Dinner ",
+              "slug": " dinner "
+            }
+          ],
+          "tags": [],
+          "tools": [
+            {
+              "id": 2,
+              "name": " Pot "
+            }
+          ],
+          "image": " ",
+          "recipeIngredient": [
+            {
+              "referenceId": "section",
+              "title": " Sauce ",
+              "originalText": "Sauce"
+            },
+            {
+              "referenceId": "raw",
+              "display": " 2 eggs ",
+              "note": "discarded"
+            },
+            {
+              "referenceId": 3,
+              "food": {
+                "id": "egg",
+                "name": " Egg "
+              },
+              "unit": null,
+              "quantity": 2,
+              "title": " Eggs "
+            },
+            {
+              "referenceId": "salt",
+              "food": {},
+              "unit": {},
+              "quantity": 0
+            },
+            {
+              "originalText": " original "
+            },
+            {}
+          ],
+          "recipeInstructions": [
+            {
+              "id": "unstable",
+              "title": " Prepare ",
+              "text": " Stir ",
+              "ingredientReferences": [
+                {
+                  "referenceId": "raw"
+                },
+                {
+                  "referenceId": "dangling"
+                }
+              ]
+            },
+            {
+              "title": "Prepare",
+              "text": " Eat "
+            },
+            {
+              "title": "",
+              "text": ""
+            },
+            {
+              "title": "Prepare",
+              "text": "Repeat"
+            }
+          ]
+        },
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/api/recipes/complete",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "b",
+          "slug": "complete",
+          "name": "Complete",
+          "createdAt": "2026-10-28",
+          "recipeCategory": [
+            {
+              "id": "cat"
+            }
+          ],
+          "tags": [
+            {
+              "id": "tag"
+            }
+          ],
+          "image": "img",
+          "tools": [
+            {}
+          ],
+          "recipeIngredient": [
+            {
+              "food": {},
+              "unit": {}
+            }
+          ]
+        },
+        "status": 200
+      }
+    ]
+  },
+  "get_recipes_for_data_enrichment.empty_filters": {
+    "requests": []
+  },
+  "find_recipes_for_ingredients.text_fallback": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/foods",
+        "query": {
+          "search": [
+            "unknown"
+          ],
+          "perPage": [
+            "25"
+          ]
+        },
+        "body": null,
+        "response": {
+          "items": [],
+          "total": 0
+        },
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/api/recipes",
+        "query": {
+          "search": [
+            "unknown"
+          ],
+          "perPage": [
+            "10"
+          ]
+        },
+        "body": null,
+        "response": {
+          "items": [
+            {
+              "name": "Salad",
+              "slug": "salad",
+              "description": "",
+              "recipeCategory": [],
+              "tags": [],
+              "totalTime": "PT5M"
+            }
+          ],
+          "total": 1
+        },
+        "status": 200
+      }
+    ]
+  },
+  "find_recipes_for_ingredients.food_and": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/foods",
+        "query": {
+          "search": [
+            "salmon"
+          ],
+          "perPage": [
+            "25"
+          ]
+        },
+        "body": null,
+        "response": {
+          "items": [
+            {
+              "id": "f1",
+              "name": "Salmon"
+            }
+          ],
+          "total": 1
+        },
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/api/foods",
+        "query": {
+          "search": [
+            "salt"
+          ],
+          "perPage": [
+            "25"
+          ]
+        },
+        "body": null,
+        "response": {
+          "items": [
+            {
+              "id": "f2",
+              "name": "Salt"
+            }
+          ],
+          "total": 1
+        },
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/api/recipes",
+        "query": {
+          "foods": [
+            "f1",
+            "f2"
+          ],
+          "requireAllFoods": [
+            "true"
+          ],
+          "perPage": [
+            "10"
+          ]
+        },
+        "body": null,
+        "response": {
+          "items": [
+            {
+              "name": "Salad",
+              "slug": "salad",
+              "description": "",
+              "recipeCategory": [],
+              "tags": [],
+              "totalTime": "PT5M"
+            }
+          ],
+          "total": 1
+        },
+        "status": 200
+      }
+    ]
+  },
+  "find_recipes_for_ingredients.deduplicate_case_sensitive": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/foods",
+        "query": {
+          "search": [
+            "basil"
+          ],
+          "perPage": [
+            "25"
+          ]
+        },
+        "body": null,
+        "response": {
+          "items": [
+            {
+              "id": "b",
+              "name": "Basil"
+            }
+          ],
+          "total": 1
+        },
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/api/foods",
+        "query": {
+          "search": [
+            "Basil"
+          ],
+          "perPage": [
+            "25"
+          ]
+        },
+        "body": null,
+        "response": {
+          "items": [
+            {
+              "id": "b",
+              "name": "Basil"
+            }
+          ],
+          "total": 1
+        },
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/api/recipes/suggestions",
+        "query": {
+          "foods": [
+            "b"
+          ],
+          "limit": [
+            "10"
+          ],
+          "maxMissingFoods": [
+            "1000"
+          ],
+          "includeFoodsOnHand": [
+            "false"
+          ],
+          "includeToolsOnHand": [
+            "false"
+          ]
+        },
+        "body": null,
+        "response": {
+          "items": [
+            {
+              "recipe": {
+                "name": "Salad",
+                "slug": "salad",
+                "description": "",
+                "recipeCategory": [],
+                "tags": [],
+                "totalTime": "PT5M"
+              },
+              "missingFoods": [],
+              "missingTools": []
+            }
+          ]
+        },
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/api/recipes/suggestions",
+        "query": {
+          "foods": [
+            "b"
+          ],
+          "limit": [
+            "10"
+          ],
+          "maxMissingFoods": [
+            "1000"
+          ],
+          "includeFoodsOnHand": [
+            "false"
+          ],
+          "includeToolsOnHand": [
+            "false"
+          ]
+        },
+        "body": null,
+        "response": {
+          "items": [
+            {
+              "recipe": {
+                "name": "Salad",
+                "slug": "salad",
+                "description": "",
+                "recipeCategory": [],
+                "tags": [],
+                "totalTime": "PT5M"
+              },
+              "missingFoods": [],
+              "missingTools": []
+            }
+          ]
+        },
+        "status": 200
+      }
+    ]
+  },
+  "find_recipes_for_ingredients.plural": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/foods",
+        "query": {
+          "search": [
+            "eggs"
+          ],
+          "perPage": [
+            "25"
+          ]
+        },
+        "body": null,
+        "response": {
+          "items": [
+            {
+              "id": "eggs",
+              "name": "Egg",
+              "pluralName": "Eggs"
+            },
+            {
+              "id": "other",
+              "name": "Other"
+            }
+          ],
+          "total": 2
+        },
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/api/recipes/suggestions",
+        "query": {
+          "foods": [
+            "eggs"
+          ],
+          "limit": [
+            "10"
+          ],
+          "maxMissingFoods": [
+            "1000"
+          ],
+          "includeFoodsOnHand": [
+            "false"
+          ],
+          "includeToolsOnHand": [
+            "false"
+          ]
+        },
+        "body": null,
+        "response": {
+          "items": [
+            {
+              "recipe": {
+                "name": "Salad",
+                "slug": "salad",
+                "description": "",
+                "recipeCategory": [],
+                "tags": [],
+                "totalTime": "PT5M"
+              },
+              "missingFoods": [],
+              "missingTools": []
+            }
+          ]
+        },
+        "status": 200
+      }
+    ]
+  },
+  "find_recipes_for_ingredients.ambiguous": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/foods",
+        "query": {
+          "search": [
+            "fish"
+          ],
+          "perPage": [
+            "25"
+          ]
+        },
+        "body": null,
+        "response": {
+          "items": [
+            {
+              "id": "x",
+              "name": "Fish"
+            },
+            {
+              "id": "y",
+              "name": "fish"
+            }
+          ],
+          "total": 2
+        },
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/api/recipes",
+        "query": {
+          "search": [
+            "fish"
+          ],
+          "perPage": [
+            "10"
+          ]
+        },
+        "body": null,
+        "response": {
+          "items": [
+            {
+              "name": "Salad",
+              "slug": "salad",
+              "description": "",
+              "recipeCategory": [],
+              "tags": [],
+              "totalTime": "PT5M"
+            }
+          ],
+          "total": 1
+        },
+        "status": 200
+      }
+    ]
+  },
+  "find_recipes_for_ingredients.resolved_text_fallback": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/foods",
+        "query": {
+          "search": [
+            "salmon"
+          ],
+          "perPage": [
+            "25"
+          ]
+        },
+        "body": null,
+        "response": {
+          "items": [
+            {
+              "id": "f1",
+              "name": "Salmon"
+            }
+          ],
+          "total": 1
+        },
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/api/recipes/suggestions",
+        "query": {
+          "foods": [
+            "f1"
+          ],
+          "limit": [
+            "10"
+          ],
+          "maxMissingFoods": [
+            "1000"
+          ],
+          "includeFoodsOnHand": [
+            "false"
+          ],
+          "includeToolsOnHand": [
+            "false"
+          ]
+        },
+        "body": null,
+        "response": {
+          "items": []
+        },
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/api/recipes",
+        "query": {
+          "search": [
+            "salmon"
+          ],
+          "perPage": [
+            "10"
+          ]
+        },
+        "body": null,
+        "response": {
+          "items": [
+            {
+              "name": "Salad",
+              "slug": "salad",
+              "description": "",
+              "recipeCategory": [],
+              "tags": [],
+              "totalTime": "PT5M"
+            }
+          ],
+          "total": 1
+        },
+        "status": 200
+      }
+    ]
+  },
+  "find_recipes_for_ingredients.clamp": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/foods",
+        "query": {
+          "search": [
+            "salmon"
+          ],
+          "perPage": [
+            "25"
+          ]
+        },
+        "body": null,
+        "response": {
+          "items": [
+            {
+              "id": "f1",
+              "name": "Salmon"
+            }
+          ],
+          "total": 1
+        },
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/api/recipes/suggestions",
+        "query": {
+          "foods": [
+            "f1"
+          ],
+          "limit": [
+            "50"
+          ],
+          "maxMissingFoods": [
+            "1000"
+          ],
+          "includeFoodsOnHand": [
+            "false"
+          ],
+          "includeToolsOnHand": [
+            "false"
+          ]
+        },
+        "body": null,
+        "response": {
+          "items": [
+            {
+              "recipe": {
+                "name": "Salad",
+                "slug": "salad",
+                "description": "",
+                "recipeCategory": [],
+                "tags": [],
+                "totalTime": "PT5M"
+              },
+              "missingFoods": [],
+              "missingTools": []
+            }
+          ]
+        },
+        "status": 200
+      }
+    ]
+  },
+  "find_recipes_for_ingredients.taxonomy_excluded": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/organizers/categories",
+        "query": {
+          "perPage": [
+            "-1"
+          ]
+        },
+        "body": null,
+        "response": {
+          "items": [
+            {
+              "id": "c",
+              "name": "Dinner",
+              "slug": "dinner"
+            }
+          ]
+        },
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/api/foods",
+        "query": {
+          "search": [
+            "salmon"
+          ],
+          "perPage": [
+            "25"
+          ]
+        },
+        "body": null,
+        "response": {
+          "items": [
+            {
+              "id": "f1",
+              "name": "Salmon"
+            }
+          ],
+          "total": 1
+        },
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/api/recipes/suggestions",
+        "query": {
+          "foods": [
+            "f1"
+          ],
+          "limit": [
+            "40"
+          ],
+          "maxMissingFoods": [
+            "1000"
+          ],
+          "includeFoodsOnHand": [
+            "false"
+          ],
+          "includeToolsOnHand": [
+            "false"
+          ]
+        },
+        "body": null,
+        "response": {
+          "items": [
+            {
+              "recipe": {
+                "name": "Salad",
+                "slug": "salad",
+                "description": "",
+                "recipeCategory": [],
+                "tags": [],
+                "totalTime": "PT5M"
+              },
+              "missingFoods": [],
+              "missingTools": []
+            }
+          ]
+        },
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/api/recipes",
+        "query": {
+          "search": [
+            "salmon"
+          ],
+          "perPage": [
+            "10"
+          ],
+          "categories": [
+            "c"
+          ]
+        },
+        "body": null,
+        "response": {
+          "items": [],
+          "total": 0
+        },
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/api/recipes",
+        "query": {
+          "search": [
+            "salmon"
+          ],
+          "perPage": [
+            "10"
+          ]
+        },
+        "body": null,
+        "response": {
+          "items": [
+            {
+              "name": "Salad",
+              "slug": "salad",
+              "description": "",
+              "recipeCategory": [],
+              "tags": [],
+              "totalTime": "PT5M"
+            }
+          ],
+          "total": 1
+        },
+        "status": 200
+      }
+    ]
+  },
+  "find_recipes_for_ingredients.blank": {
+    "requests": []
   }
 }

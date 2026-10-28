@@ -26,7 +26,8 @@ def encode_path_segment(value: str, label: str = "path segment") -> str:
     return quote(trimmed, safe="~!*'()")
 
 
-def _scalar(value: ParamScalar) -> str:
+def scalar_string(value: ParamScalar) -> str:
+    """ECMAScript-compatible JSON scalar text used in queries and compact projections."""
     if isinstance(value, bool):
         return "true" if value else "false"
     if isinstance(value, float):
@@ -50,7 +51,7 @@ def format_params(params: Mapping[str, ParamValue]) -> dict[str, str]:
             if value:
                 result[key] = ",".join(value)
         else:
-            result[key] = _scalar(value)
+            result[key] = scalar_string(value)
     return result
 
 
@@ -62,7 +63,7 @@ def build_query_string(params: Mapping[str, ParamValue]) -> str:
         if isinstance(value, list):
             pairs.extend((key, item) for item in value)
         else:
-            pairs.append((key, _scalar(value)))
+            pairs.append((key, scalar_string(value)))
     return urlencode(pairs)
 
 

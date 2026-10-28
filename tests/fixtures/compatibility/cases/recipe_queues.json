@@ -1,0 +1,1586 @@
+[
+  {
+    "tool": "get_recipes_for_classification",
+    "arguments": {},
+    "scenario": "get_recipes_for_classification.basic",
+    "expected_requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes",
+        "query": {
+          "page": [
+            "1"
+          ],
+          "perPage": [
+            "50"
+          ],
+          "orderBy": [
+            "createdAt"
+          ],
+          "orderDirection": [
+            "asc"
+          ]
+        },
+        "body": null
+      },
+      {
+        "method": "GET",
+        "path": "/api/recipes/soup",
+        "query": {},
+        "body": null
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"items\":[{\"id\":\"a\",\"slug\":\"soup\",\"name\":\"Soup\",\"description\":\"desc\",\"totalTime\":\"PT30M\",\"prepTime\":null,\"cookTime\":null,\"servings\":0,\"yield\":\"2 bowls\",\"sourceUrl\":\"https://example.test/soup\",\"ingredients\":[\"Sauce\",\"2 eggs\",\"2 Egg\",\"original\"],\"instructions\":[\"Prepare\",\"Stir\",\"Eat\",\"Repeat\"],\"categories\":[{\"id\":\"1\",\"name\":\"Dinner\",\"slug\":\"dinner\"}],\"tags\":[]}],\"failures\":[],\"nextCursor\":null,\"scannedCount\":1,\"returnedCount\":1,\"hasMore\":false}"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "get_recipes_for_ingredient_parsing",
+    "arguments": {},
+    "scenario": "get_recipes_for_ingredient_parsing.basic",
+    "expected_requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes",
+        "query": {
+          "page": [
+            "1"
+          ],
+          "perPage": [
+            "50"
+          ],
+          "orderBy": [
+            "createdAt"
+          ],
+          "orderDirection": [
+            "asc"
+          ]
+        },
+        "body": null
+      },
+      {
+        "method": "GET",
+        "path": "/api/recipes/soup",
+        "query": {},
+        "body": null
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"items\":[{\"id\":\"a\",\"slug\":\"soup\",\"name\":\"Soup\",\"description\":\"desc\",\"categories\":[{\"id\":\"1\",\"name\":\"Dinner\",\"slug\":\"dinner\"}],\"tags\":[],\"totalTime\":\"PT30M\",\"prepTime\":null,\"cookTime\":null,\"servings\":0,\"yield\":\"2 bowls\",\"ingredients\":[{\"referenceId\":\"section\",\"quantity\":null,\"unit\":null,\"food\":null,\"note\":\"\",\"display\":\"\",\"originalText\":\"Sauce\",\"title\":\"Sauce\",\"parsingState\":\"section\"},{\"referenceId\":\"raw\",\"quantity\":null,\"unit\":null,\"food\":null,\"note\":\"discarded\",\"display\":\"2 eggs\",\"originalText\":null,\"title\":null,\"parsingState\":\"unparsed\"},{\"referenceId\":\"3\",\"quantity\":2,\"unit\":null,\"food\":{\"id\":\"egg\",\"name\":\"Egg\"},\"note\":\"\",\"display\":\"\",\"originalText\":null,\"title\":\"Eggs\",\"parsingState\":\"partial\"},{\"referenceId\":\"salt\",\"quantity\":0,\"unit\":{\"id\":\"\",\"name\":\"\"},\"food\":{\"id\":\"\",\"name\":\"\"},\"note\":\"\",\"display\":\"\",\"originalText\":null,\"title\":null,\"parsingState\":\"structured\"},{\"referenceId\":\"\",\"quantity\":null,\"unit\":null,\"food\":null,\"note\":\"\",\"display\":\"\",\"originalText\":\"original\",\"title\":null,\"parsingState\":\"unparsed\"},{\"referenceId\":\"\",\"quantity\":null,\"unit\":null,\"food\":null,\"note\":\"\",\"display\":\"\",\"originalText\":null,\"title\":null,\"parsingState\":\"unparsed\"}],\"instructions\":[{\"id\":\"unstable\",\"title\":\"Prepare\",\"text\":\"Stir\",\"ingredientReferences\":[{\"referenceId\":\"raw\"},{\"referenceId\":\"dangling\"}]},{\"title\":\"Prepare\",\"text\":\"Eat\",\"ingredientReferences\":[]},{\"title\":\"\",\"text\":\"\",\"ingredientReferences\":[]},{\"title\":\"Prepare\",\"text\":\"Repeat\",\"ingredientReferences\":[]}],\"ingredientParsingState\":{\"totalCount\":6,\"structuredCount\":1,\"partialCount\":1,\"unparsedCount\":3,\"sectionCount\":2}}],\"failures\":[],\"nextCursor\":null,\"scannedCount\":1,\"returnedCount\":1,\"hasMore\":false}"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "get_recipes_for_data_enrichment",
+    "arguments": {},
+    "scenario": "get_recipes_for_data_enrichment.basic",
+    "expected_requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes",
+        "query": {
+          "page": [
+            "1"
+          ],
+          "perPage": [
+            "50"
+          ],
+          "orderBy": [
+            "createdAt"
+          ],
+          "orderDirection": [
+            "asc"
+          ]
+        },
+        "body": null
+      },
+      {
+        "method": "GET",
+        "path": "/api/recipes/soup",
+        "query": {},
+        "body": null
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"items\":[{\"id\":\"a\",\"slug\":\"soup\",\"name\":\"Soup\",\"createdAt\":\"2026-10-28\",\"updatedAt\":\"2026-10-28T10:00:00Z\",\"description\":\"desc\",\"totalTime\":\"PT30M\",\"prepTime\":null,\"cookTime\":null,\"servings\":0,\"yield\":\"2 bowls\",\"sourceUrl\":\"https://example.test/soup\",\"ingredients\":[{\"referenceId\":\"section\",\"quantity\":null,\"unit\":null,\"food\":null,\"note\":\"\",\"display\":\"\",\"originalText\":\"Sauce\",\"title\":\"Sauce\",\"parsingState\":\"section\"},{\"referenceId\":\"raw\",\"quantity\":null,\"unit\":null,\"food\":null,\"note\":\"discarded\",\"display\":\"2 eggs\",\"originalText\":null,\"title\":null,\"parsingState\":\"unparsed\"},{\"referenceId\":\"3\",\"quantity\":2,\"unit\":null,\"food\":{\"id\":\"egg\",\"name\":\"Egg\"},\"note\":\"\",\"display\":\"\",\"originalText\":null,\"title\":\"Eggs\",\"parsingState\":\"partial\"},{\"referenceId\":\"salt\",\"quantity\":0,\"unit\":{\"id\":\"\",\"name\":\"\"},\"food\":{\"id\":\"\",\"name\":\"\"},\"note\":\"\",\"display\":\"\",\"originalText\":null,\"title\":null,\"parsingState\":\"structured\"},{\"referenceId\":\"\",\"quantity\":null,\"unit\":null,\"food\":null,\"note\":\"\",\"display\":\"\",\"originalText\":\"original\",\"title\":null,\"parsingState\":\"unparsed\"},{\"referenceId\":\"\",\"quantity\":null,\"unit\":null,\"food\":null,\"note\":\"\",\"display\":\"\",\"originalText\":null,\"title\":null,\"parsingState\":\"unparsed\"}],\"instructions\":[{\"title\":\"Prepare\",\"text\":\"Stir\",\"ingredientReferenceIds\":[\"raw\",\"dangling\"]},{\"title\":\"Prepare\",\"text\":\"Eat\",\"ingredientReferenceIds\":[]},{\"title\":\"\",\"text\":\"\",\"ingredientReferenceIds\":[]},{\"title\":\"Prepare\",\"text\":\"Repeat\",\"ingredientReferenceIds\":[]}],\"tools\":[{\"id\":\"2\",\"name\":\"Pot\"}],\"categories\":[{\"id\":\"1\",\"name\":\"Dinner\",\"slug\":\"dinner\"}],\"tags\":[],\"audit\":{\"ingredients\":{\"totalCount\":6,\"structuredCount\":1,\"partialCount\":1,\"unparsedCount\":3,\"sectionCount\":2},\"instructions\":{\"instructionCount\":4,\"referencedInstructionCount\":1,\"referenceCount\":2,\"danglingReferenceCount\":1,\"sectionCount\":3},\"toolCount\":1,\"categoryCount\":1,\"tagCount\":0,\"hasImage\":false},\"matchedDimensions\":[\"ingredientParsing\",\"instructionIngredientLinks\",\"tags\",\"image\"]}],\"failures\":[],\"nextCursor\":null,\"scannedCount\":1,\"returnedCount\":1,\"hasMore\":false}"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "find_recipes_for_ingredients",
+    "arguments": {
+      "ingredients": [
+        " salmon "
+      ]
+    },
+    "scenario": "find_recipes_for_ingredients.basic",
+    "expected_requests": [
+      {
+        "method": "GET",
+        "path": "/api/foods",
+        "query": {
+          "search": [
+            "salmon"
+          ],
+          "perPage": [
+            "25"
+          ]
+        },
+        "body": null
+      },
+      {
+        "method": "GET",
+        "path": "/api/recipes/suggestions",
+        "query": {
+          "foods": [
+            "f1"
+          ],
+          "limit": [
+            "10"
+          ],
+          "maxMissingFoods": [
+            "1000"
+          ],
+          "includeFoodsOnHand": [
+            "false"
+          ],
+          "includeToolsOnHand": [
+            "false"
+          ]
+        },
+        "body": null
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"resolvedIngredients\":[{\"query\":\"salmon\",\"foodId\":\"f1\",\"foodName\":\"Salmon\",\"matchType\":\"exact-name\"}],\"unresolvedIngredients\":[],\"matchSource\":\"suggestions\",\"recipes\":[{\"name\":\"Salad\",\"slug\":\"salad\",\"categories\":[],\"tags\":[],\"totalTime\":\"PT5M\",\"matchedIngredients\":[\"salmon\"],\"missingIngredients\":[\"Oil\"],\"matchSource\":\"suggestions\"}],\"notes\":[]}"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "get_recipes_for_classification",
+    "arguments": {
+      "taxonomyState": "missing_either"
+    },
+    "scenario": "get_recipes_for_classification.missing_either",
+    "expected_requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes",
+        "query": {
+          "page": [
+            "1"
+          ],
+          "perPage": [
+            "50"
+          ],
+          "orderBy": [
+            "createdAt"
+          ],
+          "orderDirection": [
+            "asc"
+          ]
+        },
+        "body": null
+      },
+      {
+        "method": "GET",
+        "path": "/api/recipes/soup",
+        "query": {},
+        "body": null
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"items\":[{\"id\":\"a\",\"slug\":\"soup\",\"name\":\"Soup\",\"description\":\"desc\",\"totalTime\":\"PT30M\",\"prepTime\":null,\"cookTime\":null,\"servings\":0,\"yield\":\"2 bowls\",\"sourceUrl\":\"https://example.test/soup\",\"ingredients\":[\"Sauce\",\"2 eggs\",\"2 Egg\",\"original\"],\"instructions\":[\"Prepare\",\"Stir\",\"Eat\",\"Repeat\"],\"categories\":[{\"id\":\"1\",\"name\":\"Dinner\",\"slug\":\"dinner\"}],\"tags\":[]}],\"failures\":[],\"nextCursor\":null,\"scannedCount\":2,\"returnedCount\":1,\"hasMore\":false}"
+        }
+      ]
+    },
+    "request_order": "concurrent"
+  },
+  {
+    "tool": "get_recipes_for_classification",
+    "arguments": {
+      "taxonomyState": "missing_both"
+    },
+    "scenario": "get_recipes_for_classification.missing_both",
+    "expected_requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes",
+        "query": {
+          "page": [
+            "1"
+          ],
+          "perPage": [
+            "50"
+          ],
+          "orderBy": [
+            "createdAt"
+          ],
+          "orderDirection": [
+            "asc"
+          ]
+        },
+        "body": null
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"items\":[],\"failures\":[],\"nextCursor\":null,\"scannedCount\":2,\"returnedCount\":0,\"hasMore\":false}"
+        }
+      ]
+    },
+    "request_order": "concurrent"
+  },
+  {
+    "tool": "get_recipes_for_classification",
+    "arguments": {
+      "taxonomyState": "missing_categories"
+    },
+    "scenario": "get_recipes_for_classification.missing_categories",
+    "expected_requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes",
+        "query": {
+          "page": [
+            "1"
+          ],
+          "perPage": [
+            "50"
+          ],
+          "orderBy": [
+            "createdAt"
+          ],
+          "orderDirection": [
+            "asc"
+          ]
+        },
+        "body": null
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"items\":[],\"failures\":[],\"nextCursor\":null,\"scannedCount\":2,\"returnedCount\":0,\"hasMore\":false}"
+        }
+      ]
+    },
+    "request_order": "concurrent"
+  },
+  {
+    "tool": "get_recipes_for_classification",
+    "arguments": {
+      "taxonomyState": "missing_tags"
+    },
+    "scenario": "get_recipes_for_classification.missing_tags",
+    "expected_requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes",
+        "query": {
+          "page": [
+            "1"
+          ],
+          "perPage": [
+            "50"
+          ],
+          "orderBy": [
+            "createdAt"
+          ],
+          "orderDirection": [
+            "asc"
+          ]
+        },
+        "body": null
+      },
+      {
+        "method": "GET",
+        "path": "/api/recipes/soup",
+        "query": {},
+        "body": null
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"items\":[{\"id\":\"a\",\"slug\":\"soup\",\"name\":\"Soup\",\"description\":\"desc\",\"totalTime\":\"PT30M\",\"prepTime\":null,\"cookTime\":null,\"servings\":0,\"yield\":\"2 bowls\",\"sourceUrl\":\"https://example.test/soup\",\"ingredients\":[\"Sauce\",\"2 eggs\",\"2 Egg\",\"original\"],\"instructions\":[\"Prepare\",\"Stir\",\"Eat\",\"Repeat\"],\"categories\":[{\"id\":\"1\",\"name\":\"Dinner\",\"slug\":\"dinner\"}],\"tags\":[]}],\"failures\":[],\"nextCursor\":null,\"scannedCount\":2,\"returnedCount\":1,\"hasMore\":false}"
+        }
+      ]
+    },
+    "request_order": "concurrent"
+  },
+  {
+    "tool": "get_recipes_for_classification",
+    "arguments": {
+      "taxonomyState": "any"
+    },
+    "scenario": "get_recipes_for_classification.any",
+    "expected_requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes",
+        "query": {
+          "page": [
+            "1"
+          ],
+          "perPage": [
+            "50"
+          ],
+          "orderBy": [
+            "createdAt"
+          ],
+          "orderDirection": [
+            "asc"
+          ]
+        },
+        "body": null
+      },
+      {
+        "method": "GET",
+        "path": "/api/recipes/soup",
+        "query": {},
+        "body": null
+      },
+      {
+        "method": "GET",
+        "path": "/api/recipes/complete",
+        "query": {},
+        "body": null
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"items\":[{\"id\":\"a\",\"slug\":\"soup\",\"name\":\"Soup\",\"description\":\"desc\",\"totalTime\":\"PT30M\",\"prepTime\":null,\"cookTime\":null,\"servings\":0,\"yield\":\"2 bowls\",\"sourceUrl\":\"https://example.test/soup\",\"ingredients\":[\"Sauce\",\"2 eggs\",\"2 Egg\",\"original\"],\"instructions\":[\"Prepare\",\"Stir\",\"Eat\",\"Repeat\"],\"categories\":[{\"id\":\"1\",\"name\":\"Dinner\",\"slug\":\"dinner\"}],\"tags\":[]},{\"id\":\"b\",\"slug\":\"complete\",\"name\":\"Complete\",\"description\":null,\"totalTime\":null,\"prepTime\":null,\"cookTime\":null,\"servings\":null,\"yield\":null,\"sourceUrl\":null,\"ingredients\":[],\"instructions\":[],\"categories\":[{\"id\":\"cat\",\"name\":\"\",\"slug\":\"\"}],\"tags\":[{\"id\":\"tag\",\"name\":\"\",\"slug\":\"\"}]}],\"failures\":[],\"nextCursor\":null,\"scannedCount\":2,\"returnedCount\":2,\"hasMore\":false}"
+        }
+      ]
+    },
+    "request_order": "concurrent"
+  },
+  {
+    "tool": "get_recipes_for_ingredient_parsing",
+    "arguments": {
+      "state": "unparsed_only"
+    },
+    "scenario": "get_recipes_for_ingredient_parsing.unparsed_only",
+    "expected_requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes",
+        "query": {
+          "page": [
+            "1"
+          ],
+          "perPage": [
+            "50"
+          ],
+          "orderBy": [
+            "createdAt"
+          ],
+          "orderDirection": [
+            "asc"
+          ]
+        },
+        "body": null
+      },
+      {
+        "method": "GET",
+        "path": "/api/recipes/soup",
+        "query": {},
+        "body": null
+      },
+      {
+        "method": "GET",
+        "path": "/api/recipes/complete",
+        "query": {},
+        "body": null
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"items\":[{\"id\":\"a\",\"slug\":\"soup\",\"name\":\"Soup\",\"description\":\"desc\",\"categories\":[{\"id\":\"1\",\"name\":\"Dinner\",\"slug\":\"dinner\"}],\"tags\":[],\"totalTime\":\"PT30M\",\"prepTime\":null,\"cookTime\":null,\"servings\":0,\"yield\":\"2 bowls\",\"ingredients\":[{\"referenceId\":\"section\",\"quantity\":null,\"unit\":null,\"food\":null,\"note\":\"\",\"display\":\"\",\"originalText\":\"Sauce\",\"title\":\"Sauce\",\"parsingState\":\"section\"},{\"referenceId\":\"raw\",\"quantity\":null,\"unit\":null,\"food\":null,\"note\":\"discarded\",\"display\":\"2 eggs\",\"originalText\":null,\"title\":null,\"parsingState\":\"unparsed\"},{\"referenceId\":\"3\",\"quantity\":2,\"unit\":null,\"food\":{\"id\":\"egg\",\"name\":\"Egg\"},\"note\":\"\",\"display\":\"\",\"originalText\":null,\"title\":\"Eggs\",\"parsingState\":\"partial\"},{\"referenceId\":\"salt\",\"quantity\":0,\"unit\":{\"id\":\"\",\"name\":\"\"},\"food\":{\"id\":\"\",\"name\":\"\"},\"note\":\"\",\"display\":\"\",\"originalText\":null,\"title\":null,\"parsingState\":\"structured\"},{\"referenceId\":\"\",\"quantity\":null,\"unit\":null,\"food\":null,\"note\":\"\",\"display\":\"\",\"originalText\":\"original\",\"title\":null,\"parsingState\":\"unparsed\"},{\"referenceId\":\"\",\"quantity\":null,\"unit\":null,\"food\":null,\"note\":\"\",\"display\":\"\",\"originalText\":null,\"title\":null,\"parsingState\":\"unparsed\"}],\"instructions\":[{\"id\":\"unstable\",\"title\":\"Prepare\",\"text\":\"Stir\",\"ingredientReferences\":[{\"referenceId\":\"raw\"},{\"referenceId\":\"dangling\"}]},{\"title\":\"Prepare\",\"text\":\"Eat\",\"ingredientReferences\":[]},{\"title\":\"\",\"text\":\"\",\"ingredientReferences\":[]},{\"title\":\"Prepare\",\"text\":\"Repeat\",\"ingredientReferences\":[]}],\"ingredientParsingState\":{\"totalCount\":6,\"structuredCount\":1,\"partialCount\":1,\"unparsedCount\":3,\"sectionCount\":2}}],\"failures\":[],\"nextCursor\":null,\"scannedCount\":2,\"returnedCount\":1,\"hasMore\":false}"
+        }
+      ]
+    },
+    "request_order": "concurrent"
+  },
+  {
+    "tool": "get_recipes_for_ingredient_parsing",
+    "arguments": {
+      "state": "partially_parsed"
+    },
+    "scenario": "get_recipes_for_ingredient_parsing.partially_parsed",
+    "expected_requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes",
+        "query": {
+          "page": [
+            "1"
+          ],
+          "perPage": [
+            "50"
+          ],
+          "orderBy": [
+            "createdAt"
+          ],
+          "orderDirection": [
+            "asc"
+          ]
+        },
+        "body": null
+      },
+      {
+        "method": "GET",
+        "path": "/api/recipes/soup",
+        "query": {},
+        "body": null
+      },
+      {
+        "method": "GET",
+        "path": "/api/recipes/complete",
+        "query": {},
+        "body": null
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"items\":[{\"id\":\"a\",\"slug\":\"soup\",\"name\":\"Soup\",\"description\":\"desc\",\"categories\":[{\"id\":\"1\",\"name\":\"Dinner\",\"slug\":\"dinner\"}],\"tags\":[],\"totalTime\":\"PT30M\",\"prepTime\":null,\"cookTime\":null,\"servings\":0,\"yield\":\"2 bowls\",\"ingredients\":[{\"referenceId\":\"section\",\"quantity\":null,\"unit\":null,\"food\":null,\"note\":\"\",\"display\":\"\",\"originalText\":\"Sauce\",\"title\":\"Sauce\",\"parsingState\":\"section\"},{\"referenceId\":\"raw\",\"quantity\":null,\"unit\":null,\"food\":null,\"note\":\"discarded\",\"display\":\"2 eggs\",\"originalText\":null,\"title\":null,\"parsingState\":\"unparsed\"},{\"referenceId\":\"3\",\"quantity\":2,\"unit\":null,\"food\":{\"id\":\"egg\",\"name\":\"Egg\"},\"note\":\"\",\"display\":\"\",\"originalText\":null,\"title\":\"Eggs\",\"parsingState\":\"partial\"},{\"referenceId\":\"salt\",\"quantity\":0,\"unit\":{\"id\":\"\",\"name\":\"\"},\"food\":{\"id\":\"\",\"name\":\"\"},\"note\":\"\",\"display\":\"\",\"originalText\":null,\"title\":null,\"parsingState\":\"structured\"},{\"referenceId\":\"\",\"quantity\":null,\"unit\":null,\"food\":null,\"note\":\"\",\"display\":\"\",\"originalText\":\"original\",\"title\":null,\"parsingState\":\"unparsed\"},{\"referenceId\":\"\",\"quantity\":null,\"unit\":null,\"food\":null,\"note\":\"\",\"display\":\"\",\"originalText\":null,\"title\":null,\"parsingState\":\"unparsed\"}],\"instructions\":[{\"id\":\"unstable\",\"title\":\"Prepare\",\"text\":\"Stir\",\"ingredientReferences\":[{\"referenceId\":\"raw\"},{\"referenceId\":\"dangling\"}]},{\"title\":\"Prepare\",\"text\":\"Eat\",\"ingredientReferences\":[]},{\"title\":\"\",\"text\":\"\",\"ingredientReferences\":[]},{\"title\":\"Prepare\",\"text\":\"Repeat\",\"ingredientReferences\":[]}],\"ingredientParsingState\":{\"totalCount\":6,\"structuredCount\":1,\"partialCount\":1,\"unparsedCount\":3,\"sectionCount\":2}}],\"failures\":[],\"nextCursor\":null,\"scannedCount\":2,\"returnedCount\":1,\"hasMore\":false}"
+        }
+      ]
+    },
+    "request_order": "concurrent"
+  },
+  {
+    "tool": "get_recipes_for_ingredient_parsing",
+    "arguments": {
+      "state": "any"
+    },
+    "scenario": "get_recipes_for_ingredient_parsing.any",
+    "expected_requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes",
+        "query": {
+          "page": [
+            "1"
+          ],
+          "perPage": [
+            "50"
+          ],
+          "orderBy": [
+            "createdAt"
+          ],
+          "orderDirection": [
+            "asc"
+          ]
+        },
+        "body": null
+      },
+      {
+        "method": "GET",
+        "path": "/api/recipes/soup",
+        "query": {},
+        "body": null
+      },
+      {
+        "method": "GET",
+        "path": "/api/recipes/complete",
+        "query": {},
+        "body": null
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"items\":[{\"id\":\"a\",\"slug\":\"soup\",\"name\":\"Soup\",\"description\":\"desc\",\"categories\":[{\"id\":\"1\",\"name\":\"Dinner\",\"slug\":\"dinner\"}],\"tags\":[],\"totalTime\":\"PT30M\",\"prepTime\":null,\"cookTime\":null,\"servings\":0,\"yield\":\"2 bowls\",\"ingredients\":[{\"referenceId\":\"section\",\"quantity\":null,\"unit\":null,\"food\":null,\"note\":\"\",\"display\":\"\",\"originalText\":\"Sauce\",\"title\":\"Sauce\",\"parsingState\":\"section\"},{\"referenceId\":\"raw\",\"quantity\":null,\"unit\":null,\"food\":null,\"note\":\"discarded\",\"display\":\"2 eggs\",\"originalText\":null,\"title\":null,\"parsingState\":\"unparsed\"},{\"referenceId\":\"3\",\"quantity\":2,\"unit\":null,\"food\":{\"id\":\"egg\",\"name\":\"Egg\"},\"note\":\"\",\"display\":\"\",\"originalText\":null,\"title\":\"Eggs\",\"parsingState\":\"partial\"},{\"referenceId\":\"salt\",\"quantity\":0,\"unit\":{\"id\":\"\",\"name\":\"\"},\"food\":{\"id\":\"\",\"name\":\"\"},\"note\":\"\",\"display\":\"\",\"originalText\":null,\"title\":null,\"parsingState\":\"structured\"},{\"referenceId\":\"\",\"quantity\":null,\"unit\":null,\"food\":null,\"note\":\"\",\"display\":\"\",\"originalText\":\"original\",\"title\":null,\"parsingState\":\"unparsed\"},{\"referenceId\":\"\",\"quantity\":null,\"unit\":null,\"food\":null,\"note\":\"\",\"display\":\"\",\"originalText\":null,\"title\":null,\"parsingState\":\"unparsed\"}],\"instructions\":[{\"id\":\"unstable\",\"title\":\"Prepare\",\"text\":\"Stir\",\"ingredientReferences\":[{\"referenceId\":\"raw\"},{\"referenceId\":\"dangling\"}]},{\"title\":\"Prepare\",\"text\":\"Eat\",\"ingredientReferences\":[]},{\"title\":\"\",\"text\":\"\",\"ingredientReferences\":[]},{\"title\":\"Prepare\",\"text\":\"Repeat\",\"ingredientReferences\":[]}],\"ingredientParsingState\":{\"totalCount\":6,\"structuredCount\":1,\"partialCount\":1,\"unparsedCount\":3,\"sectionCount\":2}},{\"id\":\"b\",\"slug\":\"complete\",\"name\":\"Complete\",\"description\":null,\"categories\":[{\"id\":\"cat\",\"name\":\"\",\"slug\":\"\"}],\"tags\":[{\"id\":\"tag\",\"name\":\"\",\"slug\":\"\"}],\"totalTime\":null,\"prepTime\":null,\"cookTime\":null,\"servings\":null,\"yield\":null,\"ingredients\":[{\"referenceId\":\"\",\"quantity\":null,\"unit\":{\"id\":\"\",\"name\":\"\"},\"food\":{\"id\":\"\",\"name\":\"\"},\"note\":\"\",\"display\":\"\",\"originalText\":null,\"title\":null,\"parsingState\":\"structured\"}],\"instructions\":[],\"ingredientParsingState\":{\"totalCount\":1,\"structuredCount\":1,\"partialCount\":0,\"unparsedCount\":0,\"sectionCount\":0}}],\"failures\":[],\"nextCursor\":null,\"scannedCount\":2,\"returnedCount\":2,\"hasMore\":false}"
+        }
+      ]
+    },
+    "request_order": "concurrent"
+  },
+  {
+    "tool": "get_recipes_for_classification",
+    "arguments": {
+      "limit": 1.0
+    },
+    "scenario": "get_recipes_for_classification.limit",
+    "expected_requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes",
+        "query": {
+          "page": [
+            "1"
+          ],
+          "perPage": [
+            "50"
+          ],
+          "orderBy": [
+            "createdAt"
+          ],
+          "orderDirection": [
+            "asc"
+          ]
+        },
+        "body": null
+      },
+      {
+        "method": "GET",
+        "path": "/api/recipes/soup",
+        "query": {},
+        "body": null
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"items\":[{\"id\":\"a\",\"slug\":\"soup\",\"name\":\"Soup\",\"description\":\"desc\",\"totalTime\":\"PT30M\",\"prepTime\":null,\"cookTime\":null,\"servings\":0,\"yield\":\"2 bowls\",\"sourceUrl\":\"https://example.test/soup\",\"ingredients\":[\"Sauce\",\"2 eggs\",\"2 Egg\",\"original\"],\"instructions\":[\"Prepare\",\"Stir\",\"Eat\",\"Repeat\"],\"categories\":[{\"id\":\"1\",\"name\":\"Dinner\",\"slug\":\"dinner\"}],\"tags\":[]}],\"failures\":[],\"nextCursor\":\"eyJ2IjoxLCJsYXN0Q3JlYXRlZEF0IjoiMjAyNi0xMC0yOCIsImxhc3RJZCI6ImEiLCJwYWdlIjoxfQ\",\"scannedCount\":1,\"returnedCount\":1,\"hasMore\":true}"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "get_recipes_for_ingredient_parsing",
+    "arguments": {
+      "cursor": "eyJ2IjoxLCJsYXN0Q3JlYXRlZEF0IjoiMjAyNi0xMC0yOCIsImxhc3RJZCI6ImEiLCJwYWdlIjoxfQ",
+      "state": "any"
+    },
+    "scenario": "get_recipes_for_ingredient_parsing.resume",
+    "expected_requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes",
+        "query": {
+          "page": [
+            "1"
+          ],
+          "perPage": [
+            "50"
+          ],
+          "orderBy": [
+            "createdAt"
+          ],
+          "orderDirection": [
+            "asc"
+          ]
+        },
+        "body": null
+      },
+      {
+        "method": "GET",
+        "path": "/api/recipes/complete",
+        "query": {},
+        "body": null
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"items\":[{\"id\":\"b\",\"slug\":\"complete\",\"name\":\"Complete\",\"description\":null,\"categories\":[{\"id\":\"cat\",\"name\":\"\",\"slug\":\"\"}],\"tags\":[{\"id\":\"tag\",\"name\":\"\",\"slug\":\"\"}],\"totalTime\":null,\"prepTime\":null,\"cookTime\":null,\"servings\":null,\"yield\":null,\"ingredients\":[{\"referenceId\":\"\",\"quantity\":null,\"unit\":{\"id\":\"\",\"name\":\"\"},\"food\":{\"id\":\"\",\"name\":\"\"},\"note\":\"\",\"display\":\"\",\"originalText\":null,\"title\":null,\"parsingState\":\"structured\"}],\"instructions\":[],\"ingredientParsingState\":{\"totalCount\":1,\"structuredCount\":1,\"partialCount\":0,\"unparsedCount\":0,\"sectionCount\":0}}],\"failures\":[],\"nextCursor\":null,\"scannedCount\":1,\"returnedCount\":1,\"hasMore\":false}"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "get_recipes_for_classification",
+    "arguments": {
+      "cursor": "not-json!"
+    },
+    "scenario": "get_recipes_for_classification.invalid_cursor",
+    "expected_requests": [],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "Invalid cursor: not valid base64url-encoded JSON."
+        }
+      ],
+      "isError": true
+    }
+  },
+  {
+    "tool": "get_recipes_for_classification",
+    "arguments": {},
+    "scenario": "get_recipes_for_classification.empty",
+    "expected_requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes",
+        "query": {
+          "page": [
+            "1"
+          ],
+          "perPage": [
+            "50"
+          ],
+          "orderBy": [
+            "createdAt"
+          ],
+          "orderDirection": [
+            "asc"
+          ]
+        },
+        "body": null
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"items\":[],\"failures\":[],\"nextCursor\":null,\"scannedCount\":0,\"returnedCount\":0,\"hasMore\":false}"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "get_recipes_for_ingredient_parsing",
+    "arguments": {
+      "cursor": "not-json!"
+    },
+    "scenario": "get_recipes_for_ingredient_parsing.invalid_cursor",
+    "expected_requests": [],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "Invalid cursor: not valid base64url-encoded JSON."
+        }
+      ],
+      "isError": true
+    }
+  },
+  {
+    "tool": "get_recipes_for_ingredient_parsing",
+    "arguments": {},
+    "scenario": "get_recipes_for_ingredient_parsing.empty",
+    "expected_requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes",
+        "query": {
+          "page": [
+            "1"
+          ],
+          "perPage": [
+            "50"
+          ],
+          "orderBy": [
+            "createdAt"
+          ],
+          "orderDirection": [
+            "asc"
+          ]
+        },
+        "body": null
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"items\":[],\"failures\":[],\"nextCursor\":null,\"scannedCount\":0,\"returnedCount\":0,\"hasMore\":false}"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "get_recipes_for_data_enrichment",
+    "arguments": {
+      "cursor": "not-json!"
+    },
+    "scenario": "get_recipes_for_data_enrichment.invalid_cursor",
+    "expected_requests": [],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "Invalid cursor: not valid base64url-encoded JSON."
+        }
+      ],
+      "isError": true
+    }
+  },
+  {
+    "tool": "get_recipes_for_data_enrichment",
+    "arguments": {},
+    "scenario": "get_recipes_for_data_enrichment.empty",
+    "expected_requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes",
+        "query": {
+          "page": [
+            "1"
+          ],
+          "perPage": [
+            "50"
+          ],
+          "orderBy": [
+            "createdAt"
+          ],
+          "orderDirection": [
+            "asc"
+          ]
+        },
+        "body": null
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"items\":[],\"failures\":[],\"nextCursor\":null,\"scannedCount\":0,\"returnedCount\":0,\"hasMore\":false}"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "get_recipes_for_data_enrichment",
+    "arguments": {
+      "filters": {
+        "image": true
+      },
+      "match": "any"
+    },
+    "scenario": "get_recipes_for_data_enrichment.replace_defaults",
+    "expected_requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes",
+        "query": {
+          "page": [
+            "1"
+          ],
+          "perPage": [
+            "50"
+          ],
+          "orderBy": [
+            "createdAt"
+          ],
+          "orderDirection": [
+            "asc"
+          ]
+        },
+        "body": null
+      },
+      {
+        "method": "GET",
+        "path": "/api/recipes/soup",
+        "query": {},
+        "body": null
+      },
+      {
+        "method": "GET",
+        "path": "/api/recipes/complete",
+        "query": {},
+        "body": null
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"items\":[{\"id\":\"b\",\"slug\":\"complete\",\"name\":\"Complete\",\"createdAt\":\"2026-10-28\",\"updatedAt\":null,\"description\":null,\"totalTime\":null,\"prepTime\":null,\"cookTime\":null,\"servings\":null,\"yield\":null,\"sourceUrl\":null,\"ingredients\":[{\"referenceId\":\"\",\"quantity\":null,\"unit\":{\"id\":\"\",\"name\":\"\"},\"food\":{\"id\":\"\",\"name\":\"\"},\"note\":\"\",\"display\":\"\",\"originalText\":null,\"title\":null,\"parsingState\":\"structured\"}],\"instructions\":[],\"tools\":[{\"id\":\"\",\"name\":\"\"}],\"categories\":[{\"id\":\"cat\",\"name\":\"\",\"slug\":\"\"}],\"tags\":[{\"id\":\"tag\",\"name\":\"\",\"slug\":\"\"}],\"audit\":{\"ingredients\":{\"totalCount\":1,\"structuredCount\":1,\"partialCount\":0,\"unparsedCount\":0,\"sectionCount\":0},\"instructions\":{\"instructionCount\":0,\"referencedInstructionCount\":0,\"referenceCount\":0,\"danglingReferenceCount\":0,\"sectionCount\":0},\"toolCount\":1,\"categoryCount\":1,\"tagCount\":1,\"hasImage\":true},\"matchedDimensions\":[\"image\"]}],\"failures\":[],\"nextCursor\":null,\"scannedCount\":2,\"returnedCount\":1,\"hasMore\":false}"
+        }
+      ]
+    },
+    "request_order": "concurrent"
+  },
+  {
+    "tool": "get_recipes_for_data_enrichment",
+    "arguments": {
+      "filters": {
+        "image": true,
+        "categories": true
+      },
+      "match": "all"
+    },
+    "scenario": "get_recipes_for_data_enrichment.all",
+    "expected_requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes",
+        "query": {
+          "page": [
+            "1"
+          ],
+          "perPage": [
+            "50"
+          ],
+          "orderBy": [
+            "createdAt"
+          ],
+          "orderDirection": [
+            "asc"
+          ]
+        },
+        "body": null
+      },
+      {
+        "method": "GET",
+        "path": "/api/recipes/soup",
+        "query": {},
+        "body": null
+      },
+      {
+        "method": "GET",
+        "path": "/api/recipes/complete",
+        "query": {},
+        "body": null
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"items\":[{\"id\":\"b\",\"slug\":\"complete\",\"name\":\"Complete\",\"createdAt\":\"2026-10-28\",\"updatedAt\":null,\"description\":null,\"totalTime\":null,\"prepTime\":null,\"cookTime\":null,\"servings\":null,\"yield\":null,\"sourceUrl\":null,\"ingredients\":[{\"referenceId\":\"\",\"quantity\":null,\"unit\":{\"id\":\"\",\"name\":\"\"},\"food\":{\"id\":\"\",\"name\":\"\"},\"note\":\"\",\"display\":\"\",\"originalText\":null,\"title\":null,\"parsingState\":\"structured\"}],\"instructions\":[],\"tools\":[{\"id\":\"\",\"name\":\"\"}],\"categories\":[{\"id\":\"cat\",\"name\":\"\",\"slug\":\"\"}],\"tags\":[{\"id\":\"tag\",\"name\":\"\",\"slug\":\"\"}],\"audit\":{\"ingredients\":{\"totalCount\":1,\"structuredCount\":1,\"partialCount\":0,\"unparsedCount\":0,\"sectionCount\":0},\"instructions\":{\"instructionCount\":0,\"referencedInstructionCount\":0,\"referenceCount\":0,\"danglingReferenceCount\":0,\"sectionCount\":0},\"toolCount\":1,\"categoryCount\":1,\"tagCount\":1,\"hasImage\":true},\"matchedDimensions\":[\"categories\",\"image\"]}],\"failures\":[],\"nextCursor\":null,\"scannedCount\":2,\"returnedCount\":1,\"hasMore\":false}"
+        }
+      ]
+    },
+    "request_order": "concurrent"
+  },
+  {
+    "tool": "get_recipes_for_data_enrichment",
+    "arguments": {
+      "filters": {
+        "ingredientSections": false
+      },
+      "match": "any"
+    },
+    "scenario": "get_recipes_for_data_enrichment.sections",
+    "expected_requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes",
+        "query": {
+          "page": [
+            "1"
+          ],
+          "perPage": [
+            "50"
+          ],
+          "orderBy": [
+            "createdAt"
+          ],
+          "orderDirection": [
+            "asc"
+          ]
+        },
+        "body": null
+      },
+      {
+        "method": "GET",
+        "path": "/api/recipes/soup",
+        "query": {},
+        "body": null
+      },
+      {
+        "method": "GET",
+        "path": "/api/recipes/complete",
+        "query": {},
+        "body": null
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"items\":[{\"id\":\"b\",\"slug\":\"complete\",\"name\":\"Complete\",\"createdAt\":\"2026-10-28\",\"updatedAt\":null,\"description\":null,\"totalTime\":null,\"prepTime\":null,\"cookTime\":null,\"servings\":null,\"yield\":null,\"sourceUrl\":null,\"ingredients\":[{\"referenceId\":\"\",\"quantity\":null,\"unit\":{\"id\":\"\",\"name\":\"\"},\"food\":{\"id\":\"\",\"name\":\"\"},\"note\":\"\",\"display\":\"\",\"originalText\":null,\"title\":null,\"parsingState\":\"structured\"}],\"instructions\":[],\"tools\":[{\"id\":\"\",\"name\":\"\"}],\"categories\":[{\"id\":\"cat\",\"name\":\"\",\"slug\":\"\"}],\"tags\":[{\"id\":\"tag\",\"name\":\"\",\"slug\":\"\"}],\"audit\":{\"ingredients\":{\"totalCount\":1,\"structuredCount\":1,\"partialCount\":0,\"unparsedCount\":0,\"sectionCount\":0},\"instructions\":{\"instructionCount\":0,\"referencedInstructionCount\":0,\"referenceCount\":0,\"danglingReferenceCount\":0,\"sectionCount\":0},\"toolCount\":1,\"categoryCount\":1,\"tagCount\":1,\"hasImage\":true},\"matchedDimensions\":[\"ingredientSections\"]}],\"failures\":[],\"nextCursor\":null,\"scannedCount\":2,\"returnedCount\":1,\"hasMore\":false}"
+        }
+      ]
+    },
+    "request_order": "concurrent"
+  },
+  {
+    "tool": "get_recipes_for_data_enrichment",
+    "arguments": {
+      "filters": {
+        "instructionIngredientLinks": "dangling"
+      },
+      "match": "any"
+    },
+    "scenario": "get_recipes_for_data_enrichment.dangling",
+    "expected_requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes",
+        "query": {
+          "page": [
+            "1"
+          ],
+          "perPage": [
+            "50"
+          ],
+          "orderBy": [
+            "createdAt"
+          ],
+          "orderDirection": [
+            "asc"
+          ]
+        },
+        "body": null
+      },
+      {
+        "method": "GET",
+        "path": "/api/recipes/soup",
+        "query": {},
+        "body": null
+      },
+      {
+        "method": "GET",
+        "path": "/api/recipes/complete",
+        "query": {},
+        "body": null
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"items\":[{\"id\":\"a\",\"slug\":\"soup\",\"name\":\"Soup\",\"createdAt\":\"2026-10-28\",\"updatedAt\":\"2026-10-28T10:00:00Z\",\"description\":\"desc\",\"totalTime\":\"PT30M\",\"prepTime\":null,\"cookTime\":null,\"servings\":0,\"yield\":\"2 bowls\",\"sourceUrl\":\"https://example.test/soup\",\"ingredients\":[{\"referenceId\":\"section\",\"quantity\":null,\"unit\":null,\"food\":null,\"note\":\"\",\"display\":\"\",\"originalText\":\"Sauce\",\"title\":\"Sauce\",\"parsingState\":\"section\"},{\"referenceId\":\"raw\",\"quantity\":null,\"unit\":null,\"food\":null,\"note\":\"discarded\",\"display\":\"2 eggs\",\"originalText\":null,\"title\":null,\"parsingState\":\"unparsed\"},{\"referenceId\":\"3\",\"quantity\":2,\"unit\":null,\"food\":{\"id\":\"egg\",\"name\":\"Egg\"},\"note\":\"\",\"display\":\"\",\"originalText\":null,\"title\":\"Eggs\",\"parsingState\":\"partial\"},{\"referenceId\":\"salt\",\"quantity\":0,\"unit\":{\"id\":\"\",\"name\":\"\"},\"food\":{\"id\":\"\",\"name\":\"\"},\"note\":\"\",\"display\":\"\",\"originalText\":null,\"title\":null,\"parsingState\":\"structured\"},{\"referenceId\":\"\",\"quantity\":null,\"unit\":null,\"food\":null,\"note\":\"\",\"display\":\"\",\"originalText\":\"original\",\"title\":null,\"parsingState\":\"unparsed\"},{\"referenceId\":\"\",\"quantity\":null,\"unit\":null,\"food\":null,\"note\":\"\",\"display\":\"\",\"originalText\":null,\"title\":null,\"parsingState\":\"unparsed\"}],\"instructions\":[{\"title\":\"Prepare\",\"text\":\"Stir\",\"ingredientReferenceIds\":[\"raw\",\"dangling\"]},{\"title\":\"Prepare\",\"text\":\"Eat\",\"ingredientReferenceIds\":[]},{\"title\":\"\",\"text\":\"\",\"ingredientReferenceIds\":[]},{\"title\":\"Prepare\",\"text\":\"Repeat\",\"ingredientReferenceIds\":[]}],\"tools\":[{\"id\":\"2\",\"name\":\"Pot\"}],\"categories\":[{\"id\":\"1\",\"name\":\"Dinner\",\"slug\":\"dinner\"}],\"tags\":[],\"audit\":{\"ingredients\":{\"totalCount\":6,\"structuredCount\":1,\"partialCount\":1,\"unparsedCount\":3,\"sectionCount\":2},\"instructions\":{\"instructionCount\":4,\"referencedInstructionCount\":1,\"referenceCount\":2,\"danglingReferenceCount\":1,\"sectionCount\":3},\"toolCount\":1,\"categoryCount\":1,\"tagCount\":0,\"hasImage\":false},\"matchedDimensions\":[\"instructionIngredientLinks\"]}],\"failures\":[],\"nextCursor\":null,\"scannedCount\":2,\"returnedCount\":1,\"hasMore\":false}"
+        }
+      ]
+    },
+    "request_order": "concurrent"
+  },
+  {
+    "tool": "get_recipes_for_data_enrichment",
+    "arguments": {
+      "filters": {
+        "ingredientParsing": "partial"
+      },
+      "match": "any"
+    },
+    "scenario": "get_recipes_for_data_enrichment.partial",
+    "expected_requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes",
+        "query": {
+          "page": [
+            "1"
+          ],
+          "perPage": [
+            "50"
+          ],
+          "orderBy": [
+            "createdAt"
+          ],
+          "orderDirection": [
+            "asc"
+          ]
+        },
+        "body": null
+      },
+      {
+        "method": "GET",
+        "path": "/api/recipes/soup",
+        "query": {},
+        "body": null
+      },
+      {
+        "method": "GET",
+        "path": "/api/recipes/complete",
+        "query": {},
+        "body": null
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"items\":[{\"id\":\"a\",\"slug\":\"soup\",\"name\":\"Soup\",\"createdAt\":\"2026-10-28\",\"updatedAt\":\"2026-10-28T10:00:00Z\",\"description\":\"desc\",\"totalTime\":\"PT30M\",\"prepTime\":null,\"cookTime\":null,\"servings\":0,\"yield\":\"2 bowls\",\"sourceUrl\":\"https://example.test/soup\",\"ingredients\":[{\"referenceId\":\"section\",\"quantity\":null,\"unit\":null,\"food\":null,\"note\":\"\",\"display\":\"\",\"originalText\":\"Sauce\",\"title\":\"Sauce\",\"parsingState\":\"section\"},{\"referenceId\":\"raw\",\"quantity\":null,\"unit\":null,\"food\":null,\"note\":\"discarded\",\"display\":\"2 eggs\",\"originalText\":null,\"title\":null,\"parsingState\":\"unparsed\"},{\"referenceId\":\"3\",\"quantity\":2,\"unit\":null,\"food\":{\"id\":\"egg\",\"name\":\"Egg\"},\"note\":\"\",\"display\":\"\",\"originalText\":null,\"title\":\"Eggs\",\"parsingState\":\"partial\"},{\"referenceId\":\"salt\",\"quantity\":0,\"unit\":{\"id\":\"\",\"name\":\"\"},\"food\":{\"id\":\"\",\"name\":\"\"},\"note\":\"\",\"display\":\"\",\"originalText\":null,\"title\":null,\"parsingState\":\"structured\"},{\"referenceId\":\"\",\"quantity\":null,\"unit\":null,\"food\":null,\"note\":\"\",\"display\":\"\",\"originalText\":\"original\",\"title\":null,\"parsingState\":\"unparsed\"},{\"referenceId\":\"\",\"quantity\":null,\"unit\":null,\"food\":null,\"note\":\"\",\"display\":\"\",\"originalText\":null,\"title\":null,\"parsingState\":\"unparsed\"}],\"instructions\":[{\"title\":\"Prepare\",\"text\":\"Stir\",\"ingredientReferenceIds\":[\"raw\",\"dangling\"]},{\"title\":\"Prepare\",\"text\":\"Eat\",\"ingredientReferenceIds\":[]},{\"title\":\"\",\"text\":\"\",\"ingredientReferenceIds\":[]},{\"title\":\"Prepare\",\"text\":\"Repeat\",\"ingredientReferenceIds\":[]}],\"tools\":[{\"id\":\"2\",\"name\":\"Pot\"}],\"categories\":[{\"id\":\"1\",\"name\":\"Dinner\",\"slug\":\"dinner\"}],\"tags\":[],\"audit\":{\"ingredients\":{\"totalCount\":6,\"structuredCount\":1,\"partialCount\":1,\"unparsedCount\":3,\"sectionCount\":2},\"instructions\":{\"instructionCount\":4,\"referencedInstructionCount\":1,\"referenceCount\":2,\"danglingReferenceCount\":1,\"sectionCount\":3},\"toolCount\":1,\"categoryCount\":1,\"tagCount\":0,\"hasImage\":false},\"matchedDimensions\":[\"ingredientParsing\"]}],\"failures\":[],\"nextCursor\":null,\"scannedCount\":2,\"returnedCount\":1,\"hasMore\":false}"
+        }
+      ]
+    },
+    "request_order": "concurrent"
+  },
+  {
+    "tool": "get_recipes_for_data_enrichment",
+    "arguments": {
+      "filters": {}
+    },
+    "scenario": "get_recipes_for_data_enrichment.empty_filters",
+    "expected_requests": [],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "filters must specify at least one dimension. An empty filters object is not \"return every recipe\"; omit filters to use the default enrichment filters."
+        }
+      ],
+      "isError": true
+    }
+  },
+  {
+    "tool": "find_recipes_for_ingredients",
+    "arguments": {
+      "ingredients": [
+        "unknown"
+      ]
+    },
+    "scenario": "find_recipes_for_ingredients.text_fallback",
+    "expected_requests": [
+      {
+        "method": "GET",
+        "path": "/api/foods",
+        "query": {
+          "search": [
+            "unknown"
+          ],
+          "perPage": [
+            "25"
+          ]
+        },
+        "body": null
+      },
+      {
+        "method": "GET",
+        "path": "/api/recipes",
+        "query": {
+          "search": [
+            "unknown"
+          ],
+          "perPage": [
+            "10"
+          ]
+        },
+        "body": null
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"resolvedIngredients\":[],\"unresolvedIngredients\":[{\"query\":\"unknown\",\"reason\":\"not-found\"}],\"matchSource\":\"text-search\",\"recipes\":[{\"name\":\"Salad\",\"slug\":\"salad\",\"categories\":[],\"tags\":[],\"totalTime\":\"PT5M\",\"matchedIngredients\":[\"unknown\"],\"missingIngredients\":[],\"matchSource\":\"text-search\"}],\"notes\":[]}"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "find_recipes_for_ingredients",
+    "arguments": {
+      "ingredients": [
+        "salmon",
+        "salt"
+      ],
+      "requireAllIngredients": true
+    },
+    "scenario": "find_recipes_for_ingredients.food_and",
+    "expected_requests": [
+      {
+        "method": "GET",
+        "path": "/api/foods",
+        "query": {
+          "search": [
+            "salmon"
+          ],
+          "perPage": [
+            "25"
+          ]
+        },
+        "body": null
+      },
+      {
+        "method": "GET",
+        "path": "/api/foods",
+        "query": {
+          "search": [
+            "salt"
+          ],
+          "perPage": [
+            "25"
+          ]
+        },
+        "body": null
+      },
+      {
+        "method": "GET",
+        "path": "/api/recipes",
+        "query": {
+          "foods": [
+            "f1",
+            "f2"
+          ],
+          "requireAllFoods": [
+            "true"
+          ],
+          "perPage": [
+            "10"
+          ]
+        },
+        "body": null
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"resolvedIngredients\":[{\"query\":\"salmon\",\"foodId\":\"f1\",\"foodName\":\"Salmon\",\"matchType\":\"exact-name\"},{\"query\":\"salt\",\"foodId\":\"f2\",\"foodName\":\"Salt\",\"matchType\":\"exact-name\"}],\"unresolvedIngredients\":[],\"matchSource\":\"food-filter\",\"recipes\":[{\"name\":\"Salad\",\"slug\":\"salad\",\"categories\":[],\"tags\":[],\"totalTime\":\"PT5M\",\"matchedIngredients\":[\"salmon\",\"salt\"],\"missingIngredients\":[],\"matchSource\":\"food-filter\"}],\"notes\":[]}"
+        }
+      ]
+    },
+    "request_order": "concurrent"
+  },
+  {
+    "tool": "find_recipes_for_ingredients",
+    "arguments": {
+      "ingredients": [
+        "basil",
+        "basil",
+        "Basil"
+      ]
+    },
+    "scenario": "find_recipes_for_ingredients.deduplicate_case_sensitive",
+    "expected_requests": [
+      {
+        "method": "GET",
+        "path": "/api/foods",
+        "query": {
+          "search": [
+            "basil"
+          ],
+          "perPage": [
+            "25"
+          ]
+        },
+        "body": null
+      },
+      {
+        "method": "GET",
+        "path": "/api/foods",
+        "query": {
+          "search": [
+            "Basil"
+          ],
+          "perPage": [
+            "25"
+          ]
+        },
+        "body": null
+      },
+      {
+        "method": "GET",
+        "path": "/api/recipes/suggestions",
+        "query": {
+          "foods": [
+            "b"
+          ],
+          "limit": [
+            "10"
+          ],
+          "maxMissingFoods": [
+            "1000"
+          ],
+          "includeFoodsOnHand": [
+            "false"
+          ],
+          "includeToolsOnHand": [
+            "false"
+          ]
+        },
+        "body": null
+      },
+      {
+        "method": "GET",
+        "path": "/api/recipes/suggestions",
+        "query": {
+          "foods": [
+            "b"
+          ],
+          "limit": [
+            "10"
+          ],
+          "maxMissingFoods": [
+            "1000"
+          ],
+          "includeFoodsOnHand": [
+            "false"
+          ],
+          "includeToolsOnHand": [
+            "false"
+          ]
+        },
+        "body": null
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"resolvedIngredients\":[{\"query\":\"basil\",\"foodId\":\"b\",\"foodName\":\"Basil\",\"matchType\":\"exact-name\"},{\"query\":\"Basil\",\"foodId\":\"b\",\"foodName\":\"Basil\",\"matchType\":\"exact-name\"}],\"unresolvedIngredients\":[],\"matchSource\":\"suggestions\",\"recipes\":[{\"name\":\"Salad\",\"slug\":\"salad\",\"categories\":[],\"tags\":[],\"totalTime\":\"PT5M\",\"matchedIngredients\":[\"basil\",\"Basil\"],\"missingIngredients\":[],\"matchSource\":\"suggestions\"}],\"notes\":[]}"
+        }
+      ]
+    },
+    "request_order": "concurrent"
+  },
+  {
+    "tool": "find_recipes_for_ingredients",
+    "arguments": {
+      "ingredients": [
+        "eggs"
+      ]
+    },
+    "scenario": "find_recipes_for_ingredients.plural",
+    "expected_requests": [
+      {
+        "method": "GET",
+        "path": "/api/foods",
+        "query": {
+          "search": [
+            "eggs"
+          ],
+          "perPage": [
+            "25"
+          ]
+        },
+        "body": null
+      },
+      {
+        "method": "GET",
+        "path": "/api/recipes/suggestions",
+        "query": {
+          "foods": [
+            "eggs"
+          ],
+          "limit": [
+            "10"
+          ],
+          "maxMissingFoods": [
+            "1000"
+          ],
+          "includeFoodsOnHand": [
+            "false"
+          ],
+          "includeToolsOnHand": [
+            "false"
+          ]
+        },
+        "body": null
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"resolvedIngredients\":[{\"query\":\"eggs\",\"foodId\":\"eggs\",\"foodName\":\"Egg\",\"matchType\":\"exact-alternate-name\"}],\"unresolvedIngredients\":[],\"matchSource\":\"suggestions\",\"recipes\":[{\"name\":\"Salad\",\"slug\":\"salad\",\"categories\":[],\"tags\":[],\"totalTime\":\"PT5M\",\"matchedIngredients\":[\"eggs\"],\"missingIngredients\":[],\"matchSource\":\"suggestions\"}],\"notes\":[]}"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "find_recipes_for_ingredients",
+    "arguments": {
+      "ingredients": [
+        "fish"
+      ]
+    },
+    "scenario": "find_recipes_for_ingredients.ambiguous",
+    "expected_requests": [
+      {
+        "method": "GET",
+        "path": "/api/foods",
+        "query": {
+          "search": [
+            "fish"
+          ],
+          "perPage": [
+            "25"
+          ]
+        },
+        "body": null
+      },
+      {
+        "method": "GET",
+        "path": "/api/recipes",
+        "query": {
+          "search": [
+            "fish"
+          ],
+          "perPage": [
+            "10"
+          ]
+        },
+        "body": null
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"resolvedIngredients\":[],\"unresolvedIngredients\":[{\"query\":\"fish\",\"reason\":\"ambiguous\",\"candidates\":[\"Fish\",\"fish\"]}],\"matchSource\":\"text-search\",\"recipes\":[{\"name\":\"Salad\",\"slug\":\"salad\",\"categories\":[],\"tags\":[],\"totalTime\":\"PT5M\",\"matchedIngredients\":[\"fish\"],\"missingIngredients\":[],\"matchSource\":\"text-search\"}],\"notes\":[]}"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "find_recipes_for_ingredients",
+    "arguments": {
+      "ingredients": [
+        "salmon"
+      ]
+    },
+    "scenario": "find_recipes_for_ingredients.resolved_text_fallback",
+    "expected_requests": [
+      {
+        "method": "GET",
+        "path": "/api/foods",
+        "query": {
+          "search": [
+            "salmon"
+          ],
+          "perPage": [
+            "25"
+          ]
+        },
+        "body": null
+      },
+      {
+        "method": "GET",
+        "path": "/api/recipes/suggestions",
+        "query": {
+          "foods": [
+            "f1"
+          ],
+          "limit": [
+            "10"
+          ],
+          "maxMissingFoods": [
+            "1000"
+          ],
+          "includeFoodsOnHand": [
+            "false"
+          ],
+          "includeToolsOnHand": [
+            "false"
+          ]
+        },
+        "body": null
+      },
+      {
+        "method": "GET",
+        "path": "/api/recipes",
+        "query": {
+          "search": [
+            "salmon"
+          ],
+          "perPage": [
+            "10"
+          ]
+        },
+        "body": null
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"resolvedIngredients\":[{\"query\":\"salmon\",\"foodId\":\"f1\",\"foodName\":\"Salmon\",\"matchType\":\"exact-name\"}],\"unresolvedIngredients\":[],\"matchSource\":\"text-search\",\"recipes\":[{\"name\":\"Salad\",\"slug\":\"salad\",\"categories\":[],\"tags\":[],\"totalTime\":\"PT5M\",\"matchedIngredients\":[\"salmon\"],\"missingIngredients\":[],\"matchSource\":\"text-search\"}],\"notes\":[\"No results from Mealie's Recipe Finder for the resolved ingredient(s); fell back to normal recipe text search.\"]}"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "find_recipes_for_ingredients",
+    "arguments": {
+      "ingredients": [
+        "salmon"
+      ],
+      "limit": 999.9
+    },
+    "scenario": "find_recipes_for_ingredients.clamp",
+    "expected_requests": [
+      {
+        "method": "GET",
+        "path": "/api/foods",
+        "query": {
+          "search": [
+            "salmon"
+          ],
+          "perPage": [
+            "25"
+          ]
+        },
+        "body": null
+      },
+      {
+        "method": "GET",
+        "path": "/api/recipes/suggestions",
+        "query": {
+          "foods": [
+            "f1"
+          ],
+          "limit": [
+            "50"
+          ],
+          "maxMissingFoods": [
+            "1000"
+          ],
+          "includeFoodsOnHand": [
+            "false"
+          ],
+          "includeToolsOnHand": [
+            "false"
+          ]
+        },
+        "body": null
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"resolvedIngredients\":[{\"query\":\"salmon\",\"foodId\":\"f1\",\"foodName\":\"Salmon\",\"matchType\":\"exact-name\"}],\"unresolvedIngredients\":[],\"matchSource\":\"suggestions\",\"recipes\":[{\"name\":\"Salad\",\"slug\":\"salad\",\"categories\":[],\"tags\":[],\"totalTime\":\"PT5M\",\"matchedIngredients\":[\"salmon\"],\"missingIngredients\":[],\"matchSource\":\"suggestions\"}],\"notes\":[]}"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "find_recipes_for_ingredients",
+    "arguments": {
+      "ingredients": [
+        "salmon"
+      ],
+      "categories": [
+        "Dinner"
+      ]
+    },
+    "scenario": "find_recipes_for_ingredients.taxonomy_excluded",
+    "expected_requests": [
+      {
+        "method": "GET",
+        "path": "/api/organizers/categories",
+        "query": {
+          "perPage": [
+            "-1"
+          ]
+        },
+        "body": null
+      },
+      {
+        "method": "GET",
+        "path": "/api/foods",
+        "query": {
+          "search": [
+            "salmon"
+          ],
+          "perPage": [
+            "25"
+          ]
+        },
+        "body": null
+      },
+      {
+        "method": "GET",
+        "path": "/api/recipes/suggestions",
+        "query": {
+          "foods": [
+            "f1"
+          ],
+          "limit": [
+            "40"
+          ],
+          "maxMissingFoods": [
+            "1000"
+          ],
+          "includeFoodsOnHand": [
+            "false"
+          ],
+          "includeToolsOnHand": [
+            "false"
+          ]
+        },
+        "body": null
+      },
+      {
+        "method": "GET",
+        "path": "/api/recipes",
+        "query": {
+          "search": [
+            "salmon"
+          ],
+          "perPage": [
+            "10"
+          ],
+          "categories": [
+            "c"
+          ]
+        },
+        "body": null
+      },
+      {
+        "method": "GET",
+        "path": "/api/recipes",
+        "query": {
+          "search": [
+            "salmon"
+          ],
+          "perPage": [
+            "10"
+          ]
+        },
+        "body": null
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"resolvedIngredients\":[{\"query\":\"salmon\",\"foodId\":\"f1\",\"foodName\":\"Salmon\",\"matchType\":\"exact-name\"}],\"unresolvedIngredients\":[],\"matchSource\":\"none\",\"recipes\":[],\"notes\":[\"1 recipe(s) matched the ingredient search but were excluded by the requested categories/tags filter.\"]}"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "find_recipes_for_ingredients",
+    "arguments": {
+      "ingredients": [
+        " ﻿ "
+      ]
+    },
+    "scenario": "find_recipes_for_ingredients.blank",
+    "expected_requests": [],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "ingredients must contain at least one non-empty ingredient name."
+        }
+      ],
+      "isError": true
+    }
+  }
+]
