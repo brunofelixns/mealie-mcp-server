@@ -111,7 +111,7 @@
         "blobSha": "e918b9b3470dae48d07d54970c00d32cfd81beac",
         "url": "https://github.com/timo-reymann/mealie-mcp-server/blob/d027e1b4a314d781a322f1f91e37840f01464d77/src/tools/recipes.ts#L343"
       },
-      "migrationStatus": "inventoried_static_not_implemented",
+      "migrationStatus": "implemented_contract_verified",
       "effect": "read",
       "description": "Searches and lists recipes with pagination. Categories and tags are resolved by name/slug/ID against Mealie's organizer endpoints before the request, since Mealie's query params only match by exact slug/ID.",
       "descriptionSource": "'Searches and lists recipes with pagination. Categories and tags are resolved by name/slug/ID against ' +\n      'Mealie\\'s organizer endpoints before the request, since Mealie\\'s query params only match by exact slug/ID.'",
@@ -192,8 +192,29 @@
         "additionalProperties": false
       },
       "runtimeOutputSchema": null,
-      "runtimeExamples": [],
-      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeExamples": [
+        {
+          "file": "tests/fixtures/compatibility/cases/recipes_core.json",
+          "index": 0,
+          "scenario": "get_recipes.basic"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/recipes_core.json",
+          "index": 8,
+          "scenario": "get_recipes.filters"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/recipes_core.json",
+          "index": 9,
+          "scenario": "get_recipes.unresolved"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/recipes_core.json",
+          "index": 10,
+          "scenario": "get_recipes.empty_filters"
+        }
+      ],
+      "runtimeCaptureStatus": "behavior_captured_and_python_verified",
       "runtimeOutputSchemaPresent": false
     },
     {
@@ -315,7 +336,7 @@
         "blobSha": "e918b9b3470dae48d07d54970c00d32cfd81beac",
         "url": "https://github.com/timo-reymann/mealie-mcp-server/blob/d027e1b4a314d781a322f1f91e37840f01464d77/src/tools/recipes.ts#L424"
       },
-      "migrationStatus": "inventoried_static_not_implemented",
+      "migrationStatus": "implemented_contract_verified",
       "effect": "read",
       "description": "Retrieves a recipe by slug with full details including nutrition, settings, and assets.",
       "descriptionSource": "'Retrieves a recipe by slug with full details including nutrition, settings, and assets.'",
@@ -350,8 +371,19 @@
         "additionalProperties": false
       },
       "runtimeOutputSchema": null,
-      "runtimeExamples": [],
-      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeExamples": [
+        {
+          "file": "tests/fixtures/compatibility/cases/recipes_core.json",
+          "index": 1,
+          "scenario": "get_recipe_detailed.basic"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/recipes_core.json",
+          "index": 17,
+          "scenario": "get_recipe_detailed.invalid_slug"
+        }
+      ],
+      "runtimeCaptureStatus": "behavior_captured_and_python_verified",
       "runtimeOutputSchemaPresent": false
     },
     {
@@ -364,7 +396,7 @@
         "blobSha": "e918b9b3470dae48d07d54970c00d32cfd81beac",
         "url": "https://github.com/timo-reymann/mealie-mcp-server/blob/d027e1b4a314d781a322f1f91e37840f01464d77/src/tools/recipes.ts#L439"
       },
-      "migrationStatus": "inventoried_static_not_implemented",
+      "migrationStatus": "implemented_contract_verified",
       "effect": "read",
       "description": "Retrieves a recipe by slug, filtered to summary fields (name, slug, servings, yield, total time, rating, ingredients, last made).",
       "descriptionSource": "'Retrieves a recipe by slug, filtered to summary fields (name, slug, servings, yield, total time, rating, ingredients, last made).'",
@@ -398,8 +430,14 @@
         "additionalProperties": false
       },
       "runtimeOutputSchema": null,
-      "runtimeExamples": [],
-      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeExamples": [
+        {
+          "file": "tests/fixtures/compatibility/cases/recipes_core.json",
+          "index": 2,
+          "scenario": "get_recipe_concise.basic"
+        }
+      ],
+      "runtimeCaptureStatus": "behavior_captured_and_python_verified",
       "runtimeOutputSchemaPresent": false
     },
     {
@@ -412,7 +450,7 @@
         "blobSha": "e918b9b3470dae48d07d54970c00d32cfd81beac",
         "url": "https://github.com/timo-reymann/mealie-mcp-server/blob/d027e1b4a314d781a322f1f91e37840f01464d77/src/tools/recipes.ts#L460"
       },
-      "migrationStatus": "inventoried_static_not_implemented",
+      "migrationStatus": "implemented_contract_verified",
       "effect": "read",
       "description": "Fetches multiple recipes by slug with bounded concurrency (4 in-flight requests at a time).",
       "descriptionSource": "'Fetches multiple recipes by slug with bounded concurrency (4 in-flight requests at a time).'",
@@ -448,8 +486,24 @@
         "additionalProperties": false
       },
       "runtimeOutputSchema": null,
-      "runtimeExamples": [],
-      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeExamples": [
+        {
+          "file": "tests/fixtures/compatibility/cases/recipes_core.json",
+          "index": 3,
+          "scenario": "get_recipes_batch.basic"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/recipes_core.json",
+          "index": 18,
+          "scenario": "get_recipes_batch.empty"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/recipes_core.json",
+          "index": 19,
+          "scenario": "get_recipes_batch.error"
+        }
+      ],
+      "runtimeCaptureStatus": "behavior_captured_and_python_verified",
       "runtimeOutputSchemaPresent": false
     },
     {
@@ -462,7 +516,7 @@
         "blobSha": "e918b9b3470dae48d07d54970c00d32cfd81beac",
         "url": "https://github.com/timo-reymann/mealie-mcp-server/blob/d027e1b4a314d781a322f1f91e37840f01464d77/src/tools/recipes.ts#L475"
       },
-      "migrationStatus": "inventoried_static_not_implemented",
+      "migrationStatus": "implemented_contract_verified",
       "effect": "read",
       "description": "Fetches multiple recipes by slug with full details (including nutrition) and bounded concurrency.",
       "descriptionSource": "'Fetches multiple recipes by slug with full details (including nutrition) and bounded concurrency.'",
@@ -499,8 +553,24 @@
         "additionalProperties": false
       },
       "runtimeOutputSchema": null,
-      "runtimeExamples": [],
-      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeExamples": [
+        {
+          "file": "tests/fixtures/compatibility/cases/recipes_core.json",
+          "index": 4,
+          "scenario": "get_recipes_detailed_batch.basic"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/recipes_core.json",
+          "index": 20,
+          "scenario": "get_recipes_detailed_batch.empty"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/recipes_core.json",
+          "index": 21,
+          "scenario": "get_recipes_detailed_batch.error"
+        }
+      ],
+      "runtimeCaptureStatus": "behavior_captured_and_python_verified",
       "runtimeOutputSchemaPresent": false
     },
     {
@@ -765,7 +835,7 @@
         "blobSha": "e918b9b3470dae48d07d54970c00d32cfd81beac",
         "url": "https://github.com/timo-reymann/mealie-mcp-server/blob/d027e1b4a314d781a322f1f91e37840f01464d77/src/tools/recipes.ts#L719"
       },
-      "migrationStatus": "inventoried_static_not_implemented",
+      "migrationStatus": "implemented_contract_verified",
       "effect": "write",
       "description": "Creates a new recipe. Optionally sets ingredients and instructions on creation.",
       "descriptionSource": "'Creates a new recipe. Optionally sets ingredients and instructions on creation.'",
@@ -819,8 +889,29 @@
         "additionalProperties": false
       },
       "runtimeOutputSchema": null,
-      "runtimeExamples": [],
-      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeExamples": [
+        {
+          "file": "tests/fixtures/compatibility/cases/recipes_core.json",
+          "index": 5,
+          "scenario": "create_recipe.basic"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/recipes_core.json",
+          "index": 11,
+          "scenario": "create_recipe.lines"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/recipes_core.json",
+          "index": 12,
+          "scenario": "create_recipe.clear"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/recipes_core.json",
+          "index": 13,
+          "scenario": "create_recipe.put_error"
+        }
+      ],
+      "runtimeCaptureStatus": "behavior_captured_and_python_verified",
       "runtimeOutputSchemaPresent": false
     },
     {
@@ -2557,7 +2648,7 @@
         "blobSha": "e918b9b3470dae48d07d54970c00d32cfd81beac",
         "url": "https://github.com/timo-reymann/mealie-mcp-server/blob/d027e1b4a314d781a322f1f91e37840f01464d77/src/tools/recipes.ts#L1141"
       },
-      "migrationStatus": "inventoried_static_not_implemented",
+      "migrationStatus": "implemented_contract_verified",
       "effect": "write",
       "description": "Creates a duplicate of an existing recipe with an optional new name.",
       "descriptionSource": "'Creates a duplicate of an existing recipe with an optional new name.'",
@@ -2597,8 +2688,24 @@
         "additionalProperties": false
       },
       "runtimeOutputSchema": null,
-      "runtimeExamples": [],
-      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeExamples": [
+        {
+          "file": "tests/fixtures/compatibility/cases/recipes_core.json",
+          "index": 6,
+          "scenario": "duplicate_recipe.basic"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/recipes_core.json",
+          "index": 14,
+          "scenario": "duplicate_recipe.omitted"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/recipes_core.json",
+          "index": 15,
+          "scenario": "duplicate_recipe.empty"
+        }
+      ],
+      "runtimeCaptureStatus": "behavior_captured_and_python_verified",
       "runtimeOutputSchemaPresent": false
     },
     {
@@ -2947,7 +3054,7 @@
         "blobSha": "e918b9b3470dae48d07d54970c00d32cfd81beac",
         "url": "https://github.com/timo-reymann/mealie-mcp-server/blob/d027e1b4a314d781a322f1f91e37840f01464d77/src/tools/recipes.ts#L1267"
       },
-      "migrationStatus": "inventoried_static_not_implemented",
+      "migrationStatus": "implemented_contract_verified",
       "effect": "destructive",
       "description": "Permanently deletes a recipe.",
       "descriptionSource": "'Permanently deletes a recipe.'",
@@ -2980,8 +3087,19 @@
         "additionalProperties": false
       },
       "runtimeOutputSchema": null,
-      "runtimeExamples": [],
-      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeExamples": [
+        {
+          "file": "tests/fixtures/compatibility/cases/recipes_core.json",
+          "index": 7,
+          "scenario": "delete_recipe.basic"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/recipes_core.json",
+          "index": 16,
+          "scenario": "delete_recipe.204"
+        }
+      ],
+      "runtimeCaptureStatus": "behavior_captured_and_python_verified",
       "runtimeOutputSchemaPresent": false
     },
     {

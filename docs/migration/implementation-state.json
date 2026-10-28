@@ -390,7 +390,7 @@
           "tests": 290
         }
       ],
-      "commit": null
+      "commit": "d96c13199584065c7a97993baf82acc83195f0b9"
     },
     {
       "id": "P12",
@@ -398,7 +398,7 @@
       "dependsOn": [
         "P11"
       ],
-      "status": "in_progress",
+      "status": "verified",
       "tools": [
         "get_recipes",
         "get_recipe_detailed",
@@ -421,7 +421,13 @@
         "tests/unit/test_recipe_batch.py",
         "tests/unit/test_taxonomy_resolution.py"
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "report": "docs/migration/evidence/P12.md",
+          "result": "passed",
+          "tests": 328
+        }
+      ],
       "commit": null
     },
     {
@@ -430,7 +436,7 @@
       "dependsOn": [
         "P12"
       ],
-      "status": "not_started",
+      "status": "in_progress",
       "tools": [
         "patch_recipe",
         "update_recipe_taxonomy",

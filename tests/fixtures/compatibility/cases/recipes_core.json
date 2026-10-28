@@ -1,0 +1,747 @@
+[
+  {
+    "tool": "get_recipes",
+    "arguments": {
+      "search": "pasta",
+      "page": 1,
+      "perPage": 20
+    },
+    "scenario": "get_recipes.basic",
+    "expected_requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes",
+        "query": {
+          "search": [
+            "pasta"
+          ],
+          "page": [
+            "1"
+          ],
+          "perPage": [
+            "20"
+          ]
+        },
+        "body": null
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"items\":[{\"id\":\"r1\",\"name\":\"Pasta\",\"slug\":\"one\",\"recipeServings\":0,\"recipeYieldQuantity\":0,\"recipeYield\":\"\",\"totalTime\":\"PT20M\",\"rating\":null,\"recipeIngredient\":[{\"note\":\"Salt\"}],\"lastMade\":null,\"recipeInstructions\":[{\"text\":\"Cook\"}],\"nutrition\":{\"unknown\":true},\"settings\":{\"keep\":false},\"assets\":[],\"providerExtra\":{\"preserve\":true}}],\"total\":1,\"page\":1,\"size\":20}"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "get_recipe_detailed",
+    "arguments": {
+      "slug": "one"
+    },
+    "scenario": "get_recipe_detailed.basic",
+    "expected_requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes/one",
+        "query": {},
+        "body": null
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"id\":\"r1\",\"name\":\"Pasta\",\"slug\":\"one\",\"recipeServings\":0,\"recipeYieldQuantity\":0,\"recipeYield\":\"\",\"totalTime\":\"PT20M\",\"rating\":null,\"recipeIngredient\":[{\"note\":\"Salt\"}],\"lastMade\":null,\"recipeInstructions\":[{\"text\":\"Cook\"}],\"nutrition\":{\"unknown\":true},\"settings\":{\"keep\":false},\"assets\":[],\"providerExtra\":{\"preserve\":true}}"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "get_recipe_concise",
+    "arguments": {
+      "slug": "one"
+    },
+    "scenario": "get_recipe_concise.basic",
+    "expected_requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes/one",
+        "query": {},
+        "body": null
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"name\":\"Pasta\",\"slug\":\"one\",\"recipeServings\":0,\"recipeYieldQuantity\":0,\"recipeYield\":\"\",\"totalTime\":\"PT20M\",\"rating\":null,\"recipeIngredient\":[{\"note\":\"Salt\"}],\"lastMade\":null}"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "get_recipes_batch",
+    "arguments": {
+      "slugs": [
+        "one"
+      ]
+    },
+    "scenario": "get_recipes_batch.basic",
+    "expected_requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes/one",
+        "query": {},
+        "body": null
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"one\":{\"id\":\"r1\",\"name\":\"Pasta\",\"slug\":\"one\",\"recipeServings\":0,\"recipeYieldQuantity\":0,\"recipeYield\":\"\",\"totalTime\":\"PT20M\",\"rating\":null,\"recipeIngredient\":[{\"note\":\"Salt\"}],\"lastMade\":null,\"recipeInstructions\":[{\"text\":\"Cook\"}],\"nutrition\":{\"unknown\":true},\"settings\":{\"keep\":false},\"assets\":[],\"providerExtra\":{\"preserve\":true}}}"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "get_recipes_detailed_batch",
+    "arguments": {
+      "slugs": [
+        "one"
+      ]
+    },
+    "scenario": "get_recipes_detailed_batch.basic",
+    "expected_requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes/one",
+        "query": {},
+        "body": null
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"one\":{\"id\":\"r1\",\"name\":\"Pasta\",\"slug\":\"one\",\"recipeServings\":0,\"recipeYieldQuantity\":0,\"recipeYield\":\"\",\"totalTime\":\"PT20M\",\"rating\":null,\"recipeIngredient\":[{\"note\":\"Salt\"}],\"lastMade\":null,\"recipeInstructions\":[{\"text\":\"Cook\"}],\"nutrition\":{\"unknown\":true},\"settings\":{\"keep\":false},\"assets\":[],\"providerExtra\":{\"preserve\":true}}}"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "create_recipe",
+    "arguments": {
+      "name": "New"
+    },
+    "scenario": "create_recipe.basic",
+    "expected_requests": [
+      {
+        "method": "POST",
+        "path": "/api/recipes",
+        "query": {},
+        "body": {
+          "name": "New"
+        }
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "\"created\""
+        }
+      ]
+    }
+  },
+  {
+    "tool": "duplicate_recipe",
+    "arguments": {
+      "slug": "one",
+      "name": "Copy"
+    },
+    "scenario": "duplicate_recipe.basic",
+    "expected_requests": [
+      {
+        "method": "POST",
+        "path": "/api/recipes/one/duplicate",
+        "query": {},
+        "body": {
+          "name": "Copy"
+        }
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"id\":\"r1\",\"name\":\"Copy\",\"slug\":\"copy\",\"recipeServings\":0,\"recipeYieldQuantity\":0,\"recipeYield\":\"\",\"totalTime\":\"PT20M\",\"rating\":null,\"recipeIngredient\":[{\"note\":\"Salt\"}],\"lastMade\":null,\"recipeInstructions\":[{\"text\":\"Cook\"}],\"nutrition\":{\"unknown\":true},\"settings\":{\"keep\":false},\"assets\":[],\"providerExtra\":{\"preserve\":true}}"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "delete_recipe",
+    "arguments": {
+      "slug": "one"
+    },
+    "scenario": "delete_recipe.basic",
+    "expected_requests": [
+      {
+        "method": "DELETE",
+        "path": "/api/recipes/one",
+        "query": {},
+        "body": null
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"id\":\"r1\"}"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "get_recipes",
+    "arguments": {
+      "search": "pasta & salt",
+      "categories": [
+        "Dinner",
+        "dessert"
+      ],
+      "tags": [
+        "Quick",
+        "easy"
+      ],
+      "requireAllTags": false,
+      "requireAllCategories": true
+    },
+    "scenario": "get_recipes.filters",
+    "expected_requests": [
+      {
+        "method": "GET",
+        "path": "/api/organizers/categories",
+        "query": {
+          "perPage": [
+            "-1"
+          ]
+        },
+        "body": null
+      },
+      {
+        "method": "GET",
+        "path": "/api/organizers/tags",
+        "query": {
+          "perPage": [
+            "-1"
+          ]
+        },
+        "body": null
+      },
+      {
+        "method": "GET",
+        "path": "/api/recipes",
+        "query": {
+          "search": [
+            "pasta & salt"
+          ],
+          "categories": [
+            "50000000-0000-4000-8000-000000000001",
+            "50000000-0000-4000-8000-000000000002"
+          ],
+          "tags": [
+            "50000000-0000-4000-8000-000000000003",
+            "50000000-0000-4000-8000-000000000004"
+          ],
+          "requireAllTags": [
+            "false"
+          ],
+          "requireAllCategories": [
+            "true"
+          ]
+        },
+        "body": null
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"items\":[{\"id\":\"r1\",\"name\":\"Pasta\",\"slug\":\"one\",\"recipeServings\":0,\"recipeYieldQuantity\":0,\"recipeYield\":\"\",\"totalTime\":\"PT20M\",\"rating\":null,\"recipeIngredient\":[{\"note\":\"Salt\"}],\"lastMade\":null,\"recipeInstructions\":[{\"text\":\"Cook\"}],\"nutrition\":{\"unknown\":true},\"settings\":{\"keep\":false},\"assets\":[],\"providerExtra\":{\"preserve\":true}}],\"total\":1}"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "get_recipes",
+    "arguments": {
+      "categories": [
+        "typo"
+      ]
+    },
+    "scenario": "get_recipes.unresolved",
+    "expected_requests": [
+      {
+        "method": "GET",
+        "path": "/api/organizers/categories",
+        "query": {
+          "perPage": [
+            "-1"
+          ]
+        },
+        "body": null
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "The following categories do not exist: typo. Correct the categories name(s)/slug(s)/ID(s), or remove it from the filter."
+        }
+      ],
+      "isError": true
+    }
+  },
+  {
+    "tool": "get_recipes",
+    "arguments": {
+      "categories": [],
+      "tags": []
+    },
+    "scenario": "get_recipes.empty_filters",
+    "expected_requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes",
+        "query": {},
+        "body": null
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"items\":[],\"total\":0}"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "create_recipe",
+    "arguments": {
+      "name": "New",
+      "ingredients": [
+        "Salt",
+        "Water"
+      ],
+      "instructions": [
+        "Mix",
+        ""
+      ]
+    },
+    "scenario": "create_recipe.lines",
+    "expected_requests": [
+      {
+        "method": "POST",
+        "path": "/api/recipes",
+        "query": {},
+        "body": {
+          "name": "New"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/api/recipes/created",
+        "query": {},
+        "body": null
+      },
+      {
+        "method": "PUT",
+        "path": "/api/recipes/created",
+        "query": {},
+        "body": {
+          "id": "r1",
+          "name": "New",
+          "slug": "created",
+          "recipeServings": 0,
+          "recipeYieldQuantity": 0,
+          "recipeYield": "",
+          "totalTime": "PT20M",
+          "rating": null,
+          "recipeIngredient": [
+            {
+              "note": "Salt"
+            },
+            {
+              "note": "Water"
+            }
+          ],
+          "lastMade": null,
+          "recipeInstructions": [
+            {
+              "text": "Mix"
+            },
+            {
+              "text": ""
+            }
+          ],
+          "nutrition": {
+            "unknown": true
+          },
+          "settings": {
+            "keep": false
+          },
+          "assets": [],
+          "providerExtra": {
+            "preserve": true
+          }
+        }
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"id\":\"r1\",\"name\":\"New\",\"slug\":\"created\",\"recipeServings\":0,\"recipeYieldQuantity\":0,\"recipeYield\":\"\",\"totalTime\":\"PT20M\",\"rating\":null,\"recipeIngredient\":[{\"note\":\"Salt\"},{\"note\":\"Water\"}],\"lastMade\":null,\"recipeInstructions\":[{\"text\":\"Mix\"},{\"text\":\"\"}],\"nutrition\":{\"unknown\":true},\"settings\":{\"keep\":false},\"assets\":[],\"providerExtra\":{\"preserve\":true}}"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "create_recipe",
+    "arguments": {
+      "name": "New",
+      "ingredients": [],
+      "instructions": []
+    },
+    "scenario": "create_recipe.clear",
+    "expected_requests": [
+      {
+        "method": "POST",
+        "path": "/api/recipes",
+        "query": {},
+        "body": {
+          "name": "New"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/api/recipes/created",
+        "query": {},
+        "body": null
+      },
+      {
+        "method": "PUT",
+        "path": "/api/recipes/created",
+        "query": {},
+        "body": {
+          "id": "r1",
+          "name": "New",
+          "slug": "created",
+          "recipeServings": 0,
+          "recipeYieldQuantity": 0,
+          "recipeYield": "",
+          "totalTime": "PT20M",
+          "rating": null,
+          "recipeIngredient": [],
+          "lastMade": null,
+          "recipeInstructions": [],
+          "nutrition": {
+            "unknown": true
+          },
+          "settings": {
+            "keep": false
+          },
+          "assets": [],
+          "providerExtra": {
+            "preserve": true
+          }
+        }
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"id\":\"r1\",\"name\":\"New\",\"slug\":\"created\",\"recipeServings\":0,\"recipeYieldQuantity\":0,\"recipeYield\":\"\",\"totalTime\":\"PT20M\",\"rating\":null,\"recipeIngredient\":[],\"lastMade\":null,\"recipeInstructions\":[],\"nutrition\":{\"unknown\":true},\"settings\":{\"keep\":false},\"assets\":[],\"providerExtra\":{\"preserve\":true}}"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "create_recipe",
+    "arguments": {
+      "name": "New",
+      "ingredients": [
+        "Salt"
+      ]
+    },
+    "scenario": "create_recipe.put_error",
+    "expected_requests": [
+      {
+        "method": "POST",
+        "path": "/api/recipes",
+        "query": {},
+        "body": {
+          "name": "New"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/api/recipes/created",
+        "query": {},
+        "body": null
+      },
+      {
+        "method": "PUT",
+        "path": "/api/recipes/created",
+        "query": {},
+        "body": {
+          "id": "r1",
+          "name": "New",
+          "slug": "created",
+          "recipeServings": 0,
+          "recipeYieldQuantity": 0,
+          "recipeYield": "",
+          "totalTime": "PT20M",
+          "rating": null,
+          "recipeIngredient": [
+            {
+              "note": "Salt"
+            }
+          ],
+          "lastMade": null,
+          "recipeInstructions": [
+            {
+              "text": "Cook"
+            }
+          ],
+          "nutrition": {
+            "unknown": true
+          },
+          "settings": {
+            "keep": false
+          },
+          "assets": [],
+          "providerExtra": {
+            "preserve": true
+          }
+        }
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "Mealie API error 500: {\"detail\": \"private body\"}"
+        }
+      ],
+      "isError": true
+    },
+    "documented_difference": "D06",
+    "expected_python_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "Mealie API error 500."
+        }
+      ],
+      "isError": true
+    }
+  },
+  {
+    "tool": "duplicate_recipe",
+    "arguments": {
+      "slug": "one"
+    },
+    "scenario": "duplicate_recipe.omitted",
+    "expected_requests": [
+      {
+        "method": "POST",
+        "path": "/api/recipes/one/duplicate",
+        "query": {},
+        "body": null
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"slug\":\"copy\"}"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "duplicate_recipe",
+    "arguments": {
+      "slug": "one",
+      "name": ""
+    },
+    "scenario": "duplicate_recipe.empty",
+    "expected_requests": [
+      {
+        "method": "POST",
+        "path": "/api/recipes/one/duplicate",
+        "query": {},
+        "body": null
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"slug\":\"copy\"}"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "delete_recipe",
+    "arguments": {
+      "slug": "one"
+    },
+    "scenario": "delete_recipe.204",
+    "expected_requests": [
+      {
+        "method": "DELETE",
+        "path": "/api/recipes/one",
+        "query": {},
+        "body": null
+      }
+    ],
+    "expected_result": {
+      "protocolError": "MCPError",
+      "message": "MCP error -32602: Invalid tools/call result: [\n  {\n    \"code\": \"invalid_union\",\n    \"errors\": [\n      [\n        {\n          \"expected\": \"string\",\n          \"code\": \"invalid_type\",\n          \"path\": [\n            \"text\"\n          ],\n          \"message\": \"Invalid input: expected string, received undefined\"\n        }\n      ],\n      [\n        {\n          \"code\": \"invalid_value\",\n          \"values\": [\n            \"image\"\n          ],\n          \"path\": [\n            \"type\"\n          ],\n          \"message\": \"Invalid input: expected \\\"image\\\"\"\n        },\n        {\n          \"expected\": \"string\",\n          \"code\": \"invalid_type\",\n          \"path\": [\n            \"data\"\n          ],\n          \"message\": \"Invalid input: expected string, received undefined\"\n        },\n        {\n          \"expected\": \"string\",\n          \"code\": \"invalid_type\",\n          \"path\": [\n            \"mimeType\"\n          ],\n          \"message\": \"Invalid input: expected string, received undefined\"\n        }\n      ],\n      [\n        {\n          \"code\": \"invalid_value\",\n          \"values\": [\n            \"audio\"\n          ],\n          \"path\": [\n            \"type\"\n          ],\n          \"message\": \"Invalid input: expected \\\"audio\\\"\"\n        },\n        {\n          \"expected\": \"string\",\n          \"code\": \"invalid_type\",\n          \"path\": [\n            \"data\"\n          ],\n          \"message\": \"Invalid input: expected string, received undefined\"\n        },\n        {\n          \"expected\": \"string\",\n          \"code\": \"invalid_type\",\n          \"path\": [\n            \"mimeType\"\n          ],\n          \"message\": \"Invalid input: expected string, received undefined\"\n        }\n      ],\n      [\n        {\n          \"expected\": \"string\",\n          \"code\": \"invalid_type\",\n          \"path\": [\n            \"name\"\n          ],\n          \"message\": \"Invalid input: expected string, received undefined\"\n        },\n        {\n          \"expected\": \"string\",\n          \"code\": \"invalid_type\",\n          \"path\": [\n            \"uri\"\n          ],\n          \"message\": \"Invalid input: expected string, received undefined\"\n        },\n        {\n          \"code\": \"invalid_value\",\n          \"values\": [\n            \"resource_link\"\n          ],\n          \"path\": [\n            \"type\"\n          ],\n          \"message\": \"Invalid input: expected \\\"resource_link\\\"\"\n        }\n      ],\n      [\n        {\n          \"code\": \"invalid_value\",\n          \"values\": [\n            \"resource\"\n          ],\n          \"path\": [\n            \"type\"\n          ],\n          \"message\": \"Invalid input: expected \\\"resource\\\"\"\n        },\n        {\n          \"code\": \"invalid_union\",\n          \"errors\": [\n            [\n              {\n                \"expected\": \"object\",\n                \"code\": \"invalid_type\",\n                \"path\": [],\n                \"message\": \"Invalid input: expected object, received undefined\"\n              }\n            ],\n            [\n              {\n                \"expected\": \"object\",\n                \"code\": \"invalid_type\",\n                \"path\": [],\n                \"message\": \"Invalid input: expected object, received undefined\"\n              }\n            ]\n          ],\n          \"path\": [\n            \"resource\"\n          ],\n          \"message\": \"Invalid input\"\n        }\n      ]\n    ],\n    \"path\": [\n      \"content\",\n      0\n    ],\n    \"message\": \"Invalid input\"\n  }\n]"
+    },
+    "documented_difference": "D07",
+    "expected_python_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "null"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "get_recipe_detailed",
+    "arguments": {
+      "slug": ".."
+    },
+    "scenario": "get_recipe_detailed.invalid_slug",
+    "expected_requests": [],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "Invalid slug."
+        }
+      ],
+      "isError": true
+    }
+  },
+  {
+    "tool": "get_recipes_batch",
+    "arguments": {
+      "slugs": []
+    },
+    "scenario": "get_recipes_batch.empty",
+    "expected_requests": [],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{}"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "get_recipes_batch",
+    "arguments": {
+      "slugs": [
+        "broken"
+      ]
+    },
+    "scenario": "get_recipes_batch.error",
+    "expected_requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes/broken",
+        "query": {},
+        "body": null
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"broken\":{\"error\":\"Mealie API error 404: {\\\"detail\\\": \\\"private body\\\"}\"}}"
+        }
+      ]
+    },
+    "documented_difference": "D06",
+    "expected_python_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"broken\":{\"error\":\"Mealie API error 404.\"}}"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "get_recipes_detailed_batch",
+    "arguments": {
+      "slugs": []
+    },
+    "scenario": "get_recipes_detailed_batch.empty",
+    "expected_requests": [],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{}"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "get_recipes_detailed_batch",
+    "arguments": {
+      "slugs": [
+        "broken"
+      ]
+    },
+    "scenario": "get_recipes_detailed_batch.error",
+    "expected_requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes/broken",
+        "query": {},
+        "body": null
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"broken\":{\"error\":\"Mealie API error 404: {\\\"detail\\\": \\\"private body\\\"}\"}}"
+        }
+      ]
+    },
+    "documented_difference": "D06",
+    "expected_python_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"broken\":{\"error\":\"Mealie API error 404.\"}}"
+        }
+      ]
+    }
+  }
+]

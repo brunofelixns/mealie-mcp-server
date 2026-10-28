@@ -10,7 +10,7 @@
 
 **Spec:** [Diseño completo](../specs/2026-10-27-python-migration-design.md). Leer también [inventario](../../migration/compatibility-inventory.md) e [inventario JSON](../../migration/compatibility-inventory.json).
 
-Fecha: 2026-10-27. Estado: implementación autorizada; P01..P11 verificadas y P12 en curso. Ver implementation-state.json para la evidencia. No se ha publicado ni desplegado un endpoint público.
+Fecha: 2026-10-27. Estado: implementación autorizada; P01..P12 verificadas y P13 en curso. Ver implementation-state.json para la evidencia. No se ha publicado ni desplegado un endpoint público.
 
 ## Global Constraints
 
@@ -351,26 +351,26 @@ uv run pytest tests/contracts/test_shopping_lists.py -q
 <a id="p12"></a>
 ### P12: Migrar el núcleo de recetas
 
-**Depende de:** P11. **Estado:** pendiente; ver registro de ejecución.
+**Depende de:** P11. **Estado:** verificada; ver registro de ejecución.
 
 **Archivos:** `src/mealie_mcp_server/mealie/api/recipes.py`, `src/mealie_mcp_server/models/inputs/recipes.py`, `src/mealie_mcp_server/tools/recipes.py`, `src/mealie_mcp_server/services/taxonomy_resolution.py`, `tests/fixtures/compatibility/cases/recipes_core.json`.
 **Tests:** `tests/contracts/test_recipes_core.py`, `tests/unit/test_recipe_batch.py`, `tests/unit/test_taxonomy_resolution.py`.
 
-**Interfaces:** consume P05/P06; resolve_organizer_values P08. Produce register_recipe_core(server: FastMCP) -> None; get_recipe(client: MealieClient, slug: str) -> JsonObject; get_recipes_batch(client: MealieClient, slugs: list[str], *, detailed: bool) -> JsonValue; resolve_taxonomy_filter(client: MealieClient, kind: str, values: list[str] | None) -> list[str] | None.
+**Interfaces:** consume P05/P06; resolve_organizer_values P08. Produce register_recipe_core(server: FastMCP) -> None; get_recipe(client: MealieClient, slug: str) -> JsonObject; get_recipes_batch(client: MealieClient, slugs: list[str]) -> JsonObject (ambos lotes originales devuelven detalles completos); resolve_taxonomy_filter(client: MealieClient, kind: str, values: list[str] | None) -> list[str] | None.
 
 **Herramientas (8):** `get_recipes`, `get_recipe_detailed`, `get_recipe_concise`, `get_recipes_batch`, `get_recipes_detailed_batch`, `create_recipe`, `duplicate_recipe`, `delete_recipe`.
 
-- [ ] **1. Añadir las pruebas antes del código funcional.** test_recipe_core_contract para8 herramientas; test_batch_limit4_preserves_order_and_errors; test_concise_projection; test_create_returns_slug_then_updates: si la segunda fase falla la creación no se inventa como revertida. test_get_recipes_repeated_categories_tags y campos desconocidos de receta preservados.
-- [ ] **2. Ejecutar el subconjunto indicado y observar RED.** El fallo esperado es el comportamiento/handler aún ausente o incorrecto; si falta infraestructura del harness, arreglarla antes de tomar el fallo como evidencia.
-- [ ] **3. Implementar las interfaces de esta tarea y sus fixtures.** Reutilizar los contratos anteriores; preservar los valores del diseño y el inventario. 8 herramientas; patch_recipe queda para P13; concurrencia4 y serialización de filtros exactas.
+- [x] **1. Añadir las pruebas antes del código funcional.** test_recipe_core_contract para8 herramientas; test_batch_limit4_preserves_order_and_errors; test_concise_projection; test_create_returns_slug_then_updates: si la segunda fase falla la creación no se inventa como revertida. test_get_recipes_repeated_categories_tags y campos desconocidos de receta preservados.
+- [x] **2. Ejecutar el subconjunto indicado y observar RED.** El fallo esperado es el comportamiento/handler aún ausente o incorrecto; si falta infraestructura del harness, arreglarla antes de tomar el fallo como evidencia.
+- [x] **3. Implementar las interfaces de esta tarea y sus fixtures.** Reutilizar los contratos anteriores; preservar los valores del diseño y el inventario. 8 herramientas; patch_recipe queda para P13; concurrencia4 y serialización de filtros exactas.
 
-- [ ] **4. Verificar el resultado de esta tarea.** Ejecutar dentro del Dev Container; salida0 y todas las aserciones indicadas en verde. Para P01 el launcher y el contenedor auxiliar son la excepción de bootstrap explicada arriba.
+- [x] **4. Verificar el resultado de esta tarea.** Ejecutar dentro del Dev Container; salida0 y todas las aserciones indicadas en verde. Para P01 el launcher y el contenedor auxiliar son la excepción de bootstrap explicada arriba.
 
 ```bash
 uv run pytest tests/contracts/test_recipes_core.py tests/unit/test_recipe_batch.py tests/unit/test_taxonomy_resolution.py -q
 ```
 
-- [ ] **5. Revisar, documentar y cerrar.** Comprobar el criterio de salida anterior y el diff; no ampliar la suite sin una nueva causa. Actualizar estado, diferencias si las hay y evidencia con comando/resultado/entorno. Commit de implementación sugerido: `feat: port core recipe reads and CRUD`. Registrar su SHA en un commit documental posterior si hace falta; no intentar incluir el hash de un commit en sí mismo.
+- [x] **5. Revisar, documentar y cerrar.** Comprobar el criterio de salida anterior y el diff; no ampliar la suite sin una nueva causa. Actualizar estado, diferencias si las hay y evidencia con comando/resultado/entorno. Commit de implementación sugerido: `feat: port core recipe reads and CRUD`. Registrar su SHA en un commit documental posterior si hace falta; no intentar incluir el hash de un commit en sí mismo.
 
 <a id="p13"></a>
 ### P13: Migrar taxonomía y utensilios de recetas, incluido patch_recipe

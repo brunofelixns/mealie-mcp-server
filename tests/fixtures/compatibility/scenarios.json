@@ -3314,5 +3314,868 @@
         "status": 400
       }
     ]
+  },
+  "get_recipes.basic": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes",
+        "query": {
+          "search": [
+            "pasta"
+          ],
+          "page": [
+            "1"
+          ],
+          "perPage": [
+            "20"
+          ]
+        },
+        "body": null,
+        "response": {
+          "items": [
+            {
+              "id": "r1",
+              "name": "Pasta",
+              "slug": "one",
+              "recipeServings": 0,
+              "recipeYieldQuantity": 0,
+              "recipeYield": "",
+              "totalTime": "PT20M",
+              "rating": null,
+              "recipeIngredient": [
+                {
+                  "note": "Salt"
+                }
+              ],
+              "lastMade": null,
+              "recipeInstructions": [
+                {
+                  "text": "Cook"
+                }
+              ],
+              "nutrition": {
+                "unknown": true
+              },
+              "settings": {
+                "keep": false
+              },
+              "assets": [],
+              "providerExtra": {
+                "preserve": true
+              }
+            }
+          ],
+          "total": 1,
+          "page": 1,
+          "size": 20
+        },
+        "status": 200
+      }
+    ]
+  },
+  "get_recipe_detailed.basic": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes/one",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "r1",
+          "name": "Pasta",
+          "slug": "one",
+          "recipeServings": 0,
+          "recipeYieldQuantity": 0,
+          "recipeYield": "",
+          "totalTime": "PT20M",
+          "rating": null,
+          "recipeIngredient": [
+            {
+              "note": "Salt"
+            }
+          ],
+          "lastMade": null,
+          "recipeInstructions": [
+            {
+              "text": "Cook"
+            }
+          ],
+          "nutrition": {
+            "unknown": true
+          },
+          "settings": {
+            "keep": false
+          },
+          "assets": [],
+          "providerExtra": {
+            "preserve": true
+          }
+        },
+        "status": 200
+      }
+    ]
+  },
+  "get_recipe_concise.basic": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes/one",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "r1",
+          "name": "Pasta",
+          "slug": "one",
+          "recipeServings": 0,
+          "recipeYieldQuantity": 0,
+          "recipeYield": "",
+          "totalTime": "PT20M",
+          "rating": null,
+          "recipeIngredient": [
+            {
+              "note": "Salt"
+            }
+          ],
+          "lastMade": null,
+          "recipeInstructions": [
+            {
+              "text": "Cook"
+            }
+          ],
+          "nutrition": {
+            "unknown": true
+          },
+          "settings": {
+            "keep": false
+          },
+          "assets": [],
+          "providerExtra": {
+            "preserve": true
+          }
+        },
+        "status": 200
+      }
+    ]
+  },
+  "get_recipes_batch.basic": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes/one",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "r1",
+          "name": "Pasta",
+          "slug": "one",
+          "recipeServings": 0,
+          "recipeYieldQuantity": 0,
+          "recipeYield": "",
+          "totalTime": "PT20M",
+          "rating": null,
+          "recipeIngredient": [
+            {
+              "note": "Salt"
+            }
+          ],
+          "lastMade": null,
+          "recipeInstructions": [
+            {
+              "text": "Cook"
+            }
+          ],
+          "nutrition": {
+            "unknown": true
+          },
+          "settings": {
+            "keep": false
+          },
+          "assets": [],
+          "providerExtra": {
+            "preserve": true
+          }
+        },
+        "status": 200
+      }
+    ]
+  },
+  "get_recipes_detailed_batch.basic": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes/one",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "r1",
+          "name": "Pasta",
+          "slug": "one",
+          "recipeServings": 0,
+          "recipeYieldQuantity": 0,
+          "recipeYield": "",
+          "totalTime": "PT20M",
+          "rating": null,
+          "recipeIngredient": [
+            {
+              "note": "Salt"
+            }
+          ],
+          "lastMade": null,
+          "recipeInstructions": [
+            {
+              "text": "Cook"
+            }
+          ],
+          "nutrition": {
+            "unknown": true
+          },
+          "settings": {
+            "keep": false
+          },
+          "assets": [],
+          "providerExtra": {
+            "preserve": true
+          }
+        },
+        "status": 200
+      }
+    ]
+  },
+  "create_recipe.basic": {
+    "requests": [
+      {
+        "method": "POST",
+        "path": "/api/recipes",
+        "query": {},
+        "body": {
+          "name": "New"
+        },
+        "response": "created",
+        "status": 200
+      }
+    ]
+  },
+  "duplicate_recipe.basic": {
+    "requests": [
+      {
+        "method": "POST",
+        "path": "/api/recipes/one/duplicate",
+        "query": {},
+        "body": {
+          "name": "Copy"
+        },
+        "response": {
+          "id": "r1",
+          "name": "Copy",
+          "slug": "copy",
+          "recipeServings": 0,
+          "recipeYieldQuantity": 0,
+          "recipeYield": "",
+          "totalTime": "PT20M",
+          "rating": null,
+          "recipeIngredient": [
+            {
+              "note": "Salt"
+            }
+          ],
+          "lastMade": null,
+          "recipeInstructions": [
+            {
+              "text": "Cook"
+            }
+          ],
+          "nutrition": {
+            "unknown": true
+          },
+          "settings": {
+            "keep": false
+          },
+          "assets": [],
+          "providerExtra": {
+            "preserve": true
+          }
+        },
+        "status": 200
+      }
+    ]
+  },
+  "delete_recipe.basic": {
+    "requests": [
+      {
+        "method": "DELETE",
+        "path": "/api/recipes/one",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "r1"
+        },
+        "status": 200
+      }
+    ]
+  },
+  "get_recipes.filters": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/organizers/categories",
+        "query": {
+          "perPage": [
+            "-1"
+          ]
+        },
+        "body": null,
+        "response": {
+          "items": [
+            {
+              "id": "50000000-0000-4000-8000-000000000001",
+              "name": "Dinner",
+              "slug": "dinner"
+            },
+            {
+              "id": "50000000-0000-4000-8000-000000000002",
+              "name": "Dessert",
+              "slug": "dessert"
+            }
+          ]
+        },
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/api/organizers/tags",
+        "query": {
+          "perPage": [
+            "-1"
+          ]
+        },
+        "body": null,
+        "response": {
+          "items": [
+            {
+              "id": "50000000-0000-4000-8000-000000000003",
+              "name": "Quick",
+              "slug": "quick"
+            },
+            {
+              "id": "50000000-0000-4000-8000-000000000004",
+              "name": "Easy",
+              "slug": "easy"
+            }
+          ]
+        },
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/api/recipes",
+        "query": {
+          "search": [
+            "pasta & salt"
+          ],
+          "categories": [
+            "50000000-0000-4000-8000-000000000001",
+            "50000000-0000-4000-8000-000000000002"
+          ],
+          "tags": [
+            "50000000-0000-4000-8000-000000000003",
+            "50000000-0000-4000-8000-000000000004"
+          ],
+          "requireAllTags": [
+            "false"
+          ],
+          "requireAllCategories": [
+            "true"
+          ]
+        },
+        "body": null,
+        "response": {
+          "items": [
+            {
+              "id": "r1",
+              "name": "Pasta",
+              "slug": "one",
+              "recipeServings": 0,
+              "recipeYieldQuantity": 0,
+              "recipeYield": "",
+              "totalTime": "PT20M",
+              "rating": null,
+              "recipeIngredient": [
+                {
+                  "note": "Salt"
+                }
+              ],
+              "lastMade": null,
+              "recipeInstructions": [
+                {
+                  "text": "Cook"
+                }
+              ],
+              "nutrition": {
+                "unknown": true
+              },
+              "settings": {
+                "keep": false
+              },
+              "assets": [],
+              "providerExtra": {
+                "preserve": true
+              }
+            }
+          ],
+          "total": 1
+        },
+        "status": 200
+      }
+    ]
+  },
+  "get_recipes.unresolved": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/organizers/categories",
+        "query": {
+          "perPage": [
+            "-1"
+          ]
+        },
+        "body": null,
+        "response": {
+          "items": [
+            {
+              "id": "50000000-0000-4000-8000-000000000001",
+              "name": "Dinner",
+              "slug": "dinner"
+            },
+            {
+              "id": "50000000-0000-4000-8000-000000000002",
+              "name": "Dessert",
+              "slug": "dessert"
+            }
+          ]
+        },
+        "status": 200
+      }
+    ]
+  },
+  "get_recipes.empty_filters": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes",
+        "query": {},
+        "body": null,
+        "response": {
+          "items": [],
+          "total": 0
+        },
+        "status": 200
+      }
+    ]
+  },
+  "create_recipe.lines": {
+    "requests": [
+      {
+        "method": "POST",
+        "path": "/api/recipes",
+        "query": {},
+        "body": {
+          "name": "New"
+        },
+        "response": "created",
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/api/recipes/created",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "r1",
+          "name": "New",
+          "slug": "created",
+          "recipeServings": 0,
+          "recipeYieldQuantity": 0,
+          "recipeYield": "",
+          "totalTime": "PT20M",
+          "rating": null,
+          "recipeIngredient": [
+            {
+              "note": "Salt"
+            }
+          ],
+          "lastMade": null,
+          "recipeInstructions": [
+            {
+              "text": "Cook"
+            }
+          ],
+          "nutrition": {
+            "unknown": true
+          },
+          "settings": {
+            "keep": false
+          },
+          "assets": [],
+          "providerExtra": {
+            "preserve": true
+          }
+        },
+        "status": 200
+      },
+      {
+        "method": "PUT",
+        "path": "/api/recipes/created",
+        "query": {},
+        "body": {
+          "id": "r1",
+          "name": "New",
+          "slug": "created",
+          "recipeServings": 0,
+          "recipeYieldQuantity": 0,
+          "recipeYield": "",
+          "totalTime": "PT20M",
+          "rating": null,
+          "recipeIngredient": [
+            {
+              "note": "Salt"
+            },
+            {
+              "note": "Water"
+            }
+          ],
+          "lastMade": null,
+          "recipeInstructions": [
+            {
+              "text": "Mix"
+            },
+            {
+              "text": ""
+            }
+          ],
+          "nutrition": {
+            "unknown": true
+          },
+          "settings": {
+            "keep": false
+          },
+          "assets": [],
+          "providerExtra": {
+            "preserve": true
+          }
+        },
+        "response": {
+          "id": "r1",
+          "name": "New",
+          "slug": "created",
+          "recipeServings": 0,
+          "recipeYieldQuantity": 0,
+          "recipeYield": "",
+          "totalTime": "PT20M",
+          "rating": null,
+          "recipeIngredient": [
+            {
+              "note": "Salt"
+            },
+            {
+              "note": "Water"
+            }
+          ],
+          "lastMade": null,
+          "recipeInstructions": [
+            {
+              "text": "Mix"
+            },
+            {
+              "text": ""
+            }
+          ],
+          "nutrition": {
+            "unknown": true
+          },
+          "settings": {
+            "keep": false
+          },
+          "assets": [],
+          "providerExtra": {
+            "preserve": true
+          }
+        },
+        "status": 200
+      }
+    ]
+  },
+  "create_recipe.clear": {
+    "requests": [
+      {
+        "method": "POST",
+        "path": "/api/recipes",
+        "query": {},
+        "body": {
+          "name": "New"
+        },
+        "response": "created",
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/api/recipes/created",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "r1",
+          "name": "New",
+          "slug": "created",
+          "recipeServings": 0,
+          "recipeYieldQuantity": 0,
+          "recipeYield": "",
+          "totalTime": "PT20M",
+          "rating": null,
+          "recipeIngredient": [
+            {
+              "note": "Salt"
+            }
+          ],
+          "lastMade": null,
+          "recipeInstructions": [
+            {
+              "text": "Cook"
+            }
+          ],
+          "nutrition": {
+            "unknown": true
+          },
+          "settings": {
+            "keep": false
+          },
+          "assets": [],
+          "providerExtra": {
+            "preserve": true
+          }
+        },
+        "status": 200
+      },
+      {
+        "method": "PUT",
+        "path": "/api/recipes/created",
+        "query": {},
+        "body": {
+          "id": "r1",
+          "name": "New",
+          "slug": "created",
+          "recipeServings": 0,
+          "recipeYieldQuantity": 0,
+          "recipeYield": "",
+          "totalTime": "PT20M",
+          "rating": null,
+          "recipeIngredient": [],
+          "lastMade": null,
+          "recipeInstructions": [],
+          "nutrition": {
+            "unknown": true
+          },
+          "settings": {
+            "keep": false
+          },
+          "assets": [],
+          "providerExtra": {
+            "preserve": true
+          }
+        },
+        "response": {
+          "id": "r1",
+          "name": "New",
+          "slug": "created",
+          "recipeServings": 0,
+          "recipeYieldQuantity": 0,
+          "recipeYield": "",
+          "totalTime": "PT20M",
+          "rating": null,
+          "recipeIngredient": [],
+          "lastMade": null,
+          "recipeInstructions": [],
+          "nutrition": {
+            "unknown": true
+          },
+          "settings": {
+            "keep": false
+          },
+          "assets": [],
+          "providerExtra": {
+            "preserve": true
+          }
+        },
+        "status": 200
+      }
+    ]
+  },
+  "create_recipe.put_error": {
+    "requests": [
+      {
+        "method": "POST",
+        "path": "/api/recipes",
+        "query": {},
+        "body": {
+          "name": "New"
+        },
+        "response": "created",
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/api/recipes/created",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "r1",
+          "name": "New",
+          "slug": "created",
+          "recipeServings": 0,
+          "recipeYieldQuantity": 0,
+          "recipeYield": "",
+          "totalTime": "PT20M",
+          "rating": null,
+          "recipeIngredient": [
+            {
+              "note": "Salt"
+            }
+          ],
+          "lastMade": null,
+          "recipeInstructions": [
+            {
+              "text": "Cook"
+            }
+          ],
+          "nutrition": {
+            "unknown": true
+          },
+          "settings": {
+            "keep": false
+          },
+          "assets": [],
+          "providerExtra": {
+            "preserve": true
+          }
+        },
+        "status": 200
+      },
+      {
+        "method": "PUT",
+        "path": "/api/recipes/created",
+        "query": {},
+        "body": {
+          "id": "r1",
+          "name": "New",
+          "slug": "created",
+          "recipeServings": 0,
+          "recipeYieldQuantity": 0,
+          "recipeYield": "",
+          "totalTime": "PT20M",
+          "rating": null,
+          "recipeIngredient": [
+            {
+              "note": "Salt"
+            }
+          ],
+          "lastMade": null,
+          "recipeInstructions": [
+            {
+              "text": "Cook"
+            }
+          ],
+          "nutrition": {
+            "unknown": true
+          },
+          "settings": {
+            "keep": false
+          },
+          "assets": [],
+          "providerExtra": {
+            "preserve": true
+          }
+        },
+        "response": {
+          "detail": "private body"
+        },
+        "status": 500
+      }
+    ]
+  },
+  "duplicate_recipe.omitted": {
+    "requests": [
+      {
+        "method": "POST",
+        "path": "/api/recipes/one/duplicate",
+        "query": {},
+        "body": null,
+        "response": {
+          "slug": "copy"
+        },
+        "status": 200
+      }
+    ]
+  },
+  "duplicate_recipe.empty": {
+    "requests": [
+      {
+        "method": "POST",
+        "path": "/api/recipes/one/duplicate",
+        "query": {},
+        "body": null,
+        "response": {
+          "slug": "copy"
+        },
+        "status": 200
+      }
+    ]
+  },
+  "delete_recipe.204": {
+    "requests": [
+      {
+        "method": "DELETE",
+        "path": "/api/recipes/one",
+        "query": {},
+        "body": null,
+        "response": null,
+        "status": 204
+      }
+    ]
+  },
+  "get_recipe_detailed.invalid_slug": {
+    "requests": []
+  },
+  "get_recipes_batch.empty": {
+    "requests": []
+  },
+  "get_recipes_batch.error": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes/broken",
+        "query": {},
+        "body": null,
+        "response": {
+          "detail": "private body"
+        },
+        "status": 404
+      }
+    ]
+  },
+  "get_recipes_detailed_batch.empty": {
+    "requests": []
+  },
+  "get_recipes_detailed_batch.error": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes/broken",
+        "query": {},
+        "body": null,
+        "response": {
+          "detail": "private body"
+        },
+        "status": 404
+      }
+    ]
   }
 }
