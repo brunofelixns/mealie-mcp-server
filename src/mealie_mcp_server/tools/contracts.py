@@ -11,6 +11,7 @@ from fastmcp.tools import Tool, ToolResult
 from jsonschema import Draft202012Validator, FormatChecker
 from jsonschema.exceptions import ValidationError as SchemaValidationError
 from mcp.types import CallToolResult, ToolAnnotations
+from mcp.types import Tool as MCPTool
 from pydantic import BaseModel, PrivateAttr, ValidationError
 
 from mealie_mcp_server.models.common import provided_fields
@@ -77,6 +78,11 @@ class ContractTool(Tool):
         self._input_model = input_model
         self._handler = handler
         self._validator = Draft202012Validator(schema, format_checker=FormatChecker())
+
+    def to_mcp_tool(self, **overrides: Any) -> MCPTool:
+        # Use the public serialization hook to retain the original curated wire metadata.
+        overrides.setdefault("_meta", deepcopy(self.meta))
+        return super().to_mcp_tool(**overrides)
 
     async def run(self, arguments: dict[str, Any]) -> ToolResult:
         try:

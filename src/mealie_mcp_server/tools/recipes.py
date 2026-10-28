@@ -6,6 +6,11 @@ from pydantic import JsonValue
 
 from mealie_mcp_server.mealie.api import recipes as api
 from mealie_mcp_server.models.common import provided_fields
+from mealie_mcp_server.models.inputs.recipe_image import (
+    SetRecipeImageFromFileInput,
+    SetRecipeImageFromUrlInput,
+    SetRecipeImageInput,
+)
 from mealie_mcp_server.models.inputs.recipe_ingredients import (
     UpdateRecipeIngredientsBatchInput,
     UpdateRecipeIngredientsInput,
@@ -38,6 +43,7 @@ from mealie_mcp_server.services import (
     recipe_taxonomy,
 )
 from mealie_mcp_server.services.taxonomy_resolution import resolve_taxonomy_filter
+from mealie_mcp_server.support import recipe_image
 from mealie_mcp_server.tools.contracts import register_contract_tool
 from mealie_mcp_server.tools.helpers import success_result
 from mealie_mcp_server.tools.registry import definitions
@@ -280,4 +286,49 @@ def register_recipe_instructions(server: FastMCP) -> None:
         catalog["update_recipe_instructions_batch"],
         UpdateRecipeInstructionsBatchInput,
         update_recipe_instructions_batch,
+    )
+
+
+async def set_recipe_image(request: SetRecipeImageInput, state: AppState) -> CallToolResult:
+    return success_result(
+        await recipe_image.set_recipe_image(
+            state.client, request.slug, request.image_base64, request.extension
+        )
+    )
+
+
+async def set_recipe_image_from_file(
+    request: SetRecipeImageFromFileInput, state: AppState
+) -> CallToolResult:
+    return success_result(
+        await recipe_image.set_recipe_image_from_file(
+            state.client, request.slug, provided_fields(request.file)
+        )
+    )
+
+
+async def set_recipe_image_from_url(
+    request: SetRecipeImageFromUrlInput, state: AppState
+) -> CallToolResult:
+    return success_result(
+        await api.set_recipe_image_from_url(state.client, request.slug, request.image_url)
+    )
+
+
+def register_recipe_images(server: FastMCP) -> None:
+    catalog = definitions()
+    register_contract_tool(
+        server, catalog["set_recipe_image"], SetRecipeImageInput, set_recipe_image
+    )
+    register_contract_tool(
+        server,
+        catalog["set_recipe_image_from_file"],
+        SetRecipeImageFromFileInput,
+        set_recipe_image_from_file,
+    )
+    register_contract_tool(
+        server,
+        catalog["set_recipe_image_from_url"],
+        SetRecipeImageFromUrlInput,
+        set_recipe_image_from_url,
     )

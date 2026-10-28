@@ -10,7 +10,7 @@
 
 **Spec:** [Diseño completo](../specs/2026-10-27-python-migration-design.md). Leer también [inventario](../../migration/compatibility-inventory.md) e [inventario JSON](../../migration/compatibility-inventory.json).
 
-Fecha: 2026-10-27. Estado: implementación autorizada; P01..P17 verificadas y P18 en curso. Ver implementation-state.json para la evidencia. No se ha publicado ni desplegado un endpoint público.
+Fecha: 2026-10-27. Estado: implementación autorizada; P01..P18 verificadas y P19 en curso. Ver implementation-state.json para la evidencia. No se ha publicado ni desplegado un endpoint público.
 
 ## Global Constraints
 
@@ -495,26 +495,26 @@ uv run pytest tests/unit/test_recipe_instructions.py tests/contracts/test_recipe
 <a id="p18"></a>
 ### P18: Migrar imágenes y el descargador con DNS fijado
 
-**Depende de:** P17. **Estado:** pendiente; ver registro de ejecución.
+**Depende de:** P17. **Estado:** verificada; ver registro de ejecución.
 
 **Archivos:** `src/mealie_mcp_server/support/safe_download.py`, `src/mealie_mcp_server/support/recipe_image.py`, `src/mealie_mcp_server/models/inputs/recipe_image.py`, `src/mealie_mcp_server/tools/recipes.py`, `tests/fixtures/compatibility/cases/recipe_images.json`.
 **Tests:** `tests/unit/test_safe_download.py`, `tests/unit/test_recipe_image.py`, `tests/contracts/test_recipe_images.py`.
 
-**Interfaces:** consume Cliente multipart P05 y recetas P12. Produce PinnedDownloadTransport.fetch(url: str, *, validated_addresses: tuple[str,...], deadline: float) -> AsyncIterator[bytes]; download_bounded(url: str, max_bytes: int, *, timeout_s: float = 30, max_redirects: int = 3) -> bytes; decode_recipe_image(payload: str, extension: str | None = None) -> tuple[bytes,str].
+**Interfaces:** consume Cliente multipart P05 y recetas P12. Produce PinnedDownloadTransport.fetch(url: str, *, validated_addresses: tuple[str,...], deadline: float) -> AsyncContextManager[DownloadResponse]; download_bounded(url: str, max_bytes: int, *, timeout_s: float = 30, max_redirects: int = 3) -> bytes; decode_recipe_image(payload: str, extension: str | None = None) -> tuple[bytes,str].
 
 **Herramientas (3):** `set_recipe_image`, `set_recipe_image_from_file`, `set_recipe_image_from_url`.
 
-- [ ] **1. Añadir las pruebas antes del código funcional.** test_png_jpeg_gif_webp_magic_and_10mib; test_mime_hint_not_authority; test_three_redirects_revalidated; test_30s_includes_dns_and_body; test_mixed_public_private_rejected; test_no_second_dns_and_original_sni_host; test_ipv6_mapped_private; test_public_address_fallback_and_peer_recheck. file contiene download_url/file_id, no ruta local. set_image null borra; image_from_url delega en Mealie.
-- [ ] **2. Ejecutar el subconjunto indicado y observar RED.** El fallo esperado es el comportamiento/handler aún ausente o incorrecto; si falta infraestructura del harness, arreglarla antes de tomar el fallo como evidencia.
-- [ ] **3. Implementar las interfaces de esta tarea y sus fixtures.** Reutilizar los contratos anteriores; preservar los valores del diseño y el inventario. 3 herramientas, _meta openai/fileParams solo para file; suite con transporte inyectable y una prueba de socket real controlado. Si HTTPX2 no permite DNS fijado mediante API pública, usar conector asyncio TLS dedicado y probado; nunca sustituir por precheck DNS + segunda resolución.
+- [x] **1. Añadir las pruebas antes del código funcional.** test_png_jpeg_gif_webp_magic_and_10mib; test_mime_hint_not_authority; test_three_redirects_revalidated; test_30s_includes_dns_and_body; test_mixed_public_private_rejected; test_no_second_dns_and_original_sni_host; test_ipv6_mapped_private; test_public_address_fallback_and_peer_recheck. file contiene download_url/file_id, no ruta local. set_image null borra; image_from_url delega en Mealie.
+- [x] **2. Ejecutar el subconjunto indicado y observar RED.** El fallo esperado es el comportamiento/handler aún ausente o incorrecto; si falta infraestructura del harness, arreglarla antes de tomar el fallo como evidencia.
+- [x] **3. Implementar las interfaces de esta tarea y sus fixtures.** Reutilizar los contratos anteriores; preservar los valores del diseño y el inventario. 3 herramientas, _meta openai/fileParams solo para file; suite con transporte inyectable y una prueba de socket real controlado. Si HTTPX2 no permite DNS fijado mediante API pública, usar el backend público de HTTPCore 2 con AnyIO numérico o un conector asyncio TLS dedicado y probado; nunca sustituir por precheck DNS + segunda resolución.
 
-- [ ] **4. Verificar el resultado de esta tarea.** Ejecutar dentro del Dev Container; salida0 y todas las aserciones indicadas en verde. Para P01 el launcher y el contenedor auxiliar son la excepción de bootstrap explicada arriba.
+- [x] **4. Verificar el resultado de esta tarea.** Ejecutar dentro del Dev Container; salida0 y todas las aserciones indicadas en verde. Para P01 el launcher y el contenedor auxiliar son la excepción de bootstrap explicada arriba.
 
 ```bash
 uv run pytest tests/unit/test_safe_download.py tests/unit/test_recipe_image.py tests/contracts/test_recipe_images.py -q
 ```
 
-- [ ] **5. Revisar, documentar y cerrar.** Comprobar el criterio de salida anterior y el diff; no ampliar la suite sin una nueva causa. Actualizar estado, diferencias si las hay y evidencia con comando/resultado/entorno. Commit de implementación sugerido: `feat: port bounded image downloads and uploads`. Registrar su SHA en un commit documental posterior si hace falta; no intentar incluir el hash de un commit en sí mismo.
+- [x] **5. Revisar, documentar y cerrar.** Comprobar el criterio de salida anterior y el diff; no ampliar la suite sin una nueva causa. Actualizar estado, diferencias si las hay y evidencia con comando/resultado/entorno. Commit de implementación sugerido: `feat: port bounded image downloads and uploads`. Registrar su SHA en un commit documental posterior si hace falta; no intentar incluir el hash de un commit en sí mismo.
 
 <a id="p19"></a>
 ### P19: Migrar valoraciones, favoritos y fechas

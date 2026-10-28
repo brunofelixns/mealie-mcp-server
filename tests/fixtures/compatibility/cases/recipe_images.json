@@ -1,0 +1,333 @@
+[
+  {
+    "tool": "set_recipe_image",
+    "arguments": {
+      "slug": "soup",
+      "imageBase64": "iVBORw0KGgoBAgM="
+    },
+    "scenario": "set_recipe_image.basic",
+    "expected_requests": [
+      {
+        "method": "PUT",
+        "path": "/api/recipes/soup/image",
+        "query": {},
+        "body": {
+          "fields": {
+            "extension": "png"
+          },
+          "files": {
+            "image": {
+              "filename": "image.png",
+              "content_type": "application/octet-stream",
+              "base64": "iVBORw0KGgoBAgM="
+            }
+          }
+        }
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"image\":\"v1\"}"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "set_recipe_image_from_file",
+    "arguments": {
+      "slug": "soup",
+      "file": {
+        "download_url": "http://127.0.0.1/private",
+        "file_id": "f1"
+      }
+    },
+    "scenario": "set_recipe_image_from_file.private_refused",
+    "expected_requests": [],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "download_url points to a private or non-public address and was refused."
+        }
+      ],
+      "isError": true
+    }
+  },
+  {
+    "tool": "set_recipe_image_from_url",
+    "arguments": {
+      "slug": "soup",
+      "imageUrl": "http://private-mealie/image.png"
+    },
+    "scenario": "set_recipe_image_from_url.basic",
+    "expected_requests": [
+      {
+        "method": "POST",
+        "path": "/api/recipes/soup/image",
+        "query": {},
+        "body": {
+          "url": "http://private-mealie/image.png"
+        }
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"image\":\"v1\"}"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "set_recipe_image",
+    "arguments": {
+      "slug": "soup",
+      "imageBase64": "/9j/4AEC"
+    },
+    "scenario": "set_recipe_image.jpg",
+    "expected_requests": [
+      {
+        "method": "PUT",
+        "path": "/api/recipes/soup/image",
+        "query": {},
+        "body": {
+          "fields": {
+            "extension": "jpg"
+          },
+          "files": {
+            "image": {
+              "filename": "image.jpg",
+              "content_type": "application/octet-stream",
+              "base64": "/9j/4AEC"
+            }
+          }
+        }
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"image\":\"v1\"}"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "set_recipe_image",
+    "arguments": {
+      "slug": "soup",
+      "imageBase64": "UklGRgEAAABXRUJQVlA4IA=="
+    },
+    "scenario": "set_recipe_image.webp",
+    "expected_requests": [
+      {
+        "method": "PUT",
+        "path": "/api/recipes/soup/image",
+        "query": {},
+        "body": {
+          "fields": {
+            "extension": "webp"
+          },
+          "files": {
+            "image": {
+              "filename": "image.webp",
+              "content_type": "application/octet-stream",
+              "base64": "UklGRgEAAABXRUJQVlA4IA=="
+            }
+          }
+        }
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"image\":\"v1\"}"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "set_recipe_image",
+    "arguments": {
+      "slug": "soup",
+      "imageBase64": "R0lGODlhLi4uLg=="
+    },
+    "scenario": "set_recipe_image.gif",
+    "expected_requests": [
+      {
+        "method": "PUT",
+        "path": "/api/recipes/soup/image",
+        "query": {},
+        "body": {
+          "fields": {
+            "extension": "gif"
+          },
+          "files": {
+            "image": {
+              "filename": "image.gif",
+              "content_type": "application/octet-stream",
+              "base64": "R0lGODlhLi4uLg=="
+            }
+          }
+        }
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"image\":\"v1\"}"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "set_recipe_image",
+    "arguments": {
+      "slug": "soup",
+      "imageBase64": null
+    },
+    "scenario": "set_recipe_image.delete",
+    "expected_requests": [
+      {
+        "method": "DELETE",
+        "path": "/api/recipes/soup/image",
+        "query": {},
+        "body": null
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"message\":\"deleted\"}"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "set_recipe_image",
+    "arguments": {
+      "slug": "soup",
+      "imageBase64": null
+    },
+    "scenario": "set_recipe_image.delete204",
+    "expected_requests": [
+      {
+        "method": "DELETE",
+        "path": "/api/recipes/soup/image",
+        "query": {},
+        "body": null
+      }
+    ],
+    "expected_result": {
+      "protocolError": "MCPError",
+      "message": "MCP error -32602: Invalid tools/call result: [\n  {\n    \"code\": \"invalid_union\",\n    \"errors\": [\n      [\n        {\n          \"expected\": \"string\",\n          \"code\": \"invalid_type\",\n          \"path\": [\n            \"text\"\n          ],\n          \"message\": \"Invalid input: expected string, received undefined\"\n        }\n      ],\n      [\n        {\n          \"code\": \"invalid_value\",\n          \"values\": [\n            \"image\"\n          ],\n          \"path\": [\n            \"type\"\n          ],\n          \"message\": \"Invalid input: expected \\\"image\\\"\"\n        },\n        {\n          \"expected\": \"string\",\n          \"code\": \"invalid_type\",\n          \"path\": [\n            \"data\"\n          ],\n          \"message\": \"Invalid input: expected string, received undefined\"\n        },\n        {\n          \"expected\": \"string\",\n          \"code\": \"invalid_type\",\n          \"path\": [\n            \"mimeType\"\n          ],\n          \"message\": \"Invalid input: expected string, received undefined\"\n        }\n      ],\n      [\n        {\n          \"code\": \"invalid_value\",\n          \"values\": [\n            \"audio\"\n          ],\n          \"path\": [\n            \"type\"\n          ],\n          \"message\": \"Invalid input: expected \\\"audio\\\"\"\n        },\n        {\n          \"expected\": \"string\",\n          \"code\": \"invalid_type\",\n          \"path\": [\n            \"data\"\n          ],\n          \"message\": \"Invalid input: expected string, received undefined\"\n        },\n        {\n          \"expected\": \"string\",\n          \"code\": \"invalid_type\",\n          \"path\": [\n            \"mimeType\"\n          ],\n          \"message\": \"Invalid input: expected string, received undefined\"\n        }\n      ],\n      [\n        {\n          \"expected\": \"string\",\n          \"code\": \"invalid_type\",\n          \"path\": [\n            \"name\"\n          ],\n          \"message\": \"Invalid input: expected string, received undefined\"\n        },\n        {\n          \"expected\": \"string\",\n          \"code\": \"invalid_type\",\n          \"path\": [\n            \"uri\"\n          ],\n          \"message\": \"Invalid input: expected string, received undefined\"\n        },\n        {\n          \"code\": \"invalid_value\",\n          \"values\": [\n            \"resource_link\"\n          ],\n          \"path\": [\n            \"type\"\n          ],\n          \"message\": \"Invalid input: expected \\\"resource_link\\\"\"\n        }\n      ],\n      [\n        {\n          \"code\": \"invalid_value\",\n          \"values\": [\n            \"resource\"\n          ],\n          \"path\": [\n            \"type\"\n          ],\n          \"message\": \"Invalid input: expected \\\"resource\\\"\"\n        },\n        {\n          \"code\": \"invalid_union\",\n          \"errors\": [\n            [\n              {\n                \"expected\": \"object\",\n                \"code\": \"invalid_type\",\n                \"path\": [],\n                \"message\": \"Invalid input: expected object, received undefined\"\n              }\n            ],\n            [\n              {\n                \"expected\": \"object\",\n                \"code\": \"invalid_type\",\n                \"path\": [],\n                \"message\": \"Invalid input: expected object, received undefined\"\n              }\n            ]\n          ],\n          \"path\": [\n            \"resource\"\n          ],\n          \"message\": \"Invalid input\"\n        }\n      ]\n    ],\n    \"path\": [\n      \"content\",\n      0\n    ],\n    \"message\": \"Invalid input\"\n  }\n]"
+    },
+    "documented_difference": "D07",
+    "expected_python_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "null"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "set_recipe_image",
+    "arguments": {
+      "slug": "soup",
+      "imageBase64": "invalid!!"
+    },
+    "scenario": "set_recipe_image.invalid_base64",
+    "expected_requests": [],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "imageBase64 is not valid base64-encoded data."
+        }
+      ],
+      "isError": true
+    }
+  },
+  {
+    "tool": "set_recipe_image",
+    "arguments": {
+      "slug": "soup",
+      "imageBase64": "A"
+    },
+    "scenario": "set_recipe_image.decoded_empty",
+    "expected_requests": [],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "imageBase64 decoded to an empty image."
+        }
+      ],
+      "isError": true
+    }
+  },
+  {
+    "tool": "set_recipe_image",
+    "arguments": {
+      "slug": "soup",
+      "imageBase64": "iVBORw0KGgoBAgM=",
+      "extension": "jpg"
+    },
+    "scenario": "set_recipe_image.extension_mismatch",
+    "expected_requests": [],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "extension \"jpg\" does not match the image data, which is png."
+        }
+      ],
+      "isError": true
+    }
+  },
+  {
+    "tool": "set_recipe_image",
+    "arguments": {
+      "slug": "soup",
+      "imageBase64": "data:image/jpeg;base64,\n_9j_4AEC",
+      "extension": ".JPEG"
+    },
+    "scenario": "set_recipe_image.data_uri",
+    "expected_requests": [
+      {
+        "method": "PUT",
+        "path": "/api/recipes/soup/image",
+        "query": {},
+        "body": {
+          "fields": {
+            "extension": "jpg"
+          },
+          "files": {
+            "image": {
+              "filename": "image.jpg",
+              "content_type": "application/octet-stream",
+              "base64": "/9j/4AEC"
+            }
+          }
+        }
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"image\":\"v1\"}"
+        }
+      ]
+    }
+  }
+]

@@ -78,3 +78,9 @@ async def patch_recipe(client: MealieClient, slug: str, data: JsonObject) -> Jso
             "PATCH", "/api/recipes/" + encode_path_segment(slug, "slug"), json=data
         )
     )
+
+
+async def set_recipe_image_from_url(client: MealieClient, slug: str, url: str) -> JsonValue:
+    return await client.request(
+        "POST", "/api/recipes/" + encode_path_segment(slug, "slug") + "/image", json={"url": url}
+    )

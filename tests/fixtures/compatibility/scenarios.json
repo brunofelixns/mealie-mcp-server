@@ -13841,5 +13841,184 @@
         "status": 200
       }
     ]
+  },
+  "set_recipe_image.basic": {
+    "requests": [
+      {
+        "method": "PUT",
+        "path": "/api/recipes/soup/image",
+        "query": {},
+        "body": {
+          "fields": {
+            "extension": "png"
+          },
+          "files": {
+            "image": {
+              "filename": "image.png",
+              "content_type": "application/octet-stream",
+              "base64": "iVBORw0KGgoBAgM="
+            }
+          }
+        },
+        "status": 200,
+        "response": {
+          "image": "v1"
+        }
+      }
+    ]
+  },
+  "set_recipe_image_from_file.private_refused": {
+    "requests": []
+  },
+  "set_recipe_image_from_url.basic": {
+    "requests": [
+      {
+        "method": "POST",
+        "path": "/api/recipes/soup/image",
+        "query": {},
+        "body": {
+          "url": "http://private-mealie/image.png"
+        },
+        "status": 200,
+        "response": {
+          "image": "v1"
+        }
+      }
+    ]
+  },
+  "set_recipe_image.jpg": {
+    "requests": [
+      {
+        "method": "PUT",
+        "path": "/api/recipes/soup/image",
+        "query": {},
+        "body": {
+          "fields": {
+            "extension": "jpg"
+          },
+          "files": {
+            "image": {
+              "filename": "image.jpg",
+              "content_type": "application/octet-stream",
+              "base64": "/9j/4AEC"
+            }
+          }
+        },
+        "status": 200,
+        "response": {
+          "image": "v1"
+        }
+      }
+    ]
+  },
+  "set_recipe_image.webp": {
+    "requests": [
+      {
+        "method": "PUT",
+        "path": "/api/recipes/soup/image",
+        "query": {},
+        "body": {
+          "fields": {
+            "extension": "webp"
+          },
+          "files": {
+            "image": {
+              "filename": "image.webp",
+              "content_type": "application/octet-stream",
+              "base64": "UklGRgEAAABXRUJQVlA4IA=="
+            }
+          }
+        },
+        "status": 200,
+        "response": {
+          "image": "v1"
+        }
+      }
+    ]
+  },
+  "set_recipe_image.gif": {
+    "requests": [
+      {
+        "method": "PUT",
+        "path": "/api/recipes/soup/image",
+        "query": {},
+        "body": {
+          "fields": {
+            "extension": "gif"
+          },
+          "files": {
+            "image": {
+              "filename": "image.gif",
+              "content_type": "application/octet-stream",
+              "base64": "R0lGODlhLi4uLg=="
+            }
+          }
+        },
+        "status": 200,
+        "response": {
+          "image": "v1"
+        }
+      }
+    ]
+  },
+  "set_recipe_image.delete": {
+    "requests": [
+      {
+        "method": "DELETE",
+        "path": "/api/recipes/soup/image",
+        "query": {},
+        "body": null,
+        "status": 200,
+        "response": {
+          "message": "deleted"
+        }
+      }
+    ]
+  },
+  "set_recipe_image.delete204": {
+    "requests": [
+      {
+        "method": "DELETE",
+        "path": "/api/recipes/soup/image",
+        "query": {},
+        "body": null,
+        "status": 204,
+        "response": null
+      }
+    ]
+  },
+  "set_recipe_image.invalid_base64": {
+    "requests": []
+  },
+  "set_recipe_image.decoded_empty": {
+    "requests": []
+  },
+  "set_recipe_image.extension_mismatch": {
+    "requests": []
+  },
+  "set_recipe_image.data_uri": {
+    "requests": [
+      {
+        "method": "PUT",
+        "path": "/api/recipes/soup/image",
+        "query": {},
+        "body": {
+          "fields": {
+            "extension": "jpg"
+          },
+          "files": {
+            "image": {
+              "filename": "image.jpg",
+              "content_type": "application/octet-stream",
+              "base64": "/9j/4AEC"
+            }
+          }
+        },
+        "status": 200,
+        "response": {
+          "image": "v1"
+        }
+      }
+    ]
   }
 }

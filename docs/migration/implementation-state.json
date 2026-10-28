@@ -608,7 +608,7 @@
           "tests": 608
         }
       ],
-      "commit": null
+      "commit": "6fbdc26eb52605f79392a9ddade7b10248d292c9"
     },
     {
       "id": "P18",
@@ -616,7 +616,7 @@
       "dependsOn": [
         "P17"
       ],
-      "status": "in_progress",
+      "status": "verified",
       "tools": [
         "set_recipe_image",
         "set_recipe_image_from_file",
@@ -627,14 +627,27 @@
         "src/mealie_mcp_server/support/recipe_image.py",
         "src/mealie_mcp_server/models/inputs/recipe_image.py",
         "src/mealie_mcp_server/tools/recipes.py",
-        "tests/fixtures/compatibility/cases/recipe_images.json"
+        "tests/fixtures/compatibility/cases/recipe_images.json",
+        "src/mealie_mcp_server/tools/contracts.py",
+        "src/mealie_mcp_server/tools/registry.py",
+        "src/mealie_mcp_server/mealie/api/recipes.py",
+        "tests/support/fake_mealie.py",
+        "pyproject.toml",
+        "uv.lock"
       ],
       "tests": [
         "tests/unit/test_safe_download.py",
         "tests/unit/test_recipe_image.py",
-        "tests/contracts/test_recipe_images.py"
+        "tests/contracts/test_recipe_images.py",
+        "tests/unit/test_binary_fixtures.py"
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "report": "docs/migration/evidence/P18.md",
+          "result": "passed",
+          "tests": 693
+        }
+      ],
       "commit": null
     },
     {
@@ -643,7 +656,7 @@
       "dependsOn": [
         "P18"
       ],
-      "status": "not_started",
+      "status": "in_progress",
       "tools": [
         "set_recipe_rating",
         "mark_recipe_last_made"

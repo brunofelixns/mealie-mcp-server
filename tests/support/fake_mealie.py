@@ -1,7 +1,10 @@
 """Strict HTTP fixture server for upstream and Python contract comparisons."""
 
+import base64
 import json
 import threading
+from email.parser import BytesParser
+from email.policy import default
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from types import TracebackType
@@ -31,7 +34,28 @@ class FakeMealie:
             def handle_request(self) -> None:
                 url = urlsplit(self.path)
                 length = int(self.headers.get("Content-Length", "0"))
-                body = json.loads(self.rfile.read(length)) if length else None
+                raw = self.rfile.read(length) if length else b""
+                content_type = self.headers.get("Content-Type", "")
+                if content_type.startswith("multipart/form-data"):
+                    message = BytesParser(policy=default).parsebytes(
+                        b"Content-Type: " + content_type.encode("ascii") + b"\r\n\r\n" + raw
+                    )
+                    fields, uploads = {}, {}
+                    for part in message.iter_parts():
+                        name = part.get_param("name", header="Content-Disposition")
+                        data = part.get_payload(decode=True)
+                        filename = part.get_filename()
+                        if filename is None:
+                            fields[name] = data.decode("utf-8")
+                        else:
+                            uploads[name] = {
+                                "filename": filename,
+                                "content_type": part.get_content_type(),
+                                "base64": base64.b64encode(data).decode("ascii"),
+                            }
+                    body = {"fields": fields, "files": uploads}
+                else:
+                    body = json.loads(raw) if raw else None
                 received = {
                     "method": self.command,
                     "path": url.path,

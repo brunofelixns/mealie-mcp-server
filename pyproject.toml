@@ -14,6 +14,7 @@ dependencies = [
   "fastmcp==4.1.4",
   "mcp==2.3.0",
   "httpx2>=2.10.0,<3",
+  "httpcore2>=2.16,<3",
   "pydantic>=2.12,<3",
   "pydantic-settings>=2,<3",
   "jsonschema>=4.25,<5",
@@ -22,6 +23,7 @@ dependencies = [
 
 [dependency-groups]
 dev = [
+  "cryptography>=50,<51",
   "mypy>=1.18,<2",
   "pytest>=8.4,<10",
   "pytest-asyncio>=1.2,<2",
