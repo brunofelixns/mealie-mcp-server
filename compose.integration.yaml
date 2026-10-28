@@ -1,0 +1,30 @@
+name: mealie-mcp-integration
+services:
+  mealie:
+    image: ghcr.io/mealie-recipes/mealie:v3.29.0@sha256:78eb28b8776d0bad40c5e605c72b3f4f5976793e491558c7dcbdfc04c835d4bc
+    init: true
+    environment:
+      ALLOW_SIGNUP: "false"
+      TZ: UTC
+      BASE_URL: http://mealie:9000
+      HOST_IP: ""
+      LOG_LEVEL: warning
+    volumes:
+      - integration-data:/app/data
+  tests:
+    build:
+      context: .
+      target: integration-tests
+    depends_on:
+      mealie:
+        condition: service_healthy
+    environment:
+      MEALIE_LIVE_URL: http://mealie:9000
+      MEALIE_LIVE_ALLOW_WRITES: disposable-only
+    command: [uv, run, pytest, tests/integration/test_mealie_roundtrip.py, -m, live, -q]
+networks:
+  default:
+    external: true
+    name: mealie-mcp-development_default
+volumes:
+  integration-data:

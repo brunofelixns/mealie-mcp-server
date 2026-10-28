@@ -35,7 +35,7 @@ Se limitan las peticiones a 32 MiB, tanto con Content-Length como con transferen
 
 Una respuesta SSE también puede superar 1 MiB. El cliente oficial permite `streamable_http_client(..., max_sse_event_size=32 * 1024 * 1024)`; ajustar su límite si se consultan recetas grandes. No se añaden un endpoint SSE antiguo, tareas MCP ni reintentos automáticos de escrituras.
 
-Las escrituras verificadas de ingredientes e instrucciones finalizan su comprobación/restauración tras cancelación, con cleanup acotado a 35 segundos. El pool reserva hasta cinco segundos para cerrarse; Uvicorn espera hasta 40 segundos y Compose concede 45 segundos. Un kill forzado o una caída del host puede dejar el resultado remoto sin confirmar: consultar Mealie antes de repetir una escritura. El servidor no incorpora un registro duradero de recuperación.
+Las escrituras verificadas de ingredientes e instrucciones finalizan su comprobación/restauración tras cancelación, con cleanup acotado a 35 segundos. Uvicorn concede tres segundos de drenaje antes de cancelar solicitudes pendientes; después quedan hasta35 segundos para la mutación y cinco para cerrar el pool. Ese presupuesto suma43 segundos, por debajo de los45 de Compose. Un kill forzado o una caída del host puede dejar el resultado remoto sin confirmar: consultar Mealie antes de repetir una escritura. El servidor no incorpora un registro duradero de recuperación.
 
 En HTTP, Uvicorn vuelve a emitir la señal recibida después de cerrar el lifespan: SIGTERM produce salida 143 en Docker (-15 en subprocess). Esa salida es compatible con un cierre limpio; los tests comprueban también el cierre del cliente. En stdio las señales transformadas en EOF salen con código cero.
 

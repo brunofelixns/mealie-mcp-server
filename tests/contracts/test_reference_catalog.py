@@ -5,6 +5,10 @@ import subprocess
 import sys
 from pathlib import Path
 
+import pytest
+
+pytestmark = pytest.mark.reference
+
 
 def test_reference_catalog(tmp_path: Path) -> None:
     repository = Path(__file__).resolve().parents[2]

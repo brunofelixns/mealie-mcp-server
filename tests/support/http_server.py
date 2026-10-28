@@ -19,7 +19,7 @@ async def serve_http(app):
             port=port,
             log_level="critical",
             access_log=False,
-            timeout_graceful_shutdown=40,
+            timeout_graceful_shutdown=3,
             proxy_headers=False,
         )
     )

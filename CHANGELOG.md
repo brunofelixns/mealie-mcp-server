@@ -1,3 +1,10 @@
+# Unreleased — migración Python
+
+- Migra las78 herramientas y weekly-meal-plan a Python3.14/FastMCP; conserva el contrato de negocio upstream fijado.
+- Añade stdio y Streamable HTTP con Bearer personal independiente, cierre controlado y límites de payload documentados.
+- Incorpora Dev Container, wheel, runtime OCI amd64/arm64, pruebas de compatibilidad e integración Mealie desechable.
+- Sustituye el producto y CI Node por Python; conserva la referencia Node solo como auditoría opcional. Consultar docs/migration/differences.md y docs/migration/acceptance.md antes de publicar una nueva versión.
+
 # [2.1.0](https://github.com/timo-reymann/mealie-mcp-server/compare/v2.0.0...v2.1.0) (2026-10-25)
 
 

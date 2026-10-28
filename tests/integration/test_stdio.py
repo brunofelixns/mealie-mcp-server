@@ -3,6 +3,7 @@ import base64
 import json
 import os
 import sys
+import threading
 
 import pytest
 from fastmcp import Client as FastMCPClient
@@ -10,6 +11,7 @@ from fastmcp.client.transports import StdioTransport
 from mcp import Client
 from mcp.client.stdio import StdioServerParameters
 
+from tests.support.contracts import FIXTURES, load_cases
 from tests.support.fake_mealie import FakeMealie
 
 
@@ -171,3 +173,82 @@ async def test_stdout_is_only_jsonrpc_and_shutdown_closes_live_pool(shutdown):
                 await process.wait()
             if not stderr.done():
                 await stderr
+
+
+@pytest.mark.parametrize("shutdown", ["eof", "sigterm"])
+async def test_stdio_shutdown_finishes_an_issued_write_and_rollback(shutdown):
+    case = next(
+        case for case in load_cases("recipe_ingredients") if case.scenario.endswith(".rollback")
+    )
+    fixture_data = json.loads(await asyncio.to_thread((FIXTURES / "scenarios.json").read_text))
+    requests = fixture_data[case.scenario]["requests"]
+    entered, release = threading.Event(), threading.Event()
+    first_patch = next(request for request in requests if request["method"] == "PATCH")
+    first_patch.update(response_entered=entered, response_gate=release)
+    with FakeMealie(requests) as fake:
+        process = await asyncio.create_subprocess_exec(
+            sys.executable,
+            "-m",
+            "mealie_mcp_server",
+            stdin=asyncio.subprocess.PIPE,
+            stdout=asyncio.subprocess.PIPE,
+            stderr=asyncio.subprocess.PIPE,
+            env=environment(fake, MEALIE_MCP_DEBUG="true"),
+        )
+        diagnostics = asyncio.create_task(process.stderr.read())
+
+        async def send(message):
+            process.stdin.write(json.dumps(message).encode() + b"\n")
+            await process.stdin.drain()
+
+        try:
+            await send(
+                {
+                    "jsonrpc": "2.0",
+                    "id": 1,
+                    "method": "initialize",
+                    "params": {
+                        "protocolVersion": "2025-11-25",
+                        "capabilities": {},
+                        "clientInfo": {"name": "shutdown-write-test", "version": "1"},
+                    },
+                }
+            )
+            async with asyncio.timeout(20):
+                while True:
+                    frame = json.loads(await process.stdout.readline())
+                    assert frame["jsonrpc"] == "2.0"
+                    if frame.get("id") == 1:
+                        break
+            await send({"jsonrpc": "2.0", "method": "notifications/initialized"})
+            await send(
+                {
+                    "jsonrpc": "2.0",
+                    "id": 2,
+                    "method": "tools/call",
+                    "params": {"name": case.tool, "arguments": case.arguments},
+                }
+            )
+            assert await asyncio.to_thread(entered.wait, 10)
+            if shutdown == "eof":
+                process.stdin.close()
+            else:
+                process.terminate()
+            await asyncio.sleep(0.05)
+            release.set()
+            await asyncio.wait_for(process.wait(), 15)
+            assert process.returncode == 0
+            assert [request["method"] for request in fake.recorded_requests] == [
+                "GET",
+                "PATCH",
+                "PATCH",
+            ]
+            for line in (await process.stdout.read()).splitlines():
+                assert json.loads(line)["jsonrpc"] == "2.0"
+            assert "Mealie client closed" in (await diagnostics).decode()
+        finally:
+            release.set()
+            if process.returncode is None:
+                process.kill()
+                await process.wait()
+            await diagnostics

@@ -92,6 +92,13 @@ class FakeMealie:
                     else:
                         owner.pending.remove(match)
                         status, response = match.get("status", 200), match.get("response")
+                if match is not None:
+                    entered = match.get("response_entered")
+                    gate = match.get("response_gate")
+                    if entered is not None:
+                        entered.set()
+                    if gate is not None and not gate.wait(timeout=10):
+                        status, response = 500, {"detail": "Fixture response gate timed out"}
                 payload = json.dumps(response).encode() if status != 204 else b""
                 self.send_response(status)
                 self.send_header("Content-Type", "application/json")

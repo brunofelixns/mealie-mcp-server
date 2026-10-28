@@ -91,3 +91,9 @@ Ruling: conservar el informe completo Debian12 y permitir solo cero secretos/cer
 Ruling: Compose de producción con secrets de archivo se lanza desde el host del daemon — sus bind mounts no resuelven paths internos /workspaces del Dev Container — no requiere Python en el host; los tests desde el Dev Container utilizan copias API y redes Docker.
 
 Task P23: complete — suite841/841, Ruff/mypy passed; evidencia evidence/P23.md. P24 en curso.
+
+P24: suite929/929,3 deseleccionados, cobertura95,982974% líneas/87,472284% ramas; checker sobre JUnit real confirma78 positivos+78 rechazos. Integración Mealie3.29.0 desechable pasa directa y por Compose; retiro TS y documentación implementados. Build final/revisión aún pendientes.
+
+Ruling: reducir el drenaje Uvicorn a3s —40+35 de recuperación+5 de pool superaban stop_grace_period45 — requests largas reciben cancelación durante parada; las mutaciones emitidas conservan su limpieza protegida de35s y el presupuesto total es43s.
+
+Ruling: registrar la conformidad externa como limitada, sin quitar Bearer — el runner npm0.1.16 no admite cabeceras y server-initialize recibe401; tampoco ofrece2026-07-28 — no se afirma certificación externa ni compatibilidad universal; SDK oficial/FastMCP de ambas eras tienen pruebas propias.

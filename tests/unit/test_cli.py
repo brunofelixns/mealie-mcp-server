@@ -73,3 +73,33 @@ def test_invalid_configuration_exits_nonzero_with_safe_stderr(environment):
         "key-must-not-print" not in result.stderr and "secret-must-not-print" not in result.stderr
     )
     assert "Traceback" not in result.stderr
+
+
+async def test_http_shutdown_reserves_time_for_mutation_cleanup_and_pool_close(monkeypatch):
+    import uvicorn
+
+    from mealie_mcp_server.cli import _serve_http
+    from mealie_mcp_server.config import load_settings
+
+    observed = []
+
+    class ProbeServer:
+        def __init__(self, config):
+            observed.append(config.timeout_graceful_shutdown)
+
+        async def serve(self):
+            pass
+
+    monkeypatch.setattr(uvicorn, "Server", ProbeServer)
+    settings = load_settings(
+        {
+            "MEALIE_BASE_URL": "http://mealie.test",
+            "MEALIE_API_KEY": "fixture",
+            "MCP_TRANSPORT": "http",
+            "MCP_AUTH_TOKEN": "fixture-personal-" + "x" * 40,
+        }
+    )
+    await _serve_http(settings)
+    # The design reserves 35s for a cancelled mutation and 5s for pool cleanup.
+    # Docker's 45s stop budget must leave headroom beyond all three stages.
+    assert observed[0] + 35 + 5 < 45

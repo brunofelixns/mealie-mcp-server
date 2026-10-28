@@ -18,6 +18,7 @@ from pydantic import JsonValue
 from mealie_mcp_server.config import Settings
 from mealie_mcp_server.mealie.errors import MealieApiError, MealieTransportError
 from mealie_mcp_server.models.common import UNSET, UnsetType
+from mealie_mcp_server.support.strings import trim
 
 type ParamScalar = str | int | float | bool
 type ParamValue = ParamScalar | list[str] | None | UnsetType
@@ -25,7 +26,7 @@ logger = logging.getLogger(__name__)
 
 
 def encode_path_segment(value: str, label: str = "path segment") -> str:
-    trimmed = value.strip() if isinstance(value, str) else ""
+    trimmed = trim(value) if isinstance(value, str) else ""
     if not trimmed or trimmed in {".", ".."} or "/" in trimmed or "\\" in trimmed:
         raise ValueError(f"Invalid {label}.")
     return quote(trimmed, safe="~!*'()")

@@ -19,7 +19,7 @@ Las bases Python3.14 y uv están fijadas por digest en Dockerfile; uv.lock fija 
 
 ## Configuración y secretos
 
-Copiar .env.example a una configuración privada e indicar MEALIE_BASE_URL. Crear dos archivos UTF-8 fuera de Git: secrets/mealie_api_key y secrets/mcp_auth_token. El primero contiene una API key Mealie; el segundo, un valor aleatorio independiente de al menos32 caracteres visibles. No introducir secretos en build args, imágenes o comandos versionados. En Linux el proceso10001 debe poder leer cada archivo: por ejemplo, directorio privado0700 y archivos0444. Revisar los permisos efectivos del montaje; los secrets de archivo de Compose utilizan bind mounts.
+Copiar .env.example a .env para interpolación de Compose, o indicar otro archivo con --env-file, y configurar MEALIE_BASE_URL. El proceso Python no carga dotenv. Crear dos archivos UTF-8 fuera de Git: secrets/mealie_api_key y secrets/mcp_auth_token. El primero contiene una API key Mealie; el segundo, un valor aleatorio independiente de al menos32 caracteres visibles. No introducir secretos en build args, imágenes o comandos versionados. En Linux el proceso10001 debe poder leer cada archivo: por ejemplo, directorio privado0700 y archivos0444. Revisar los permisos efectivos del montaje; los secrets de archivo de Compose utilizan bind mounts.
 
 Generar un token dentro del Dev Container, escribiéndolo directamente al archivo:
 

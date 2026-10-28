@@ -23,27 +23,36 @@ WORKDIR /workspaces/mealie-mcp-server
 USER vscode
 CMD ["sleep", "infinity"]
 
+FROM development AS integration-tests
+USER root
+RUN chown vscode:vscode /workspaces/mealie-mcp-server
+USER vscode
+ARG TARGETARCH
+COPY --chown=vscode:vscode pyproject.toml uv.lock ./
+RUN --mount=type=cache,target=/home/vscode/.cache/uv,id=uv-integration-${TARGETARCH},uid=1000,gid=1000 uv sync --frozen --group dev --no-install-project
+COPY --chown=vscode:vscode README.md LICENSE ./
+COPY --chown=vscode:vscode src/mealie_mcp_server ./src/mealie_mcp_server
+COPY --chown=vscode:vscode tests/__init__.py ./tests/__init__.py
+COPY --chown=vscode:vscode tests/integration/test_mealie_roundtrip.py ./tests/integration/test_mealie_roundtrip.py
+RUN --mount=type=cache,target=/home/vscode/.cache/uv,id=uv-integration-${TARGETARCH},uid=1000,gid=1000 uv sync --frozen --group dev
+CMD ["uv", "run", "pytest", "tests/integration/test_mealie_roundtrip.py", "-q"]
+
 FROM base AS builder
 RUN apt-get update \
     && apt-get install --yes --no-install-recommends g++ pkg-config libicu-dev \
     && rm -rf /var/lib/apt/lists/*
 ENV UV_PROJECT_ENVIRONMENT=/opt/venv UV_COMPILE_BYTECODE=1
 WORKDIR /build
-COPY pyproject.toml uv.lock README.md LICENSE ./
-RUN uv sync --frozen --no-dev --no-install-project
+ARG TARGETARCH
+COPY pyproject.toml uv.lock ./
+RUN --mount=type=cache,target=/root/.cache/uv,id=uv-runtime-${TARGETARCH} uv sync --frozen --no-dev --no-install-project
+COPY README.md LICENSE ./
 COPY src/mealie_mcp_server ./src/mealie_mcp_server
 RUN uv build --wheel --out-dir /dist \
     && uv pip install --python /opt/venv/bin/python --no-deps /dist/*.whl \
     && uv pip check --python /opt/venv/bin/python
 
 FROM ${PYTHON_IMAGE} AS runtime
-ARG VCS_REF=unknown
-LABEL org.opencontainers.image.title="Mealie MCP server" \
-      org.opencontainers.image.description="Python MCP server for Mealie: stdio and authenticated Streamable HTTP" \
-      org.opencontainers.image.version="2.1.0" \
-      org.opencontainers.image.licenses="MIT" \
-      org.opencontainers.image.source="https://github.com/timo-reymann/mealie-mcp-server" \
-      org.opencontainers.image.revision="${VCS_REF}"
 RUN apt-get update \
     && apt-get install --yes --no-install-recommends ca-certificates tzdata libicu72 \
     && rm -rf /var/lib/apt/lists/* \
@@ -60,3 +69,10 @@ EXPOSE 8000
 HEALTHCHECK NONE
 ENTRYPOINT ["/opt/venv/bin/mealie-mcp-server"]
 CMD []
+ARG VCS_REF=unknown
+LABEL org.opencontainers.image.title="Mealie MCP server" \
+      org.opencontainers.image.description="Python MCP server for Mealie: stdio and authenticated Streamable HTTP" \
+      org.opencontainers.image.version="2.1.0" \
+      org.opencontainers.image.licenses="MIT" \
+      org.opencontainers.image.source="https://github.com/timo-reymann/mealie-mcp-server" \
+      org.opencontainers.image.revision="${VCS_REF}"

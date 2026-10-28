@@ -1,23 +1,53 @@
 # Desarrollo en Dev Container
 
-El proyecto usa Docker Desktop en modo Linux y Dev Containers de VS Code. Abrir esta carpeta y ejecutar **Dev Containers: Reopen in Container**.
+Abrir el repositorio con **Dev Containers: Reopen in Container**. Docker Desktop debe usar contenedores Linux. Python, uv, los tests y los builds se ejecutan dentro del Dev Container; el host sirve como editor y launcher de Docker.
 
-El target development incluye Python3.14 y uv fijados por digest. El usuario remoto es vscode (no root); .venv y caché uv usan volúmenes Linux. Docker CLI comparte el daemon del host mediante la feature docker-outside-of-docker. No hay daemon anidado ni secrets incorporados a la imagen.
+El target development fija Python3.14 y uv por digest, usa el usuario vscode y guarda .venv y la caché de uv en volúmenes Linux. postCreateCommand ejecuta `uv sync --frozen --group dev`; no regenera el lock. En hosts Linux, updateRemoteUserUID alinea el usuario con el propietario del checkout. La feature docker-outside-of-docker comparte el daemon del host. Los bind mounts de contenedores hermanos se resuelven en ese host: no asumir que conoce /workspaces.
 
-ICU reproduce la ordenación por nombres de la referencia Node. Development incluye libicu-dev, pkg-config y g++ para construir PyICU; el runtime solo necesita libicu72. El lock fija PyICU2.17. Reabrir/reconstruir el Dev Container después de cambiar Dockerfile.
+PyICU2.17 e ICU72.1 reproducen la ordenación de la referencia. Development incluye libicu-dev, pkg-config y g++; runtime solo necesita libicu72. Reconstruir el Dev Container si cambia Dockerfile. El puerto8000 se reenvía como privado; el servidor arranca mediante el CLI descrito en [clientes](clients.md).
 
-En el primer arranque, sin uv.lock, solo se prepara el entorno. P02 crea el lock dentro del contenedor; los arranques posteriores ejecutan uv sync --frozen --group dev.
+## Comprobaciones
 
-Comprobaciones en el terminal del contenedor:
+Desde el terminal del contenedor:
 
 ```bash
-python --version
-id -u
-uv --version
-docker version
-docker compose -f .devcontainer/compose.yaml config
+uv sync --frozen --group dev
+uv run ruff check .
+uv run ruff format --check .
+uv run mypy src
+uv run python scripts/generate_docs.py --check
+uv run pytest -q --cov=mealie_mcp_server --cov-branch --cov-report=json:artifacts/coverage.json --cov-report=xml:artifacts/coverage.xml --junitxml=artifacts/pytest.xml
+uv run python scripts/check_compatibility.py --require-all --coverage-json artifacts/coverage.json --junit-xml artifacts/pytest.xml
+uv build
 ```
 
-El puerto8000 se reenvía como privado; todavía no hay un servidor HTTP implementado en P01. No se arranca Mealie ni se requiere una API key para preparar el entorno.
+Construir primero la imagen runtime como indica [contenedores](containers.md): la suite incluye pruebas reales de esa imagen. Los umbrales se comprueban independientemente: líneas >=90% y ramas >=85%. coverage activa la medición de los subprocess Python para observar el CLI real; la imagen de producción no incorpora coverage. El JUnit demuestra la ejecución de casos positivos y rechazos para las78 herramientas; un índice de fixtures por sí solo no demuestra que pasaron.
+
+`uv run python scripts/generate_docs.py` regenera docs/tools.md, docs/api-coverage.md, el índice API_COVERAGE.md y únicamente la sección delimitada de herramientas en README.md. Conserva el texto manual y escribe mediante reemplazo atómico. `--check` falla ante diferencias, incluidos cambios de esquema.
+
+## Integración real desechable
+
+Con la red del Dev Container disponible:
+
+```bash
+docker compose -f compose.integration.yaml up --build --abort-on-container-exit --exit-code-from tests
+integration_container=$(docker compose -f compose.integration.yaml ps --all --quiet tests)
+docker cp "$integration_container:/workspaces/mealie-mcp-server/artifacts/P24-live-summary.json" artifacts/mealie-live-summary.json
+docker compose -f compose.integration.yaml down --volumes
+```
+
+Este proyecto Compose fija Mealie3.29.0 por digest, crea su volumen exclusivo y no publica puertos. El test exige `MEALIE_LIVE_ALLOW_WRITES=disposable-only`, inicia sesión con la cuenta inicial de esa instancia y crea datos sintéticos. Nunca apuntarlo a una instancia personal o productiva. Comprueba recetas, ingredientes/instrucciones y referencias, taxonomía, imagen, valoración/favorito, última preparación, planificación y compra. La limpieza `down --volumes` pertenece solo a mealie-mcp-integration; no borra la red externa del Dev Container.
+
+## Auditoría opcional de la referencia
+
+```bash
+docker compose -f tests/reference/compose.yaml build
+docker compose -f tests/reference/compose.yaml run --rm reference
+uv run pytest tests/contracts/test_reference_catalog.py -m reference -q
+```
+
+Node queda aislado en ese runner de auditoría fijado al commit upstream, fuera del producto, su instalación y el CI ordinario. Las capturas declarativas, su procedencia y la licencia se conservan. El caso positivo de imagen por archivo usa un downloader Python inyectado; no se presenta como captura positiva original.
+
+Para cambios funcionales, añadir primero una prueba de comportamiento, preservar el contrato de src/mealie_mcp_server/resources/tool-catalog.json y registrar diferencias intencionadas en [differences.md](migration/differences.md). No modificar expectativas de referencia para ocultar regresiones.
 
 [Plan](superpowers/plans/2026-10-27-python-migration.md) · [Avance](migration/progress.md) · [Ledger](migration/execution-log.md).

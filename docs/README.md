@@ -1,29 +1,23 @@
-# Migración de Mealie MCP a Python
+# Mealie MCP en Python
 
-Estado a2026-10-28: **implementación en curso (P01..P23 verificadas; P24 activa)**.
+Migración completa de las78 herramientas y el prompt weekly-meal-plan a FastMCP. Admite stdio local y Streamable HTTP con token Bearer personal independiente de la API key de Mealie. Desarrollo y verificación en Dev Container; imagen de producción para amd64 y arm64.
 
-## Ruta de lectura
+El cierre P24 está en verificación. [Avance](migration/progress.md), [estado JSON](migration/implementation-state.json) y [aceptación](migration/acceptance.md) distinguen lo ejecutado de las limitaciones y de la publicación pendiente.
 
-1. [Plan de implementación](superpowers/plans/2026-10-27-python-migration.md):24 tareas ordenadas, dependencias, archivos, interfaces, pruebas y criterios de cierre.
-2. [Seguimiento de avance](migration/progress.md) y [estado JSON](migration/implementation-state.json): punto de reanudación y propietario de cada herramienta, módulo y test original.
-3. [Diseño de la migración](superpowers/specs/2026-10-27-python-migration-design.md): arquitectura, stdio/HTTP, Bearer, Dev Container e imagen de producción.
-4. [Inventario de compatibilidad](migration/compatibility-inventory.md) e [inventario JSON](migration/compatibility-inventory.json):78 herramientas, prompt, esquemas fuente, endpoints y trazabilidad.
-5. [Aceptación](migration/acceptance.md): plantilla donde registrar resultados reales y condiciones de entrega.
-6. [Diferencias controladas](migration/differences.md): ampliaciones/correcciones explícitas y condicionadas.
-7. [Licencia upstream](migration/upstream-LICENSE.txt).
+| Necesidad | Documento |
+|---|---|
+| Preparar el entorno y ejecutar checks | [Desarrollo](development.md) |
+| Variables y credenciales | [Configuración](configuration.md) |
+| Conectar clientes stdio/HTTP | [Clientes](clients.md) |
+| Proteger el endpoint remoto | [Despliegue HTTP](http-deployment.md) |
+| Construir y ejecutar la imagen | [Contenedores](containers.md) |
+| Módulos y ciclo de vida | [Arquitectura](architecture.md) |
+| CI, release y mantenimiento | [Workflows](workflows.md) |
+| Herramientas y esquemas | [Catálogo](tools.md) |
+| Endpoints Mealie utilizados | [Cobertura API](api-coverage.md) |
+| Contratos originales y trazabilidad | [Inventario](migration/compatibility-inventory.md) |
+| Cambios explícitos frente al original | [Diferencias](migration/differences.md) |
+| Resultados y límites de la entrega | [Aceptación](migration/acceptance.md) |
+| Escaneo y avisos del sistema base | [Seguridad de imagen](migration/evidence/P23-security.md) |
 
-## Decisiones confirmadas
-
-FastMCP, migración completa a Python, stdio local y HTTP remoto, token Bearer personal independiente de la API key de Mealie, trabajo dentro del Dev Container y generación de una imagen de producción.
-
-## Estado de la evidencia
-
-Upstream fijado en d027e1b4a314d781a322f1f91e37840f01464d77. Se revisaron estáticamente los registros y42 archivos de pruebas originales. El diseño pasó una revisión independiente; el plan se revisó contra el diseño y el inventario.
-
-Las comprobaciones auxiliares de estos documentos se ejecutan en el host y se identifican como documentales. P01..P23 aportan evidencia de ejecución:1058tests originales y841Python pasan;78/78 herramientas portadas y verificadas. Ver el seguimiento para los límites y trabajo pendiente.
-
-## Cómo empezar después de revisar el plan
-
-Para retomar, consultar la tarea activa del estado JSON y sus dependencias. Cerrar cada tarea con evidencia antes de avanzar. La implementación secuencial está autorizada; no se publican artefactos ni se despliega un endpoint público.
-
-Los documentos futuros de desarrollo, configuración, clientes y operación se crearán junto a la tarea que los necesite, dentro de docs. No se crean runbooks que aparenten describir una aplicación ya operativa.
+El [diseño aprobado](superpowers/specs/2026-10-27-python-migration-design.md) y el [plan de24 tareas](superpowers/plans/2026-10-27-python-migration.md) conservan las decisiones y criterios originales. El [ledger](migration/execution-log.md) registra su ejecución. Upstream está fijado en d027e1b4a314d781a322f1f91e37840f01464d77; se conserva su [licencia](migration/upstream-LICENSE.txt).

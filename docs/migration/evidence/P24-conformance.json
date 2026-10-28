@@ -1,0 +1,12 @@
+{
+  "runner": "@modelcontextprotocol/conformance",
+  "version": "0.1.16",
+  "integrity": "sha512-GI7qiN0r39/MH2srVUR3AXaEN0YLCro20lIBbnvc1frBhszenxvUifBuTzxeVQVagILfBzCIcnungUOma8OrgA==",
+  "scenario": "server-initialize",
+  "specVersion": "2025-11-25",
+  "passed": 0,
+  "failed": 1,
+  "serverWithoutBearerStatus": 401,
+  "authenticationDisabled": false,
+  "limitation": "Published CLI has no header option and lists only 2025-06-18/2025-11-25 scenarios. No 2026-07-28 scenario. This run is not conformance certification."
+}

@@ -16,6 +16,18 @@ def test_segment_is_encoded_once_and_trimmed() -> None:
     assert encode_path_segment("%2F") == "%252F"
 
 
+@pytest.mark.parametrize(
+    "value, expected", [("\ufeffsoup\ufeff", "soup"), ("\x1csoup\x1c", "%1Csoup%1C")]
+)
+def test_segment_uses_javascript_whitespace_exactly(value, expected):
+    assert encode_path_segment(value) == expected
+
+
+def test_bom_only_segment_is_empty_under_javascript_trim():
+    with pytest.raises(ValueError):
+        encode_path_segment("\ufeff")
+
+
 def test_format_params_distinguishes_false_and_empty() -> None:
     assert format_params(
         {"page": 1, "perPage": 50, "tags": ["a", "b"], "empty": [], "missing": None, "all": False}

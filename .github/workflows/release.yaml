@@ -46,6 +46,7 @@ jobs:
             GITHUB_ACTOR
             GITHUB_REPOSITORY
           runCmd: |
+            set -eu
             uv sync --frozen --group dev
             uv run python scripts/release_gate.py --release-version "$RELEASE_VERSION"
             image="ghcr.io/$(printf '%s' "$GITHUB_REPOSITORY" | tr '[:upper:]' '[:lower:]')"
@@ -78,6 +79,7 @@ jobs:
             GITHUB_ACTOR
             GITHUB_REPOSITORY
           runCmd: |
+            set -eu
             uv sync --frozen --group dev
             uv run python scripts/release_gate.py --release-version "$RELEASE_VERSION"
             image="ghcr.io/$(printf '%s' "$GITHUB_REPOSITORY" | tr '[:upper:]' '[:lower:]')"

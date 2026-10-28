@@ -73,7 +73,7 @@ async def _serve_http(settings: Settings) -> None:
         log_level=settings.log_level.lower(),
         access_log=False,
         proxy_headers=False,
-        timeout_graceful_shutdown=40,
+        timeout_graceful_shutdown=3,
         limit_concurrency=40,
     )
     await uvicorn.Server(config).serve()
