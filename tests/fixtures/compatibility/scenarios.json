@@ -4177,5 +4177,1947 @@
         "status": 404
       }
     ]
+  },
+  "patch_recipe.basic": {
+    "requests": [
+      {
+        "method": "PATCH",
+        "path": "/api/recipes/one",
+        "query": {},
+        "body": {
+          "name": "Changed"
+        },
+        "response": {
+          "id": "r1",
+          "slug": "one",
+          "name": "Changed",
+          "recipeCategory": [
+            {
+              "id": "a",
+              "name": "Dinner",
+              "slug": "dinner"
+            }
+          ],
+          "tags": [
+            {
+              "id": "t",
+              "name": "Quick",
+              "slug": "quick"
+            }
+          ],
+          "tools": [
+            {
+              "id": "w",
+              "name": "Whisk",
+              "slug": "whisk"
+            }
+          ],
+          "recipeIngredient": [
+            {
+              "note": "keep"
+            }
+          ],
+          "nutrition": {
+            "keep": true
+          }
+        },
+        "status": 200
+      }
+    ]
+  },
+  "update_recipe_taxonomy.basic": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes/one",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "r1",
+          "slug": "one",
+          "name": "Recipe",
+          "recipeCategory": [
+            {
+              "id": "a",
+              "name": "Dinner",
+              "slug": "dinner"
+            }
+          ],
+          "tags": [
+            {
+              "id": "t",
+              "name": "Quick",
+              "slug": "quick"
+            }
+          ],
+          "tools": [
+            {
+              "id": "w",
+              "name": "Whisk",
+              "slug": "whisk"
+            }
+          ],
+          "recipeIngredient": [
+            {
+              "note": "keep"
+            }
+          ],
+          "nutrition": {
+            "keep": true
+          }
+        },
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/api/organizers/categories",
+        "query": {
+          "perPage": [
+            "-1"
+          ]
+        },
+        "body": null,
+        "response": {
+          "items": [
+            {
+              "id": "a",
+              "name": "Dinner",
+              "slug": "dinner"
+            },
+            {
+              "id": "b",
+              "name": "Dessert",
+              "slug": "dessert"
+            }
+          ]
+        },
+        "status": 200
+      },
+      {
+        "method": "PATCH",
+        "path": "/api/recipes/one",
+        "query": {},
+        "body": {
+          "recipeCategory": [
+            {
+              "id": "a",
+              "name": "Dinner",
+              "slug": "dinner"
+            },
+            {
+              "id": "b",
+              "name": "Dessert",
+              "slug": "dessert"
+            }
+          ]
+        },
+        "response": {
+          "id": "r1",
+          "slug": "one",
+          "name": "Recipe",
+          "recipeCategory": [
+            {
+              "id": "a",
+              "name": "Dinner",
+              "slug": "dinner"
+            },
+            {
+              "id": "b",
+              "name": "Dessert",
+              "slug": "dessert"
+            }
+          ],
+          "tags": [
+            {
+              "id": "t",
+              "name": "Quick",
+              "slug": "quick"
+            }
+          ],
+          "tools": [
+            {
+              "id": "w",
+              "name": "Whisk",
+              "slug": "whisk"
+            }
+          ],
+          "recipeIngredient": [
+            {
+              "note": "keep"
+            }
+          ],
+          "nutrition": {
+            "keep": true
+          }
+        },
+        "status": 200
+      }
+    ]
+  },
+  "update_recipe_taxonomy_batch.basic": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes/one",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "r1",
+          "slug": "one",
+          "name": "Recipe",
+          "recipeCategory": [
+            {
+              "id": "a",
+              "name": "Dinner",
+              "slug": "dinner"
+            }
+          ],
+          "tags": [
+            {
+              "id": "t",
+              "name": "Quick",
+              "slug": "quick"
+            }
+          ],
+          "tools": [
+            {
+              "id": "w",
+              "name": "Whisk",
+              "slug": "whisk"
+            }
+          ],
+          "recipeIngredient": [
+            {
+              "note": "keep"
+            }
+          ],
+          "nutrition": {
+            "keep": true
+          }
+        },
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/api/organizers/tags",
+        "query": {
+          "perPage": [
+            "-1"
+          ]
+        },
+        "body": null,
+        "response": {
+          "items": [
+            {
+              "id": "t",
+              "name": "Quick",
+              "slug": "quick"
+            },
+            {
+              "id": "u",
+              "name": "Easy",
+              "slug": "easy"
+            }
+          ]
+        },
+        "status": 200
+      },
+      {
+        "method": "PATCH",
+        "path": "/api/recipes/one",
+        "query": {},
+        "body": {
+          "tags": [
+            {
+              "id": "t",
+              "name": "Quick",
+              "slug": "quick"
+            },
+            {
+              "id": "u",
+              "name": "Easy",
+              "slug": "easy"
+            }
+          ]
+        },
+        "response": {
+          "id": "r1",
+          "slug": "one",
+          "name": "Recipe",
+          "recipeCategory": [
+            {
+              "id": "a",
+              "name": "Dinner",
+              "slug": "dinner"
+            }
+          ],
+          "tags": [
+            {
+              "id": "t",
+              "name": "Quick",
+              "slug": "quick"
+            },
+            {
+              "id": "u",
+              "name": "Easy",
+              "slug": "easy"
+            }
+          ],
+          "tools": [
+            {
+              "id": "w",
+              "name": "Whisk",
+              "slug": "whisk"
+            }
+          ],
+          "recipeIngredient": [
+            {
+              "note": "keep"
+            }
+          ],
+          "nutrition": {
+            "keep": true
+          }
+        },
+        "status": 200
+      }
+    ]
+  },
+  "update_recipe_tools.basic": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes/one",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "r1",
+          "slug": "one",
+          "name": "Recipe",
+          "recipeCategory": [
+            {
+              "id": "a",
+              "name": "Dinner",
+              "slug": "dinner"
+            }
+          ],
+          "tags": [
+            {
+              "id": "t",
+              "name": "Quick",
+              "slug": "quick"
+            }
+          ],
+          "tools": [
+            {
+              "id": "w",
+              "name": "Whisk",
+              "slug": "whisk"
+            }
+          ],
+          "recipeIngredient": [
+            {
+              "note": "keep"
+            }
+          ],
+          "nutrition": {
+            "keep": true
+          }
+        },
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/api/organizers/tools",
+        "query": {
+          "perPage": [
+            "-1"
+          ]
+        },
+        "body": null,
+        "response": {
+          "items": [
+            {
+              "id": "w",
+              "name": "Whisk",
+              "slug": "whisk"
+            },
+            {
+              "id": "p",
+              "name": "Pan",
+              "slug": "pan"
+            }
+          ]
+        },
+        "status": 200
+      },
+      {
+        "method": "PATCH",
+        "path": "/api/recipes/one",
+        "query": {},
+        "body": {
+          "tools": [
+            {
+              "id": "w",
+              "name": "Whisk",
+              "slug": "whisk"
+            },
+            {
+              "id": "p",
+              "name": "Pan",
+              "slug": "pan"
+            }
+          ]
+        },
+        "response": {
+          "id": "r1",
+          "slug": "one",
+          "name": "Recipe",
+          "recipeCategory": [
+            {
+              "id": "a",
+              "name": "Dinner",
+              "slug": "dinner"
+            }
+          ],
+          "tags": [
+            {
+              "id": "t",
+              "name": "Quick",
+              "slug": "quick"
+            }
+          ],
+          "tools": [
+            {
+              "id": "w",
+              "name": "Whisk",
+              "slug": "whisk"
+            },
+            {
+              "id": "p",
+              "name": "Pan",
+              "slug": "pan"
+            }
+          ],
+          "recipeIngredient": [
+            {
+              "note": "keep"
+            }
+          ],
+          "nutrition": {
+            "keep": true
+          }
+        },
+        "status": 200
+      }
+    ]
+  },
+  "update_recipe_tools_batch.basic": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes/one",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "r1",
+          "slug": "one",
+          "name": "Recipe",
+          "recipeCategory": [
+            {
+              "id": "a",
+              "name": "Dinner",
+              "slug": "dinner"
+            }
+          ],
+          "tags": [
+            {
+              "id": "t",
+              "name": "Quick",
+              "slug": "quick"
+            }
+          ],
+          "tools": [
+            {
+              "id": "w",
+              "name": "Whisk",
+              "slug": "whisk"
+            }
+          ],
+          "recipeIngredient": [
+            {
+              "note": "keep"
+            }
+          ],
+          "nutrition": {
+            "keep": true
+          }
+        },
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/api/organizers/tools",
+        "query": {
+          "perPage": [
+            "-1"
+          ]
+        },
+        "body": null,
+        "response": {
+          "items": [
+            {
+              "id": "w",
+              "name": "Whisk",
+              "slug": "whisk"
+            },
+            {
+              "id": "p",
+              "name": "Pan",
+              "slug": "pan"
+            }
+          ]
+        },
+        "status": 200
+      },
+      {
+        "method": "PATCH",
+        "path": "/api/recipes/one",
+        "query": {},
+        "body": {
+          "tools": []
+        },
+        "response": {
+          "id": "r1",
+          "slug": "one",
+          "name": "Recipe",
+          "recipeCategory": [
+            {
+              "id": "a",
+              "name": "Dinner",
+              "slug": "dinner"
+            }
+          ],
+          "tags": [
+            {
+              "id": "t",
+              "name": "Quick",
+              "slug": "quick"
+            }
+          ],
+          "tools": [],
+          "recipeIngredient": [
+            {
+              "note": "keep"
+            }
+          ],
+          "nutrition": {
+            "keep": true
+          }
+        },
+        "status": 200
+      }
+    ]
+  },
+  "update_recipe_taxonomy.clear": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes/one",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "r1",
+          "slug": "one",
+          "name": "Recipe",
+          "recipeCategory": [
+            {
+              "id": "a",
+              "name": "Dinner",
+              "slug": "dinner"
+            }
+          ],
+          "tags": [
+            {
+              "id": "t",
+              "name": "Quick",
+              "slug": "quick"
+            }
+          ],
+          "tools": [
+            {
+              "id": "w",
+              "name": "Whisk",
+              "slug": "whisk"
+            }
+          ],
+          "recipeIngredient": [
+            {
+              "note": "keep"
+            }
+          ],
+          "nutrition": {
+            "keep": true
+          }
+        },
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/api/organizers/categories",
+        "query": {
+          "perPage": [
+            "-1"
+          ]
+        },
+        "body": null,
+        "response": {
+          "items": [
+            {
+              "id": "a",
+              "name": "Dinner",
+              "slug": "dinner"
+            },
+            {
+              "id": "b",
+              "name": "Dessert",
+              "slug": "dessert"
+            }
+          ]
+        },
+        "status": 200
+      },
+      {
+        "method": "PATCH",
+        "path": "/api/recipes/one",
+        "query": {},
+        "body": {
+          "recipeCategory": []
+        },
+        "response": {
+          "id": "r1",
+          "slug": "one",
+          "name": "Recipe",
+          "recipeCategory": [],
+          "tags": [
+            {
+              "id": "t",
+              "name": "Quick",
+              "slug": "quick"
+            }
+          ],
+          "tools": [
+            {
+              "id": "w",
+              "name": "Whisk",
+              "slug": "whisk"
+            }
+          ],
+          "recipeIngredient": [
+            {
+              "note": "keep"
+            }
+          ],
+          "nutrition": {
+            "keep": true
+          }
+        },
+        "status": 200
+      }
+    ]
+  },
+  "update_recipe_taxonomy.noop": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes/one",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "r1",
+          "slug": "one",
+          "name": "Recipe",
+          "recipeCategory": [
+            {
+              "id": "a",
+              "name": "Dinner",
+              "slug": "dinner"
+            }
+          ],
+          "tags": [
+            {
+              "id": "t",
+              "name": "Quick",
+              "slug": "quick"
+            }
+          ],
+          "tools": [
+            {
+              "id": "w",
+              "name": "Whisk",
+              "slug": "whisk"
+            }
+          ],
+          "recipeIngredient": [
+            {
+              "note": "keep"
+            }
+          ],
+          "nutrition": {
+            "keep": true
+          }
+        },
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/api/organizers/categories",
+        "query": {
+          "perPage": [
+            "-1"
+          ]
+        },
+        "body": null,
+        "response": {
+          "items": [
+            {
+              "id": "a",
+              "name": "Dinner",
+              "slug": "dinner"
+            },
+            {
+              "id": "b",
+              "name": "Dessert",
+              "slug": "dessert"
+            }
+          ]
+        },
+        "status": 200
+      }
+    ]
+  },
+  "update_recipe_taxonomy.reorder_noop": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes/one",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "r1",
+          "slug": "one",
+          "name": "Recipe",
+          "recipeCategory": [
+            {
+              "id": "a",
+              "name": "Dinner",
+              "slug": "dinner"
+            },
+            {
+              "id": "b",
+              "name": "Dessert",
+              "slug": "dessert"
+            }
+          ],
+          "tags": [
+            {
+              "id": "t",
+              "name": "Quick",
+              "slug": "quick"
+            }
+          ],
+          "tools": [
+            {
+              "id": "w",
+              "name": "Whisk",
+              "slug": "whisk"
+            }
+          ],
+          "recipeIngredient": [
+            {
+              "note": "keep"
+            }
+          ],
+          "nutrition": {
+            "keep": true
+          }
+        },
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/api/organizers/categories",
+        "query": {
+          "perPage": [
+            "-1"
+          ]
+        },
+        "body": null,
+        "response": {
+          "items": [
+            {
+              "id": "a",
+              "name": "Dinner",
+              "slug": "dinner"
+            },
+            {
+              "id": "b",
+              "name": "Dessert",
+              "slug": "dessert"
+            }
+          ]
+        },
+        "status": 200
+      }
+    ]
+  },
+  "update_recipe_taxonomy.delta": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes/one",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "r1",
+          "slug": "one",
+          "name": "Recipe",
+          "recipeCategory": [
+            {
+              "id": "a",
+              "name": "Dinner",
+              "slug": "dinner"
+            }
+          ],
+          "tags": [
+            {
+              "id": "t",
+              "name": "Quick",
+              "slug": "quick"
+            }
+          ],
+          "tools": [
+            {
+              "id": "w",
+              "name": "Whisk",
+              "slug": "whisk"
+            }
+          ],
+          "recipeIngredient": [
+            {
+              "note": "keep"
+            }
+          ],
+          "nutrition": {
+            "keep": true
+          }
+        },
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/api/organizers/categories",
+        "query": {
+          "perPage": [
+            "-1"
+          ]
+        },
+        "body": null,
+        "response": {
+          "items": [
+            {
+              "id": "a",
+              "name": "Dinner",
+              "slug": "dinner"
+            },
+            {
+              "id": "b",
+              "name": "Dessert",
+              "slug": "dessert"
+            }
+          ]
+        },
+        "status": 200
+      },
+      {
+        "method": "PATCH",
+        "path": "/api/recipes/one",
+        "query": {},
+        "body": {
+          "recipeCategory": [
+            {
+              "id": "b",
+              "name": "Dessert",
+              "slug": "dessert"
+            }
+          ]
+        },
+        "response": {
+          "id": "r1",
+          "slug": "one",
+          "name": "Recipe",
+          "recipeCategory": [
+            {
+              "id": "b",
+              "name": "Dessert",
+              "slug": "dessert"
+            }
+          ],
+          "tags": [
+            {
+              "id": "t",
+              "name": "Quick",
+              "slug": "quick"
+            }
+          ],
+          "tools": [
+            {
+              "id": "w",
+              "name": "Whisk",
+              "slug": "whisk"
+            }
+          ],
+          "recipeIngredient": [
+            {
+              "note": "keep"
+            }
+          ],
+          "nutrition": {
+            "keep": true
+          }
+        },
+        "status": 200
+      }
+    ]
+  },
+  "update_recipe_taxonomy.mixed": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes/one",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "r1",
+          "slug": "one",
+          "name": "Recipe",
+          "recipeCategory": [
+            {
+              "id": "a",
+              "name": "Dinner",
+              "slug": "dinner"
+            }
+          ],
+          "tags": [
+            {
+              "id": "t",
+              "name": "Quick",
+              "slug": "quick"
+            }
+          ],
+          "tools": [
+            {
+              "id": "w",
+              "name": "Whisk",
+              "slug": "whisk"
+            }
+          ],
+          "recipeIngredient": [
+            {
+              "note": "keep"
+            }
+          ],
+          "nutrition": {
+            "keep": true
+          }
+        },
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/api/organizers/categories",
+        "query": {
+          "perPage": [
+            "-1"
+          ]
+        },
+        "body": null,
+        "response": {
+          "items": [
+            {
+              "id": "a",
+              "name": "Dinner",
+              "slug": "dinner"
+            },
+            {
+              "id": "b",
+              "name": "Dessert",
+              "slug": "dessert"
+            }
+          ]
+        },
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/api/organizers/tags",
+        "query": {
+          "perPage": [
+            "-1"
+          ]
+        },
+        "body": null,
+        "response": {
+          "items": [
+            {
+              "id": "t",
+              "name": "Quick",
+              "slug": "quick"
+            },
+            {
+              "id": "u",
+              "name": "Easy",
+              "slug": "easy"
+            }
+          ]
+        },
+        "status": 200
+      },
+      {
+        "method": "PATCH",
+        "path": "/api/recipes/one",
+        "query": {},
+        "body": {
+          "recipeCategory": [
+            {
+              "id": "b",
+              "name": "Dessert",
+              "slug": "dessert"
+            }
+          ],
+          "tags": [
+            {
+              "id": "u",
+              "name": "Easy",
+              "slug": "easy"
+            }
+          ]
+        },
+        "response": {
+          "id": "r1",
+          "slug": "one",
+          "name": "Recipe",
+          "recipeCategory": [
+            {
+              "id": "b",
+              "name": "Dessert",
+              "slug": "dessert"
+            }
+          ],
+          "tags": [
+            {
+              "id": "u",
+              "name": "Easy",
+              "slug": "easy"
+            }
+          ],
+          "tools": [
+            {
+              "id": "w",
+              "name": "Whisk",
+              "slug": "whisk"
+            }
+          ],
+          "recipeIngredient": [
+            {
+              "note": "keep"
+            }
+          ],
+          "nutrition": {
+            "keep": true
+          }
+        },
+        "status": 200
+      }
+    ]
+  },
+  "update_recipe_taxonomy.conflicting_forms": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes/one",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "r1",
+          "slug": "one",
+          "name": "Recipe",
+          "recipeCategory": [
+            {
+              "id": "a",
+              "name": "Dinner",
+              "slug": "dinner"
+            }
+          ],
+          "tags": [
+            {
+              "id": "t",
+              "name": "Quick",
+              "slug": "quick"
+            }
+          ],
+          "tools": [
+            {
+              "id": "w",
+              "name": "Whisk",
+              "slug": "whisk"
+            }
+          ],
+          "recipeIngredient": [
+            {
+              "note": "keep"
+            }
+          ],
+          "nutrition": {
+            "keep": true
+          }
+        },
+        "status": 200
+      }
+    ]
+  },
+  "update_recipe_taxonomy.mode_delta": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes/one",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "r1",
+          "slug": "one",
+          "name": "Recipe",
+          "recipeCategory": [
+            {
+              "id": "a",
+              "name": "Dinner",
+              "slug": "dinner"
+            }
+          ],
+          "tags": [
+            {
+              "id": "t",
+              "name": "Quick",
+              "slug": "quick"
+            }
+          ],
+          "tools": [
+            {
+              "id": "w",
+              "name": "Whisk",
+              "slug": "whisk"
+            }
+          ],
+          "recipeIngredient": [
+            {
+              "note": "keep"
+            }
+          ],
+          "nutrition": {
+            "keep": true
+          }
+        },
+        "status": 200
+      }
+    ]
+  },
+  "update_recipe_taxonomy.overlap": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes/one",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "r1",
+          "slug": "one",
+          "name": "Recipe",
+          "recipeCategory": [
+            {
+              "id": "a",
+              "name": "Dinner",
+              "slug": "dinner"
+            }
+          ],
+          "tags": [
+            {
+              "id": "t",
+              "name": "Quick",
+              "slug": "quick"
+            }
+          ],
+          "tools": [
+            {
+              "id": "w",
+              "name": "Whisk",
+              "slug": "whisk"
+            }
+          ],
+          "recipeIngredient": [
+            {
+              "note": "keep"
+            }
+          ],
+          "nutrition": {
+            "keep": true
+          }
+        },
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/api/organizers/categories",
+        "query": {
+          "perPage": [
+            "-1"
+          ]
+        },
+        "body": null,
+        "response": {
+          "items": [
+            {
+              "id": "a",
+              "name": "Dinner",
+              "slug": "dinner"
+            },
+            {
+              "id": "b",
+              "name": "Dessert",
+              "slug": "dessert"
+            }
+          ]
+        },
+        "status": 200
+      }
+    ]
+  },
+  "update_recipe_taxonomy.validate_all_before_create": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes/one",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "r1",
+          "slug": "one",
+          "name": "Recipe",
+          "recipeCategory": [
+            {
+              "id": "a",
+              "name": "Dinner",
+              "slug": "dinner"
+            }
+          ],
+          "tags": [
+            {
+              "id": "t",
+              "name": "Quick",
+              "slug": "quick"
+            }
+          ],
+          "tools": [
+            {
+              "id": "w",
+              "name": "Whisk",
+              "slug": "whisk"
+            }
+          ],
+          "recipeIngredient": [
+            {
+              "note": "keep"
+            }
+          ],
+          "nutrition": {
+            "keep": true
+          }
+        },
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/api/organizers/categories",
+        "query": {
+          "perPage": [
+            "-1"
+          ]
+        },
+        "body": null,
+        "response": {
+          "items": [
+            {
+              "id": "a",
+              "name": "Dinner",
+              "slug": "dinner"
+            },
+            {
+              "id": "b",
+              "name": "Dessert",
+              "slug": "dessert"
+            }
+          ]
+        },
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/api/organizers/tags",
+        "query": {
+          "perPage": [
+            "-1"
+          ]
+        },
+        "body": null,
+        "response": {
+          "items": [
+            {
+              "id": "t",
+              "name": "Quick",
+              "slug": "quick"
+            },
+            {
+              "id": "u",
+              "name": "Easy",
+              "slug": "easy"
+            }
+          ]
+        },
+        "status": 200
+      }
+    ]
+  },
+  "update_recipe_taxonomy.omitted": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes/one",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "r1",
+          "slug": "one",
+          "name": "Recipe",
+          "recipeCategory": [
+            {
+              "id": "a",
+              "name": "Dinner",
+              "slug": "dinner"
+            }
+          ],
+          "tags": [
+            {
+              "id": "t",
+              "name": "Quick",
+              "slug": "quick"
+            }
+          ],
+          "tools": [
+            {
+              "id": "w",
+              "name": "Whisk",
+              "slug": "whisk"
+            }
+          ],
+          "recipeIngredient": [
+            {
+              "note": "keep"
+            }
+          ],
+          "nutrition": {
+            "keep": true
+          }
+        },
+        "status": 200
+      }
+    ]
+  },
+  "update_recipe_taxonomy_batch.empty": {
+    "requests": []
+  },
+  "update_recipe_taxonomy_batch.duplicates": {
+    "requests": []
+  },
+  "update_recipe_tools.delta": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes/one",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "r1",
+          "slug": "one",
+          "name": "Recipe",
+          "recipeCategory": [
+            {
+              "id": "a",
+              "name": "Dinner",
+              "slug": "dinner"
+            }
+          ],
+          "tags": [
+            {
+              "id": "t",
+              "name": "Quick",
+              "slug": "quick"
+            }
+          ],
+          "tools": [
+            {
+              "id": "w",
+              "name": "Whisk",
+              "slug": "whisk"
+            }
+          ],
+          "recipeIngredient": [
+            {
+              "note": "keep"
+            }
+          ],
+          "nutrition": {
+            "keep": true
+          }
+        },
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/api/organizers/tools",
+        "query": {
+          "perPage": [
+            "-1"
+          ]
+        },
+        "body": null,
+        "response": {
+          "items": [
+            {
+              "id": "w",
+              "name": "Whisk",
+              "slug": "whisk"
+            },
+            {
+              "id": "p",
+              "name": "Pan",
+              "slug": "pan"
+            }
+          ]
+        },
+        "status": 200
+      },
+      {
+        "method": "PATCH",
+        "path": "/api/recipes/one",
+        "query": {},
+        "body": {
+          "tools": [
+            {
+              "id": "p",
+              "name": "Pan",
+              "slug": "pan"
+            }
+          ]
+        },
+        "response": {
+          "id": "r1",
+          "slug": "one",
+          "name": "Recipe",
+          "recipeCategory": [
+            {
+              "id": "a",
+              "name": "Dinner",
+              "slug": "dinner"
+            }
+          ],
+          "tags": [
+            {
+              "id": "t",
+              "name": "Quick",
+              "slug": "quick"
+            }
+          ],
+          "tools": [
+            {
+              "id": "p",
+              "name": "Pan",
+              "slug": "pan"
+            }
+          ],
+          "recipeIngredient": [
+            {
+              "note": "keep"
+            }
+          ],
+          "nutrition": {
+            "keep": true
+          }
+        },
+        "status": 200
+      }
+    ]
+  },
+  "update_recipe_tools.noop": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes/one",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "r1",
+          "slug": "one",
+          "name": "Recipe",
+          "recipeCategory": [
+            {
+              "id": "a",
+              "name": "Dinner",
+              "slug": "dinner"
+            }
+          ],
+          "tags": [
+            {
+              "id": "t",
+              "name": "Quick",
+              "slug": "quick"
+            }
+          ],
+          "tools": [
+            {
+              "id": "w",
+              "name": "Whisk",
+              "slug": "whisk"
+            }
+          ],
+          "recipeIngredient": [
+            {
+              "note": "keep"
+            }
+          ],
+          "nutrition": {
+            "keep": true
+          }
+        },
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/api/organizers/tools",
+        "query": {
+          "perPage": [
+            "-1"
+          ]
+        },
+        "body": null,
+        "response": {
+          "items": [
+            {
+              "id": "w",
+              "name": "Whisk",
+              "slug": "whisk"
+            },
+            {
+              "id": "p",
+              "name": "Pan",
+              "slug": "pan"
+            }
+          ]
+        },
+        "status": 200
+      }
+    ]
+  },
+  "update_recipe_tools.unknown_removal": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes/one",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "r1",
+          "slug": "one",
+          "name": "Recipe",
+          "recipeCategory": [
+            {
+              "id": "a",
+              "name": "Dinner",
+              "slug": "dinner"
+            }
+          ],
+          "tags": [
+            {
+              "id": "t",
+              "name": "Quick",
+              "slug": "quick"
+            }
+          ],
+          "tools": [
+            {
+              "id": "w",
+              "name": "Whisk",
+              "slug": "whisk"
+            }
+          ],
+          "recipeIngredient": [
+            {
+              "note": "keep"
+            }
+          ],
+          "nutrition": {
+            "keep": true
+          }
+        },
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/api/organizers/tools",
+        "query": {
+          "perPage": [
+            "-1"
+          ]
+        },
+        "body": null,
+        "response": {
+          "items": [
+            {
+              "id": "w",
+              "name": "Whisk",
+              "slug": "whisk"
+            },
+            {
+              "id": "p",
+              "name": "Pan",
+              "slug": "pan"
+            }
+          ]
+        },
+        "status": 200
+      }
+    ]
+  },
+  "update_recipe_tools.conflicting_forms": {
+    "requests": []
+  },
+  "update_recipe_tools.omitted": {
+    "requests": []
+  },
+  "update_recipe_tools_batch.duplicates": {
+    "requests": []
+  },
+  "patch_recipe.taxonomy_noop": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes/one",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "r1",
+          "slug": "one",
+          "name": "Recipe",
+          "recipeCategory": [
+            {
+              "id": "a",
+              "name": "Dinner",
+              "slug": "dinner"
+            }
+          ],
+          "tags": [
+            {
+              "id": "t",
+              "name": "Quick",
+              "slug": "quick"
+            }
+          ],
+          "tools": [
+            {
+              "id": "w",
+              "name": "Whisk",
+              "slug": "whisk"
+            }
+          ],
+          "recipeIngredient": [
+            {
+              "note": "keep"
+            }
+          ],
+          "nutrition": {
+            "keep": true
+          }
+        },
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/api/organizers/categories",
+        "query": {
+          "perPage": [
+            "-1"
+          ]
+        },
+        "body": null,
+        "response": {
+          "items": [
+            {
+              "id": "a",
+              "name": "Dinner",
+              "slug": "dinner"
+            },
+            {
+              "id": "b",
+              "name": "Dessert",
+              "slug": "dessert"
+            }
+          ]
+        },
+        "status": 200
+      }
+    ]
+  },
+  "patch_recipe.clear_instructions": {
+    "requests": [
+      {
+        "method": "PATCH",
+        "path": "/api/recipes/one",
+        "query": {},
+        "body": {
+          "recipeInstructions": []
+        },
+        "response": {
+          "id": "r1",
+          "slug": "one",
+          "name": "Recipe",
+          "recipeCategory": [
+            {
+              "id": "a",
+              "name": "Dinner",
+              "slug": "dinner"
+            }
+          ],
+          "tags": [
+            {
+              "id": "t",
+              "name": "Quick",
+              "slug": "quick"
+            }
+          ],
+          "tools": [
+            {
+              "id": "w",
+              "name": "Whisk",
+              "slug": "whisk"
+            }
+          ],
+          "recipeIngredient": [
+            {
+              "note": "keep"
+            }
+          ],
+          "nutrition": {
+            "keep": true
+          },
+          "recipeInstructions": []
+        },
+        "status": 200
+      }
+    ]
+  },
+  "patch_recipe.flags_only": {
+    "requests": [
+      {
+        "method": "PATCH",
+        "path": "/api/recipes/one",
+        "query": {},
+        "body": {},
+        "response": {
+          "id": "r1",
+          "slug": "one",
+          "name": "Recipe",
+          "recipeCategory": [
+            {
+              "id": "a",
+              "name": "Dinner",
+              "slug": "dinner"
+            }
+          ],
+          "tags": [
+            {
+              "id": "t",
+              "name": "Quick",
+              "slug": "quick"
+            }
+          ],
+          "tools": [
+            {
+              "id": "w",
+              "name": "Whisk",
+              "slug": "whisk"
+            }
+          ],
+          "recipeIngredient": [
+            {
+              "note": "keep"
+            }
+          ],
+          "nutrition": {
+            "keep": true
+          }
+        },
+        "status": 200
+      }
+    ]
+  },
+  "patch_recipe.combined": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes/one",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "r1",
+          "slug": "one",
+          "name": "Recipe",
+          "recipeCategory": [
+            {
+              "id": "a",
+              "name": "Dinner",
+              "slug": "dinner"
+            }
+          ],
+          "tags": [
+            {
+              "id": "t",
+              "name": "Quick",
+              "slug": "quick"
+            }
+          ],
+          "tools": [
+            {
+              "id": "w",
+              "name": "Whisk",
+              "slug": "whisk"
+            }
+          ],
+          "recipeIngredient": [
+            {
+              "note": "keep"
+            }
+          ],
+          "nutrition": {
+            "keep": true
+          }
+        },
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/api/organizers/categories",
+        "query": {
+          "perPage": [
+            "-1"
+          ]
+        },
+        "body": null,
+        "response": {
+          "items": [
+            {
+              "id": "a",
+              "name": "Dinner",
+              "slug": "dinner"
+            },
+            {
+              "id": "b",
+              "name": "Dessert",
+              "slug": "dessert"
+            }
+          ]
+        },
+        "status": 200
+      },
+      {
+        "method": "PATCH",
+        "path": "/api/recipes/one",
+        "query": {},
+        "body": {
+          "name": "Changed",
+          "recipeServings": 0,
+          "recipeInstructions": [
+            {
+              "text": ""
+            }
+          ],
+          "recipeCategory": [
+            {
+              "id": "a",
+              "name": "Dinner",
+              "slug": "dinner"
+            },
+            {
+              "id": "b",
+              "name": "Dessert",
+              "slug": "dessert"
+            }
+          ]
+        },
+        "response": {
+          "id": "r1",
+          "slug": "one",
+          "name": "Changed",
+          "recipeCategory": [
+            {
+              "id": "a",
+              "name": "Dinner",
+              "slug": "dinner"
+            },
+            {
+              "id": "b",
+              "name": "Dessert",
+              "slug": "dessert"
+            }
+          ],
+          "tags": [
+            {
+              "id": "t",
+              "name": "Quick",
+              "slug": "quick"
+            }
+          ],
+          "tools": [
+            {
+              "id": "w",
+              "name": "Whisk",
+              "slug": "whisk"
+            }
+          ],
+          "recipeIngredient": [
+            {
+              "note": "keep"
+            }
+          ],
+          "nutrition": {
+            "keep": true
+          },
+          "recipeServings": 0,
+          "recipeInstructions": [
+            {
+              "text": ""
+            }
+          ]
+        },
+        "status": 200
+      }
+    ]
   }
 }

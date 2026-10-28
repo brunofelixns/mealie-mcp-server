@@ -10,7 +10,7 @@
 
 **Spec:** [Diseño completo](../specs/2026-10-27-python-migration-design.md). Leer también [inventario](../../migration/compatibility-inventory.md) e [inventario JSON](../../migration/compatibility-inventory.json).
 
-Fecha: 2026-10-27. Estado: implementación autorizada; P01..P12 verificadas y P13 en curso. Ver implementation-state.json para la evidencia. No se ha publicado ni desplegado un endpoint público.
+Fecha: 2026-10-27. Estado: implementación autorizada; P01..P13 verificadas y P14 en curso. Ver implementation-state.json para la evidencia. No se ha publicado ni desplegado un endpoint público.
 
 ## Global Constraints
 
@@ -375,7 +375,7 @@ uv run pytest tests/contracts/test_recipes_core.py tests/unit/test_recipe_batch.
 <a id="p13"></a>
 ### P13: Migrar taxonomía y utensilios de recetas, incluido patch_recipe
 
-**Depende de:** P12. **Estado:** pendiente; ver registro de ejecución.
+**Depende de:** P12. **Estado:** verificada; ver registro de ejecución.
 
 **Archivos:** `src/mealie_mcp_server/services/recipe_taxonomy.py`, `src/mealie_mcp_server/services/recipe_equipment.py`, `src/mealie_mcp_server/models/inputs/recipe_taxonomy.py`, `src/mealie_mcp_server/tools/recipes.py`, `tests/fixtures/compatibility/cases/recipe_organizers.json`.
 **Tests:** `tests/unit/test_recipe_taxonomy.py`, `tests/unit/test_recipe_equipment.py`, `tests/contracts/test_recipe_organizers.py`.
@@ -384,17 +384,17 @@ uv run pytest tests/contracts/test_recipes_core.py tests/unit/test_recipe_batch.
 
 **Herramientas (5):** `patch_recipe`, `update_recipe_taxonomy`, `update_recipe_taxonomy_batch`, `update_recipe_tools`, `update_recipe_tools_batch`.
 
-- [ ] **1. Añadir las pruebas antes del código funcional.** test_merge_replace_and_delta_exclusive; test_noop_does_not_patch; test_duplicate_slugs_no_writes; test_batch_serializes_create_missing y scopes por entrada. test_taxonomy_batch_not_artificially_capped_at25; equipamiento sí1..25; max_inflight escritores5. test_patch_preserves_unrelated_fields y taxonomyChanges.
-- [ ] **2. Ejecutar el subconjunto indicado y observar RED.** El fallo esperado es el comportamiento/handler aún ausente o incorrecto; si falta infraestructura del harness, arreglarla antes de tomar el fallo como evidencia.
-- [ ] **3. Implementar las interfaces de esta tarea y sus fixtures.** Reutilizar los contratos anteriores; preservar los valores del diseño y el inventario. 5 herramientas; lotes independientes, creación serializada; canónicos creados no se revierten globalmente por fallos posteriores.
+- [x] **1. Añadir las pruebas antes del código funcional.** test_merge_replace_and_delta_exclusive; test_noop_does_not_patch; test_duplicate_slugs_no_writes; test_batch_serializes_create_missing y scopes por entrada. test_taxonomy_batch_not_artificially_capped_at25; equipamiento sí1..25; max_inflight escritores5. test_patch_preserves_unrelated_fields y taxonomyChanges.
+- [x] **2. Ejecutar el subconjunto indicado y observar RED.** El fallo esperado es el comportamiento/handler aún ausente o incorrecto; si falta infraestructura del harness, arreglarla antes de tomar el fallo como evidencia.
+- [x] **3. Implementar las interfaces de esta tarea y sus fixtures.** Reutilizar los contratos anteriores; preservar los valores del diseño y el inventario. 5 herramientas; lotes independientes, creación serializada; canónicos creados no se revierten globalmente por fallos posteriores.
 
-- [ ] **4. Verificar el resultado de esta tarea.** Ejecutar dentro del Dev Container; salida0 y todas las aserciones indicadas en verde. Para P01 el launcher y el contenedor auxiliar son la excepción de bootstrap explicada arriba.
+- [x] **4. Verificar el resultado de esta tarea.** Ejecutar dentro del Dev Container; salida0 y todas las aserciones indicadas en verde. Para P01 el launcher y el contenedor auxiliar son la excepción de bootstrap explicada arriba.
 
 ```bash
 uv run pytest tests/unit/test_recipe_taxonomy.py tests/unit/test_recipe_equipment.py tests/contracts/test_recipe_organizers.py -q
 ```
 
-- [ ] **5. Revisar, documentar y cerrar.** Comprobar el criterio de salida anterior y el diff; no ampliar la suite sin una nueva causa. Actualizar estado, diferencias si las hay y evidencia con comando/resultado/entorno. Commit de implementación sugerido: `feat: port guarded recipe organizer updates`. Registrar su SHA en un commit documental posterior si hace falta; no intentar incluir el hash de un commit en sí mismo.
+- [x] **5. Revisar, documentar y cerrar.** Comprobar el criterio de salida anterior y el diff; no ampliar la suite sin una nueva causa. Actualizar estado, diferencias si las hay y evidencia con comando/resultado/entorno. Commit de implementación sugerido: `feat: port guarded recipe organizer updates`. Registrar su SHA en un commit documental posterior si hace falta; no intentar incluir el hash de un commit en sí mismo.
 
 <a id="p14"></a>
 ### P14: Migrar planes de comidas y operaciones por fases

@@ -428,7 +428,7 @@
           "tests": 328
         }
       ],
-      "commit": null
+      "commit": "c87228c3da026f290ded62970ac5f4ff6bbb3067"
     },
     {
       "id": "P13",
@@ -436,7 +436,7 @@
       "dependsOn": [
         "P12"
       ],
-      "status": "in_progress",
+      "status": "verified",
       "tools": [
         "patch_recipe",
         "update_recipe_taxonomy",
@@ -449,14 +449,21 @@
         "src/mealie_mcp_server/services/recipe_equipment.py",
         "src/mealie_mcp_server/models/inputs/recipe_taxonomy.py",
         "src/mealie_mcp_server/tools/recipes.py",
-        "tests/fixtures/compatibility/cases/recipe_organizers.json"
+        "tests/fixtures/compatibility/cases/recipe_organizers.json",
+        "src/mealie_mcp_server/services/recipe_organizers.py"
       ],
       "tests": [
         "tests/unit/test_recipe_taxonomy.py",
         "tests/unit/test_recipe_equipment.py",
         "tests/contracts/test_recipe_organizers.py"
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "report": "docs/migration/evidence/P13.md",
+          "result": "passed",
+          "tests": 403
+        }
+      ],
       "commit": null
     },
     {
@@ -465,7 +472,7 @@
       "dependsOn": [
         "P13"
       ],
-      "status": "not_started",
+      "status": "in_progress",
       "tools": [
         "get_all_mealplans",
         "get_mealplan_with_recipes",

@@ -65,3 +65,11 @@ async def duplicate_recipe(client: MealieClient, slug: str, name: str | None = N
 
 async def delete_recipe(client: MealieClient, slug: str) -> JsonValue:
     return await client.request("DELETE", "/api/recipes/" + encode_path_segment(slug, "slug"))
+
+
+async def patch_recipe(client: MealieClient, slug: str, data: JsonObject) -> JsonObject:
+    return _object(
+        await client.request(
+            "PATCH", "/api/recipes/" + encode_path_segment(slug, "slug"), json=data
+        )
+    )

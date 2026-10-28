@@ -924,7 +924,7 @@
         "blobSha": "e918b9b3470dae48d07d54970c00d32cfd81beac",
         "url": "https://github.com/timo-reymann/mealie-mcp-server/blob/d027e1b4a314d781a322f1f91e37840f01464d77/src/tools/recipes.ts#L752"
       },
-      "migrationStatus": "inventoried_static_not_implemented",
+      "migrationStatus": "implemented_contract_verified",
       "effect": "write",
       "description": "Partially updates a recipe. Optional categories/tags/taxonomyMode/createMissing assign taxonomy; unchanged Category/Tag collections are never written and, if taxonomy is the only thing requested and nothing changes, no PATCH is issued and the current recipe is returned with taxonomyChanges. Optional instructions is the complete new list of steps (not a patch): it replaces all steps, [] clears them, omitting it leaves them unchanged.",
       "descriptionSource": "'Partially updates a recipe. Optional categories/tags/taxonomyMode/createMissing assign taxonomy; unchanged Category/Tag collections are never written and, if taxonomy is the only thing requested and nothing changes, no PATCH is issued and the current recipe is returned with taxonomyChanges. Optional instructions is the complete new list of steps (not a patch): it replaces all steps, [] clears them, omitting it leaves them unchanged.'",
@@ -1063,8 +1063,34 @@
         "additionalProperties": false
       },
       "runtimeOutputSchema": null,
-      "runtimeExamples": [],
-      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeExamples": [
+        {
+          "file": "tests/fixtures/compatibility/cases/recipe_organizers.json",
+          "index": 0,
+          "scenario": "patch_recipe.basic"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/recipe_organizers.json",
+          "index": 23,
+          "scenario": "patch_recipe.taxonomy_noop"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/recipe_organizers.json",
+          "index": 24,
+          "scenario": "patch_recipe.clear_instructions"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/recipe_organizers.json",
+          "index": 25,
+          "scenario": "patch_recipe.flags_only"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/recipe_organizers.json",
+          "index": 26,
+          "scenario": "patch_recipe.combined"
+        }
+      ],
+      "runtimeCaptureStatus": "behavior_captured_and_python_verified",
       "runtimeOutputSchemaPresent": false
     },
     {
@@ -2160,7 +2186,7 @@
         "blobSha": "e918b9b3470dae48d07d54970c00d32cfd81beac",
         "url": "https://github.com/timo-reymann/mealie-mcp-server/blob/d027e1b4a314d781a322f1f91e37840f01464d77/src/tools/recipes.ts#L1016"
       },
-      "migrationStatus": "inventoried_static_not_implemented",
+      "migrationStatus": "implemented_contract_verified",
       "effect": "write",
       "description": "Updates a recipe's categories and/or tags. Resolves requested names/slugs/IDs against existing taxonomy, optionally auto-creating missing values. Reads the recipe first to merge with existing taxonomy. Per collection, use either categories/tags (+ mode merge/replace) or the delta fields addCategories/removeCategories/addTags/removeTags (current - remove + add, other assignments untouched); additions and removals can be combined in one call. Removals must exist and are never created; createMissing only applies to additions. Unchanged Category/Tag collections are never written, whether the legacy merge/replace form or explicit delta form is used; if nothing changes, no recipe PATCH is issued. Returns final/added/removed/created per collection.",
       "descriptionSource": "'Updates a recipe\\'s categories and/or tags. Resolves requested names/slugs/IDs against existing taxonomy, ' +\n      'optionally auto-creating missing values. Reads the recipe first to merge with existing taxonomy. Per ' +\n      'collection, use either categories/tags (+ mode merge/replace) or the delta fields ' +\n      'addCategories/removeCategories/addTags/removeTags (current - remove + add, other assignments untouched); ' +\n      'additions and removals can be combined in one call. Removals must exist and are never created; ' +\n      'createMissing only applies to additions. Unchanged Category/Tag collections are never written, whether the ' +\n      'legacy merge/replace form or explicit delta form is used; if nothing changes, no recipe PATCH is issued. ' +\n      'Returns final/added/removed/created per collection.'",
@@ -2294,8 +2320,64 @@
         "additionalProperties": false
       },
       "runtimeOutputSchema": null,
-      "runtimeExamples": [],
-      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeExamples": [
+        {
+          "file": "tests/fixtures/compatibility/cases/recipe_organizers.json",
+          "index": 1,
+          "scenario": "update_recipe_taxonomy.basic"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/recipe_organizers.json",
+          "index": 5,
+          "scenario": "update_recipe_taxonomy.clear"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/recipe_organizers.json",
+          "index": 6,
+          "scenario": "update_recipe_taxonomy.noop"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/recipe_organizers.json",
+          "index": 7,
+          "scenario": "update_recipe_taxonomy.reorder_noop"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/recipe_organizers.json",
+          "index": 8,
+          "scenario": "update_recipe_taxonomy.delta"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/recipe_organizers.json",
+          "index": 9,
+          "scenario": "update_recipe_taxonomy.mixed"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/recipe_organizers.json",
+          "index": 10,
+          "scenario": "update_recipe_taxonomy.conflicting_forms"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/recipe_organizers.json",
+          "index": 11,
+          "scenario": "update_recipe_taxonomy.mode_delta"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/recipe_organizers.json",
+          "index": 12,
+          "scenario": "update_recipe_taxonomy.overlap"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/recipe_organizers.json",
+          "index": 13,
+          "scenario": "update_recipe_taxonomy.validate_all_before_create"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/recipe_organizers.json",
+          "index": 14,
+          "scenario": "update_recipe_taxonomy.omitted"
+        }
+      ],
+      "runtimeCaptureStatus": "behavior_captured_and_python_verified",
       "runtimeOutputSchemaPresent": false
     },
     {
@@ -2308,7 +2390,7 @@
         "blobSha": "e918b9b3470dae48d07d54970c00d32cfd81beac",
         "url": "https://github.com/timo-reymann/mealie-mcp-server/blob/d027e1b4a314d781a322f1f91e37840f01464d77/src/tools/recipes.ts#L1045"
       },
-      "migrationStatus": "inventoried_static_not_implemented",
+      "migrationStatus": "implemented_contract_verified",
       "effect": "write",
       "description": "Runs update_recipe_taxonomy for multiple recipes with bounded concurrency (5 at a time), returning a success/error result per recipe. Each entry accepts the same legacy (categories/tags + mode) or delta (addCategories/removeCategories/addTags/removeTags) fields. Each slug may appear only once; a request that repeats a slug is rejected as a whole before any recipe is processed. Category/tag creation via createMissing is serialized across the batch so a value requested by several recipes is created once, but createMissing applies per entry: an entry without it may fail as missing even if another entry creates that value, so set createMissing on every entry that names a new category or tag.",
       "descriptionSource": "'Runs update_recipe_taxonomy for multiple recipes with bounded concurrency (5 at a time), returning a ' +\n      'success/error result per recipe. Each entry accepts the same legacy (categories/tags + mode) or delta ' +\n      '(addCategories/removeCategories/addTags/removeTags) fields. Each slug may appear only once; a request ' +\n      'that repeats a slug is rejected as a whole before any recipe is processed. Category/tag creation via ' +\n      'createMissing is serialized across the batch so a value requested by several recipes is created once, ' +\n      'but createMissing applies per entry: an entry without it may fail as missing even if another entry ' +\n      'creates that value, so set createMissing on every entry that names a new category or tag.'",
@@ -2419,8 +2501,24 @@
         "additionalProperties": false
       },
       "runtimeOutputSchema": null,
-      "runtimeExamples": [],
-      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeExamples": [
+        {
+          "file": "tests/fixtures/compatibility/cases/recipe_organizers.json",
+          "index": 2,
+          "scenario": "update_recipe_taxonomy_batch.basic"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/recipe_organizers.json",
+          "index": 15,
+          "scenario": "update_recipe_taxonomy_batch.empty"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/recipe_organizers.json",
+          "index": 16,
+          "scenario": "update_recipe_taxonomy_batch.duplicates"
+        }
+      ],
+      "runtimeCaptureStatus": "behavior_captured_and_python_verified",
       "runtimeOutputSchemaPresent": false
     },
     {
@@ -2433,7 +2531,7 @@
         "blobSha": "e918b9b3470dae48d07d54970c00d32cfd81beac",
         "url": "https://github.com/timo-reymann/mealie-mcp-server/blob/d027e1b4a314d781a322f1f91e37840f01464d77/src/tools/recipes.ts#L1083"
       },
-      "migrationStatus": "inventoried_static_not_implemented",
+      "migrationStatus": "implemented_contract_verified",
       "effect": "write",
       "description": "Assigns Mealie Tool organizers (equipment, e.g. \"Whisk\", \"Sheet Pan\") to one existing recipe. You decide which tools the recipe needs; this tool only resolves them deterministically (exact ID, then slug, then name, case-insensitive — no fuzzy matching or substitution) and persists them, PATCHing only the recipe's tools field. Two mutually exclusive forms: (1) tools + mode — \"merge\" (default) keeps existing assignments, \"replace\" sets the complete collection and DESTRUCTIVELY clears all assigned tools when tools is an empty array; (2) add and/or remove — a delta computed as current - remove + add, leaving every other assigned tool untouched. Unknown tools fail the call before any recipe write unless createMissing is true, which creates values from tools/add (never from remove); if a later creation or the recipe write then fails, any Tool organizers already created remain (no rollback). The same tool in both add and remove is rejected, and a call that changes nothing skips the recipe write.",
       "descriptionSource": "'Assigns Mealie Tool organizers (equipment, e.g. \"Whisk\", \"Sheet Pan\") to one existing recipe. You decide which ' +\n      'tools the recipe needs; this tool only resolves them deterministically (exact ID, then slug, then name, ' +\n      'case-insensitive — no fuzzy matching or substitution) and persists them, PATCHing only the recipe\\'s tools ' +\n      'field. Two mutually exclusive forms: (1) tools + mode — \"merge\" (default) keeps existing assignments, ' +\n      '\"replace\" sets the complete collection and DESTRUCTIVELY clears all assigned tools when tools is an empty ' +\n      'array; (2) add and/or remove — a delta computed as current - remove + add, leaving every other assigned ' +\n      'tool untouched. Unknown tools fail the call before any recipe write unless createMissing is true, which ' +\n      'creates values from tools/add (never from remove); if a later creation or the recipe write then fails, any ' +\n      'Tool organizers already created remain (no rollback). The same tool in both add and remove is rejected, ' +\n      'and a call that changes nothing skips the recipe write.'",
@@ -2532,8 +2630,39 @@
         "additionalProperties": false
       },
       "runtimeOutputSchema": null,
-      "runtimeExamples": [],
-      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeExamples": [
+        {
+          "file": "tests/fixtures/compatibility/cases/recipe_organizers.json",
+          "index": 3,
+          "scenario": "update_recipe_tools.basic"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/recipe_organizers.json",
+          "index": 17,
+          "scenario": "update_recipe_tools.delta"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/recipe_organizers.json",
+          "index": 18,
+          "scenario": "update_recipe_tools.noop"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/recipe_organizers.json",
+          "index": 19,
+          "scenario": "update_recipe_tools.unknown_removal"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/recipe_organizers.json",
+          "index": 20,
+          "scenario": "update_recipe_tools.conflicting_forms"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/recipe_organizers.json",
+          "index": 21,
+          "scenario": "update_recipe_tools.omitted"
+        }
+      ],
+      "runtimeCaptureStatus": "behavior_captured_and_python_verified",
       "runtimeOutputSchemaPresent": false
     },
     {
@@ -2546,7 +2675,7 @@
         "blobSha": "e918b9b3470dae48d07d54970c00d32cfd81beac",
         "url": "https://github.com/timo-reymann/mealie-mcp-server/blob/d027e1b4a314d781a322f1f91e37840f01464d77/src/tools/recipes.ts#L1107"
       },
-      "migrationStatus": "inventoried_static_not_implemented",
+      "migrationStatus": "implemented_contract_verified",
       "effect": "write",
       "description": "Applies update_recipe_tools to several recipes in one call. Each update accepts the same legacy (tools + mode) or delta (add/remove) contract as the singular tool, with the same deterministic ID/slug/name resolution — you decide which tools each recipe needs. Recipes are processed independently with bounded concurrency (5 at a time), results are returned in input order with per-recipe success/error plus requested/succeeded/failed counts, and a failure on one recipe never stops or rolls back the others (no cross-recipe transaction; Tool organizers created for a recipe that later fails remain). Organizer creation via createMissing is serialized across the batch so a Tool requested by several recipes is created once. createMissing still applies per entry: an entry without it may fail as missing even if another entry in the same call creates that Tool, so set createMissing on every entry that names a new Tool. The whole call is rejected before any write for an empty batch, more than ${RECIPE_TOOLS_BATCH_MAX_SIZE} updates, a missing slug, or the same recipe slug repeated.",
       "descriptionSource": "'Applies update_recipe_tools to several recipes in one call. Each update accepts the same legacy (tools + ' +\n      'mode) or delta (add/remove) contract as the singular tool, with the same deterministic ID/slug/name ' +\n      'resolution — you decide which tools each recipe needs. Recipes are processed independently with bounded ' +\n      'concurrency (5 at a time), results are returned in input order with per-recipe success/error plus ' +\n      'requested/succeeded/failed counts, and a failure on one recipe never stops or rolls back the others (no ' +\n      'cross-recipe transaction; Tool organizers created for a recipe that later fails remain). Organizer ' +\n      'creation via createMissing is serialized across the batch so a Tool requested by several recipes is ' +\n      'created once. createMissing still applies per entry: an entry without it may fail as missing even if ' +\n      'another entry in the same call creates that Tool, so set createMissing on every entry that names a new ' +\n      `Tool. The whole call is rejected before any write for an empty batch, more than ${RECIPE_TOOLS_BATCH_MAX_SIZE} ` +\n      'updates, a missing slug, or the same recipe slug repeated.'",
@@ -2634,8 +2763,19 @@
         "additionalProperties": false
       },
       "runtimeOutputSchema": null,
-      "runtimeExamples": [],
-      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeExamples": [
+        {
+          "file": "tests/fixtures/compatibility/cases/recipe_organizers.json",
+          "index": 4,
+          "scenario": "update_recipe_tools_batch.basic"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/recipe_organizers.json",
+          "index": 22,
+          "scenario": "update_recipe_tools_batch.duplicates"
+        }
+      ],
+      "runtimeCaptureStatus": "behavior_captured_and_python_verified",
       "runtimeOutputSchemaPresent": false
     },
     {

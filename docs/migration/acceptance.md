@@ -1,7 +1,7 @@
 # Informe de aceptación de la migración
 
 Estado: **informe en construcción; aceptación final pendiente**. Actualizado el2026-10-28.
-P01..P12 verificadas:54/78herramientas,328tests Python y1058originales pasan. Ver evidence/P01.md..P12.md. La aceptación final sigue pendiente.
+P01..P13 verificadas:59/78herramientas,403tests Python y1058originales pasan. Ver evidence/P01.md..P13.md. La aceptación final sigue pendiente.
 
 Referencias: [plan](../superpowers/plans/2026-10-27-python-migration.md), [estado](implementation-state.json), [inventario](compatibility-inventory.md), [diferencias](differences.md).
 

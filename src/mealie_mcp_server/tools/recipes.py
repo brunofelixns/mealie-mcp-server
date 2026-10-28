@@ -5,6 +5,14 @@ from mcp.types import CallToolResult
 from pydantic import JsonValue
 
 from mealie_mcp_server.mealie.api import recipes as api
+from mealie_mcp_server.models.common import provided_fields
+from mealie_mcp_server.models.inputs.recipe_taxonomy import (
+    PatchRecipeInput,
+    UpdateRecipeTaxonomyBatchInput,
+    UpdateRecipeTaxonomyInput,
+    UpdateRecipeToolsBatchInput,
+    UpdateRecipeToolsInput,
+)
 from mealie_mcp_server.models.inputs.recipes import (
     CreateRecipeInput,
     DeleteRecipeInput,
@@ -15,6 +23,7 @@ from mealie_mcp_server.models.inputs.recipes import (
     GetRecipesDetailedBatchInput,
     GetRecipesInput,
 )
+from mealie_mcp_server.services import recipe_equipment, recipe_taxonomy
 from mealie_mcp_server.services.taxonomy_resolution import resolve_taxonomy_filter
 from mealie_mcp_server.tools.contracts import register_contract_tool
 from mealie_mcp_server.tools.helpers import success_result
@@ -118,3 +127,72 @@ def register_recipe_core(server: FastMCP) -> None:
         server, catalog["duplicate_recipe"], DuplicateRecipeInput, duplicate_recipe
     )
     register_contract_tool(server, catalog["delete_recipe"], DeleteRecipeInput, delete_recipe)
+
+
+async def patch_recipe(request: PatchRecipeInput, state: AppState) -> CallToolResult:
+    changes = provided_fields(request)
+    changes.pop("slug")
+    return success_result(
+        await recipe_taxonomy.patch_recipe_with_taxonomy(state.client, request.slug, changes)
+    )
+
+
+async def update_recipe_taxonomy(
+    request: UpdateRecipeTaxonomyInput, state: AppState
+) -> CallToolResult:
+    changes = provided_fields(request)
+    changes.pop("slug")
+    return success_result(
+        await recipe_taxonomy.update_recipe_taxonomy(state.client, request.slug, changes)
+    )
+
+
+async def update_recipe_taxonomy_batch(
+    request: UpdateRecipeTaxonomyBatchInput, state: AppState
+) -> CallToolResult:
+    return success_result(
+        await recipe_taxonomy.update_recipe_taxonomy_batch(
+            state.client, [provided_fields(item) for item in request.updates]
+        )
+    )
+
+
+async def update_recipe_tools(request: UpdateRecipeToolsInput, state: AppState) -> CallToolResult:
+    changes = provided_fields(request)
+    changes.pop("slug")
+    return success_result(
+        await recipe_equipment.update_recipe_equipment(state.client, request.slug, changes)
+    )
+
+
+async def update_recipe_tools_batch(
+    request: UpdateRecipeToolsBatchInput, state: AppState
+) -> CallToolResult:
+    return success_result(
+        await recipe_equipment.update_recipe_equipment_batch(
+            state.client, [provided_fields(item) for item in request.updates]
+        )
+    )
+
+
+def register_recipe_organizers(server: FastMCP) -> None:
+    catalog = definitions()
+    register_contract_tool(server, catalog["patch_recipe"], PatchRecipeInput, patch_recipe)
+    register_contract_tool(
+        server, catalog["update_recipe_taxonomy"], UpdateRecipeTaxonomyInput, update_recipe_taxonomy
+    )
+    register_contract_tool(
+        server,
+        catalog["update_recipe_taxonomy_batch"],
+        UpdateRecipeTaxonomyBatchInput,
+        update_recipe_taxonomy_batch,
+    )
+    register_contract_tool(
+        server, catalog["update_recipe_tools"], UpdateRecipeToolsInput, update_recipe_tools
+    )
+    register_contract_tool(
+        server,
+        catalog["update_recipe_tools_batch"],
+        UpdateRecipeToolsBatchInput,
+        update_recipe_tools_batch,
+    )

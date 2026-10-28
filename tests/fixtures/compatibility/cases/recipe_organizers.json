@@ -1,0 +1,1039 @@
+[
+  {
+    "tool": "patch_recipe",
+    "arguments": {
+      "slug": "one",
+      "name": "Changed"
+    },
+    "scenario": "patch_recipe.basic",
+    "expected_requests": [
+      {
+        "method": "PATCH",
+        "path": "/api/recipes/one",
+        "query": {},
+        "body": {
+          "name": "Changed"
+        }
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"id\":\"r1\",\"slug\":\"one\",\"name\":\"Changed\",\"recipeCategory\":[{\"id\":\"a\",\"name\":\"Dinner\",\"slug\":\"dinner\"}],\"tags\":[{\"id\":\"t\",\"name\":\"Quick\",\"slug\":\"quick\"}],\"tools\":[{\"id\":\"w\",\"name\":\"Whisk\",\"slug\":\"whisk\"}],\"recipeIngredient\":[{\"note\":\"keep\"}],\"nutrition\":{\"keep\":true}}"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "update_recipe_taxonomy",
+    "arguments": {
+      "slug": "one",
+      "categories": [
+        "Dessert"
+      ]
+    },
+    "scenario": "update_recipe_taxonomy.basic",
+    "expected_requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes/one",
+        "query": {},
+        "body": null
+      },
+      {
+        "method": "GET",
+        "path": "/api/organizers/categories",
+        "query": {
+          "perPage": [
+            "-1"
+          ]
+        },
+        "body": null
+      },
+      {
+        "method": "PATCH",
+        "path": "/api/recipes/one",
+        "query": {},
+        "body": {
+          "recipeCategory": [
+            {
+              "id": "a",
+              "name": "Dinner",
+              "slug": "dinner"
+            },
+            {
+              "id": "b",
+              "name": "Dessert",
+              "slug": "dessert"
+            }
+          ]
+        }
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"id\":\"r1\",\"slug\":\"one\",\"categories\":{\"final\":[{\"id\":\"a\",\"name\":\"Dinner\",\"slug\":\"dinner\"},{\"id\":\"b\",\"name\":\"Dessert\",\"slug\":\"dessert\"}],\"added\":[{\"id\":\"b\",\"name\":\"Dessert\",\"slug\":\"dessert\"}],\"removed\":[],\"created\":[]}}"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "update_recipe_taxonomy_batch",
+    "arguments": {
+      "updates": [
+        {
+          "slug": "one",
+          "tags": [
+            "Easy"
+          ]
+        }
+      ]
+    },
+    "scenario": "update_recipe_taxonomy_batch.basic",
+    "expected_requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes/one",
+        "query": {},
+        "body": null
+      },
+      {
+        "method": "GET",
+        "path": "/api/organizers/tags",
+        "query": {
+          "perPage": [
+            "-1"
+          ]
+        },
+        "body": null
+      },
+      {
+        "method": "PATCH",
+        "path": "/api/recipes/one",
+        "query": {},
+        "body": {
+          "tags": [
+            {
+              "id": "t",
+              "name": "Quick",
+              "slug": "quick"
+            },
+            {
+              "id": "u",
+              "name": "Easy",
+              "slug": "easy"
+            }
+          ]
+        }
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "[{\"success\":true,\"id\":\"r1\",\"slug\":\"one\",\"tags\":{\"final\":[{\"id\":\"t\",\"name\":\"Quick\",\"slug\":\"quick\"},{\"id\":\"u\",\"name\":\"Easy\",\"slug\":\"easy\"}],\"added\":[{\"id\":\"u\",\"name\":\"Easy\",\"slug\":\"easy\"}],\"removed\":[],\"created\":[]}}]"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "update_recipe_tools",
+    "arguments": {
+      "slug": "one",
+      "tools": [
+        "Pan"
+      ]
+    },
+    "scenario": "update_recipe_tools.basic",
+    "expected_requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes/one",
+        "query": {},
+        "body": null
+      },
+      {
+        "method": "GET",
+        "path": "/api/organizers/tools",
+        "query": {
+          "perPage": [
+            "-1"
+          ]
+        },
+        "body": null
+      },
+      {
+        "method": "PATCH",
+        "path": "/api/recipes/one",
+        "query": {},
+        "body": {
+          "tools": [
+            {
+              "id": "w",
+              "name": "Whisk",
+              "slug": "whisk"
+            },
+            {
+              "id": "p",
+              "name": "Pan",
+              "slug": "pan"
+            }
+          ]
+        }
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"id\":\"r1\",\"slug\":\"one\",\"tools\":{\"final\":[{\"id\":\"w\",\"name\":\"Whisk\",\"slug\":\"whisk\"},{\"id\":\"p\",\"name\":\"Pan\",\"slug\":\"pan\"}],\"added\":[{\"id\":\"p\",\"name\":\"Pan\",\"slug\":\"pan\"}],\"removed\":[],\"created\":[]}}"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "update_recipe_tools_batch",
+    "arguments": {
+      "updates": [
+        {
+          "slug": "one",
+          "tools": [],
+          "mode": "replace"
+        }
+      ]
+    },
+    "scenario": "update_recipe_tools_batch.basic",
+    "expected_requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes/one",
+        "query": {},
+        "body": null
+      },
+      {
+        "method": "GET",
+        "path": "/api/organizers/tools",
+        "query": {
+          "perPage": [
+            "-1"
+          ]
+        },
+        "body": null
+      },
+      {
+        "method": "PATCH",
+        "path": "/api/recipes/one",
+        "query": {},
+        "body": {
+          "tools": []
+        }
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"requestedCount\":1,\"succeededCount\":1,\"failedCount\":0,\"results\":[{\"success\":true,\"id\":\"r1\",\"slug\":\"one\",\"tools\":{\"final\":[],\"added\":[],\"removed\":[{\"id\":\"w\",\"name\":\"Whisk\",\"slug\":\"whisk\"}],\"created\":[]}}]}"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "update_recipe_taxonomy",
+    "arguments": {
+      "slug": "one",
+      "categories": [],
+      "mode": "replace"
+    },
+    "scenario": "update_recipe_taxonomy.clear",
+    "expected_requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes/one",
+        "query": {},
+        "body": null
+      },
+      {
+        "method": "GET",
+        "path": "/api/organizers/categories",
+        "query": {
+          "perPage": [
+            "-1"
+          ]
+        },
+        "body": null
+      },
+      {
+        "method": "PATCH",
+        "path": "/api/recipes/one",
+        "query": {},
+        "body": {
+          "recipeCategory": []
+        }
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"id\":\"r1\",\"slug\":\"one\",\"categories\":{\"final\":[],\"added\":[],\"removed\":[{\"id\":\"a\",\"name\":\"Dinner\",\"slug\":\"dinner\"}],\"created\":[]}}"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "update_recipe_taxonomy",
+    "arguments": {
+      "slug": "one",
+      "categories": [
+        "Dinner"
+      ]
+    },
+    "scenario": "update_recipe_taxonomy.noop",
+    "expected_requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes/one",
+        "query": {},
+        "body": null
+      },
+      {
+        "method": "GET",
+        "path": "/api/organizers/categories",
+        "query": {
+          "perPage": [
+            "-1"
+          ]
+        },
+        "body": null
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"id\":\"r1\",\"slug\":\"one\",\"categories\":{\"final\":[{\"id\":\"a\",\"name\":\"Dinner\",\"slug\":\"dinner\"}],\"added\":[],\"removed\":[],\"created\":[]}}"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "update_recipe_taxonomy",
+    "arguments": {
+      "slug": "one",
+      "categories": [
+        "Dessert",
+        "Dinner"
+      ],
+      "mode": "replace"
+    },
+    "scenario": "update_recipe_taxonomy.reorder_noop",
+    "expected_requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes/one",
+        "query": {},
+        "body": null
+      },
+      {
+        "method": "GET",
+        "path": "/api/organizers/categories",
+        "query": {
+          "perPage": [
+            "-1"
+          ]
+        },
+        "body": null
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"id\":\"r1\",\"slug\":\"one\",\"categories\":{\"final\":[{\"id\":\"b\",\"name\":\"Dessert\",\"slug\":\"dessert\"},{\"id\":\"a\",\"name\":\"Dinner\",\"slug\":\"dinner\"}],\"added\":[],\"removed\":[],\"created\":[]}}"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "update_recipe_taxonomy",
+    "arguments": {
+      "slug": "one",
+      "addCategories": [
+        " Dessert "
+      ],
+      "removeCategories": [
+        "Dinner"
+      ]
+    },
+    "scenario": "update_recipe_taxonomy.delta",
+    "expected_requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes/one",
+        "query": {},
+        "body": null
+      },
+      {
+        "method": "GET",
+        "path": "/api/organizers/categories",
+        "query": {
+          "perPage": [
+            "-1"
+          ]
+        },
+        "body": null
+      },
+      {
+        "method": "PATCH",
+        "path": "/api/recipes/one",
+        "query": {},
+        "body": {
+          "recipeCategory": [
+            {
+              "id": "b",
+              "name": "Dessert",
+              "slug": "dessert"
+            }
+          ]
+        }
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"id\":\"r1\",\"slug\":\"one\",\"categories\":{\"final\":[{\"id\":\"b\",\"name\":\"Dessert\",\"slug\":\"dessert\"}],\"added\":[{\"id\":\"b\",\"name\":\"Dessert\",\"slug\":\"dessert\"}],\"removed\":[{\"id\":\"a\",\"name\":\"Dinner\",\"slug\":\"dinner\"}],\"created\":[]}}"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "update_recipe_taxonomy",
+    "arguments": {
+      "slug": "one",
+      "categories": [
+        "Dessert"
+      ],
+      "mode": "replace",
+      "addTags": [
+        "Easy"
+      ],
+      "removeTags": [
+        "Quick"
+      ]
+    },
+    "scenario": "update_recipe_taxonomy.mixed",
+    "expected_requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes/one",
+        "query": {},
+        "body": null
+      },
+      {
+        "method": "GET",
+        "path": "/api/organizers/categories",
+        "query": {
+          "perPage": [
+            "-1"
+          ]
+        },
+        "body": null
+      },
+      {
+        "method": "GET",
+        "path": "/api/organizers/tags",
+        "query": {
+          "perPage": [
+            "-1"
+          ]
+        },
+        "body": null
+      },
+      {
+        "method": "PATCH",
+        "path": "/api/recipes/one",
+        "query": {},
+        "body": {
+          "recipeCategory": [
+            {
+              "id": "b",
+              "name": "Dessert",
+              "slug": "dessert"
+            }
+          ],
+          "tags": [
+            {
+              "id": "u",
+              "name": "Easy",
+              "slug": "easy"
+            }
+          ]
+        }
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"id\":\"r1\",\"slug\":\"one\",\"categories\":{\"final\":[{\"id\":\"b\",\"name\":\"Dessert\",\"slug\":\"dessert\"}],\"added\":[{\"id\":\"b\",\"name\":\"Dessert\",\"slug\":\"dessert\"}],\"removed\":[{\"id\":\"a\",\"name\":\"Dinner\",\"slug\":\"dinner\"}],\"created\":[]},\"tags\":{\"final\":[{\"id\":\"u\",\"name\":\"Easy\",\"slug\":\"easy\"}],\"added\":[{\"id\":\"u\",\"name\":\"Easy\",\"slug\":\"easy\"}],\"removed\":[{\"id\":\"t\",\"name\":\"Quick\",\"slug\":\"quick\"}],\"created\":[]}}"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "update_recipe_taxonomy",
+    "arguments": {
+      "slug": "one",
+      "categories": [],
+      "addCategories": []
+    },
+    "scenario": "update_recipe_taxonomy.conflicting_forms",
+    "expected_requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes/one",
+        "query": {},
+        "body": null
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "Provide either categories (with optional mode) or addCategories/removeCategories, not both."
+        }
+      ],
+      "isError": true
+    }
+  },
+  {
+    "tool": "update_recipe_taxonomy",
+    "arguments": {
+      "slug": "one",
+      "addCategories": [],
+      "mode": "merge"
+    },
+    "scenario": "update_recipe_taxonomy.mode_delta",
+    "expected_requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes/one",
+        "query": {},
+        "body": null
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "mode only applies together with categories/tags; it has no effect on add/remove delta fields."
+        }
+      ],
+      "isError": true
+    }
+  },
+  {
+    "tool": "update_recipe_taxonomy",
+    "arguments": {
+      "slug": "one",
+      "addCategories": [
+        "Dinner"
+      ],
+      "removeCategories": [
+        "a"
+      ],
+      "createMissing": true
+    },
+    "scenario": "update_recipe_taxonomy.overlap",
+    "expected_requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes/one",
+        "query": {},
+        "body": null
+      },
+      {
+        "method": "GET",
+        "path": "/api/organizers/categories",
+        "query": {
+          "perPage": [
+            "-1"
+          ]
+        },
+        "body": null
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "The same category appears in both add and remove: Dinner."
+        }
+      ],
+      "isError": true
+    }
+  },
+  {
+    "tool": "update_recipe_taxonomy",
+    "arguments": {
+      "slug": "one",
+      "categories": [
+        "New"
+      ],
+      "removeTags": [
+        "unknown"
+      ],
+      "createMissing": true
+    },
+    "scenario": "update_recipe_taxonomy.validate_all_before_create",
+    "expected_requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes/one",
+        "query": {},
+        "body": null
+      },
+      {
+        "method": "GET",
+        "path": "/api/organizers/categories",
+        "query": {
+          "perPage": [
+            "-1"
+          ]
+        },
+        "body": null
+      },
+      {
+        "method": "GET",
+        "path": "/api/organizers/tags",
+        "query": {
+          "perPage": [
+            "-1"
+          ]
+        },
+        "body": null
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "Cannot remove tags that do not exist: unknown. Values passed to remove are never created; correct the tags name(s)/slug(s)/ID(s). No changes were made to the recipe."
+        }
+      ],
+      "isError": true
+    }
+  },
+  {
+    "tool": "update_recipe_taxonomy",
+    "arguments": {
+      "slug": "one"
+    },
+    "scenario": "update_recipe_taxonomy.omitted",
+    "expected_requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes/one",
+        "query": {},
+        "body": null
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"id\":\"r1\",\"slug\":\"one\"}"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "update_recipe_taxonomy_batch",
+    "arguments": {
+      "updates": []
+    },
+    "scenario": "update_recipe_taxonomy_batch.empty",
+    "expected_requests": [],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "[]"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "update_recipe_taxonomy_batch",
+    "arguments": {
+      "updates": [
+        {
+          "slug": "one"
+        },
+        {
+          "slug": " one "
+        }
+      ]
+    },
+    "scenario": "update_recipe_taxonomy_batch.duplicates",
+    "expected_requests": [],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "Duplicate recipe slug(s) in the same batch call: one. Each recipe may appear at most once per batch — submit a second call for a repeat update."
+        }
+      ],
+      "isError": true
+    }
+  },
+  {
+    "tool": "update_recipe_tools",
+    "arguments": {
+      "slug": "one",
+      "add": [
+        "Pan"
+      ],
+      "remove": [
+        "Whisk"
+      ]
+    },
+    "scenario": "update_recipe_tools.delta",
+    "expected_requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes/one",
+        "query": {},
+        "body": null
+      },
+      {
+        "method": "GET",
+        "path": "/api/organizers/tools",
+        "query": {
+          "perPage": [
+            "-1"
+          ]
+        },
+        "body": null
+      },
+      {
+        "method": "PATCH",
+        "path": "/api/recipes/one",
+        "query": {},
+        "body": {
+          "tools": [
+            {
+              "id": "p",
+              "name": "Pan",
+              "slug": "pan"
+            }
+          ]
+        }
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"id\":\"r1\",\"slug\":\"one\",\"tools\":{\"final\":[{\"id\":\"p\",\"name\":\"Pan\",\"slug\":\"pan\"}],\"added\":[{\"id\":\"p\",\"name\":\"Pan\",\"slug\":\"pan\"}],\"removed\":[{\"id\":\"w\",\"name\":\"Whisk\",\"slug\":\"whisk\"}],\"created\":[]}}"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "update_recipe_tools",
+    "arguments": {
+      "slug": "one",
+      "tools": [
+        "Whisk"
+      ]
+    },
+    "scenario": "update_recipe_tools.noop",
+    "expected_requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes/one",
+        "query": {},
+        "body": null
+      },
+      {
+        "method": "GET",
+        "path": "/api/organizers/tools",
+        "query": {
+          "perPage": [
+            "-1"
+          ]
+        },
+        "body": null
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"id\":\"r1\",\"slug\":\"one\",\"tools\":{\"final\":[{\"id\":\"w\",\"name\":\"Whisk\",\"slug\":\"whisk\"}],\"added\":[],\"removed\":[],\"created\":[]}}"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "update_recipe_tools",
+    "arguments": {
+      "slug": "one",
+      "add": [
+        "New"
+      ],
+      "remove": [
+        "unknown"
+      ],
+      "createMissing": true
+    },
+    "scenario": "update_recipe_tools.unknown_removal",
+    "expected_requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes/one",
+        "query": {},
+        "body": null
+      },
+      {
+        "method": "GET",
+        "path": "/api/organizers/tools",
+        "query": {
+          "perPage": [
+            "-1"
+          ]
+        },
+        "body": null
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "Cannot remove tools that do not exist: unknown. Values passed to remove are never created; correct the tool name(s)/slug(s)/ID(s). No changes were made to the recipe."
+        }
+      ],
+      "isError": true
+    }
+  },
+  {
+    "tool": "update_recipe_tools",
+    "arguments": {
+      "slug": "one",
+      "tools": [],
+      "add": []
+    },
+    "scenario": "update_recipe_tools.conflicting_forms",
+    "expected_requests": [],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "Provide either tools (with optional mode) or add/remove, not both."
+        }
+      ],
+      "isError": true
+    }
+  },
+  {
+    "tool": "update_recipe_tools",
+    "arguments": {
+      "slug": "one"
+    },
+    "scenario": "update_recipe_tools.omitted",
+    "expected_requests": [],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "Provide tools (with optional mode) or at least one of add/remove."
+        }
+      ],
+      "isError": true
+    }
+  },
+  {
+    "tool": "update_recipe_tools_batch",
+    "arguments": {
+      "updates": [
+        {
+          "slug": "one"
+        },
+        {
+          "slug": " one "
+        }
+      ]
+    },
+    "scenario": "update_recipe_tools_batch.duplicates",
+    "expected_requests": [],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "Duplicate recipe slug(s) in the same batch call: one. Each recipe may appear at most once per batch — submit a second call for a repeat update."
+        }
+      ],
+      "isError": true
+    }
+  },
+  {
+    "tool": "patch_recipe",
+    "arguments": {
+      "slug": "one",
+      "categories": [
+        "Dinner"
+      ]
+    },
+    "scenario": "patch_recipe.taxonomy_noop",
+    "expected_requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes/one",
+        "query": {},
+        "body": null
+      },
+      {
+        "method": "GET",
+        "path": "/api/organizers/categories",
+        "query": {
+          "perPage": [
+            "-1"
+          ]
+        },
+        "body": null
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"id\":\"r1\",\"slug\":\"one\",\"name\":\"Recipe\",\"recipeCategory\":[{\"id\":\"a\",\"name\":\"Dinner\",\"slug\":\"dinner\"}],\"tags\":[{\"id\":\"t\",\"name\":\"Quick\",\"slug\":\"quick\"}],\"tools\":[{\"id\":\"w\",\"name\":\"Whisk\",\"slug\":\"whisk\"}],\"recipeIngredient\":[{\"note\":\"keep\"}],\"nutrition\":{\"keep\":true},\"taxonomyChanges\":{\"categories\":{\"final\":[{\"id\":\"a\",\"name\":\"Dinner\",\"slug\":\"dinner\"}],\"added\":[],\"removed\":[],\"created\":[]}}}"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "patch_recipe",
+    "arguments": {
+      "slug": "one",
+      "instructions": []
+    },
+    "scenario": "patch_recipe.clear_instructions",
+    "expected_requests": [
+      {
+        "method": "PATCH",
+        "path": "/api/recipes/one",
+        "query": {},
+        "body": {
+          "recipeInstructions": []
+        }
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"id\":\"r1\",\"slug\":\"one\",\"name\":\"Recipe\",\"recipeCategory\":[{\"id\":\"a\",\"name\":\"Dinner\",\"slug\":\"dinner\"}],\"tags\":[{\"id\":\"t\",\"name\":\"Quick\",\"slug\":\"quick\"}],\"tools\":[{\"id\":\"w\",\"name\":\"Whisk\",\"slug\":\"whisk\"}],\"recipeIngredient\":[{\"note\":\"keep\"}],\"nutrition\":{\"keep\":true},\"recipeInstructions\":[]}"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "patch_recipe",
+    "arguments": {
+      "slug": "one",
+      "taxonomyMode": "replace",
+      "createMissing": true
+    },
+    "scenario": "patch_recipe.flags_only",
+    "expected_requests": [
+      {
+        "method": "PATCH",
+        "path": "/api/recipes/one",
+        "query": {},
+        "body": {}
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"id\":\"r1\",\"slug\":\"one\",\"name\":\"Recipe\",\"recipeCategory\":[{\"id\":\"a\",\"name\":\"Dinner\",\"slug\":\"dinner\"}],\"tags\":[{\"id\":\"t\",\"name\":\"Quick\",\"slug\":\"quick\"}],\"tools\":[{\"id\":\"w\",\"name\":\"Whisk\",\"slug\":\"whisk\"}],\"recipeIngredient\":[{\"note\":\"keep\"}],\"nutrition\":{\"keep\":true}}"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "patch_recipe",
+    "arguments": {
+      "slug": "one",
+      "name": "Changed",
+      "recipeServings": 0,
+      "instructions": [
+        ""
+      ],
+      "categories": [
+        "Dessert"
+      ]
+    },
+    "scenario": "patch_recipe.combined",
+    "expected_requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes/one",
+        "query": {},
+        "body": null
+      },
+      {
+        "method": "GET",
+        "path": "/api/organizers/categories",
+        "query": {
+          "perPage": [
+            "-1"
+          ]
+        },
+        "body": null
+      },
+      {
+        "method": "PATCH",
+        "path": "/api/recipes/one",
+        "query": {},
+        "body": {
+          "name": "Changed",
+          "recipeServings": 0,
+          "recipeInstructions": [
+            {
+              "text": ""
+            }
+          ],
+          "recipeCategory": [
+            {
+              "id": "a",
+              "name": "Dinner",
+              "slug": "dinner"
+            },
+            {
+              "id": "b",
+              "name": "Dessert",
+              "slug": "dessert"
+            }
+          ]
+        }
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"id\":\"r1\",\"slug\":\"one\",\"name\":\"Changed\",\"recipeCategory\":[{\"id\":\"a\",\"name\":\"Dinner\",\"slug\":\"dinner\"},{\"id\":\"b\",\"name\":\"Dessert\",\"slug\":\"dessert\"}],\"tags\":[{\"id\":\"t\",\"name\":\"Quick\",\"slug\":\"quick\"}],\"tools\":[{\"id\":\"w\",\"name\":\"Whisk\",\"slug\":\"whisk\"}],\"recipeIngredient\":[{\"note\":\"keep\"}],\"nutrition\":{\"keep\":true},\"recipeServings\":0,\"recipeInstructions\":[{\"text\":\"\"}],\"taxonomyChanges\":{\"categories\":{\"final\":[{\"id\":\"a\",\"name\":\"Dinner\",\"slug\":\"dinner\"},{\"id\":\"b\",\"name\":\"Dessert\",\"slug\":\"dessert\"}],\"added\":[{\"id\":\"b\",\"name\":\"Dessert\",\"slug\":\"dessert\"}],\"removed\":[],\"created\":[]}}}"
+        }
+      ]
+    }
+  }
+]
