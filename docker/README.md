@@ -29,7 +29,7 @@ Editar estos valores:
 
 Para generar el token HTTP en un servidor con OpenSSL: `openssl rand -hex 32`. Guardar el resultado en MCP_AUTH_TOKEN. Si un valor contiene `$`, escribirlo entre comillas simples en .env para evitar interpolación.
 
-El workflow release.yaml publica bajo el propietario/repositorio que lo ejecuta: por ejemplo, si el fork es miusuario/mealie-mcp-server, la referencia será ghcr.io/miusuario/mealie-mcp-server:2.1.0. **La plantilla no afirma que esa imagen exista:** sustituir tu-usuario y esperar a que termine la publicación. El workflow actual publica versiones concretas, sin un tag latest.
+El workflow release.yaml publica bajo el propietario/repositorio que lo ejecuta. La plantilla apunta a ghcr.io/brunofelixns/mealie-mcp-server:2.1.0, correspondiente a este repositorio. **La plantilla no afirma que esa imagen exista:** esperar a que termine la publicación. Si se utiliza otro fork, cambiar propietario/repositorio. El workflow actual publica versiones concretas, sin un tag latest.
 
 Compose lee .env e inyecta explícitamente las variables necesarias. En esta modalidad las credenciales son variables del contenedor, visibles para administradores Docker; proteger .env y el acceso al daemon. La configuración con secretos de archivo se documenta en [contenedores](../docs/containers.md).
 
