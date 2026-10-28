@@ -543,7 +543,7 @@
           "tests": 521
         }
       ],
-      "commit": null
+      "commit": "a0a28e8a8ec3833b158c8ef81c16b4532cbea002"
     },
     {
       "id": "P16",
@@ -551,7 +551,7 @@
       "dependsOn": [
         "P15"
       ],
-      "status": "in_progress",
+      "status": "verified",
       "tools": [
         "update_recipe_ingredients",
         "update_recipe_ingredients_batch"
@@ -560,13 +560,23 @@
         "src/mealie_mcp_server/models/inputs/recipe_ingredients.py",
         "src/mealie_mcp_server/services/recipe_ingredients.py",
         "src/mealie_mcp_server/tools/recipes.py",
-        "tests/fixtures/compatibility/cases/recipe_ingredients.json"
+        "tests/fixtures/compatibility/cases/recipe_ingredients.json",
+        "src/mealie_mcp_server/support/mutations.py",
+        "src/mealie_mcp_server/tools/registry.py",
+        "pyproject.toml",
+        "uv.lock"
       ],
       "tests": [
         "tests/unit/test_recipe_ingredients.py",
         "tests/contracts/test_recipe_ingredients.py"
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "report": "docs/migration/evidence/P16.md",
+          "result": "passed",
+          "tests": 568
+        }
+      ],
       "commit": null
     },
     {
@@ -575,7 +585,7 @@
       "dependsOn": [
         "P16"
       ],
-      "status": "not_started",
+      "status": "in_progress",
       "tools": [
         "update_recipe_instructions",
         "update_recipe_instructions_batch"

@@ -6,6 +6,10 @@ from pydantic import JsonValue
 
 from mealie_mcp_server.mealie.api import recipes as api
 from mealie_mcp_server.models.common import provided_fields
+from mealie_mcp_server.models.inputs.recipe_ingredients import (
+    UpdateRecipeIngredientsBatchInput,
+    UpdateRecipeIngredientsInput,
+)
 from mealie_mcp_server.models.inputs.recipe_taxonomy import (
     PatchRecipeInput,
     UpdateRecipeTaxonomyBatchInput,
@@ -23,7 +27,7 @@ from mealie_mcp_server.models.inputs.recipes import (
     GetRecipesDetailedBatchInput,
     GetRecipesInput,
 )
-from mealie_mcp_server.services import recipe_equipment, recipe_taxonomy
+from mealie_mcp_server.services import recipe_equipment, recipe_ingredients, recipe_taxonomy
 from mealie_mcp_server.services.taxonomy_resolution import resolve_taxonomy_filter
 from mealie_mcp_server.tools.contracts import register_contract_tool
 from mealie_mcp_server.tools.helpers import success_result
@@ -195,4 +199,40 @@ def register_recipe_organizers(server: FastMCP) -> None:
         catalog["update_recipe_tools_batch"],
         UpdateRecipeToolsBatchInput,
         update_recipe_tools_batch,
+    )
+
+
+async def update_recipe_ingredients(
+    request: UpdateRecipeIngredientsInput, state: AppState
+) -> CallToolResult:
+    changes = provided_fields(request)
+    changes.pop("slug")
+    return success_result(
+        await recipe_ingredients.update_recipe_ingredients(state.client, request.slug, changes)
+    )
+
+
+async def update_recipe_ingredients_batch(
+    request: UpdateRecipeIngredientsBatchInput, state: AppState
+) -> CallToolResult:
+    return success_result(
+        await recipe_ingredients.update_recipe_ingredients_batch(
+            state.client, [provided_fields(item) for item in request.updates]
+        )
+    )
+
+
+def register_recipe_ingredients(server: FastMCP) -> None:
+    catalog = definitions()
+    register_contract_tool(
+        server,
+        catalog["update_recipe_ingredients"],
+        UpdateRecipeIngredientsInput,
+        update_recipe_ingredients,
+    )
+    register_contract_tool(
+        server,
+        catalog["update_recipe_ingredients_batch"],
+        UpdateRecipeIngredientsBatchInput,
+        update_recipe_ingredients_batch,
     )

@@ -10,7 +10,7 @@
 
 **Spec:** [Diseño completo](../specs/2026-10-27-python-migration-design.md). Leer también [inventario](../../migration/compatibility-inventory.md) e [inventario JSON](../../migration/compatibility-inventory.json).
 
-Fecha: 2026-10-27. Estado: implementación autorizada; P01..P15 verificadas y P16 en curso. Ver implementation-state.json para la evidencia. No se ha publicado ni desplegado un endpoint público.
+Fecha: 2026-10-27. Estado: implementación autorizada; P01..P16 verificadas y P17 en curso. Ver implementation-state.json para la evidencia. No se ha publicado ni desplegado un endpoint público.
 
 ## Global Constraints
 
@@ -447,26 +447,26 @@ uv run pytest tests/unit/test_recipe_discovery.py tests/unit/test_recipe_scan.py
 <a id="p16"></a>
 ### P16: Migrar escrituras de ingredientes y recuperación
 
-**Depende de:** P15. **Estado:** pendiente; ver registro de ejecución.
+**Depende de:** P15. **Estado:** verificada; ver registro de ejecución.
 
-**Archivos:** `src/mealie_mcp_server/models/inputs/recipe_ingredients.py`, `src/mealie_mcp_server/services/recipe_ingredients.py`, `src/mealie_mcp_server/tools/recipes.py`, `tests/fixtures/compatibility/cases/recipe_ingredients.json`.
+**Archivos:** `src/mealie_mcp_server/models/inputs/recipe_ingredients.py`, `src/mealie_mcp_server/services/recipe_ingredients.py`, `src/mealie_mcp_server/tools/recipes.py`, `src/mealie_mcp_server/support/mutations.py`, `tests/fixtures/compatibility/cases/recipe_ingredients.json`.
 **Tests:** `tests/unit/test_recipe_ingredients.py`, `tests/contracts/test_recipe_ingredients.py`.
 
 **Interfaces:** consume Recetas y cliente; vocabularios P09; concurrencia P05. Produce update_recipe_ingredients(client: MealieClient, slug: str, changes: JsonObject) -> JsonObject; update_recipe_ingredients_batch(client: MealieClient, updates: list[JsonObject]) -> JsonObject; ambas herramientas.
 
 **Herramientas (2):** `update_recipe_ingredients`, `update_recipe_ingredients_batch`.
 
-- [ ] **1. Añadir las pruebas antes del código funcional.** test_replace_or_reference_delta; test_preserves_reference_ids_notes_and_sections; test_subrecipe_reference_checked; test_food_unit_name_id_mismatch_before_write; test_silent_association_corruption_rolls_back; test_rollback_failure_reported. Batch1..25/slugs únicos/concurrencia5. test_disconnect_after_patch_finishes_verification_with_bounded_cleanup; test_cancel_before_write_has_no_effect.
-- [ ] **2. Ejecutar el subconjunto indicado y observar RED.** El fallo esperado es el comportamiento/handler aún ausente o incorrecto; si falta infraestructura del harness, arreglarla antes de tomar el fallo como evidencia.
-- [ ] **3. Implementar las interfaces de esta tarea y sus fixtures.** Reutilizar los contratos anteriores; preservar los valores del diseño y el inventario. 2 herramientas; verificación de persistencia y best-effort rollback con error propio por receta; no se pierde un campo ajeno por usar un modelo incompleto.
+- [x] **1. Añadir las pruebas antes del código funcional.** test_replace_or_reference_delta; test_preserves_reference_ids_notes_and_sections; test_subrecipe_reference_checked; test_food_unit_missing_pair_before_write; test_food_unit_name_id_mismatch_verified_after_write; test_silent_association_corruption_rolls_back; test_rollback_failure_reported. Batch1..25/slugs únicos/concurrencia5. test_disconnect_after_patch_finishes_verification_with_bounded_cleanup; test_cancel_before_write_has_no_effect.
+- [x] **2. Ejecutar el subconjunto indicado y observar RED.** El fallo esperado es el comportamiento/handler aún ausente o incorrecto; si falta infraestructura del harness, arreglarla antes de tomar el fallo como evidencia.
+- [x] **3. Implementar las interfaces de esta tarea y sus fixtures.** Reutilizar los contratos anteriores; preservar los valores del diseño y el inventario. 2 herramientas; verificación de persistencia y best-effort rollback con error propio por receta; no se pierde un campo ajeno por usar un modelo incompleto.
 
-- [ ] **4. Verificar el resultado de esta tarea.** Ejecutar dentro del Dev Container; salida0 y todas las aserciones indicadas en verde. Para P01 el launcher y el contenedor auxiliar son la excepción de bootstrap explicada arriba.
+- [x] **4. Verificar el resultado de esta tarea.** Ejecutar dentro del Dev Container; salida0 y todas las aserciones indicadas en verde. Para P01 el launcher y el contenedor auxiliar son la excepción de bootstrap explicada arriba.
 
 ```bash
 uv run pytest tests/unit/test_recipe_ingredients.py tests/contracts/test_recipe_ingredients.py -q
 ```
 
-- [ ] **5. Revisar, documentar y cerrar.** Comprobar el criterio de salida anterior y el diff; no ampliar la suite sin una nueva causa. Actualizar estado, diferencias si las hay y evidencia con comando/resultado/entorno. Commit de implementación sugerido: `feat: port verified ingredient writes and recovery`. Registrar su SHA en un commit documental posterior si hace falta; no intentar incluir el hash de un commit en sí mismo.
+- [x] **5. Revisar, documentar y cerrar.** Comprobar el criterio de salida anterior y el diff; no ampliar la suite sin una nueva causa. Actualizar estado, diferencias si las hay y evidencia con comando/resultado/entorno. Commit de implementación sugerido: `feat: port verified ingredient writes and recovery`. Registrar su SHA en un commit documental posterior si hace falta; no intentar incluir el hash de un commit en sí mismo.
 
 <a id="p17"></a>
 ### P17: Migrar instrucciones con guardas de snapshot

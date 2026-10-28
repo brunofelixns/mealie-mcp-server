@@ -11564,5 +11564,1075 @@
   },
   "find_recipes_for_ingredients.blank": {
     "requests": []
+  },
+  "update_recipe_ingredients.basic": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes/soup",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "cccccccc-cccc-4ccc-8ccc-cccccccccccc",
+          "slug": "soup",
+          "name": "Keep",
+          "recipeIngredient": [
+            {
+              "referenceId": "11111111-1111-4111-8111-111111111111",
+              "note": "old",
+              "food": {
+                "id": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+                "name": "Salt"
+              },
+              "unit": null,
+              "quantity": 0,
+              "providerExtra": {
+                "keep": true
+              }
+            },
+            {
+              "referenceId": "22222222-2222-4222-8222-222222222222",
+              "title": "Sauce",
+              "food": null,
+              "unit": null
+            }
+          ],
+          "recipeInstructions": [
+            {
+              "id": "unstable",
+              "text": "Keep"
+            }
+          ],
+          "providerExtra": true
+        },
+        "status": 200
+      },
+      {
+        "method": "PATCH",
+        "path": "/api/recipes/soup",
+        "query": {},
+        "body": {
+          "recipeIngredient": [
+            {
+              "food": {
+                "id": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+                "name": "Salt"
+              },
+              "unit": null,
+              "quantity": 0,
+              "note": null,
+              "originalText": null,
+              "title": null,
+              "referenceId": "11111111-1111-4111-8111-111111111111"
+            },
+            {
+              "food": null,
+              "unit": null,
+              "title": "Sauce",
+              "referenceId": "22222222-2222-4222-8222-222222222222"
+            }
+          ]
+        },
+        "response": {
+          "id": "cccccccc-cccc-4ccc-8ccc-cccccccccccc",
+          "slug": "soup",
+          "name": "Keep",
+          "recipeIngredient": [
+            {
+              "food": {
+                "id": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+                "name": "Salt"
+              },
+              "unit": null,
+              "quantity": 0,
+              "note": null,
+              "originalText": null,
+              "title": null,
+              "referenceId": "11111111-1111-4111-8111-111111111111"
+            },
+            {
+              "food": null,
+              "unit": null,
+              "title": "Sauce",
+              "referenceId": "22222222-2222-4222-8222-222222222222"
+            }
+          ],
+          "recipeInstructions": [
+            {
+              "id": "unstable",
+              "text": "Keep"
+            }
+          ],
+          "providerExtra": true
+        },
+        "status": 200
+      }
+    ]
+  },
+  "update_recipe_ingredients_batch.basic": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes/soup",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "cccccccc-cccc-4ccc-8ccc-cccccccccccc",
+          "slug": "soup",
+          "name": "Keep",
+          "recipeIngredient": [
+            {
+              "referenceId": "11111111-1111-4111-8111-111111111111",
+              "note": "old",
+              "food": {
+                "id": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+                "name": "Salt"
+              },
+              "unit": null,
+              "quantity": 0,
+              "providerExtra": {
+                "keep": true
+              }
+            },
+            {
+              "referenceId": "22222222-2222-4222-8222-222222222222",
+              "title": "Sauce",
+              "food": null,
+              "unit": null
+            }
+          ],
+          "recipeInstructions": [
+            {
+              "id": "unstable",
+              "text": "Keep"
+            }
+          ],
+          "providerExtra": true
+        },
+        "status": 200
+      },
+      {
+        "method": "PATCH",
+        "path": "/api/recipes/soup",
+        "query": {},
+        "body": {
+          "recipeIngredient": [
+            {
+              "food": {
+                "id": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+                "name": "Salt"
+              },
+              "unit": null,
+              "quantity": 0,
+              "note": null,
+              "originalText": null,
+              "title": null,
+              "referenceId": "11111111-1111-4111-8111-111111111111"
+            },
+            {
+              "food": null,
+              "unit": null,
+              "title": "Sauce",
+              "referenceId": "22222222-2222-4222-8222-222222222222"
+            }
+          ]
+        },
+        "response": {
+          "id": "cccccccc-cccc-4ccc-8ccc-cccccccccccc",
+          "slug": "soup",
+          "name": "Keep",
+          "recipeIngredient": [
+            {
+              "food": {
+                "id": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+                "name": "Salt"
+              },
+              "unit": null,
+              "quantity": 0,
+              "note": null,
+              "originalText": null,
+              "title": null,
+              "referenceId": "11111111-1111-4111-8111-111111111111"
+            },
+            {
+              "food": null,
+              "unit": null,
+              "title": "Sauce",
+              "referenceId": "22222222-2222-4222-8222-222222222222"
+            }
+          ],
+          "recipeInstructions": [
+            {
+              "id": "unstable",
+              "text": "Keep"
+            }
+          ],
+          "providerExtra": true
+        },
+        "status": 200
+      }
+    ]
+  },
+  "update_recipe_ingredients.clear": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes/soup",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "cccccccc-cccc-4ccc-8ccc-cccccccccccc",
+          "slug": "soup",
+          "name": "Keep",
+          "recipeIngredient": [
+            {
+              "referenceId": "11111111-1111-4111-8111-111111111111",
+              "note": "old",
+              "food": {
+                "id": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+                "name": "Salt"
+              },
+              "unit": null,
+              "quantity": 0,
+              "providerExtra": {
+                "keep": true
+              }
+            },
+            {
+              "referenceId": "22222222-2222-4222-8222-222222222222",
+              "title": "Sauce",
+              "food": null,
+              "unit": null
+            }
+          ],
+          "recipeInstructions": [
+            {
+              "id": "unstable",
+              "text": "Keep"
+            }
+          ],
+          "providerExtra": true
+        },
+        "status": 200
+      },
+      {
+        "method": "PATCH",
+        "path": "/api/recipes/soup",
+        "query": {},
+        "body": {
+          "recipeIngredient": []
+        },
+        "response": {
+          "id": "cccccccc-cccc-4ccc-8ccc-cccccccccccc",
+          "slug": "soup",
+          "name": "Keep",
+          "recipeIngredient": [],
+          "recipeInstructions": [
+            {
+              "id": "unstable",
+              "text": "Keep"
+            }
+          ],
+          "providerExtra": true
+        },
+        "status": 200
+      }
+    ]
+  },
+  "update_recipe_ingredients.missing_name": {
+    "requests": []
+  },
+  "update_recipe_ingredients.missing_plan": {
+    "requests": []
+  },
+  "update_recipe_ingredients.mixed_plan": {
+    "requests": []
+  },
+  "update_recipe_ingredients.empty_delta": {
+    "requests": []
+  },
+  "update_recipe_ingredients.delta": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes/soup",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "cccccccc-cccc-4ccc-8ccc-cccccccccccc",
+          "slug": "soup",
+          "name": "Keep",
+          "recipeIngredient": [
+            {
+              "referenceId": "11111111-1111-4111-8111-111111111111",
+              "note": "old",
+              "food": {
+                "id": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+                "name": "Salt"
+              },
+              "unit": null,
+              "quantity": 0,
+              "providerExtra": {
+                "keep": true
+              }
+            },
+            {
+              "referenceId": "22222222-2222-4222-8222-222222222222",
+              "title": "Sauce",
+              "food": null,
+              "unit": null
+            }
+          ],
+          "recipeInstructions": [
+            {
+              "id": "unstable",
+              "text": "Keep"
+            }
+          ],
+          "providerExtra": true
+        },
+        "status": 200
+      },
+      {
+        "method": "PATCH",
+        "path": "/api/recipes/soup",
+        "query": {},
+        "body": {
+          "recipeIngredient": [
+            {
+              "referenceId": "11111111-1111-4111-8111-111111111111",
+              "note": "new",
+              "food": {
+                "id": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+                "name": "Salt"
+              },
+              "unit": null,
+              "quantity": 0,
+              "providerExtra": {
+                "keep": true
+              },
+              "title": null
+            },
+            {
+              "food": null,
+              "unit": null,
+              "referenceId": "33333333-3333-4333-8333-333333333333",
+              "note": "After"
+            }
+          ]
+        },
+        "response": {
+          "id": "cccccccc-cccc-4ccc-8ccc-cccccccccccc",
+          "slug": "soup",
+          "name": "Keep",
+          "recipeIngredient": [
+            {
+              "referenceId": "11111111-1111-4111-8111-111111111111",
+              "note": "new",
+              "food": {
+                "id": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+                "name": "Salt"
+              },
+              "unit": null,
+              "quantity": 0,
+              "providerExtra": {
+                "keep": true
+              },
+              "title": null
+            },
+            {
+              "food": null,
+              "unit": null,
+              "referenceId": "33333333-3333-4333-8333-333333333333",
+              "note": "After"
+            }
+          ],
+          "recipeInstructions": [
+            {
+              "id": "unstable",
+              "text": "Keep"
+            }
+          ],
+          "providerExtra": true
+        },
+        "status": 200
+      }
+    ]
+  },
+  "update_recipe_ingredients.unknown_reference": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes/soup",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "cccccccc-cccc-4ccc-8ccc-cccccccccccc",
+          "slug": "soup",
+          "name": "Keep",
+          "recipeIngredient": [
+            {
+              "referenceId": "11111111-1111-4111-8111-111111111111",
+              "note": "old",
+              "food": {
+                "id": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+                "name": "Salt"
+              },
+              "unit": null,
+              "quantity": 0,
+              "providerExtra": {
+                "keep": true
+              }
+            },
+            {
+              "referenceId": "22222222-2222-4222-8222-222222222222",
+              "title": "Sauce",
+              "food": null,
+              "unit": null
+            }
+          ],
+          "recipeInstructions": [
+            {
+              "id": "unstable",
+              "text": "Keep"
+            }
+          ],
+          "providerExtra": true
+        },
+        "status": 200
+      }
+    ]
+  },
+  "update_recipe_ingredients.delta_pair": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes/soup",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "cccccccc-cccc-4ccc-8ccc-cccccccccccc",
+          "slug": "soup",
+          "name": "Keep",
+          "recipeIngredient": [
+            {
+              "referenceId": "11111111-1111-4111-8111-111111111111",
+              "note": "old",
+              "food": {
+                "id": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+                "name": "Salt"
+              },
+              "unit": null,
+              "quantity": 0,
+              "providerExtra": {
+                "keep": true
+              }
+            },
+            {
+              "referenceId": "22222222-2222-4222-8222-222222222222",
+              "title": "Sauce",
+              "food": null,
+              "unit": null
+            }
+          ],
+          "recipeInstructions": [
+            {
+              "id": "unstable",
+              "text": "Keep"
+            }
+          ],
+          "providerExtra": true
+        },
+        "status": 200
+      }
+    ]
+  },
+  "update_recipe_ingredients.conflicting_anchors": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes/soup",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "cccccccc-cccc-4ccc-8ccc-cccccccccccc",
+          "slug": "soup",
+          "name": "Keep",
+          "recipeIngredient": [
+            {
+              "referenceId": "11111111-1111-4111-8111-111111111111",
+              "note": "old",
+              "food": {
+                "id": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+                "name": "Salt"
+              },
+              "unit": null,
+              "quantity": 0,
+              "providerExtra": {
+                "keep": true
+              }
+            },
+            {
+              "referenceId": "22222222-2222-4222-8222-222222222222",
+              "title": "Sauce",
+              "food": null,
+              "unit": null
+            }
+          ],
+          "recipeInstructions": [
+            {
+              "id": "unstable",
+              "text": "Keep"
+            }
+          ],
+          "providerExtra": true
+        },
+        "status": 200
+      }
+    ]
+  },
+  "update_recipe_ingredients.self_reference": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes/soup",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "cccccccc-cccc-4ccc-8ccc-cccccccccccc",
+          "slug": "soup",
+          "name": "Keep",
+          "recipeIngredient": [
+            {
+              "referenceId": "11111111-1111-4111-8111-111111111111",
+              "note": "old",
+              "food": {
+                "id": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+                "name": "Salt"
+              },
+              "unit": null,
+              "quantity": 0,
+              "providerExtra": {
+                "keep": true
+              }
+            },
+            {
+              "referenceId": "22222222-2222-4222-8222-222222222222",
+              "title": "Sauce",
+              "food": null,
+              "unit": null
+            }
+          ],
+          "recipeInstructions": [
+            {
+              "id": "unstable",
+              "text": "Keep"
+            }
+          ],
+          "providerExtra": true
+        },
+        "status": 200
+      }
+    ]
+  },
+  "update_recipe_ingredients.subrecipe": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes/soup",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "cccccccc-cccc-4ccc-8ccc-cccccccccccc",
+          "slug": "soup",
+          "name": "Keep",
+          "recipeIngredient": [
+            {
+              "referenceId": "11111111-1111-4111-8111-111111111111",
+              "note": "old",
+              "food": {
+                "id": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+                "name": "Salt"
+              },
+              "unit": null,
+              "quantity": 0,
+              "providerExtra": {
+                "keep": true
+              }
+            },
+            {
+              "referenceId": "22222222-2222-4222-8222-222222222222",
+              "title": "Sauce",
+              "food": null,
+              "unit": null
+            }
+          ],
+          "recipeInstructions": [
+            {
+              "id": "unstable",
+              "text": "Keep"
+            }
+          ],
+          "providerExtra": true
+        },
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/api/recipes/dddddddd-dddd-4ddd-8ddd-dddddddddddd",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "dddddddd-dddd-4ddd-8ddd-dddddddddddd",
+          "slug": "sauce"
+        },
+        "status": 200
+      },
+      {
+        "method": "PATCH",
+        "path": "/api/recipes/soup",
+        "query": {},
+        "body": {
+          "recipeIngredient": [
+            {
+              "food": null,
+              "unit": null,
+              "referencedRecipe": {
+                "id": "dddddddd-dddd-4ddd-8ddd-dddddddddddd"
+              },
+              "note": "Sauce"
+            }
+          ]
+        },
+        "response": {
+          "id": "cccccccc-cccc-4ccc-8ccc-cccccccccccc",
+          "slug": "soup",
+          "name": "Keep",
+          "recipeIngredient": [
+            {
+              "food": null,
+              "unit": null,
+              "referencedRecipe": {
+                "id": "dddddddd-dddd-4ddd-8ddd-dddddddddddd"
+              },
+              "note": "Sauce"
+            }
+          ],
+          "recipeInstructions": [
+            {
+              "id": "unstable",
+              "text": "Keep"
+            }
+          ],
+          "providerExtra": true
+        },
+        "status": 200
+      }
+    ]
+  },
+  "update_recipe_ingredients.subrecipe_wrong_identity": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes/soup",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "cccccccc-cccc-4ccc-8ccc-cccccccccccc",
+          "slug": "soup",
+          "name": "Keep",
+          "recipeIngredient": [
+            {
+              "referenceId": "11111111-1111-4111-8111-111111111111",
+              "note": "old",
+              "food": {
+                "id": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+                "name": "Salt"
+              },
+              "unit": null,
+              "quantity": 0,
+              "providerExtra": {
+                "keep": true
+              }
+            },
+            {
+              "referenceId": "22222222-2222-4222-8222-222222222222",
+              "title": "Sauce",
+              "food": null,
+              "unit": null
+            }
+          ],
+          "recipeInstructions": [
+            {
+              "id": "unstable",
+              "text": "Keep"
+            }
+          ],
+          "providerExtra": true
+        },
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/api/recipes/dddddddd-dddd-4ddd-8ddd-dddddddddddd",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "cccccccc-cccc-4ccc-8ccc-cccccccccccc"
+        },
+        "status": 200
+      }
+    ]
+  },
+  "update_recipe_ingredients.rollback": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes/soup",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "cccccccc-cccc-4ccc-8ccc-cccccccccccc",
+          "slug": "soup",
+          "name": "Keep",
+          "recipeIngredient": [
+            {
+              "referenceId": "11111111-1111-4111-8111-111111111111",
+              "note": "old",
+              "food": {
+                "id": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+                "name": "Salt"
+              },
+              "unit": null,
+              "quantity": 0,
+              "providerExtra": {
+                "keep": true
+              }
+            },
+            {
+              "referenceId": "22222222-2222-4222-8222-222222222222",
+              "title": "Sauce",
+              "food": null,
+              "unit": null
+            }
+          ],
+          "recipeInstructions": [
+            {
+              "id": "unstable",
+              "text": "Keep"
+            }
+          ],
+          "providerExtra": true
+        },
+        "status": 200
+      },
+      {
+        "method": "PATCH",
+        "path": "/api/recipes/soup",
+        "query": {},
+        "body": {
+          "recipeIngredient": [
+            {
+              "food": {
+                "id": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+                "name": "Salt"
+              },
+              "unit": null,
+              "quantity": 0,
+              "note": null,
+              "originalText": null,
+              "title": null,
+              "referenceId": "11111111-1111-4111-8111-111111111111"
+            },
+            {
+              "food": null,
+              "unit": null,
+              "title": "Sauce",
+              "referenceId": "22222222-2222-4222-8222-222222222222"
+            }
+          ]
+        },
+        "response": {
+          "id": "cccccccc-cccc-4ccc-8ccc-cccccccccccc",
+          "slug": "soup",
+          "name": "Keep",
+          "recipeIngredient": [
+            {
+              "food": null,
+              "unit": null,
+              "quantity": 0,
+              "note": null,
+              "originalText": null,
+              "title": null,
+              "referenceId": "11111111-1111-4111-8111-111111111111"
+            },
+            {
+              "food": null,
+              "unit": null,
+              "title": "Sauce",
+              "referenceId": "22222222-2222-4222-8222-222222222222"
+            }
+          ],
+          "recipeInstructions": [
+            {
+              "id": "unstable",
+              "text": "Keep"
+            }
+          ],
+          "providerExtra": true
+        },
+        "status": 200
+      },
+      {
+        "method": "PATCH",
+        "path": "/api/recipes/soup",
+        "query": {},
+        "body": {
+          "recipeIngredient": [
+            {
+              "referenceId": "11111111-1111-4111-8111-111111111111",
+              "note": "old",
+              "food": {
+                "id": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+                "name": "Salt"
+              },
+              "unit": null,
+              "quantity": 0,
+              "providerExtra": {
+                "keep": true
+              }
+            },
+            {
+              "referenceId": "22222222-2222-4222-8222-222222222222",
+              "title": "Sauce",
+              "food": null,
+              "unit": null
+            }
+          ]
+        },
+        "response": {
+          "id": "cccccccc-cccc-4ccc-8ccc-cccccccccccc",
+          "slug": "soup",
+          "name": "Keep",
+          "recipeIngredient": [
+            {
+              "referenceId": "11111111-1111-4111-8111-111111111111",
+              "note": "old",
+              "food": {
+                "id": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+                "name": "Salt"
+              },
+              "unit": null,
+              "quantity": 0,
+              "providerExtra": {
+                "keep": true
+              }
+            },
+            {
+              "referenceId": "22222222-2222-4222-8222-222222222222",
+              "title": "Sauce",
+              "food": null,
+              "unit": null
+            }
+          ],
+          "recipeInstructions": [
+            {
+              "id": "unstable",
+              "text": "Keep"
+            }
+          ],
+          "providerExtra": true
+        },
+        "status": 200
+      }
+    ]
+  },
+  "update_recipe_ingredients.canonical_alias": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes/soup",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "cccccccc-cccc-4ccc-8ccc-cccccccccccc",
+          "slug": "soup",
+          "name": "Keep",
+          "recipeIngredient": [
+            {
+              "referenceId": "11111111-1111-4111-8111-111111111111",
+              "note": "old",
+              "food": {
+                "id": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+                "name": "Salt"
+              },
+              "unit": null,
+              "quantity": 0,
+              "providerExtra": {
+                "keep": true
+              }
+            },
+            {
+              "referenceId": "22222222-2222-4222-8222-222222222222",
+              "title": "Sauce",
+              "food": null,
+              "unit": null
+            }
+          ],
+          "recipeInstructions": [
+            {
+              "id": "unstable",
+              "text": "Keep"
+            }
+          ],
+          "providerExtra": true
+        },
+        "status": 200
+      },
+      {
+        "method": "PATCH",
+        "path": "/api/recipes/soup",
+        "query": {},
+        "body": {
+          "recipeIngredient": [
+            {
+              "food": {
+                "id": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+                "name": "Salt"
+              },
+              "unit": null,
+              "quantity": 0,
+              "note": null,
+              "originalText": null,
+              "title": null,
+              "referenceId": "11111111-1111-4111-8111-111111111111"
+            },
+            {
+              "food": null,
+              "unit": null,
+              "title": "Sauce",
+              "referenceId": "22222222-2222-4222-8222-222222222222"
+            }
+          ]
+        },
+        "response": {
+          "id": "cccccccc-cccc-4ccc-8ccc-cccccccccccc",
+          "slug": "soup",
+          "name": "Keep",
+          "recipeIngredient": [
+            {
+              "food": {
+                "id": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+                "name": "Canonical",
+                "aliases": [
+                  {
+                    "name": "Salt"
+                  }
+                ]
+              },
+              "unit": null,
+              "quantity": 0,
+              "note": null,
+              "originalText": null,
+              "title": null,
+              "referenceId": "11111111-1111-4111-8111-111111111111"
+            },
+            {
+              "food": null,
+              "unit": null,
+              "title": "Sauce",
+              "referenceId": "22222222-2222-4222-8222-222222222222"
+            }
+          ],
+          "recipeInstructions": [
+            {
+              "id": "unstable",
+              "text": "Keep"
+            }
+          ],
+          "providerExtra": true
+        },
+        "status": 200
+      }
+    ]
+  },
+  "update_recipe_ingredients_batch.duplicate_slug": {
+    "requests": []
+  },
+  "update_recipe_ingredients_batch.partial_error": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/recipes/soup",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "cccccccc-cccc-4ccc-8ccc-cccccccccccc",
+          "slug": "soup",
+          "name": "Keep",
+          "recipeIngredient": [
+            {
+              "referenceId": "11111111-1111-4111-8111-111111111111",
+              "note": "old",
+              "food": {
+                "id": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+                "name": "Salt"
+              },
+              "unit": null,
+              "quantity": 0,
+              "providerExtra": {
+                "keep": true
+              }
+            },
+            {
+              "referenceId": "22222222-2222-4222-8222-222222222222",
+              "title": "Sauce",
+              "food": null,
+              "unit": null
+            }
+          ],
+          "recipeInstructions": [
+            {
+              "id": "unstable",
+              "text": "Keep"
+            }
+          ],
+          "providerExtra": true
+        },
+        "status": 200
+      },
+      {
+        "method": "PATCH",
+        "path": "/api/recipes/soup",
+        "query": {},
+        "body": {
+          "recipeIngredient": []
+        },
+        "response": {
+          "id": "cccccccc-cccc-4ccc-8ccc-cccccccccccc",
+          "slug": "soup",
+          "name": "Keep",
+          "recipeIngredient": [],
+          "recipeInstructions": [
+            {
+              "id": "unstable",
+              "text": "Keep"
+            }
+          ],
+          "providerExtra": true
+        },
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/api/recipes/bad",
+        "query": {},
+        "body": null,
+        "response": {
+          "detail": "private"
+        },
+        "status": 404
+      }
+    ]
   }
 }

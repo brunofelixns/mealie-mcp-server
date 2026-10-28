@@ -728,6 +728,7 @@ name = "mealie-mcp-server"
 version = "2.1.0"
 source = { editable = "." }
 dependencies = [
+    { name = "anyio" },
     { name = "fastmcp" },
     { name = "httpx2" },
     { name = "jsonschema" },
@@ -749,6 +750,7 @@ dev = [
 
 [package.metadata]
 requires-dist = [
+    { name = "anyio", specifier = ">=4.11,<5" },
     { name = "fastmcp", specifier = "==4.1.4" },
     { name = "httpx2", specifier = ">=2.10.0,<3" },
     { name = "jsonschema", specifier = ">=4.25,<5" },

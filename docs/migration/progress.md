@@ -11,8 +11,8 @@ Diferencias: [registro](differences.md).
 ## Situación actual
 
 - Documentados: inventario de78 herramientas, un prompt, diseño y plan.
-- Implementación:15/24 tareas verificadas; P16 en curso;69 herramientas portadas y verificadas.
-- Pruebas ejecutadas:1058originales y521Python pasan; sin Mealie de producción.
+- Implementación:16/24 tareas verificadas; P17 en curso;71 herramientas portadas y verificadas.
+- Pruebas ejecutadas:1058originales y568Python pasan; sin Mealie de producción.
 - Dev Container creado/abierto: verificado en P01.
 - Imagen de producción construida: pendiente.
 - Publicación y endpoint remoto: pendientes; se decidirá destino después de las pruebas locales.
@@ -39,8 +39,8 @@ La tabla refleja el estado del JSON. Ambos se actualizan en el mismo cambio docu
 | [P13](../superpowers/plans/2026-10-27-python-migration.md#p13) | Migrar taxonomía y utensilios de recetas, incluido patch_recipe | P12 | Verificada |
 | [P14](../superpowers/plans/2026-10-27-python-migration.md#p14) | Migrar planes de comidas y operaciones por fases | P13 | Verificada |
 | [P15](../superpowers/plans/2026-10-27-python-migration.md#p15) | Migrar búsqueda por ingredientes, cursores y colas de auditoría | P14 | Verificada |
-| [P16](../superpowers/plans/2026-10-27-python-migration.md#p16) | Migrar escrituras de ingredientes y recuperación | P15 | En curso |
-| [P17](../superpowers/plans/2026-10-27-python-migration.md#p17) | Migrar instrucciones con guardas de snapshot | P16 | Pendiente |
+| [P16](../superpowers/plans/2026-10-27-python-migration.md#p16) | Migrar escrituras de ingredientes y recuperación | P15 | Verificada |
+| [P17](../superpowers/plans/2026-10-27-python-migration.md#p17) | Migrar instrucciones con guardas de snapshot | P16 | En curso |
 | [P18](../superpowers/plans/2026-10-27-python-migration.md#p18) | Migrar imágenes y el descargador con DNS fijado | P17 | Pendiente |
 | [P19](../superpowers/plans/2026-10-27-python-migration.md#p19) | Migrar valoraciones, favoritos y fechas | P18 | Pendiente |
 | [P20](../superpowers/plans/2026-10-27-python-migration.md#p20) | Cerrar catálogo, prompt e instrucciones | P19 | Pendiente |

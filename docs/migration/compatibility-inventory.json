@@ -1282,7 +1282,7 @@
         "blobSha": "e918b9b3470dae48d07d54970c00d32cfd81beac",
         "url": "https://github.com/timo-reymann/mealie-mcp-server/blob/d027e1b4a314d781a322f1f91e37840f01464d77/src/tools/recipes.ts#L808"
       },
-      "migrationStatus": "inventoried_static_not_implemented",
+      "migrationStatus": "implemented_contract_verified",
       "effect": "write",
       "description": "Replaces the complete structured ingredient collection (recipeIngredient) of an existing recipe, leaving every other recipe field untouched (name, description, categories, tags, settings, nutrition, etc.). Known Mealie limitation, not caused by this tool: every recipe instruction's ID is regenerated on any recipe update (PATCH or PUT), including this one — instruction text/title/summary/ingredient-references are preserved correctly, only the IDs change. Low-level write primitive: it does not parse ingredient text and does not look up or create foods/units — foodId/unitId must already reference existing Mealie entities, resolved first with get_food_matches/get_unit_matches (batch, alias-aware lookup for several already-interpreted concepts at once — the normal path after parsing ingredient text) or get_foods/get_food/get_units/get_unit for a single manual lookup. The ingredients array is the recipe's complete new ingredient list, not a patch: any ingredient not included is removed, and an empty array clears all ingredients. Call get_recipe_detailed first to see the recipe's current ingredients, referenceIds, and other fields before replacing them. Note: each ingredient's \"display\" field is never actually persisted by Mealie — it is always recomputed from quantity/unit/food/note, regardless of what is supplied here. Integrity check: after writing, the recipe Mealie returns is verified — for every ingredient that supplied a foodId/unitId, the persisted food/unit must still be non-null, match the given id, and match the given name (case-insensitive against name/pluralName, plus abbreviation/pluralAbbreviation for units). If verification fails (e.g. a nonexistent or mismatched foodId/unitId that Mealie silently dropped or resolved to the wrong entity), the recipe is restored to its pre-write state on a best-effort basis and this call reports failure — never a silent partial write. Referenced recipes: a row may carry referencedRecipeId (an existing recipe's id) instead of a food/unit to use that recipe as a sub-recipe; every referenced id is read first (an unknown id fails the call and nothing is written), and after the write the persisted referencedRecipe must be non-null with the same id or the recipe is restored like any other verification failure. Verification adds no extra request on success beyond one GET per distinct referenced recipe; a failed write adds one rollback request. Alternatively, use the delta form (addIngredients/updateIngredients/removeIngredientReferenceIds, instead of ingredients) to edit rows incrementally by stable referenceId: retained rows keep their order, updates edit in place, additions are appended or anchored with insertAfterReferenceId/insertBeforeReferenceId, and ingredient sections are just rows with a \"title\". The delta is applied to the recipe's current ingredients, the complete final collection is built, and the same verified write and rollback is used. Duplicate, unknown, or conflicting operations are rejected before any write. Note Mealie generates a fresh referenceId on every read for rows that never had one stored, so such a row may not be addressable by an id from an earlier read — use the complete-replacement form for it.",
       "descriptionSource": "'Replaces the complete structured ingredient collection (recipeIngredient) of an existing recipe, leaving ' +\n      'every other recipe field untouched (name, description, categories, tags, settings, nutrition, etc.). ' +\n      'Known Mealie limitation, not caused by this tool: every recipe instruction\\'s ID is regenerated on any ' +\n      'recipe update (PATCH or PUT), including this one — instruction text/title/summary/ingredient-references ' +\n      'are preserved correctly, only the IDs change. Low-level write primitive: it does not parse ingredient ' +\n      'text and does not look up or create foods/units — foodId/unitId must already reference existing Mealie ' +\n      'entities, resolved first with get_food_matches/get_unit_matches (batch, alias-aware lookup for several ' +\n      'already-interpreted concepts at once — the normal path after parsing ingredient text) or get_foods/' +\n      'get_food/get_units/get_unit for a single manual lookup. The ingredients array ' +\n      'is the recipe\\'s complete new ingredient list, not a patch: any ingredient not included is removed, and ' +\n      'an empty array clears all ingredients. Call get_recipe_detailed first to see the recipe\\'s current ' +\n      'ingredients, referenceIds, and other fields before replacing them. Note: each ingredient\\'s \"display\" ' +\n      'field is never actually persisted by Mealie — it is always recomputed from quantity/unit/food/note, ' +\n      'regardless of what is supplied here. Integrity check: after writing, the recipe Mealie returns is ' +\n      'verified — for every ingredient that supplied a foodId/unitId, the persisted food/unit must still be ' +\n      'non-null, match the given id, and match the given name (case-insensitive against name/pluralName, plus ' +\n      'abbreviation/pluralAbbreviation for units). If verification fails (e.g. a nonexistent or mismatched ' +\n      'foodId/unitId that Mealie silently dropped or resolved to the wrong entity), the recipe is restored to ' +\n      'its pre-write state on a best-effort basis and this call reports failure — never a silent partial ' +\n      'write. Referenced recipes: a row may carry referencedRecipeId (an existing recipe\\'s id) instead of a ' +\n      'food/unit to use that recipe as a sub-recipe; every referenced id is read first (an unknown id fails ' +\n      'the call and nothing is written), and after the write the persisted referencedRecipe must be non-null ' +\n      'with the same id or the recipe is restored like any other verification failure. Verification adds no ' +\n      'extra request on success beyond one GET per distinct referenced recipe; a failed write adds one ' +\n      'rollback request. Alternatively, use the delta form (addIngredients/updateIngredients/removeIngredientReferenceIds, ' +\n      'instead of ingredients) to edit rows incrementally by stable referenceId: retained rows keep their ' +\n      'order, updates edit in place, additions are appended or anchored with insertAfterReferenceId/' +\n      'insertBeforeReferenceId, and ingredient sections are just rows with a \"title\". The delta is applied to ' +\n      'the recipe\\'s current ingredients, the complete final collection is built, and the same verified write ' +\n      'and rollback is used. Duplicate, unknown, or conflicting operations are rejected before any write. ' +\n      'Note Mealie generates a fresh referenceId on every read for rows that never had one stored, so such a ' +\n      'row may not be addressable by an id from an earlier read — use the complete-replacement form for it.'",
@@ -1586,8 +1586,84 @@
         "additionalProperties": false
       },
       "runtimeOutputSchema": null,
-      "runtimeExamples": [],
-      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeExamples": [
+        {
+          "file": "tests/fixtures/compatibility/cases/recipe_ingredients.json",
+          "index": 0,
+          "scenario": "update_recipe_ingredients.basic"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/recipe_ingredients.json",
+          "index": 2,
+          "scenario": "update_recipe_ingredients.clear"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/recipe_ingredients.json",
+          "index": 3,
+          "scenario": "update_recipe_ingredients.missing_name"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/recipe_ingredients.json",
+          "index": 4,
+          "scenario": "update_recipe_ingredients.missing_plan"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/recipe_ingredients.json",
+          "index": 5,
+          "scenario": "update_recipe_ingredients.mixed_plan"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/recipe_ingredients.json",
+          "index": 6,
+          "scenario": "update_recipe_ingredients.empty_delta"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/recipe_ingredients.json",
+          "index": 7,
+          "scenario": "update_recipe_ingredients.delta"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/recipe_ingredients.json",
+          "index": 8,
+          "scenario": "update_recipe_ingredients.unknown_reference"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/recipe_ingredients.json",
+          "index": 9,
+          "scenario": "update_recipe_ingredients.delta_pair"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/recipe_ingredients.json",
+          "index": 10,
+          "scenario": "update_recipe_ingredients.conflicting_anchors"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/recipe_ingredients.json",
+          "index": 11,
+          "scenario": "update_recipe_ingredients.self_reference"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/recipe_ingredients.json",
+          "index": 12,
+          "scenario": "update_recipe_ingredients.subrecipe"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/recipe_ingredients.json",
+          "index": 13,
+          "scenario": "update_recipe_ingredients.subrecipe_wrong_identity"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/recipe_ingredients.json",
+          "index": 14,
+          "scenario": "update_recipe_ingredients.rollback"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/recipe_ingredients.json",
+          "index": 15,
+          "scenario": "update_recipe_ingredients.canonical_alias"
+        }
+      ],
+      "runtimeCaptureStatus": "behavior_captured_and_python_verified",
       "runtimeOutputSchemaPresent": false
     },
     {
@@ -1600,7 +1676,7 @@
         "blobSha": "e918b9b3470dae48d07d54970c00d32cfd81beac",
         "url": "https://github.com/timo-reymann/mealie-mcp-server/blob/d027e1b4a314d781a322f1f91e37840f01464d77/src/tools/recipes.ts#L865"
       },
-      "migrationStatus": "inventoried_static_not_implemented",
+      "migrationStatus": "implemented_contract_verified",
       "effect": "write",
       "description": "Runs update_recipe_ingredients for multiple recipes with bounded concurrency (5 at a time). Use this once several recipes already have COMPLETE, resolved ingredient collections ready to persist — e.g. after batch-resolving food/unit concepts with get_food_matches/get_unit_matches across many recipes — to avoid one individual write call per recipe. Same low-level write semantics as the singular tool, applied independently per entry: each item's \"ingredients\" is that recipe's complete new recipeIngredient list (not a patch — any ingredient omitted is removed), foodId/unitId must already reference existing Mealie entities (this tool never looks up, matches, or creates foods/units), and referenceIds are preserved exactly as supplied. Same post-write integrity verification and best-effort rollback as the singular tool applies independently per recipe: a verification failure on one recipe restores only that recipe and is reported in its own result entry (error.rollbackSucceeded, plus error.rollbackError if the restore itself failed) — it never affects siblings. There is no cross-recipe transaction: recipes are processed independently, a failure on one (a 404/422/502 from Mealie, a local validation error like a mismatched foodId/foodName, or a verification failure) does not stop or roll back the others, and the response reports a success/failure result per recipe in the same order submitted. The whole call is rejected before any write starts only for a true request-shape problem — an empty batch, more than ${RECIPE_INGREDIENTS_BATCH_MAX_SIZE} recipes, a missing slug, or the same slug repeated in one call. Rows may carry referencedRecipeId (sub-recipe by recipe id, instead of a food/unit) exactly as in the singular tool: each distinct referenced id costs one extra GET per recipe (counted in apiRequestCount) and an unknown id fails only that recipe, with nothing written for it. The same recipeInstructions-id-regeneration caveat as update_recipe_ingredients applies to every recipe touched here (instruction content is preserved, only ids churn). Each entry uses either the complete-replacement form (ingredients) or the referenceId delta form (addIngredients/updateIngredients/removeIngredientReferenceIds) with the singular tool's semantics; an invalid or conflicting entry fails only its own result, before that recipe is written.",
       "descriptionSource": "'Runs update_recipe_ingredients for multiple recipes with bounded concurrency (5 at a time). Use this ' +\n      'once several recipes already have COMPLETE, resolved ingredient collections ready to persist — e.g. ' +\n      'after batch-resolving food/unit concepts with get_food_matches/get_unit_matches across many recipes — ' +\n      'to avoid one individual write call per recipe. Same low-level write semantics as the singular tool, ' +\n      'applied independently per entry: each item\\'s \"ingredients\" is that recipe\\'s complete new ' +\n      'recipeIngredient list (not a patch — any ingredient omitted is removed), foodId/unitId must already ' +\n      'reference existing Mealie entities (this tool never looks up, matches, or creates foods/units), and ' +\n      'referenceIds are preserved exactly as supplied. Same post-write integrity verification and best-effort ' +\n      'rollback as the singular tool applies independently per recipe: a verification failure on one recipe ' +\n      'restores only that recipe and is reported in its own result entry (error.rollbackSucceeded, plus ' +\n      'error.rollbackError if the restore itself failed) — it never affects siblings. There is no cross-recipe ' +\n      'transaction: recipes are processed independently, a failure on one (a 404/422/502 from Mealie, a local ' +\n      'validation error like a mismatched foodId/foodName, or a verification failure) does not stop or roll ' +\n      'back the others, and the response reports a success/failure result per recipe in the same order ' +\n      'submitted. The whole call is rejected before any write starts only for a true request-shape problem — ' +\n      `an empty batch, more than ${RECIPE_INGREDIENTS_BATCH_MAX_SIZE} recipes, a missing slug, or the same ` +\n      'slug repeated in one call. Rows may carry referencedRecipeId (sub-recipe by recipe id, instead of a ' +\n      'food/unit) exactly as in the singular tool: each distinct referenced id costs one extra GET per recipe ' +\n      '(counted in apiRequestCount) and an unknown id fails only that recipe, with nothing written for it. ' +\n      'The same recipeInstructions-id-regeneration caveat as ' +\n      'update_recipe_ingredients applies to every recipe touched here (instruction content is preserved, only ' +\n      'ids churn). Each entry uses either the complete-replacement form (ingredients) or the referenceId ' +\n      'delta form (addIngredients/updateIngredients/removeIngredientReferenceIds) with the singular tool\\'s ' +\n      'semantics; an invalid or conflicting entry fails only its own result, before that recipe is written.'",
@@ -1896,8 +1972,24 @@
         "additionalProperties": false
       },
       "runtimeOutputSchema": null,
-      "runtimeExamples": [],
-      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeExamples": [
+        {
+          "file": "tests/fixtures/compatibility/cases/recipe_ingredients.json",
+          "index": 1,
+          "scenario": "update_recipe_ingredients_batch.basic"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/recipe_ingredients.json",
+          "index": 16,
+          "scenario": "update_recipe_ingredients_batch.duplicate_slug"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/recipe_ingredients.json",
+          "index": 17,
+          "scenario": "update_recipe_ingredients_batch.partial_error"
+        }
+      ],
+      "runtimeCaptureStatus": "behavior_captured_and_python_verified",
       "runtimeOutputSchemaPresent": false
     },
     {

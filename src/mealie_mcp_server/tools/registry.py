@@ -36,7 +36,11 @@ def register_all_tools(server: FastMCP) -> None:
     from mealie_mcp_server.tools.foods import register_foods
     from mealie_mcp_server.tools.mealplans import register_mealplans
     from mealie_mcp_server.tools.recipe_queues import register_recipe_queues
-    from mealie_mcp_server.tools.recipes import register_recipe_core, register_recipe_organizers
+    from mealie_mcp_server.tools.recipes import (
+        register_recipe_core,
+        register_recipe_ingredients,
+        register_recipe_organizers,
+    )
     from mealie_mcp_server.tools.shopping_lists import register_shopping_lists
     from mealie_mcp_server.tools.tags import register_tags
     from mealie_mcp_server.tools.units import register_units
@@ -51,3 +55,4 @@ def register_all_tools(server: FastMCP) -> None:
     register_recipe_organizers(server)
     register_mealplans(server)
     register_recipe_queues(server)
+    register_recipe_ingredients(server)
