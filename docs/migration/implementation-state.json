@@ -464,7 +464,7 @@
           "tests": 403
         }
       ],
-      "commit": null
+      "commit": "23d886edb91ae47cab7307c6f673b23575979072"
     },
     {
       "id": "P14",
@@ -472,7 +472,7 @@
       "dependsOn": [
         "P13"
       ],
-      "status": "in_progress",
+      "status": "verified",
       "tools": [
         "get_all_mealplans",
         "get_mealplan_with_recipes",
@@ -485,13 +485,21 @@
         "src/mealie_mcp_server/mealie/api/mealplans.py",
         "src/mealie_mcp_server/models/inputs/mealplans.py",
         "src/mealie_mcp_server/tools/mealplans.py",
-        "tests/fixtures/compatibility/cases/mealplans.json"
+        "tests/fixtures/compatibility/cases/mealplans.json",
+        "src/mealie_mcp_server/services/mealplans.py"
       ],
       "tests": [
         "tests/unit/test_mealplans_api.py",
-        "tests/contracts/test_mealplans.py"
+        "tests/contracts/test_mealplans.py",
+        "tests/unit/test_contract_requests.py"
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "report": "docs/migration/evidence/P14.md",
+          "result": "passed",
+          "tests": 436
+        }
+      ],
       "commit": null
     },
     {
@@ -500,7 +508,7 @@
       "dependsOn": [
         "P14"
       ],
-      "status": "not_started",
+      "status": "in_progress",
       "tools": [
         "find_recipes_for_ingredients",
         "get_recipes_for_classification",

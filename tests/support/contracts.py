@@ -3,7 +3,7 @@
 import json
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any
+from typing import Any, Literal
 
 FIXTURES = Path(__file__).resolve().parents[1] / "fixtures" / "compatibility"
 
@@ -17,6 +17,7 @@ class ContractCase:
     expected_result: dict[str, Any]
     documented_difference: str | None = None
     expected_python_result: dict[str, Any] | None = None
+    request_order: Literal["sequential", "concurrent"] = "sequential"
 
 
 def load_cases(family: str) -> list[ContractCase]:
@@ -47,6 +48,19 @@ def _content(blocks: list[dict[str, Any]], *, is_error: bool) -> list[Any]:
     return normalized
 
 
+def assert_requests_match(actual, expected, request_order="sequential") -> None:
+    assert request_order in {"sequential", "concurrent"}
+    if request_order == "sequential":
+        assert _typed_json(actual) == _typed_json(expected)
+        return
+    remaining = [_typed_json(request) for request in expected]
+    for request in actual:
+        typed = _typed_json(request)
+        assert typed in remaining, request
+        remaining.remove(typed)
+    assert not remaining, remaining
+
+
 async def assert_contract_matches(server: Any, case: ContractCase, fake: Any) -> None:
     from fastmcp import Client
 
@@ -66,5 +80,5 @@ async def assert_contract_matches(server: Any, case: ContractCase, fake: Any) ->
         expected["content"], is_error=is_error
     )
     assert _typed_json(result.structured_content) == _typed_json(expected.get("structuredContent"))
-    assert _typed_json(fake.recorded_requests) == _typed_json(case.expected_requests)
+    assert_requests_match(fake.recorded_requests, case.expected_requests, case.request_order)
     assert not fake.errors

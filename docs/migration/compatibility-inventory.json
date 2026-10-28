@@ -3252,7 +3252,7 @@
         "blobSha": "f01c7ceef53dd97631a8130944f14a1333bc6f38",
         "url": "https://github.com/timo-reymann/mealie-mcp-server/blob/d027e1b4a314d781a322f1f91e37840f01464d77/src/tools/mealplans.ts#L34"
       },
-      "migrationStatus": "inventoried_static_not_implemented",
+      "migrationStatus": "implemented_contract_verified",
       "effect": "read",
       "description": "Lists meal plans with optional date range filtering and pagination.",
       "descriptionSource": "'Lists meal plans with optional date range filtering and pagination.'",
@@ -3305,8 +3305,19 @@
         "additionalProperties": false
       },
       "runtimeOutputSchema": null,
-      "runtimeExamples": [],
-      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeExamples": [
+        {
+          "file": "tests/fixtures/compatibility/cases/mealplans.json",
+          "index": 0,
+          "scenario": "get_all_mealplans.basic"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/mealplans.json",
+          "index": 11,
+          "scenario": "get_all_mealplans.format_only"
+        }
+      ],
+      "runtimeCaptureStatus": "behavior_captured_and_python_verified",
       "runtimeOutputSchemaPresent": false
     },
     {
@@ -3319,7 +3330,7 @@
         "blobSha": "f01c7ceef53dd97631a8130944f14a1333bc6f38",
         "url": "https://github.com/timo-reymann/mealie-mcp-server/blob/d027e1b4a314d781a322f1f91e37840f01464d77/src/tools/mealplans.ts#L54"
       },
-      "migrationStatus": "inventoried_static_not_implemented",
+      "migrationStatus": "implemented_contract_verified",
       "effect": "read",
       "description": "Returns meal plans with embedded recipe details (full recipe data fetched via batch requests with bounded concurrency).",
       "descriptionSource": "'Returns meal plans with embedded recipe details (full recipe data fetched via batch requests with bounded concurrency).'",
@@ -3363,8 +3374,14 @@
         "additionalProperties": false
       },
       "runtimeOutputSchema": null,
-      "runtimeExamples": [],
-      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeExamples": [
+        {
+          "file": "tests/fixtures/compatibility/cases/mealplans.json",
+          "index": 1,
+          "scenario": "get_mealplan_with_recipes.basic"
+        }
+      ],
+      "runtimeCaptureStatus": "behavior_captured_and_python_verified",
       "runtimeOutputSchemaPresent": false
     },
     {
@@ -3377,7 +3394,7 @@
         "blobSha": "f01c7ceef53dd97631a8130944f14a1333bc6f38",
         "url": "https://github.com/timo-reymann/mealie-mcp-server/blob/d027e1b4a314d781a322f1f91e37840f01464d77/src/tools/mealplans.ts#L98"
       },
-      "migrationStatus": "inventoried_static_not_implemented",
+      "migrationStatus": "implemented_contract_verified",
       "effect": "write",
       "description": "Creates a single meal plan entry for a given date.",
       "descriptionSource": "'Creates a single meal plan entry for a given date.'",
@@ -3432,8 +3449,14 @@
         "additionalProperties": false
       },
       "runtimeOutputSchema": null,
-      "runtimeExamples": [],
-      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeExamples": [
+        {
+          "file": "tests/fixtures/compatibility/cases/mealplans.json",
+          "index": 2,
+          "scenario": "create_mealplan.basic"
+        }
+      ],
+      "runtimeCaptureStatus": "behavior_captured_and_python_verified",
       "runtimeOutputSchemaPresent": false
     },
     {
@@ -3446,7 +3469,7 @@
         "blobSha": "f01c7ceef53dd97631a8130944f14a1333bc6f38",
         "url": "https://github.com/timo-reymann/mealie-mcp-server/blob/d027e1b4a314d781a322f1f91e37840f01464d77/src/tools/mealplans.ts#L118"
       },
-      "migrationStatus": "inventoried_static_not_implemented",
+      "migrationStatus": "implemented_contract_verified",
       "effect": "write",
       "description": "Creates multiple meal plan entries at once via bounded concurrent requests. Entries are independent: a failure of one does not stop or undo the others, so a partial failure leaves the successful entries written. Returns { created, failed, results } with one result per input entry in input order: { index, success: true, entry: { id, date, entryType, recipeId, title } } or { index, success: false, error }. The call is an error result only when every entry failed.",
       "descriptionSource": "'Creates multiple meal plan entries at once via bounded concurrent requests. Entries are independent: a failure of one does not stop or undo the others, so a partial failure leaves the successful entries written. Returns { created, failed, results } with one result per input entry in input order: { index, success: true, entry: { id, date, entryType, recipeId, title } } or { index, success: false, error }. The call is an error result only when every entry failed.'",
@@ -3501,8 +3524,29 @@
         "additionalProperties": false
       },
       "runtimeOutputSchema": null,
-      "runtimeExamples": [],
-      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeExamples": [
+        {
+          "file": "tests/fixtures/compatibility/cases/mealplans.json",
+          "index": 3,
+          "scenario": "create_mealplan_bulk.basic"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/mealplans.json",
+          "index": 6,
+          "scenario": "create_mealplan_bulk.empty"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/mealplans.json",
+          "index": 7,
+          "scenario": "create_mealplan_bulk.partial"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/mealplans.json",
+          "index": 8,
+          "scenario": "create_mealplan_bulk.all_failed"
+        }
+      ],
+      "runtimeCaptureStatus": "behavior_captured_and_python_verified",
       "runtimeOutputSchemaPresent": false
     },
     {
@@ -3515,7 +3559,7 @@
         "blobSha": "f01c7ceef53dd97631a8130944f14a1333bc6f38",
         "url": "https://github.com/timo-reymann/mealie-mcp-server/blob/d027e1b4a314d781a322f1f91e37840f01464d77/src/tools/mealplans.ts#L160"
       },
-      "migrationStatus": "inventoried_static_not_implemented",
+      "migrationStatus": "implemented_contract_verified",
       "effect": "read",
       "description": "Returns today's meal plan.",
       "descriptionSource": "'Returns today\\'s meal plan.'",
@@ -3537,8 +3581,14 @@
         "additionalProperties": false
       },
       "runtimeOutputSchema": null,
-      "runtimeExamples": [],
-      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeExamples": [
+        {
+          "file": "tests/fixtures/compatibility/cases/mealplans.json",
+          "index": 4,
+          "scenario": "get_todays_mealplan.basic"
+        }
+      ],
+      "runtimeCaptureStatus": "behavior_captured_and_python_verified",
       "runtimeOutputSchemaPresent": false
     },
     {
@@ -3551,7 +3601,7 @@
         "blobSha": "f01c7ceef53dd97631a8130944f14a1333bc6f38",
         "url": "https://github.com/timo-reymann/mealie-mcp-server/blob/d027e1b4a314d781a322f1f91e37840f01464d77/src/tools/mealplans.ts#L175"
       },
-      "migrationStatus": "inventoried_static_not_implemented",
+      "migrationStatus": "implemented_contract_verified",
       "effect": "write",
       "description": "Performs a batch of mixed operations on meal plan entries in a single call. Use this to move recipes between meal types, update entries, or add new ones.",
       "descriptionSource": "'Performs a batch of mixed operations on meal plan entries in a single call. Use this to move recipes between meal types, update entries, or add new ones.'",
@@ -3677,8 +3727,24 @@
         "additionalProperties": false
       },
       "runtimeOutputSchema": null,
-      "runtimeExamples": [],
-      "runtimeCaptureStatus": "catalog_captured_behavior_examples_pending",
+      "runtimeExamples": [
+        {
+          "file": "tests/fixtures/compatibility/cases/mealplans.json",
+          "index": 5,
+          "scenario": "patch_mealplan.basic"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/mealplans.json",
+          "index": 9,
+          "scenario": "patch_mealplan.all_failed"
+        },
+        {
+          "file": "tests/fixtures/compatibility/cases/mealplans.json",
+          "index": 10,
+          "scenario": "patch_mealplan.replace_omitted"
+        }
+      ],
+      "runtimeCaptureStatus": "behavior_captured_and_python_verified",
       "runtimeOutputSchemaPresent": false
     },
     {

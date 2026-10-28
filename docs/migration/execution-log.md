@@ -25,6 +25,8 @@
 - P09: modelos transforman solo los campos que el original transforma; validar después contra el esquema preserva trim antes de maxLength. JsonInteger conserva la semántica de números JSON integrales. Comparador/fake distinguen bool de number. Mecánica REST food/unit compartida con handlers MCP explícitos.
 - P12: ambos lotes de lectura originales devuelven detalles completos; get_recipes_batch no añade un flag detailed que cambie la proyección. Resolver de filtros ID/name/slug separado del resolver de asignaciones ID/slug/name. Arrays vacíos en create_recipe cuentan como presentes y provocan GET/PUT como en JavaScript.
 - P13: mecánica de colecciones compartida en services/recipe_organizers.py; políticas de taxonomía/utensilios y respuestas batch siguen separadas. Locks solo por lote y para entradas createMissing:true; sin cache o permiso global. patch_recipe delega su flujo a un servicio y conserva el caso legacy de flags sin colecciones.
+- P14: workflows en services/mealplans.py, REST y handlers separados. Defaults breakfast se incluyen explícitamente al serializar creación/append; replace no los hereda. El harness solo ignora orden entre solicitudes concurrentes declaradas, nunca entre fases; bool/number, cardinalidad y omisión/null se comparan estrictamente.
+- Revisión F2 interna: ejecutar-plans exige una revisión fresca de toda la rama al final, no un revisor por tarea. Se reserva la delegación de revisión para P24 y se registra F2 en evidence/F2.md; no se interrumpe la ejecución para pedir confirmación entre fases.
 
 ## Evidencia
 
@@ -57,3 +59,5 @@ Task P11: complete — suite290/290, Ruff/mypy passed; evidencia evidence/P11.md
 Task P12: complete — suite328/328, Ruff/mypy passed; evidencia evidence/P12.md. P13 en curso.
 
 Task P13: complete — suite403/403, Ruff/mypy passed; evidencia evidence/P13.md. P14 en curso.
+
+Task P14: complete — suite436/436, Ruff/mypy passed; evidencia evidence/P14.md. P15 en curso.

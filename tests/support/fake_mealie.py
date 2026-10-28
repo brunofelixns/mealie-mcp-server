@@ -38,6 +38,8 @@ class FakeMealie:
                     "query": parse_qs(url.query, keep_blank_values=True),
                     "body": body,
                 }
+                if length and body is None:
+                    received["has_body"] = True
                 with owner._lock:
                     owner.recorded_requests.append(received)
                     match = next(

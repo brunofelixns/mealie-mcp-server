@@ -11,7 +11,7 @@ from mcp import Client
 from mcp.client.stdio import StdioServerParameters
 
 from scripts.capture_reference import REFERENCE_IMAGE, UPSTREAM_COMMIT, dump
-from tests.support.contracts import FIXTURES
+from tests.support.contracts import FIXTURES, assert_requests_match
 from tests.support.fake_mealie import FakeMealie
 
 
@@ -53,7 +53,11 @@ async def capture(family: str, overwrite: bool) -> None:
                         "protocolError": type(error).__name__,
                         "message": str(error),
                     }
-                assert fake.recorded_requests[start:] == case["expected_requests"], case["tool"]
+                assert_requests_match(
+                    fake.recorded_requests[start:],
+                    case["expected_requests"],
+                    case.get("request_order", "sequential"),
+                )
     path.write_text(json.dumps(cases, ensure_ascii=False, indent=2) + "\n")
     print(json.dumps({"family": family, "cases": len(cases), "commit": UPSTREAM_COMMIT}))
 

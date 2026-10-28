@@ -6119,5 +6119,426 @@
         "status": 200
       }
     ]
+  },
+  "get_all_mealplans.basic": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/households/mealplans",
+        "query": {
+          "start_date": [
+            "2026-10-01"
+          ],
+          "end_date": [
+            "2026-10-31"
+          ],
+          "page": [
+            "2"
+          ],
+          "perPage": [
+            "20"
+          ]
+        },
+        "body": null,
+        "response": {
+          "items": [
+            {
+              "id": 1,
+              "date": "2026-10-28",
+              "entryType": "breakfast",
+              "title": "Free",
+              "providerExtra": {
+                "keep": true
+              }
+            }
+          ],
+          "total": 1
+        },
+        "status": 200
+      }
+    ]
+  },
+  "get_mealplan_with_recipes.basic": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/households/mealplans",
+        "query": {
+          "start_date": [
+            "2026-10-01"
+          ],
+          "end_date": [
+            "2026-10-31"
+          ],
+          "page": [
+            "1"
+          ],
+          "perPage": [
+            "100"
+          ]
+        },
+        "body": null,
+        "response": {
+          "items": [
+            {
+              "id": 1,
+              "date": "2026-10-28",
+              "entryType": "breakfast",
+              "title": "Free",
+              "providerExtra": {
+                "keep": true
+              },
+              "recipeId": "recipe-1"
+            },
+            {
+              "id": 9,
+              "date": "2026-09-01",
+              "recipeId": "must-not-fetch"
+            }
+          ],
+          "total": 3
+        },
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/api/households/mealplans",
+        "query": {
+          "start_date": [
+            "2026-10-01"
+          ],
+          "end_date": [
+            "2026-10-31"
+          ],
+          "page": [
+            "2"
+          ],
+          "perPage": [
+            "100"
+          ]
+        },
+        "body": null,
+        "response": {
+          "items": [
+            {
+              "id": 4,
+              "date": "2026-10-29",
+              "title": "No recipe"
+            }
+          ],
+          "total": 3
+        },
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/api/recipes/recipe-1",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "recipe-1",
+          "slug": "soup",
+          "name": "Soup",
+          "nutrition": {
+            "keep": true
+          }
+        },
+        "status": 200
+      }
+    ]
+  },
+  "create_mealplan.basic": {
+    "requests": [
+      {
+        "method": "POST",
+        "path": "/api/households/mealplans",
+        "query": {},
+        "body": {
+          "date": "2026-10-28",
+          "title": "Free",
+          "entryType": "breakfast"
+        },
+        "response": {
+          "id": 1,
+          "date": "2026-10-28",
+          "entryType": "breakfast",
+          "title": "Free",
+          "providerExtra": {
+            "keep": true
+          }
+        },
+        "status": 200
+      }
+    ]
+  },
+  "create_mealplan_bulk.basic": {
+    "requests": [
+      {
+        "method": "POST",
+        "path": "/api/households/mealplans",
+        "query": {},
+        "body": {
+          "date": "2026-10-28",
+          "title": "Free",
+          "entryType": "breakfast"
+        },
+        "response": {
+          "id": 1,
+          "date": "2026-10-28",
+          "entryType": "breakfast",
+          "title": "Free",
+          "providerExtra": {
+            "keep": true
+          }
+        },
+        "status": 200
+      }
+    ]
+  },
+  "get_todays_mealplan.basic": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/households/mealplans/today",
+        "query": {},
+        "body": null,
+        "response": [
+          {
+            "id": 1,
+            "date": "1990-01-01",
+            "entryType": "breakfast",
+            "title": "Free",
+            "providerExtra": {
+              "keep": true
+            }
+          }
+        ],
+        "status": 200
+      }
+    ]
+  },
+  "patch_mealplan.basic": {
+    "requests": [
+      {
+        "method": "DELETE",
+        "path": "/api/households/mealplans/1",
+        "query": {},
+        "body": null,
+        "response": null,
+        "status": 204
+      },
+      {
+        "method": "GET",
+        "path": "/api/households/mealplans/2",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": 2,
+          "date": "2026-10-28",
+          "entryType": "dinner",
+          "recipeId": "old",
+          "title": "Keep",
+          "providerExtra": {
+            "keep": true
+          }
+        },
+        "status": 200
+      },
+      {
+        "method": "PUT",
+        "path": "/api/households/mealplans/2",
+        "query": {},
+        "body": {
+          "id": 2,
+          "date": "2026-10-28",
+          "entryType": "dinner",
+          "recipeId": "old",
+          "title": "",
+          "providerExtra": {
+            "keep": true
+          }
+        },
+        "response": {
+          "id": 2,
+          "date": "2026-10-28",
+          "entryType": "dinner",
+          "recipeId": "old",
+          "title": "",
+          "providerExtra": {
+            "keep": true
+          }
+        },
+        "status": 200
+      },
+      {
+        "method": "POST",
+        "path": "/api/households/mealplans",
+        "query": {},
+        "body": {
+          "date": "2026-10-29",
+          "title": "After",
+          "entryType": "breakfast"
+        },
+        "response": {
+          "id": 3,
+          "date": "2026-10-29",
+          "title": "After",
+          "entryType": "breakfast",
+          "providerExtra": true
+        },
+        "status": 200
+      }
+    ]
+  },
+  "create_mealplan_bulk.empty": {
+    "requests": []
+  },
+  "create_mealplan_bulk.partial": {
+    "requests": [
+      {
+        "method": "POST",
+        "path": "/api/households/mealplans",
+        "query": {},
+        "body": {
+          "date": "2026-10-28",
+          "entryType": "lunch",
+          "title": "Good"
+        },
+        "response": {
+          "id": 5,
+          "date": "2026-10-28",
+          "entryType": "lunch",
+          "title": "Good",
+          "providerExtra": true
+        },
+        "status": 200
+      },
+      {
+        "method": "POST",
+        "path": "/api/households/mealplans",
+        "query": {},
+        "body": {
+          "date": "2026-10-29",
+          "entryType": "dinner",
+          "title": "Bad"
+        },
+        "response": {
+          "detail": "private body"
+        },
+        "status": 422
+      }
+    ]
+  },
+  "create_mealplan_bulk.all_failed": {
+    "requests": [
+      {
+        "method": "POST",
+        "path": "/api/households/mealplans",
+        "query": {},
+        "body": {
+          "date": "2026-10-28",
+          "entryType": "lunch",
+          "title": "Good"
+        },
+        "response": {
+          "detail": "private body"
+        },
+        "status": 500
+      },
+      {
+        "method": "POST",
+        "path": "/api/households/mealplans",
+        "query": {},
+        "body": {
+          "date": "2026-10-29",
+          "entryType": "dinner",
+          "title": "Bad"
+        },
+        "response": {
+          "detail": "private body"
+        },
+        "status": 422
+      }
+    ]
+  },
+  "patch_mealplan.all_failed": {
+    "requests": [
+      {
+        "method": "DELETE",
+        "path": "/api/households/mealplans/missing",
+        "query": {},
+        "body": null,
+        "response": {
+          "detail": "private body"
+        },
+        "status": 404
+      }
+    ]
+  },
+  "patch_mealplan.replace_omitted": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/households/mealplans/2",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": 2,
+          "date": "2026-10-28",
+          "entryType": "dinner",
+          "recipeId": "old",
+          "title": "Keep",
+          "providerExtra": {
+            "keep": true
+          }
+        },
+        "status": 200
+      },
+      {
+        "method": "PUT",
+        "path": "/api/households/mealplans/2",
+        "query": {},
+        "body": {
+          "id": 2,
+          "date": "2026-10-28",
+          "entryType": "dinner",
+          "recipeId": "old",
+          "title": "Keep",
+          "providerExtra": {
+            "keep": true
+          }
+        },
+        "response": {
+          "id": 2,
+          "date": "2026-10-28",
+          "entryType": "dinner",
+          "recipeId": "old",
+          "title": "Keep",
+          "providerExtra": {
+            "keep": true
+          }
+        },
+        "status": 200
+      }
+    ]
+  },
+  "get_all_mealplans.format_only": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/households/mealplans",
+        "query": {
+          "start_date": [
+            "2026-99-99"
+          ]
+        },
+        "body": null,
+        "response": {
+          "items": [],
+          "total": 0
+        },
+        "status": 200
+      }
+    ]
   }
 }

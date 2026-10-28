@@ -10,7 +10,7 @@
 
 **Spec:** [Diseño completo](../specs/2026-10-27-python-migration-design.md). Leer también [inventario](../../migration/compatibility-inventory.md) e [inventario JSON](../../migration/compatibility-inventory.json).
 
-Fecha: 2026-10-27. Estado: implementación autorizada; P01..P13 verificadas y P14 en curso. Ver implementation-state.json para la evidencia. No se ha publicado ni desplegado un endpoint público.
+Fecha: 2026-10-27. Estado: implementación autorizada; P01..P14 verificadas y P15 en curso. Ver implementation-state.json para la evidencia. No se ha publicado ni desplegado un endpoint público.
 
 ## Global Constraints
 
@@ -399,7 +399,7 @@ uv run pytest tests/unit/test_recipe_taxonomy.py tests/unit/test_recipe_equipmen
 <a id="p14"></a>
 ### P14: Migrar planes de comidas y operaciones por fases
 
-**Depende de:** P13. **Estado:** pendiente; ver registro de ejecución.
+**Depende de:** P13. **Estado:** verificada; ver registro de ejecución.
 
 **Archivos:** `src/mealie_mcp_server/mealie/api/mealplans.py`, `src/mealie_mcp_server/models/inputs/mealplans.py`, `src/mealie_mcp_server/tools/mealplans.py`, `tests/fixtures/compatibility/cases/mealplans.json`.
 **Tests:** `tests/unit/test_mealplans_api.py`, `tests/contracts/test_mealplans.py`.
@@ -408,17 +408,17 @@ uv run pytest tests/unit/test_recipe_taxonomy.py tests/unit/test_recipe_equipmen
 
 **Herramientas (6):** `get_all_mealplans`, `get_mealplan_with_recipes`, `create_mealplan`, `create_mealplan_bulk`, `get_todays_mealplan`, `patch_mealplan`.
 
-- [ ] **1. Añadir las pruebas antes del código funcional.** test_mealplans_contract para6 nombres. test_patch_phase_order: assert calls == deletes+replaces+appends y resultados agrupados por fase; replace conserva campos omitidos mediante lectura previa. test_bulk_is_error_only_if_all_fail; test_embed_fetches_all_pages; test_today_calls_mealie_endpoint, no reloj del contenedor.
-- [ ] **2. Ejecutar el subconjunto indicado y observar RED.** El fallo esperado es el comportamiento/handler aún ausente o incorrecto; si falta infraestructura del harness, arreglarla antes de tomar el fallo como evidencia.
-- [ ] **3. Implementar las interfaces de esta tarea y sus fixtures.** Reutilizar los contratos anteriores; preservar los valores del diseño y el inventario. 6 herramientas; límites4 y fallos parciales, fechas y paginación como baseline.
+- [x] **1. Añadir las pruebas antes del código funcional.** test_mealplans_contract para6 nombres. test_patch_phase_order: assert calls == deletes+replaces+appends y resultados agrupados por fase; replace conserva campos omitidos mediante lectura previa. test_bulk_is_error_only_if_all_fail; test_embed_fetches_all_pages; test_today_calls_mealie_endpoint, no reloj del contenedor.
+- [x] **2. Ejecutar el subconjunto indicado y observar RED.** El fallo esperado es el comportamiento/handler aún ausente o incorrecto; si falta infraestructura del harness, arreglarla antes de tomar el fallo como evidencia.
+- [x] **3. Implementar las interfaces de esta tarea y sus fixtures.** Reutilizar los contratos anteriores; preservar los valores del diseño y el inventario. 6 herramientas; límites4 y fallos parciales, fechas y paginación como baseline.
 
-- [ ] **4. Verificar el resultado de esta tarea.** Ejecutar dentro del Dev Container; salida0 y todas las aserciones indicadas en verde. Para P01 el launcher y el contenedor auxiliar son la excepción de bootstrap explicada arriba.
+- [x] **4. Verificar el resultado de esta tarea.** Ejecutar dentro del Dev Container; salida0 y todas las aserciones indicadas en verde. Para P01 el launcher y el contenedor auxiliar son la excepción de bootstrap explicada arriba.
 
 ```bash
 uv run pytest tests/unit/test_mealplans_api.py tests/contracts/test_mealplans.py -q
 ```
 
-- [ ] **5. Revisar, documentar y cerrar.** Comprobar el criterio de salida anterior y el diff; no ampliar la suite sin una nueva causa. Actualizar estado, diferencias si las hay y evidencia con comando/resultado/entorno. Commit de implementación sugerido: `feat: port meal planning and phased updates`. Registrar su SHA en un commit documental posterior si hace falta; no intentar incluir el hash de un commit en sí mismo.
+- [x] **5. Revisar, documentar y cerrar.** Comprobar el criterio de salida anterior y el diff; no ampliar la suite sin una nueva causa. Actualizar estado, diferencias si las hay y evidencia con comando/resultado/entorno. Commit de implementación sugerido: `feat: port meal planning and phased updates`. Registrar su SHA en un commit documental posterior si hace falta; no intentar incluir el hash de un commit en sí mismo.
 
 <a id="p15"></a>
 ### P15: Migrar búsqueda por ingredientes, cursores y colas de auditoría

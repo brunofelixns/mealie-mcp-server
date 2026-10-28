@@ -11,8 +11,8 @@ Diferencias: [registro](differences.md).
 ## Situación actual
 
 - Documentados: inventario de78 herramientas, un prompt, diseño y plan.
-- Implementación:13/24 tareas verificadas; P14 en curso;59 herramientas portadas y verificadas.
-- Pruebas ejecutadas:1058originales y403Python pasan; sin Mealie de producción.
+- Implementación:14/24 tareas verificadas; P15 en curso;65 herramientas portadas y verificadas.
+- Pruebas ejecutadas:1058originales y436Python pasan; sin Mealie de producción.
 - Dev Container creado/abierto: verificado en P01.
 - Imagen de producción construida: pendiente.
 - Publicación y endpoint remoto: pendientes; se decidirá destino después de las pruebas locales.
@@ -20,9 +20,9 @@ Diferencias: [registro](differences.md).
 
 ## Orden de ejecución
 
-La tabla es la vista inicial del JSON. Durante la ejecución se actualizan ambos en el mismo cambio documental; los checkboxes de pasos del plan expresan trabajo, no sustituyen evidencias.
+La tabla refleja el estado del JSON. Ambos se actualizan en el mismo cambio documental; los checkboxes de pasos del plan expresan trabajo, no sustituyen evidencias.
 
-| Tarea | Resultado | Dependencias | Estado inicial |
+| Tarea | Resultado | Dependencias | Estado |
 |---|---|---|---|
 | [P01](../superpowers/plans/2026-10-27-python-migration.md#p01) | Arrancar el Dev Container sin depender de un lock inexistente | — | Verificada |
 | [P02](../superpowers/plans/2026-10-27-python-migration.md#p02) | Fijar paquete, dependencias y checks Python | P01 | Verificada |
@@ -37,8 +37,8 @@ La tabla es la vista inicial del JSON. Durante la ejecución se actualizan ambos
 | [P11](../superpowers/plans/2026-10-27-python-migration.md#p11) | Migrar listas de compra e items | P10 | Verificada |
 | [P12](../superpowers/plans/2026-10-27-python-migration.md#p12) | Migrar el núcleo de recetas | P11 | Verificada |
 | [P13](../superpowers/plans/2026-10-27-python-migration.md#p13) | Migrar taxonomía y utensilios de recetas, incluido patch_recipe | P12 | Verificada |
-| [P14](../superpowers/plans/2026-10-27-python-migration.md#p14) | Migrar planes de comidas y operaciones por fases | P13 | En curso |
-| [P15](../superpowers/plans/2026-10-27-python-migration.md#p15) | Migrar búsqueda por ingredientes, cursores y colas de auditoría | P14 | Pendiente |
+| [P14](../superpowers/plans/2026-10-27-python-migration.md#p14) | Migrar planes de comidas y operaciones por fases | P13 | Verificada |
+| [P15](../superpowers/plans/2026-10-27-python-migration.md#p15) | Migrar búsqueda por ingredientes, cursores y colas de auditoría | P14 | En curso |
 | [P16](../superpowers/plans/2026-10-27-python-migration.md#p16) | Migrar escrituras de ingredientes y recuperación | P15 | Pendiente |
 | [P17](../superpowers/plans/2026-10-27-python-migration.md#p17) | Migrar instrucciones con guardas de snapshot | P16 | Pendiente |
 | [P18](../superpowers/plans/2026-10-27-python-migration.md#p18) | Migrar imágenes y el descargador con DNS fijado | P17 | Pendiente |
