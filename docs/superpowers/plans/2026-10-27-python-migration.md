@@ -10,7 +10,7 @@
 
 **Spec:** [Diseño completo](../specs/2026-10-27-python-migration-design.md). Leer también [inventario](../../migration/compatibility-inventory.md) e [inventario JSON](../../migration/compatibility-inventory.json).
 
-Fecha: 2026-10-27. Estado: implementación autorizada; P01..P20 verificadas y P21 en curso. Ver implementation-state.json para la evidencia. No se ha publicado ni desplegado un endpoint público.
+Fecha: 2026-10-27. Estado: implementación autorizada; P01..P21 verificadas y P22 en curso. Ver implementation-state.json para la evidencia. No se ha publicado ni desplegado un endpoint público.
 
 ## Global Constraints
 
@@ -565,24 +565,24 @@ uv run pytest tests/contracts/test_full_catalog.py tests/contracts/test_prompts.
 <a id="p21"></a>
 ### P21: Completar CLI y stdio real
 
-**Depende de:** P20. **Estado:** pendiente; ver registro de ejecución.
+**Depende de:** P20. **Estado:** verificada; ver registro de ejecución.
 
 **Archivos:** `src/mealie_mcp_server/cli.py`, `src/mealie_mcp_server/__main__.py`, `pyproject.toml`, `docs/clients.md`.
 **Tests:** `tests/integration/test_stdio.py`, `tests/unit/test_cli.py`.
 
 **Interfaces:** consume create_server P06, Settings P04 y catálogo P20. Produce main(argv: Sequence[str] | None = None) -> int; entrada mealie-mcp-server; python -m mealie_mcp_server equivalente; --transport stdio default.
 
-- [ ] **1. Añadir las pruebas antes del código funcional.** test_help_version_without_env_no_secret_read; test_stdio_stdout_only_jsonrpc; test_stdio_modern_and_2025_11_25; test_prompt_and_tool_roundtrip; test_eof_and_sigterm_close_pool; test_missing_config_exits_nonzero_without_secret. Protocolos por cliente SDK oficial y FastMCP; token HTTP ausente no bloquea stdio.
-- [ ] **2. Ejecutar el subconjunto indicado y observar RED.** El fallo esperado es el comportamiento/handler aún ausente o incorrecto; si falta infraestructura del harness, arreglarla antes de tomar el fallo como evidencia.
-- [ ] **3. Implementar las interfaces de esta tarea y sus fixtures.** Reutilizar los contratos anteriores; preservar los valores del diseño y el inventario. Subprocess real y wheel fuera del árbol fuente; nada de banner/ANSI/logs en stdout; ejemplos locales Windows/Linux documentados.
+- [x] **1. Añadir las pruebas antes del código funcional.** test_help_version_without_env_no_secret_read; test_stdio_stdout_only_jsonrpc; test_stdio_modern_and_2025_11_25; test_prompt_and_tool_roundtrip; test_eof_and_sigterm_close_pool; test_missing_config_exits_nonzero_without_secret. Protocolos por cliente SDK oficial y FastMCP; token HTTP ausente no bloquea stdio.
+- [x] **2. Ejecutar el subconjunto indicado y observar RED.** El fallo esperado es el comportamiento/handler aún ausente o incorrecto; si falta infraestructura del harness, arreglarla antes de tomar el fallo como evidencia.
+- [x] **3. Implementar las interfaces de esta tarea y sus fixtures.** Reutilizar los contratos anteriores; preservar los valores del diseño y el inventario. Subprocess real y wheel fuera del árbol fuente; nada de banner/ANSI/logs en stdout; ejemplos locales Windows/Linux documentados.
 
-- [ ] **4. Verificar el resultado de esta tarea.** Ejecutar dentro del Dev Container; salida0 y todas las aserciones indicadas en verde. Para P01 el launcher y el contenedor auxiliar son la excepción de bootstrap explicada arriba.
+- [x] **4. Verificar el resultado de esta tarea.** Ejecutar dentro del Dev Container; salida0 y todas las aserciones indicadas en verde. Para P01 el launcher y el contenedor auxiliar son la excepción de bootstrap explicada arriba.
 
 ```bash
 uv run pytest tests/unit/test_cli.py tests/integration/test_stdio.py -q
 ```
 
-- [ ] **5. Revisar, documentar y cerrar.** Comprobar el criterio de salida anterior y el diff; no ampliar la suite sin una nueva causa. Actualizar estado, diferencias si las hay y evidencia con comando/resultado/entorno. Commit de implementación sugerido: `feat: add production CLI and stdio transport`. Registrar su SHA en un commit documental posterior si hace falta; no intentar incluir el hash de un commit en sí mismo.
+- [x] **5. Revisar, documentar y cerrar.** Comprobar el criterio de salida anterior y el diff; no ampliar la suite sin una nueva causa. Actualizar estado, diferencias si las hay y evidencia con comando/resultado/entorno. Commit de implementación sugerido: `feat: add production CLI and stdio transport`. Registrar su SHA en un commit documental posterior si hace falta; no intentar incluir el hash de un commit en sí mismo.
 
 <a id="p22"></a>
 ### P22: Completar HTTP con Bearer personal y salud

@@ -2,13 +2,16 @@
 
 import asyncio
 import json as jsonlib
+import logging
 import math
 from collections.abc import Mapping
 from decimal import Decimal
+from time import monotonic
 from types import TracebackType
 from typing import NoReturn, Self, cast
 from urllib.parse import quote, urlencode
 
+import anyio
 import httpx2 as httpx
 from pydantic import JsonValue
 
@@ -18,6 +21,7 @@ from mealie_mcp_server.models.common import UNSET, UnsetType
 
 type ParamScalar = str | int | float | bool
 type ParamValue = ParamScalar | list[str] | None | UnsetType
+logger = logging.getLogger(__name__)
 
 
 def encode_path_segment(value: str, label: str = "path segment") -> str:
@@ -109,11 +113,16 @@ class MealieClient:
     ) -> None:
         if self._http is not None:
             try:
-                cached, self.self_user_id_task = self.self_user_id_task, None
-                if cached is not None and not cached.done():
-                    cached.cancel()
-                    await asyncio.gather(cached, return_exceptions=True)
-                await self._http.aclose()
+                with anyio.move_on_after(5, shield=True) as cleanup:
+                    cached, self.self_user_id_task = self.self_user_id_task, None
+                    if cached is not None and not cached.done():
+                        cached.cancel()
+                        await asyncio.gather(cached, return_exceptions=True)
+                    await self._http.aclose()
+                if cleanup.cancel_called:
+                    logger.warning("Mealie client cleanup timed out.")
+                else:
+                    logger.debug("Mealie client closed")
             finally:
                 self._http = None
 
@@ -147,6 +156,7 @@ class MealieClient:
                 json, ensure_ascii=False, allow_nan=False, separators=(",", ":")
             ).encode("utf-8")
         headers = {"Content-Type": "application/json"} if files is None else None
+        started = monotonic()
         try:
             response = await self._http.request(
                 method,
@@ -164,6 +174,9 @@ class MealieClient:
             raise MealieTransportError("Mealie request timed out." + suffix) from None
         except httpx.RequestError:
             raise MealieTransportError("Mealie request failed.") from None
+        finally:
+            if self.settings.debug:
+                logger.debug("Mealie HTTP %s: %.1f ms", method, (monotonic() - started) * 1000)
         if not 200 <= response.status_code < 300:
             raise MealieApiError(
                 response.status_code,

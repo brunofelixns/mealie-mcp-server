@@ -17,17 +17,26 @@ FIXTURES = Path(__file__).resolve().parents[1] / "fixtures" / "compatibility"
 
 
 class FakeMealie:
-    def __init__(self, scenario: str | list[dict[str, Any]]) -> None:
+    def __init__(self, scenario: str | list[dict[str, Any]], *, keep_alive: bool = False) -> None:
         scenarios = json.loads((FIXTURES / "scenarios.json").read_text())
         self.pending = (
             scenarios[scenario]["requests"] if isinstance(scenario, str) else list(scenario)
         )
         self.recorded_requests: list[dict[str, Any]] = []
         self.errors: list[str] = []
+        self.connection_closed = threading.Event()
         self._lock = threading.Lock()
         owner = self
 
         class Handler(BaseHTTPRequestHandler):
+            protocol_version = "HTTP/1.1" if keep_alive else "HTTP/1.0"
+
+            def finish(self) -> None:
+                try:
+                    super().finish()
+                finally:
+                    owner.connection_closed.set()
+
             def log_message(self, format: str, *args: Any) -> None:
                 pass
 

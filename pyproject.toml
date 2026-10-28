@@ -32,6 +32,9 @@ dev = [
   "types-jsonschema>=4.26.0.20261006",
 ]
 
+[project.scripts]
+mealie-mcp-server = "mealie_mcp_server.cli:main"
+
 [tool.hatch.build.targets.wheel]
 packages = ["src/mealie_mcp_server"]
 

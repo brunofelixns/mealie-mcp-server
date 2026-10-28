@@ -73,3 +73,5 @@ Task P18: complete — suite693/693, Ruff/mypy passed; evidencia evidence/P18.md
 Task P19: complete — suite787/787, Ruff/mypy passed; evidencia evidence/P19.md. P20 en curso.
 
 Task P20: complete — suite801/801, Ruff/mypy passed; evidencia evidence/P20.md. P21 en curso.
+
+Task P21: complete — suite814/814, Ruff/mypy passed; evidencia evidence/P21.md. P22 en curso.

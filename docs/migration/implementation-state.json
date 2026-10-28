@@ -705,7 +705,9 @@
         "src/mealie_mcp_server/resources/server-instructions.md",
         "src/mealie_mcp_server/server.py",
         "tests/fixtures/compatibility/catalog-differences.json",
-        "docs/migration/compatibility-inventory.json"
+        "docs/migration/compatibility-inventory.json",
+        "src/mealie_mcp_server/tools/contracts.py",
+        "src/mealie_mcp_server/resources/weekly-meal-plan.md"
       ],
       "tests": [
         "tests/contracts/test_full_catalog.py",
@@ -719,7 +721,7 @@
           "tests": 801
         }
       ],
-      "commit": null
+      "commit": "20ae5a1d4a2d9d47f93b51504acc0c8232f45f8f"
     },
     {
       "id": "P21",
@@ -727,19 +729,28 @@
       "dependsOn": [
         "P20"
       ],
-      "status": "in_progress",
+      "status": "verified",
       "tools": [],
       "files": [
         "src/mealie_mcp_server/cli.py",
         "src/mealie_mcp_server/__main__.py",
         "pyproject.toml",
-        "docs/clients.md"
+        "docs/clients.md",
+        "src/mealie_mcp_server/support/stdio.py",
+        "src/mealie_mcp_server/mealie/client.py",
+        "tests/support/fake_mealie.py"
       ],
       "tests": [
         "tests/integration/test_stdio.py",
         "tests/unit/test_cli.py"
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "report": "docs/migration/evidence/P21.md",
+          "result": "passed",
+          "tests": 814
+        }
+      ],
       "commit": null
     },
     {
@@ -748,7 +759,7 @@
       "dependsOn": [
         "P21"
       ],
-      "status": "not_started",
+      "status": "in_progress",
       "tools": [],
       "files": [
         "src/mealie_mcp_server/auth.py",

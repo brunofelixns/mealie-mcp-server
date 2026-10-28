@@ -1,6 +1,9 @@
 node_modules/
 dist/
 coverage/
+.coverage
+.coverage.*
+htmlcov/
 .env
 *.log
 .vite/
