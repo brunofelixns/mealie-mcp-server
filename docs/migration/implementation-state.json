@@ -689,7 +689,7 @@
           "tests": 787
         }
       ],
-      "commit": null
+      "commit": "38b2a8bbd7fadd6b46b404fd5fcbece11f56f51d"
     },
     {
       "id": "P20",
@@ -697,7 +697,7 @@
       "dependsOn": [
         "P19"
       ],
-      "status": "in_progress",
+      "status": "verified",
       "tools": [],
       "files": [
         "src/mealie_mcp_server/tools/registry.py",
@@ -712,7 +712,13 @@
         "tests/contracts/test_prompts.py",
         "tests/contracts/test_server_instructions.py"
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "report": "docs/migration/evidence/P20.md",
+          "result": "passed",
+          "tests": 801
+        }
+      ],
       "commit": null
     },
     {
@@ -721,7 +727,7 @@
       "dependsOn": [
         "P20"
       ],
-      "status": "not_started",
+      "status": "in_progress",
       "tools": [],
       "files": [
         "src/mealie_mcp_server/cli.py",

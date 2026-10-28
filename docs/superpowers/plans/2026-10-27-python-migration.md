@@ -10,7 +10,7 @@
 
 **Spec:** [Diseño completo](../specs/2026-10-27-python-migration-design.md). Leer también [inventario](../../migration/compatibility-inventory.md) e [inventario JSON](../../migration/compatibility-inventory.json).
 
-Fecha: 2026-10-27. Estado: implementación autorizada; P01..P19 verificadas y P20 en curso. Ver implementation-state.json para la evidencia. No se ha publicado ni desplegado un endpoint público.
+Fecha: 2026-10-27. Estado: implementación autorizada; P01..P20 verificadas y P21 en curso. Ver implementation-state.json para la evidencia. No se ha publicado ni desplegado un endpoint público.
 
 ## Global Constraints
 
@@ -543,24 +543,24 @@ uv run pytest tests/unit/test_recipe_rating.py tests/unit/test_last_made.py test
 <a id="p20"></a>
 ### P20: Cerrar catálogo, prompt e instrucciones
 
-**Depende de:** P19. **Estado:** pendiente; ver registro de ejecución.
+**Depende de:** P19. **Estado:** verificada; ver registro de ejecución.
 
 **Archivos:** `src/mealie_mcp_server/tools/registry.py`, `src/mealie_mcp_server/prompts.py`, `src/mealie_mcp_server/resources/server-instructions.md`, `src/mealie_mcp_server/server.py`, `tests/fixtures/compatibility/catalog-differences.json`, `docs/migration/compatibility-inventory.json`.
 **Tests:** `tests/contracts/test_full_catalog.py`, `tests/contracts/test_prompts.py`, `tests/contracts/test_server_instructions.py`.
 
 **Interfaces:** consume Los78 handlers P08..P19; baseline P03. Produce register_all_tools y register_prompts(server: FastMCP) -> None completos; weekly-meal-plan(preferences: str | None = None); instrucciones empaquetadas y versión única.
 
-- [ ] **1. Añadir las pruebas antes del código funcional.** test_full_catalog_exact_names: assert len(names)==78; assert names==baseline_names. test_prompt_roles_and_confirmation: roles assistant,user y confirmación antes de guardar. test_instructions_preserved_with_perpage_correction; test_file_meta_exactly_one_tool; strict validation en todos los objetos; outputschema/structuredContent solo cuando no cambia contenido anterior.
-- [ ] **2. Ejecutar el subconjunto indicado y observar RED.** El fallo esperado es el comportamiento/handler aún ausente o incorrecto; si falta infraestructura del harness, arreglarla antes de tomar el fallo como evidencia.
-- [ ] **3. Implementar las interfaces de esta tarea y sus fixtures.** Reutilizar los contratos anteriores; preservar los valores del diseño y el inventario. 78/78+1 prompt+instrucciones; diferencias de metadata y 204 registradas, runtimeInputSchema ya capturado y confrontado. Sigue faltando demostrar transportes/imagen final.
+- [x] **1. Añadir las pruebas antes del código funcional.** test_full_catalog_exact_names: assert len(names)==78; assert names==baseline_names. test_prompt_roles_and_confirmation: roles assistant,user y confirmación antes de guardar. test_instructions_preserved_with_perpage_correction; test_file_meta_exactly_one_tool; strict validation en todos los objetos; outputschema/structuredContent solo cuando no cambia contenido anterior.
+- [x] **2. Ejecutar el subconjunto indicado y observar RED.** El fallo esperado es el comportamiento/handler aún ausente o incorrecto; si falta infraestructura del harness, arreglarla antes de tomar el fallo como evidencia.
+- [x] **3. Implementar las interfaces de esta tarea y sus fixtures.** Reutilizar los contratos anteriores; preservar los valores del diseño y el inventario. 78/78+1 prompt+instrucciones; diferencias de metadata y 204 registradas, runtimeInputSchema ya capturado y confrontado. Sigue faltando demostrar transportes/imagen final.
 
-- [ ] **4. Verificar el resultado de esta tarea.** Ejecutar dentro del Dev Container; salida0 y todas las aserciones indicadas en verde. Para P01 el launcher y el contenedor auxiliar son la excepción de bootstrap explicada arriba.
+- [x] **4. Verificar el resultado de esta tarea.** Ejecutar dentro del Dev Container; salida0 y todas las aserciones indicadas en verde. Para P01 el launcher y el contenedor auxiliar son la excepción de bootstrap explicada arriba.
 
 ```bash
 uv run pytest tests/contracts/test_full_catalog.py tests/contracts/test_prompts.py tests/contracts/test_server_instructions.py -q
 ```
 
-- [ ] **5. Revisar, documentar y cerrar.** Comprobar el criterio de salida anterior y el diff; no ampliar la suite sin una nueva causa. Actualizar estado, diferencias si las hay y evidencia con comando/resultado/entorno. Commit de implementación sugerido: `feat: complete MCP catalog and agent guidance`. Registrar su SHA en un commit documental posterior si hace falta; no intentar incluir el hash de un commit en sí mismo.
+- [x] **5. Revisar, documentar y cerrar.** Comprobar el criterio de salida anterior y el diff; no ampliar la suite sin una nueva causa. Actualizar estado, diferencias si las hay y evidencia con comando/resultado/entorno. Commit de implementación sugerido: `feat: complete MCP catalog and agent guidance`. Registrar su SHA en un commit documental posterior si hace falta; no intentar incluir el hash de un commit en sí mismo.
 
 <a id="p21"></a>
 ### P21: Completar CLI y stdio real

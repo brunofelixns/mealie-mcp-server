@@ -3,6 +3,7 @@
 from collections.abc import AsyncIterator, Callable
 from contextlib import AbstractAsyncContextManager, asynccontextmanager
 from dataclasses import dataclass
+from importlib.resources import files
 from typing import Any
 
 from fastmcp import FastMCP
@@ -10,6 +11,7 @@ from fastmcp import FastMCP
 from mealie_mcp_server import version
 from mealie_mcp_server.config import Settings
 from mealie_mcp_server.mealie.client import MealieClient
+from mealie_mcp_server.prompts import register_prompts
 from mealie_mcp_server.tools.registry import register_all_tools
 
 
@@ -31,6 +33,18 @@ def create_server(
         async with factory() as client:
             yield {"state": AppState(settings, client)}
 
-    server = FastMCP("mealie-mcp-server", version=version(), lifespan=lifespan)
+    instructions = (
+        files("mealie_mcp_server")
+        .joinpath("resources/server-instructions.md")
+        .read_text(encoding="utf-8")
+    )
+    server = FastMCP(
+        "mealie-mcp-server",
+        version=version(),
+        instructions=instructions,
+        lifespan=lifespan,
+        tasks=False,
+    )
     register_all_tools(server)
+    register_prompts(server)
     return server

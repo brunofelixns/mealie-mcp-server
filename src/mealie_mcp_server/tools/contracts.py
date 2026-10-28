@@ -10,7 +10,7 @@ from fastmcp.server.dependencies import get_context
 from fastmcp.tools import Tool, ToolResult
 from jsonschema import Draft202012Validator, FormatChecker
 from jsonschema.exceptions import ValidationError as SchemaValidationError
-from mcp.types import CallToolResult, ToolAnnotations
+from mcp.types import CallToolResult, ToolAnnotations, ToolExecution
 from mcp.types import Tool as MCPTool
 from pydantic import BaseModel, PrivateAttr, ValidationError
 
@@ -32,6 +32,7 @@ class ToolDefinition:
     annotations: dict[str, Any] | None = None
     meta: dict[str, Any] | None = None
     endpoints: tuple[str, ...] = ()
+    execution: dict[str, Any] | None = None
 
 
 def _input_error(error: SchemaValidationError | ValidationError) -> ValueError:
@@ -74,6 +75,11 @@ class ContractTool(Tool):
                 else None
             ),
             meta=deepcopy(definition.meta),
+            execution=(
+                ToolExecution.model_validate(definition.execution)
+                if definition.execution is not None
+                else None
+            ),
         )
         self._input_model = input_model
         self._handler = handler
@@ -82,6 +88,7 @@ class ContractTool(Tool):
     def to_mcp_tool(self, **overrides: Any) -> MCPTool:
         # Use the public serialization hook to retain the original curated wire metadata.
         overrides.setdefault("_meta", deepcopy(self.meta))
+        overrides.setdefault("title", self.title)
         return super().to_mcp_tool(**overrides)
 
     async def run(self, arguments: dict[str, Any]) -> ToolResult:

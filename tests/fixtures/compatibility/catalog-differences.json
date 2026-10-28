@@ -1,0 +1,14 @@
+{
+  "D01": {
+    "originalLegacyCapabilities": {"prompts": {"listChanged": true}, "tools": {"listChanged": true}},
+    "pythonLegacyCapabilities": {"logging": {}, "prompts": {"listChanged": true}, "resources": {"subscribe": false, "listChanged": true}, "tools": {"listChanged": true}},
+    "pythonModernCapabilities": {"logging": {}, "prompts": {"listChanged": false}, "resources": {"subscribe": false, "listChanged": false}, "tools": {"listChanged": false}, "extensions": {"io.modelcontextprotocol/ui": {}}},
+    "originalResources": {"unsupported": true, "code": -32601},
+    "pythonResources": [],
+    "legacyToolExecution": {"taskSupport": "forbidden"},
+    "modernToolExecution": "omitted_by_protocol",
+    "modernResultEnvelope": {"resultType": "complete", "_meta": {"io.modelcontextprotocol/serverInfo": {"name": "mealie-mcp-server", "version": "2.1.0"}}}
+  },
+  "D04": {"originalServerVersion": "1.0.0", "pythonServerVersion": "2.1.0"},
+  "D05": {"promptOriginal": "always set per_page=50", "promptPython": "always set perPage=50"}
+}

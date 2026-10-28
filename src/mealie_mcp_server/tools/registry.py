@@ -1,11 +1,14 @@
 """Curated definitions and explicit registration of implemented families only."""
 
 import json
+from collections.abc import Sequence
 from functools import lru_cache
 from importlib.resources import files
 from typing import Any
 
 from fastmcp import FastMCP
+from fastmcp.server.transforms import Transform
+from fastmcp.tools import Tool
 
 from mealie_mcp_server.tools.contracts import ToolDefinition
 
@@ -23,9 +26,22 @@ def definitions() -> dict[str, ToolDefinition]:
             annotations=tool.get("annotations"),
             meta=tool.get("_meta"),
             endpoints=tuple(tool["endpoints"]),
+            execution=tool.get("execution"),
         )
         for tool in raw["tools"]
     }
+
+
+class CatalogOrder(Transform):
+    """Keep the captured catalog order while allowing callers to add their own tools."""
+
+    def __init__(self, names: Sequence[str]) -> None:
+        self.positions = {name: index for index, name in enumerate(names)}
+
+    async def list_tools(self, tools: Sequence[Tool]) -> Sequence[Tool]:
+        return sorted(
+            tools, key=lambda tool: (self.positions.get(tool.name, len(self.positions)), tool.name)
+        )
 
 
 def register_all_tools(server: FastMCP) -> None:
@@ -62,3 +78,4 @@ def register_all_tools(server: FastMCP) -> None:
     register_recipe_instructions(server)
     register_recipe_images(server)
     register_ratings_dates(server)
+    server.add_transform(CatalogOrder(tuple(definitions())))
