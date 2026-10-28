@@ -83,3 +83,11 @@ Ruling: configurar el limitador público del manager HTTP después de startup �
 Ruling: conservar la salida143 de Uvicorn tras SIGTERM — la señal se reemite después del cleanup — distinguir señal esperada de fallo, verificando también cierre y logs seguros.
 
 Task P22: complete — suite831/831, Ruff/mypy passed; evidencia evidence/P22.md. P23 en curso.
+
+Ruling: retirar pip/ensurepip del runtime en lugar de añadir dependencias no usadas — los ocho avisos Python estaban vendorizados en la base, no en uv.lock — la imagen no admite instalar paquetes al ejecutarse; se reconstruye desde el lock.
+
+Ruling: conservar el informe completo Debian12 y permitir solo cero secretos/cero HIGH-CRITICAL corregibles en el gate — no hay FixedVersion para los242 avisos del OS en este canal — los dos CRITICAL y59 HIGH siguen documentados y requieren revisión antes de exposición pública; no se declara imagen sin vulnerabilidades.
+
+Ruling: Compose de producción con secrets de archivo se lanza desde el host del daemon — sus bind mounts no resuelven paths internos /workspaces del Dev Container — no requiere Python en el host; los tests desde el Dev Container utilizan copias API y redes Docker.
+
+Task P23: complete — suite841/841, Ruff/mypy passed; evidencia evidence/P23.md. P24 en curso.

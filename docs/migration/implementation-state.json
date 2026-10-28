@@ -788,7 +788,7 @@
           "tests": 831
         }
       ],
-      "commit": null
+      "commit": "c70f1bbea449cf17f9510d5f4c6e8b1acf47b57e"
     },
     {
       "id": "P23",
@@ -796,7 +796,7 @@
       "dependsOn": [
         "P22"
       ],
-      "status": "in_progress",
+      "status": "verified",
       "tools": [],
       "files": [
         "Dockerfile",
@@ -804,14 +804,26 @@
         ".dockerignore",
         ".github/workflows/ci.yaml",
         ".github/workflows/release.yaml",
-        "docs/containers.md"
+        "docs/containers.md",
+        "scripts/release_gate.py",
+        "scripts/scan_runtime.py",
+        "tests/containers/conftest.py",
+        "tests/containers/security_probe.py",
+        "tests/unit/test_release_gate.py"
       ],
       "tests": [
         "tests/containers/test_runtime_stdio.py",
         "tests/containers/test_runtime_http.py",
-        "tests/containers/test_runtime_security.py"
+        "tests/containers/test_runtime_security.py",
+        "tests/unit/test_release_gate.py"
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "report": "docs/migration/evidence/P23.md",
+          "result": "passed",
+          "tests": 841
+        }
+      ],
       "commit": null
     },
     {
@@ -820,7 +832,7 @@
       "dependsOn": [
         "P23"
       ],
-      "status": "not_started",
+      "status": "in_progress",
       "tools": [],
       "files": [
         "compose.integration.yaml",

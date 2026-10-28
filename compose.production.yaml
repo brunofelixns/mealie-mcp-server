@@ -1,0 +1,62 @@
+name: mealie-mcp-production
+
+x-runtime: &runtime
+  image: ${MEALIE_MCP_IMAGE:-mealie-mcp-server:local}
+  build:
+    context: .
+    target: runtime
+  init: true
+  user: "10001:10001"
+  read_only: true
+  tmpfs:
+    - /tmp:rw,noexec,nosuid,size=64m
+  cap_drop: [ALL]
+  security_opt: [no-new-privileges:true]
+  stop_grace_period: 45s
+  pids_limit: 256
+
+x-environment: &environment
+  MEALIE_BASE_URL: ${MEALIE_BASE_URL:-http://host.docker.internal:9000}
+  MEALIE_API_KEY_FILE: /run/secrets/mealie_api_key
+  TZ: ${TZ:-UTC}
+  LOG_LEVEL: ${LOG_LEVEL:-INFO}
+  MEALIE_MCP_DEBUG: ${MEALIE_MCP_DEBUG:-false}
+
+services:
+  stdio:
+    <<: *runtime
+    profiles: [stdio]
+    stdin_open: true
+    tty: false
+    command: [--transport, stdio]
+    environment:
+      <<: *environment
+    secrets: [mealie_api_key]
+
+  http:
+    <<: *runtime
+    profiles: [http]
+    restart: unless-stopped
+    command: [--transport, http, --host, 0.0.0.0, --port, "8000"]
+    environment:
+      <<: *environment
+      MCP_AUTH_TOKEN_FILE: /run/secrets/mcp_auth_token
+      MCP_REQUIRE_HTTPS: "true"
+      MCP_PUBLIC_URL: ${MCP_PUBLIC_URL:-}
+      MCP_ALLOWED_HOSTS: ${MCP_ALLOWED_HOSTS:-localhost,127.0.0.1,[::1]}
+      MCP_ALLOWED_ORIGINS: ${MCP_ALLOWED_ORIGINS:-}
+    ports:
+      - "127.0.0.1:${MCP_PUBLISHED_PORT:-8000}:8000"
+    secrets: [mealie_api_key, mcp_auth_token]
+    healthcheck:
+      test: [CMD, /opt/venv/bin/python, -c, "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/readyz', timeout=2).close()"]
+      interval: 30s
+      timeout: 3s
+      start_period: 15s
+      retries: 3
+
+secrets:
+  mealie_api_key:
+    file: ${MEALIE_API_KEY_SECRET_PATH:-./secrets/mealie_api_key}
+  mcp_auth_token:
+    file: ${MCP_AUTH_TOKEN_SECRET_PATH:-./secrets/mcp_auth_token}

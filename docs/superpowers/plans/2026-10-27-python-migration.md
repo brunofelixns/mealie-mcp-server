@@ -10,7 +10,7 @@
 
 **Spec:** [Diseño completo](../specs/2026-10-27-python-migration-design.md). Leer también [inventario](../../migration/compatibility-inventory.md) e [inventario JSON](../../migration/compatibility-inventory.json).
 
-Fecha: 2026-10-27. Estado: implementación autorizada; P01..P22 verificadas y P23 en curso. Ver implementation-state.json para la evidencia. No se ha publicado ni desplegado un endpoint público.
+Fecha: 2026-10-27. Estado: implementación autorizada; P01..P23 verificadas y P24 en curso. Ver implementation-state.json para la evidencia. No se ha publicado ni desplegado un endpoint público.
 
 ## Global Constraints
 
@@ -609,18 +609,18 @@ uv run pytest tests/unit/test_auth.py tests/integration/test_http.py tests/integ
 <a id="p23"></a>
 ### P23: Construir y verificar la imagen de producción
 
-**Depende de:** P22. **Estado:** pendiente; ver registro de ejecución.
+**Depende de:** P22. **Estado:** verificada; ver registro de ejecución.
 
 **Archivos:** `Dockerfile`, `compose.production.yaml`, `.dockerignore`, `.github/workflows/ci.yaml`, `.github/workflows/release.yaml`, `docs/containers.md`.
 **Tests:** `tests/containers/test_runtime_stdio.py`, `tests/containers/test_runtime_http.py`, `tests/containers/test_runtime_security.py`.
 
 **Interfaces:** consume App completa P22 y lock P02. Produce Stages base/builder/development/runtime; mismo wheel de release; image stdio default o HTTP command; CI build/smoke y workflow release con publicación condicionada al cierre P24.
 
-- [ ] **1. Añadir las pruebas antes del código funcional.** test_runtime_no_node_devtools_or_secrets; test_nonroot_readonly_tmpfs; test_docker_stdio_i_no_tty; test_http_bearer_health_and_stop45s; test_wheel_contains_instructions. Probar imagen final sin source mounts, stdout JSON-RPC, stdin, señales y separación de credenciales. Salud solo para perfil HTTP.
-- [ ] **2. Ejecutar el subconjunto indicado y observar RED.** El fallo esperado es el comportamiento/handler aún ausente o incorrecto; si falta infraestructura del harness, arreglarla antes de tomar el fallo como evidencia.
-- [ ] **3. Implementar las interfaces de esta tarea y sus fixtures.** Reutilizar los contratos anteriores; preservar los valores del diseño y el inventario. Imagen ejecutable linux/amd64 y linux/arm64 con smoke por arquitectura, emulación identificada; CA/tzdata; labels/SBOM/provenance; no publicar ni desplegar por crear el plan.
+- [x] **1. Añadir las pruebas antes del código funcional.** test_runtime_no_node_devtools_or_secrets; test_nonroot_readonly_tmpfs; test_docker_stdio_i_no_tty; test_http_bearer_health_and_stop45s; test_wheel_contains_instructions. Probar imagen final sin source mounts, stdout JSON-RPC, stdin, señales y separación de credenciales. Salud solo para perfil HTTP.
+- [x] **2. Ejecutar el subconjunto indicado y observar RED.** El fallo esperado es el comportamiento/handler aún ausente o incorrecto; si falta infraestructura del harness, arreglarla antes de tomar el fallo como evidencia.
+- [x] **3. Implementar las interfaces de esta tarea y sus fixtures.** Reutilizar los contratos anteriores; preservar los valores del diseño y el inventario. Imagen ejecutable linux/amd64 y linux/arm64 con smoke por arquitectura, emulación identificada; CA/tzdata; labels/SBOM/provenance; no publicar ni desplegar por crear el plan.
 
-- [ ] **4. Verificar el resultado de esta tarea.** Ejecutar dentro del Dev Container; salida0 y todas las aserciones indicadas en verde. Para P01 el launcher y el contenedor auxiliar son la excepción de bootstrap explicada arriba.
+- [x] **4. Verificar el resultado de esta tarea.** Ejecutar dentro del Dev Container; salida0 y todas las aserciones indicadas en verde. Para P01 el launcher y el contenedor auxiliar son la excepción de bootstrap explicada arriba.
 
 ```bash
 docker build --target runtime -t mealie-mcp-server:local .
@@ -628,7 +628,7 @@ docker compose -f compose.production.yaml config
 uv run pytest tests/containers -q
 ```
 
-- [ ] **5. Revisar, documentar y cerrar.** Comprobar el criterio de salida anterior y el diff; no ampliar la suite sin una nueva causa. Actualizar estado, diferencias si las hay y evidencia con comando/resultado/entorno. Commit de implementación sugerido: `build: add verified production MCP image`. Registrar su SHA en un commit documental posterior si hace falta; no intentar incluir el hash de un commit en sí mismo.
+- [x] **5. Revisar, documentar y cerrar.** Comprobar el criterio de salida anterior y el diff; no ampliar la suite sin una nueva causa. Actualizar estado, diferencias si las hay y evidencia con comando/resultado/entorno. Commit de implementación sugerido: `build: add verified production MCP image`. Registrar su SHA en un commit documental posterior si hace falta; no intentar incluir el hash de un commit en sí mismo.
 
 <a id="p24"></a>
 ### P24: Cerrar integración, documentación, retirada TS y aceptación

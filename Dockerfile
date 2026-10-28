@@ -22,3 +22,41 @@ ENV UV_PROJECT_ENVIRONMENT=/workspaces/mealie-mcp-server/.venv UV_CACHE_DIR=/hom
 WORKDIR /workspaces/mealie-mcp-server
 USER vscode
 CMD ["sleep", "infinity"]
+
+FROM base AS builder
+RUN apt-get update \
+    && apt-get install --yes --no-install-recommends g++ pkg-config libicu-dev \
+    && rm -rf /var/lib/apt/lists/*
+ENV UV_PROJECT_ENVIRONMENT=/opt/venv UV_COMPILE_BYTECODE=1
+WORKDIR /build
+COPY pyproject.toml uv.lock README.md LICENSE ./
+RUN uv sync --frozen --no-dev --no-install-project
+COPY src/mealie_mcp_server ./src/mealie_mcp_server
+RUN uv build --wheel --out-dir /dist \
+    && uv pip install --python /opt/venv/bin/python --no-deps /dist/*.whl \
+    && uv pip check --python /opt/venv/bin/python
+
+FROM ${PYTHON_IMAGE} AS runtime
+ARG VCS_REF=unknown
+LABEL org.opencontainers.image.title="Mealie MCP server" \
+      org.opencontainers.image.description="Python MCP server for Mealie: stdio and authenticated Streamable HTTP" \
+      org.opencontainers.image.version="2.1.0" \
+      org.opencontainers.image.licenses="MIT" \
+      org.opencontainers.image.source="https://github.com/timo-reymann/mealie-mcp-server" \
+      org.opencontainers.image.revision="${VCS_REF}"
+RUN apt-get update \
+    && apt-get install --yes --no-install-recommends ca-certificates tzdata libicu72 \
+    && rm -rf /var/lib/apt/lists/* \
+    && groupadd --gid 10001 mcp \
+    && useradd --uid 10001 --gid mcp --no-create-home --home-dir /nonexistent --shell /usr/sbin/nologin mcp
+COPY --from=builder /opt/venv /opt/venv
+COPY --from=builder /build/LICENSE /licenses/mealie-mcp-server/LICENSE
+RUN python -m pip uninstall --yes pip \
+    && rm -rf /usr/local/lib/python3.14/ensurepip /root/.cache
+ENV PATH=/opt/venv/bin:$PATH PYTHONUNBUFFERED=1 PYTHONDONTWRITEBYTECODE=1 TZ=UTC HOME=/nonexistent
+WORKDIR /app
+USER 10001:10001
+EXPOSE 8000
+HEALTHCHECK NONE
+ENTRYPOINT ["/opt/venv/bin/mealie-mcp-server"]
+CMD []

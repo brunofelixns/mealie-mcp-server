@@ -1,0 +1,85 @@
+name: Publish verified Python runtime
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Exact package version to release
+        required: true
+        default: "2.1.0"
+        type: string
+      publish:
+        description: Publish images to this repository owner's GHCR namespace
+        default: false
+        type: boolean
+permissions:
+  contents: read
+jobs:
+  checks:
+    uses: ./.github/workflows/ci.yaml
+  images:
+    needs: checks
+    if: inputs.publish
+    permissions:
+      contents: read
+      packages: write
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - runner: ubuntu-24.04
+            arch: amd64
+          - runner: ubuntu-24.04-arm
+            arch: arm64
+    runs-on: ${{ matrix.runner }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - name: Publish the verified native architecture
+        uses: devcontainers/ci@513af61f4de4f75d37e4438f184ba4358f0fc1ca # v0.3
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_VERSION: ${{ inputs.version }}
+        with:
+          push: never
+          env: |
+            GH_TOKEN
+            RELEASE_VERSION
+            GITHUB_ACTOR
+            GITHUB_REPOSITORY
+          runCmd: |
+            uv sync --frozen --group dev
+            uv run python scripts/release_gate.py --release-version "$RELEASE_VERSION"
+            image="ghcr.io/$(printf '%s' "$GITHUB_REPOSITORY" | tr '[:upper:]' '[:lower:]')"
+            mkdir -p artifacts
+            docker buildx build --platform linux/${{ matrix.arch }} --target runtime --tag mealie-mcp-server:local --tag "$image:$RELEASE_VERSION-${{ matrix.arch }}" --build-arg VCS_REF=$(git rev-parse HEAD) --sbom=true --provenance=mode=max --load --metadata-file artifacts/release-build.json .
+            export MCP_TEST_ARCH=${{ matrix.arch }}
+            uv run pytest tests/containers -q
+            uv run python scripts/scan_runtime.py mealie-mcp-server:local --platform linux/${{ matrix.arch }} --output artifacts/release-security.json --enforce
+            printf '%s' "$GH_TOKEN" | docker login ghcr.io --username "$GITHUB_ACTOR" --password-stdin
+            docker buildx build --platform linux/${{ matrix.arch }} --target runtime --tag "$image:$RELEASE_VERSION-${{ matrix.arch }}" --build-arg VCS_REF=$(git rev-parse HEAD) --sbom=true --provenance=mode=max --push .
+  manifest:
+    needs: images
+    if: inputs.publish
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - name: Assemble the multi-platform manifest
+        uses: devcontainers/ci@513af61f4de4f75d37e4438f184ba4358f0fc1ca # v0.3
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_VERSION: ${{ inputs.version }}
+        with:
+          push: never
+          env: |
+            GH_TOKEN
+            RELEASE_VERSION
+            GITHUB_ACTOR
+            GITHUB_REPOSITORY
+          runCmd: |
+            uv sync --frozen --group dev
+            uv run python scripts/release_gate.py --release-version "$RELEASE_VERSION"
+            image="ghcr.io/$(printf '%s' "$GITHUB_REPOSITORY" | tr '[:upper:]' '[:lower:]')"
+            printf '%s' "$GH_TOKEN" | docker login ghcr.io --username "$GITHUB_ACTOR" --password-stdin
+            docker buildx imagetools create --tag "$image:$RELEASE_VERSION" "$image:$RELEASE_VERSION-amd64" "$image:$RELEASE_VERSION-arm64"

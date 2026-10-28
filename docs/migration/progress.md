@@ -11,8 +11,8 @@ Diferencias: [registro](differences.md).
 ## Situación actual
 
 - Documentados: inventario de78 herramientas, un prompt, diseño y plan.
-- Implementación:22/24 tareas verificadas; P23 en curso;78 herramientas portadas y verificadas.
-- Pruebas ejecutadas:1058originales y831Python pasan; sin Mealie de producción.
+- Implementación:23/24 tareas verificadas; P24 en curso;78 herramientas portadas y verificadas.
+- Pruebas ejecutadas:1058originales y841Python pasan; sin Mealie de producción.
 - Dev Container creado/abierto: verificado en P01.
 - Imagen de producción construida: pendiente.
 - Publicación y endpoint remoto: pendientes; se decidirá destino después de las pruebas locales.
@@ -46,8 +46,8 @@ La tabla refleja el estado del JSON. Ambos se actualizan en el mismo cambio docu
 | [P20](../superpowers/plans/2026-10-27-python-migration.md#p20) | Cerrar catálogo, prompt e instrucciones | P19 | Verificada |
 | [P21](../superpowers/plans/2026-10-27-python-migration.md#p21) | Completar CLI y stdio real | P20 | Verificada |
 | [P22](../superpowers/plans/2026-10-27-python-migration.md#p22) | Completar HTTP con Bearer personal y salud | P21 | Verificada |
-| [P23](../superpowers/plans/2026-10-27-python-migration.md#p23) | Construir y verificar la imagen de producción | P22 | En curso |
-| [P24](../superpowers/plans/2026-10-27-python-migration.md#p24) | Cerrar integración, documentación, retirada TS y aceptación | P23 | Pendiente |
+| [P23](../superpowers/plans/2026-10-27-python-migration.md#p23) | Construir y verificar la imagen de producción | P22 | Verificada |
+| [P24](../superpowers/plans/2026-10-27-python-migration.md#p24) | Cerrar integración, documentación, retirada TS y aceptación | P23 | En curso |
 
 ## Regla de avance
 
