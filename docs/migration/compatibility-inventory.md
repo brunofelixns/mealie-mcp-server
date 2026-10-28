@@ -1,6 +1,6 @@
 # Inventario de compatibilidad: Mealie MCP en Python
 
-Fecha: 2026-10-27. Estado:27/78herramientas Python verificadas; ver implementation-state.json y evidence/P09.md.
+Fecha: 2026-10-27. Estado:33/78herramientas Python verificadas; ver implementation-state.json y evidence/P10.md.
 
 La referencia es [timo-reymann/mealie-mcp-server, commit d027e1b4a314d781a322f1f91e37840f01464d77](https://github.com/timo-reymann/mealie-mcp-server/tree/d027e1b4a314d781a322f1f91e37840f01464d77). El alcance es migrar lo que implementa este commit, incluidos sus flujos compuestos. No equivale a implementar todos los endpoints posibles de Mealie.
 

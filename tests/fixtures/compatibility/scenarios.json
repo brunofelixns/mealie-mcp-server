@@ -2598,5 +2598,233 @@
         "status": 200
       }
     ]
+  },
+  "get_tools.basic": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/organizers/tools",
+        "query": {
+          "search": [
+            "tin"
+          ],
+          "page": [
+            "1"
+          ],
+          "perPage": [
+            "20"
+          ]
+        },
+        "body": null,
+        "response": {
+          "items": [
+            {
+              "id": "30000000-0000-4000-8000-000000000001",
+              "name": "Baking Tin",
+              "slug": "baking-tin",
+              "householdsWithTool": [
+                "home",
+                "other-home"
+              ],
+              "createdAt": "2024-01-01",
+              "providerExtra": {
+                "keep": true
+              }
+            }
+          ],
+          "total": 1
+        },
+        "status": 200
+      }
+    ]
+  },
+  "get_tool.basic": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/organizers/tools/30000000-0000-4000-8000-000000000001",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "30000000-0000-4000-8000-000000000001",
+          "name": "Baking Tin",
+          "slug": "baking-tin",
+          "householdsWithTool": [
+            "home",
+            "other-home"
+          ],
+          "createdAt": "2024-01-01",
+          "providerExtra": {
+            "keep": true
+          }
+        },
+        "status": 200
+      }
+    ]
+  },
+  "get_tool_matches.basic": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/organizers/tools",
+        "query": {
+          "queryFilter": [
+            "(name LIKE \"%Baking Tin%\" OR slug LIKE \"%Baking Tin%\") OR (name LIKE \"%baking-tin%\" OR slug LIKE \"%baking-tin%\")"
+          ],
+          "page": [
+            "1"
+          ],
+          "perPage": [
+            "200"
+          ]
+        },
+        "body": null,
+        "response": {
+          "items": [
+            {
+              "id": "30000000-0000-4000-8000-000000000001",
+              "name": "Baking Tin",
+              "slug": "baking-tin",
+              "householdsWithTool": [
+                "home",
+                "other-home"
+              ],
+              "createdAt": "2024-01-01",
+              "providerExtra": {
+                "keep": true
+              }
+            }
+          ],
+          "total": 1
+        },
+        "status": 200
+      }
+    ]
+  },
+  "create_tool.basic": {
+    "requests": [
+      {
+        "method": "POST",
+        "path": "/api/organizers/tools",
+        "query": {},
+        "body": {
+          "name": "Baking Tin"
+        },
+        "response": {
+          "id": "30000000-0000-4000-8000-000000000001",
+          "name": "Baking Tin",
+          "slug": "baking-tin",
+          "householdsWithTool": [
+            "home",
+            "other-home"
+          ],
+          "createdAt": "2024-01-01",
+          "providerExtra": {
+            "keep": true
+          }
+        },
+        "status": 200
+      }
+    ]
+  },
+  "update_tool.basic": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/organizers/tools/30000000-0000-4000-8000-000000000001",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "30000000-0000-4000-8000-000000000001",
+          "name": "Baking Tin",
+          "slug": "baking-tin",
+          "householdsWithTool": [
+            "home",
+            "other-home"
+          ],
+          "createdAt": "2024-01-01",
+          "providerExtra": {
+            "keep": true
+          }
+        },
+        "status": 200
+      },
+      {
+        "method": "PUT",
+        "path": "/api/organizers/tools/30000000-0000-4000-8000-000000000001",
+        "query": {},
+        "body": {
+          "id": "30000000-0000-4000-8000-000000000001",
+          "name": "Renamed",
+          "householdsWithTool": [
+            "home",
+            "other-home"
+          ]
+        },
+        "response": {
+          "id": "30000000-0000-4000-8000-000000000001",
+          "name": "Renamed",
+          "slug": "baking-tin",
+          "householdsWithTool": [
+            "home",
+            "other-home"
+          ],
+          "createdAt": "2024-01-01",
+          "providerExtra": {
+            "keep": true
+          }
+        },
+        "status": 200
+      }
+    ]
+  },
+  "delete_tool.basic": {
+    "requests": [
+      {
+        "method": "DELETE",
+        "path": "/api/organizers/tools/30000000-0000-4000-8000-000000000001",
+        "query": {},
+        "body": null,
+        "response": {
+          "id": "30000000-0000-4000-8000-000000000001"
+        },
+        "status": 200
+      }
+    ]
+  },
+  "create_tool.blank": {
+    "requests": []
+  },
+  "update_tool.blank": {
+    "requests": []
+  },
+  "update_tool.empty": {
+    "requests": []
+  },
+  "delete_tool.204": {
+    "requests": [
+      {
+        "method": "DELETE",
+        "path": "/api/organizers/tools/30000000-0000-4000-8000-000000000001",
+        "query": {},
+        "body": null,
+        "response": null,
+        "status": 204
+      }
+    ]
+  },
+  "delete_tool.refused": {
+    "requests": [
+      {
+        "method": "DELETE",
+        "path": "/api/organizers/tools/30000000-0000-4000-8000-000000000001",
+        "query": {},
+        "body": null,
+        "response": {
+          "detail": "in use"
+        },
+        "status": 400
+      }
+    ]
   }
 }

@@ -10,7 +10,7 @@
 
 **Spec:** [Diseño completo](../specs/2026-10-27-python-migration-design.md). Leer también [inventario](../../migration/compatibility-inventory.md) e [inventario JSON](../../migration/compatibility-inventory.json).
 
-Fecha: 2026-10-27. Estado: implementación autorizada; P01..P09 verificadas y P10 en curso. Ver implementation-state.json para la evidencia. No se ha publicado ni desplegado un endpoint público.
+Fecha: 2026-10-27. Estado: implementación autorizada; P01..P10 verificadas y P11 en curso. Ver implementation-state.json para la evidencia. No se ha publicado ni desplegado un endpoint público.
 
 ## Global Constraints
 
@@ -303,7 +303,7 @@ uv run pytest tests/unit/test_foods_api.py tests/unit/test_units_api.py tests/co
 <a id="p10"></a>
 ### P10: Migrar el catálogo de utensilios
 
-**Depende de:** P09. **Estado:** pendiente; ver registro de ejecución.
+**Depende de:** P09. **Estado:** verificada; ver registro de ejecución.
 
 **Archivos:** `src/mealie_mcp_server/mealie/api/equipment.py`, `src/mealie_mcp_server/models/inputs/equipment.py`, `src/mealie_mcp_server/tools/equipment.py`, `tests/fixtures/compatibility/cases/equipment.json`.
 **Tests:** `tests/unit/test_equipment_api.py`, `tests/contracts/test_equipment.py`.
@@ -312,17 +312,17 @@ uv run pytest tests/unit/test_foods_api.py tests/unit/test_units_api.py tests/co
 
 **Herramientas (6):** `get_tools`, `get_tool`, `get_tool_matches`, `create_tool`, `update_tool`, `delete_tool`.
 
-- [ ] **1. Añadir las pruebas antes del código funcional.** test_equipment_contract para6 nombres; test_rename_preserves_households_with_tool: assert payload['householdsWithTool'] conserva original; test_candidates_do_not_create; test_delete_error_and_204.
-- [ ] **2. Ejecutar el subconjunto indicado y observar RED.** El fallo esperado es el comportamiento/handler aún ausente o incorrecto; si falta infraestructura del harness, arreglarla antes de tomar el fallo como evidencia.
-- [ ] **3. Implementar las interfaces de esta tarea y sus fixtures.** Reutilizar los contratos anteriores; preservar los valores del diseño y el inventario. 6 herramientas y escrituras PUT conservadoras; equipamiento no se confunde con las herramientas MCP.
+- [x] **1. Añadir las pruebas antes del código funcional.** test_equipment_contract para6 nombres; test_rename_preserves_households_with_tool: assert payload['householdsWithTool'] conserva original; test_candidates_do_not_create; test_delete_error_and_204.
+- [x] **2. Ejecutar el subconjunto indicado y observar RED.** El fallo esperado es el comportamiento/handler aún ausente o incorrecto; si falta infraestructura del harness, arreglarla antes de tomar el fallo como evidencia.
+- [x] **3. Implementar las interfaces de esta tarea y sus fixtures.** Reutilizar los contratos anteriores; preservar los valores del diseño y el inventario. 6 herramientas y escrituras PUT conservadoras; equipamiento no se confunde con las herramientas MCP.
 
-- [ ] **4. Verificar el resultado de esta tarea.** Ejecutar dentro del Dev Container; salida0 y todas las aserciones indicadas en verde. Para P01 el launcher y el contenedor auxiliar son la excepción de bootstrap explicada arriba.
+- [x] **4. Verificar el resultado de esta tarea.** Ejecutar dentro del Dev Container; salida0 y todas las aserciones indicadas en verde. Para P01 el launcher y el contenedor auxiliar son la excepción de bootstrap explicada arriba.
 
 ```bash
 uv run pytest tests/unit/test_equipment_api.py tests/contracts/test_equipment.py -q
 ```
 
-- [ ] **5. Revisar, documentar y cerrar.** Comprobar el criterio de salida anterior y el diff; no ampliar la suite sin una nueva causa. Actualizar estado, diferencias si las hay y evidencia con comando/resultado/entorno. Commit de implementación sugerido: `feat: port equipment organizer tools`. Registrar su SHA en un commit documental posterior si hace falta; no intentar incluir el hash de un commit en sí mismo.
+- [x] **5. Revisar, documentar y cerrar.** Comprobar el criterio de salida anterior y el diff; no ampliar la suite sin una nueva causa. Actualizar estado, diferencias si las hay y evidencia con comando/resultado/entorno. Commit de implementación sugerido: `feat: port equipment organizer tools`. Registrar su SHA en un commit documental posterior si hace falta; no intentar incluir el hash de un commit en sí mismo.
 
 <a id="p11"></a>
 ### P11: Migrar listas de compra e items

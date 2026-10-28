@@ -47,3 +47,5 @@ Task P07: complete — suite94/94, Ruff/mypy passed; evidencia evidence/P07.md. 
 Task P08: complete — suite135/135, Ruff/mypy passed; evidencia evidence/P08.md. P09 en curso.
 
 Task P09: complete — suite220/220, Ruff/mypy passed; evidencia evidence/P09.md. P10 en curso.
+
+Task P10: complete — suite247/247, Ruff/mypy passed; evidencia evidence/P10.md. P11 en curso.

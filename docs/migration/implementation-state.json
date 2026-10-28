@@ -316,7 +316,7 @@
           "tests": 220
         }
       ],
-      "commit": null
+      "commit": "b47579aae74fb9f7961cf935162da09cde8b3b7d"
     },
     {
       "id": "P10",
@@ -324,7 +324,7 @@
       "dependsOn": [
         "P09"
       ],
-      "status": "in_progress",
+      "status": "verified",
       "tools": [
         "get_tools",
         "get_tool",
@@ -343,7 +343,13 @@
         "tests/unit/test_equipment_api.py",
         "tests/contracts/test_equipment.py"
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "report": "docs/migration/evidence/P10.md",
+          "result": "passed",
+          "tests": 247
+        }
+      ],
       "commit": null
     },
     {
@@ -352,7 +358,7 @@
       "dependsOn": [
         "P10"
       ],
-      "status": "not_started",
+      "status": "in_progress",
       "tools": [
         "get_shopping_lists",
         "create_shopping_list",

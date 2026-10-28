@@ -1,0 +1,295 @@
+[
+  {
+    "tool": "get_tools",
+    "arguments": {
+      "search": "tin",
+      "page": 1,
+      "perPage": 20
+    },
+    "scenario": "get_tools.basic",
+    "expected_requests": [
+      {
+        "method": "GET",
+        "path": "/api/organizers/tools",
+        "query": {
+          "search": [
+            "tin"
+          ],
+          "page": [
+            "1"
+          ],
+          "perPage": [
+            "20"
+          ]
+        },
+        "body": null
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"items\":[{\"id\":\"30000000-0000-4000-8000-000000000001\",\"name\":\"Baking Tin\",\"slug\":\"baking-tin\",\"householdsWithTool\":[\"home\",\"other-home\"],\"createdAt\":\"2024-01-01\",\"providerExtra\":{\"keep\":true}}],\"total\":1}"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "get_tool",
+    "arguments": {
+      "toolId": "30000000-0000-4000-8000-000000000001"
+    },
+    "scenario": "get_tool.basic",
+    "expected_requests": [
+      {
+        "method": "GET",
+        "path": "/api/organizers/tools/30000000-0000-4000-8000-000000000001",
+        "query": {},
+        "body": null
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"id\":\"30000000-0000-4000-8000-000000000001\",\"name\":\"Baking Tin\",\"slug\":\"baking-tin\",\"householdsWithTool\":[\"home\",\"other-home\"],\"createdAt\":\"2024-01-01\",\"providerExtra\":{\"keep\":true}}"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "get_tool_matches",
+    "arguments": {
+      "queries": [
+        "Baking Tin",
+        "baking-tin"
+      ]
+    },
+    "scenario": "get_tool_matches.basic",
+    "expected_requests": [
+      {
+        "method": "GET",
+        "path": "/api/organizers/tools",
+        "query": {
+          "queryFilter": [
+            "(name LIKE \"%Baking Tin%\" OR slug LIKE \"%Baking Tin%\") OR (name LIKE \"%baking-tin%\" OR slug LIKE \"%baking-tin%\")"
+          ],
+          "page": [
+            "1"
+          ],
+          "perPage": [
+            "200"
+          ]
+        },
+        "body": null
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"matches\":[{\"query\":\"Baking Tin\",\"items\":[{\"id\":\"30000000-0000-4000-8000-000000000001\",\"name\":\"Baking Tin\",\"slug\":\"baking-tin\",\"householdsWithTool\":[\"home\",\"other-home\"],\"createdAt\":\"2024-01-01\",\"providerExtra\":{\"keep\":true},\"matchedBy\":\"name\",\"matchType\":\"exact\",\"matchedValue\":\"Baking Tin\"}],\"truncated\":false},{\"query\":\"baking-tin\",\"items\":[{\"id\":\"30000000-0000-4000-8000-000000000001\",\"name\":\"Baking Tin\",\"slug\":\"baking-tin\",\"householdsWithTool\":[\"home\",\"other-home\"],\"createdAt\":\"2024-01-01\",\"providerExtra\":{\"keep\":true},\"matchedBy\":\"slug\",\"matchType\":\"exact\",\"matchedValue\":\"baking-tin\"}],\"truncated\":false}],\"queryCount\":2,\"uniqueQueryCount\":2,\"matchedCount\":2,\"apiRequestCount\":1}"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "create_tool",
+    "arguments": {
+      "name": " Baking Tin "
+    },
+    "scenario": "create_tool.basic",
+    "expected_requests": [
+      {
+        "method": "POST",
+        "path": "/api/organizers/tools",
+        "query": {},
+        "body": {
+          "name": "Baking Tin"
+        }
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"id\":\"30000000-0000-4000-8000-000000000001\",\"name\":\"Baking Tin\",\"slug\":\"baking-tin\",\"householdsWithTool\":[\"home\",\"other-home\"],\"createdAt\":\"2024-01-01\",\"providerExtra\":{\"keep\":true}}"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "update_tool",
+    "arguments": {
+      "toolId": "30000000-0000-4000-8000-000000000001",
+      "name": " Renamed "
+    },
+    "scenario": "update_tool.basic",
+    "expected_requests": [
+      {
+        "method": "GET",
+        "path": "/api/organizers/tools/30000000-0000-4000-8000-000000000001",
+        "query": {},
+        "body": null
+      },
+      {
+        "method": "PUT",
+        "path": "/api/organizers/tools/30000000-0000-4000-8000-000000000001",
+        "query": {},
+        "body": {
+          "id": "30000000-0000-4000-8000-000000000001",
+          "name": "Renamed",
+          "householdsWithTool": [
+            "home",
+            "other-home"
+          ]
+        }
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"id\":\"30000000-0000-4000-8000-000000000001\",\"name\":\"Renamed\",\"slug\":\"baking-tin\",\"householdsWithTool\":[\"home\",\"other-home\"],\"createdAt\":\"2024-01-01\",\"providerExtra\":{\"keep\":true}}"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "delete_tool",
+    "arguments": {
+      "toolId": "30000000-0000-4000-8000-000000000001"
+    },
+    "scenario": "delete_tool.basic",
+    "expected_requests": [
+      {
+        "method": "DELETE",
+        "path": "/api/organizers/tools/30000000-0000-4000-8000-000000000001",
+        "query": {},
+        "body": null
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"id\":\"30000000-0000-4000-8000-000000000001\"}"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "create_tool",
+    "arguments": {
+      "name": " "
+    },
+    "scenario": "create_tool.blank",
+    "expected_requests": [],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "Tool name cannot be empty."
+        }
+      ],
+      "isError": true
+    }
+  },
+  {
+    "tool": "update_tool",
+    "arguments": {
+      "toolId": "30000000-0000-4000-8000-000000000001",
+      "name": " "
+    },
+    "scenario": "update_tool.blank",
+    "expected_requests": [],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "Tool name cannot be empty."
+        }
+      ],
+      "isError": true
+    }
+  },
+  {
+    "tool": "update_tool",
+    "arguments": {
+      "toolId": "30000000-0000-4000-8000-000000000001"
+    },
+    "scenario": "update_tool.empty",
+    "expected_requests": [],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "At least one field must be supplied for an update."
+        }
+      ],
+      "isError": true
+    }
+  },
+  {
+    "tool": "delete_tool",
+    "arguments": {
+      "toolId": "30000000-0000-4000-8000-000000000001"
+    },
+    "scenario": "delete_tool.204",
+    "expected_requests": [
+      {
+        "method": "DELETE",
+        "path": "/api/organizers/tools/30000000-0000-4000-8000-000000000001",
+        "query": {},
+        "body": null
+      }
+    ],
+    "expected_result": {
+      "protocolError": "MCPError",
+      "message": "MCP error -32602: Invalid tools/call result: [\n  {\n    \"code\": \"invalid_union\",\n    \"errors\": [\n      [\n        {\n          \"expected\": \"string\",\n          \"code\": \"invalid_type\",\n          \"path\": [\n            \"text\"\n          ],\n          \"message\": \"Invalid input: expected string, received undefined\"\n        }\n      ],\n      [\n        {\n          \"code\": \"invalid_value\",\n          \"values\": [\n            \"image\"\n          ],\n          \"path\": [\n            \"type\"\n          ],\n          \"message\": \"Invalid input: expected \\\"image\\\"\"\n        },\n        {\n          \"expected\": \"string\",\n          \"code\": \"invalid_type\",\n          \"path\": [\n            \"data\"\n          ],\n          \"message\": \"Invalid input: expected string, received undefined\"\n        },\n        {\n          \"expected\": \"string\",\n          \"code\": \"invalid_type\",\n          \"path\": [\n            \"mimeType\"\n          ],\n          \"message\": \"Invalid input: expected string, received undefined\"\n        }\n      ],\n      [\n        {\n          \"code\": \"invalid_value\",\n          \"values\": [\n            \"audio\"\n          ],\n          \"path\": [\n            \"type\"\n          ],\n          \"message\": \"Invalid input: expected \\\"audio\\\"\"\n        },\n        {\n          \"expected\": \"string\",\n          \"code\": \"invalid_type\",\n          \"path\": [\n            \"data\"\n          ],\n          \"message\": \"Invalid input: expected string, received undefined\"\n        },\n        {\n          \"expected\": \"string\",\n          \"code\": \"invalid_type\",\n          \"path\": [\n            \"mimeType\"\n          ],\n          \"message\": \"Invalid input: expected string, received undefined\"\n        }\n      ],\n      [\n        {\n          \"expected\": \"string\",\n          \"code\": \"invalid_type\",\n          \"path\": [\n            \"name\"\n          ],\n          \"message\": \"Invalid input: expected string, received undefined\"\n        },\n        {\n          \"expected\": \"string\",\n          \"code\": \"invalid_type\",\n          \"path\": [\n            \"uri\"\n          ],\n          \"message\": \"Invalid input: expected string, received undefined\"\n        },\n        {\n          \"code\": \"invalid_value\",\n          \"values\": [\n            \"resource_link\"\n          ],\n          \"path\": [\n            \"type\"\n          ],\n          \"message\": \"Invalid input: expected \\\"resource_link\\\"\"\n        }\n      ],\n      [\n        {\n          \"code\": \"invalid_value\",\n          \"values\": [\n            \"resource\"\n          ],\n          \"path\": [\n            \"type\"\n          ],\n          \"message\": \"Invalid input: expected \\\"resource\\\"\"\n        },\n        {\n          \"code\": \"invalid_union\",\n          \"errors\": [\n            [\n              {\n                \"expected\": \"object\",\n                \"code\": \"invalid_type\",\n                \"path\": [],\n                \"message\": \"Invalid input: expected object, received undefined\"\n              }\n            ],\n            [\n              {\n                \"expected\": \"object\",\n                \"code\": \"invalid_type\",\n                \"path\": [],\n                \"message\": \"Invalid input: expected object, received undefined\"\n              }\n            ]\n          ],\n          \"path\": [\n            \"resource\"\n          ],\n          \"message\": \"Invalid input\"\n        }\n      ]\n    ],\n    \"path\": [\n      \"content\",\n      0\n    ],\n    \"message\": \"Invalid input\"\n  }\n]"
+    },
+    "documented_difference": "D07",
+    "expected_python_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "null"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "delete_tool",
+    "arguments": {
+      "toolId": "30000000-0000-4000-8000-000000000001"
+    },
+    "scenario": "delete_tool.refused",
+    "expected_requests": [
+      {
+        "method": "DELETE",
+        "path": "/api/organizers/tools/30000000-0000-4000-8000-000000000001",
+        "query": {},
+        "body": null
+      }
+    ],
+    "expected_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "Unable to delete tool 30000000-0000-4000-8000-000000000001. Mealie may refuse to delete a tool that cannot be removed: Mealie API error 400: {\"detail\": \"in use\"}"
+        }
+      ],
+      "isError": true
+    },
+    "documented_difference": "D06",
+    "expected_python_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "Unable to delete tool 30000000-0000-4000-8000-000000000001. Mealie may refuse to delete a tool that cannot be removed: Mealie API error 400."
+        }
+      ],
+      "isError": true
+    }
+  }
+]
