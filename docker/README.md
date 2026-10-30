@@ -1,10 +1,18 @@
 # Desplegar la imagen publicada en GHCR
 
-Esta carpeta permite instalar un servicio nuevo con Docker Compose, sin clonar el código Python, construir una imagen ni instalar Python en el servidor. HTTP es el servicio por defecto; stdio se activa mediante su perfil.
+Esta carpeta permite instalar el MCP con una imagen de GHCR. Solo hay que completar cuatro valores en `.env` y arrancar el servicio.
+
+| Archivo | Para qué sirve |
+|---|---|
+| `compose.yaml` | Servicio HTTP remoto con Bearer |
+| `compose.stdio.yaml` | Proceso stdio que arranca tu cliente MCP |
+| `.env.example` | Plantilla de configuración |
+
+Cada Compose contiene un único servicio, sin anchors ni perfiles. Las opciones de protección ya están configuradas; no hace falta editarlas.
 
 ## Preparar la configuración
 
-Copiar esta carpeta al servidor Docker, por ejemplo a /srv/mealie-mcp. Son necesarios compose.yaml y un .env configurado. En el repositorio solo se versiona .env.example; el .env local está excluido de Git y del contexto de build.
+Copiar `compose.yaml` y `.env.example` al servidor Docker, por ejemplo a `/srv/mealie-mcp`. Para stdio, copiar además `compose.stdio.yaml`. En el repositorio solo se versiona `.env.example`; el `.env` local está excluido de Git y del contexto de build.
 
 Desde esta carpeta, si todavía no existe .env:
 
@@ -15,23 +23,24 @@ chmod 600 .env
 
 En PowerShell, usar `Copy-Item .env.example .env` y limitar el acceso al archivo con los permisos del sistema.
 
-Editar estos valores:
+Completar estos cuatro valores en `.env`:
 
 | Variable | Valor que debe configurar el operador |
 |---|---|
-| MEALIE_MCP_IMAGE | Imagen Python publicada: ghcr.io/PROPIETARIO/REPOSITORIO:VERSION, en minúsculas. Usar versión concreta o @sha256:DIGEST. |
 | MEALIE_BASE_URL | URL de la instancia Mealie accesible desde el contenedor. |
 | MEALIE_API_KEY | API key de ese Mealie. |
 | MCP_AUTH_TOKEN | Token personal aleatorio independiente para los clientes HTTP. |
 | MCP_PUBLIC_URL | URL HTTPS que tendrá el MCP detrás del proxy, terminada en /mcp. |
-| MCP_PUBLISHED_PORT | Puerto local disponible;8000 por defecto. |
-| COMPOSE_PROJECT_NAME | Nombre distinto si se instala otra instancia en el mismo host. |
+
+La imagen predeterminada es `ghcr.io/brunofelixns/mealie-mcp-server:0.1.0`. `MEALIE_MCP_IMAGE` y `TZ` son opcionales. Si el `.env` ya existe, editarlo sin volver a copiar la plantilla sobre él.
 
 Para generar el token HTTP en un servidor con OpenSSL: `openssl rand -hex 32`. Guardar el resultado en MCP_AUTH_TOKEN. Si un valor contiene `$`, escribirlo entre comillas simples en .env para evitar interpolación.
 
-Se puede publicar con release.yaml o [desde el Dev Container sin GitHub Actions](../docs/publishing-local.md). La plantilla apunta a ghcr.io/brunofelixns/mealie-mcp-server:0.1.0, correspondiente a este repositorio. **La plantilla no afirma que esa imagen exista:** esperar a que termine la publicación. Si se utiliza otro fork, cambiar propietario/repositorio. Ambos flujos publican versiones concretas, sin un tag latest.
+La versión `0.1.0` está publicada en GHCR para amd64 y arm64. Para futuras versiones se puede publicar con release.yaml o [desde el Dev Container sin GitHub Actions](../docs/publishing-local.md). Si se utiliza otro fork, cambiar propietario/repositorio en `MEALIE_MCP_IMAGE`. Ambos flujos publican versiones concretas, sin un tag latest.
 
-Compose lee .env e inyecta explícitamente las variables necesarias. En esta modalidad las credenciales son variables del contenedor, visibles para administradores Docker; proteger .env y el acceso al daemon. La configuración con secretos de archivo se documenta en [contenedores](../docs/containers.md).
+HTTP carga `.env` con `env_file`; debe estar junto a `compose.yaml`. También se pueden añadir allí las opciones avanzadas de la [configuración](../docs/configuration.md), por ejemplo `LOG_LEVEL`, `MCP_ALLOWED_ORIGINS`, `MCP_PUBLISHED_PORT` o `COMPOSE_PROJECT_NAME`. Para usar otro archivo de variables HTTP, cambiar la ruta `env_file`; `--env-file` controla la interpolación de Compose. [Semántica de Docker](https://docs.docker.com/compose/how-tos/environment-variables/set-environment-variables/).
+
+Las credenciales son variables del contenedor, visibles para administradores Docker; proteger `.env` y el acceso al daemon. La variante con secretos de archivo se documenta en [contenedores](../docs/containers.md).
 
 ## Descargar y arrancar HTTP
 
@@ -74,14 +83,16 @@ La red debe existir. En ella se puede usar MEALIE_BASE_URL=http://mealie:9000 y 
 
 ## stdio local
 
-Solo requiere MEALIE_BASE_URL y MEALIE_API_KEY; MCP_AUTH_TOKEN puede estar vacío. No arrancar este perfil con up --detach: el cliente MCP debe mantener stdin abierto.
+Solo requiere `MEALIE_BASE_URL` y `MEALIE_API_KEY`; `MCP_AUTH_TOKEN` puede estar vacío. El cliente MCP debe mantener stdin abierto.
 
 ```sh
-docker compose --profile stdio pull stdio
-docker compose --profile stdio run --rm --no-deps -T stdio
+docker compose -f compose.stdio.yaml pull stdio
+docker compose -f compose.stdio.yaml run --rm --no-deps -T stdio
 ```
 
-Usar ese comando desde el cliente MCP con esta carpeta como directorio de trabajo, o indicar paths absolutos con --env-file y -f. No añadir TTY. Este servicio no publica puertos ni configura healthcheck y no recibe el Bearer HTTP.
+Usar ese comando desde el cliente MCP con esta carpeta como directorio de trabajo, o indicar paths absolutos con `--env-file` y `-f`. No añadir TTY. Este servicio no publica puertos ni configura healthcheck y recibe explícitamente solo las variables Mealie, zona horaria y logs. El Bearer HTTP no se transmite al proceso stdio.
+
+Si utilizabas el comando anterior con `--profile stdio`, sustituirlo por `-f compose.stdio.yaml`. El archivo HTTP ya no incluye ese servicio.
 
 ## Actualizar o detener
 

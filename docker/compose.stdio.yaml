@@ -1,0 +1,23 @@
+name: mealie-mcp-stdio
+
+services:
+  stdio:
+    image: ${MEALIE_MCP_IMAGE:-ghcr.io/brunofelixns/mealie-mcp-server:0.1.0}
+    pull_policy: missing
+    command: [--transport, stdio]
+    environment:
+      MEALIE_BASE_URL: ${MEALIE_BASE_URL:?Configura MEALIE_BASE_URL en .env}
+      MEALIE_API_KEY: ${MEALIE_API_KEY:?Configura MEALIE_API_KEY en .env}
+      TZ: ${TZ:-UTC}
+      LOG_LEVEL: ${LOG_LEVEL:-INFO}
+      MEALIE_MCP_DEBUG: ${MEALIE_MCP_DEBUG:-false}
+    stdin_open: true
+    tty: false
+    init: true
+    read_only: true
+    tmpfs:
+      - /tmp:rw,noexec,nosuid,size=64m
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    stop_grace_period: 45s
+    pids_limit: 256

@@ -41,15 +41,17 @@ Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
 
 Cerrar la ventana retira ese cambio de política. Una política de empresa puede tener prioridad; en ese caso utilizar el terminal Bash del Dev Container o seguir la configuración de tu organización, sin cambiar la política del equipo.
 
-### 3. Iniciar sesión una vez
+### 3. Iniciar sesión en GHCR una vez
+
+La ruta documentada por GitHub para publicar fuera de Actions utiliza un [PAT classic con `write:packages`](https://github.com/settings/tokens/new?scopes=write:packages&description=mealie-mcp-server%20GHCR). Después de generarlo, autenticar Docker **dentro del Dev Container**:
 
 ```powershell
-.\scripts\publish-local.ps1 -Action Login
+docker exec -it --user vscode mealie-mcp-development-dev-1 docker login ghcr.io --username brunofelixns
 ```
 
-El launcher solicita acceso a GitHub con `write:packages`. Si pregunta si debe autenticar Git con las credenciales de GitHub, puedes responder `Y`. GitHub CLI muestra un código de un solo uso y te pide continuar en el navegador. Si no se abre automáticamente desde Linux, abrir [github.com/login/device](https://github.com/login/device) **en el navegador de Windows**, introducir ese código, entrar con **brunofelixns** y autorizar **GitHub CLI**. Volver a la terminal y esperar a ver `Login GHCR completado`.
+Introducir el PAT cuando pida `Password`. El PAT es el valor secreto que aparece después de `Generate token`; el nombre `mealie-mcp-server GHCR` solo identifica esa credencial. El token se introduce en el prompt de Docker, sin guardarlo en `.env`. Si se reconstruye el Dev Container y se pierde la sesión, repetir el login. Si el contenedor tiene otro nombre, usar ese nombre en el comando.
 
-Ese código del navegador no es una API key que debas pegar en el script. Después de la autorización, el launcher comprueba la cuenta y conecta `gh auth token` directamente con `docker login --password-stdin` **dentro del contenedor**, sin que el token pase por PowerShell ni por `.env`. La acción `Login` no construye ni publica. Si se reconstruye el Dev Container y se pierde la sesión, repetir este paso. [Flujo de login de GitHub CLI](https://cli.github.com/manual/gh_auth_login).
+`-Action Login` conserva la opción de reutilizar la sesión web de GitHub CLI. Esa sesión OAuth no garantiza que GHCR autorice el push: en el intento registrado devolvió `denied` incluso con la cuenta y `write:packages` correctos. Para la publicación usar la ruta PAT anterior. [Autenticación GHCR](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry).
 
 ### 4. Construir, probar y publicar
 
@@ -119,7 +121,7 @@ El flujo ejecuta, en orden:
 4. Build runtime por arquitectura con `--sbom=true --provenance=mode=max --load`. Verifica versión/revisión/plataforma e ID; exporta cada imagen a OCI y comprueba los payloads SBOM y provenance ligados al runtime correcto.
 5. Para cada imagen inmutable: pruebas de contenedor stdio/HTTP, los cuatro recorridos E2E con Mealie desechable y escaneo `--enforce`. Se rechazan secretos y vulnerabilidades HIGH/CRITICAL con corrección disponible; otros avisos permanecen en el informe, según la política existente del repositorio.
 
-Las pruebas del Compose portátil conceden hasta 60 segundos al arranque y 40 segundos a las lecturas MCP, con sondas de salud de hasta 10 segundos. Estos márgenes permiten ejecutar ARM bajo QEMU sin eliminar comprobaciones de salud, autenticación o API; la configuración de producción no se modifica.
+Las pruebas del Compose portátil conceden hasta 60 segundos al arranque y 40 segundos a las lecturas MCP en ejecución nativa. Cuando el controlador x86 ejecuta una imagen ARM bajo QEMU, se amplían a 120 y 90 segundos respectivamente; la sonda de prueba puede tardar hasta 10 segundos. Se conservan salud, autenticación y API, con los mismos límites de producción.
 
 Un fallo detiene el flujo y evita cualquier push. El informe diferencia `verified_local` de `published`; una simulación o un build aislado no equivalen a una publicación validada.
 
@@ -127,7 +129,7 @@ Un fallo detiene el flujo y evita cualquier push. El informe diferencia `verifie
 
 ### Con GitHub CLI
 
-Para uso interactivo, se puede reutilizar la sesión de `gh` y evitar copiar un PAT manualmente. La feature GitHub CLI está incluida en `.devcontainer/devcontainer.json`; reconstruir el Dev Container para añadirla a uno existente. Esto no elimina los tokens: `gh` los gestiona y Docker recibe uno por entrada estándar.
+Como opción adicional, se puede reutilizar la sesión de `gh`. El flujo web autentica GitHub CLI, pero no garantiza que GHCR autorice una publicación; la ruta recomendada para este proyecto es el PAT classic de la sección siguiente. La feature GitHub CLI está incluida en `.devcontainer/devcontainer.json`; reconstruir el Dev Container para añadirla a uno existente. `gh` gestiona un token y Docker lo recibe por entrada estándar.
 
 Desde el terminal Bash del Dev Container:
 
@@ -156,7 +158,7 @@ El usuario de ambos comandos debe corresponder a la cuenta autenticada que tiene
 
 ### Con un PAT dedicado
 
-Como alternativa documentada por GHCR, crear un **PAT GitHub classic** limitado a `write:packages` e iniciar sesión en el mismo Dev Container donde ejecutarás el script:
+Como ruta documentada por GHCR, crear un **PAT GitHub classic** limitado a `write:packages` e iniciar sesión en el mismo Dev Container donde ejecutarás el script:
 
 ```bash
 docker login ghcr.io --username brunofelixns
@@ -227,3 +229,9 @@ uv run python tests/windows/runner.py
 ```
 
 El runner descarga una imagen PowerShell fijada por digest y ejecuta el launcher con Docker simulado en un contenedor sin red ni socket Docker; comprueba acciones, separación de credenciales, selección del checkout y propagación de errores. Elimina únicamente su propio contenedor al terminar. No inicia sesión ni publica. La comprobación real en Windows se hace con `Plan`; las pruebas simuladas no demuestran un login OAuth ni una publicación GHCR reales.
+
+## Publicación 0.1.0 comprobada
+
+El 2026-10-30 se verificó por lectura la etiqueta multiarch `0.1.0` con digest `sha256:9b76115fa5b4796408c779c30f4ff96ceea63ba4db3b8dff716bfa43576b571b`. Contiene exactamente los dos runtimes y sus attestations del run `cf036c87d382`, cuyo commit fuente es `f5e70a6c7241ad0f7ca9e0317547d9239047bc16`. Ese run pasó 983 pruebas ordinarias, 7 de contenedor y 4 E2E por arquitectura, y ambos escaneos antes de la publicación. El paquete es privado y está asociado al repositorio.
+
+El primer push fue denegado; se conservó su informe y se preparó una recuperación temporal con comprobación de fuente, evidencias e imágenes inmutables. La comprobación posterior de GHCR confirma que la etiqueta utilizable existe. Para desplegarla en otro servidor o desde Docker de Windows, iniciar sesión en **ese cliente Docker** si no dispone de credenciales de lectura; la sesión del Dev Container no autentica automáticamente los demás clientes.

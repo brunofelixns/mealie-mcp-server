@@ -8,9 +8,14 @@ MEALIE_KEY = "fixture-runtime-mealie-key"
 AUTH_TOKEN = "fixture-runtime-personal-" + "b" * 40
 
 
-def docker(*arguments, check=True, input=None):
+def docker(*arguments, check=True, input=None, timeout=75):
     return subprocess.run(
-        ["docker", *arguments], capture_output=True, text=True, check=check, timeout=75, input=input
+        ["docker", *arguments],
+        capture_output=True,
+        text=True,
+        check=check,
+        timeout=timeout,
+        input=input,
     )
 
 

@@ -1,6 +1,6 @@
 # Contenedor de producción
 
-Para instalar un servicio desde una imagen ya publicada en GHCR, usar [docker/](../docker/README.md): incluye Compose sin build, plantilla .env, HTTP por defecto y un perfil stdio. Solo se copia esa carpeta al servidor; no se necesita el repositorio completo. Las secciones siguientes describen el build local y la variante con secretos de archivo.
+Para instalar un servicio desde una imagen ya publicada en GHCR, usar [docker/](../docker/README.md): `compose.yaml` contiene únicamente HTTP y carga `.env`; `compose.stdio.yaml` contiene únicamente stdio. No utilizan anchors ni perfiles y solo se necesita configurar cuatro valores para HTTP. Se copia esa carpeta al servidor; no se necesita el repositorio completo. Las secciones siguientes describen el build local y la variante con secretos de archivo, que conserva sus perfiles.
 
 El Dockerfile tiene etapas development, builder y runtime. El runtime instala el wheel y sus dependencias de producción; conserva CA, tzdata e ICU72. No incorpora Node, compiladores, uv, pip, ensurepip, herramientas de tests ni secretos. Ejecuta como10001:10001 y admite raíz de solo lectura con /tmp temporal.
 

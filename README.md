@@ -71,17 +71,17 @@ La API key y el Bearer deben ser distintos. Genera el Bearer con al menos32 byte
 > [!IMPORTANT]
 > El servicio HTTP se publica en `127.0.0.1:8000`. Para conectarte desde fuera del host, configura un proxy HTTPS hacia ese puerto y conserva el streaming de MCP. [Ejemplo de proxy](docs/http-deployment.md#tls-y-proxy).
 
-La referencia de imagen debe existir en GHCR. La publicación se realiza con el workflow manual de [release](.github/workflows/release.yaml); la plantilla no implica que una versión esté publicada.
+La versión `0.1.0` ya está publicada en GHCR para amd64 y arm64. Para publicar futuras versiones desde tu máquina, consulta la [guía de publicación local](docs/publishing-local.md); también existe el workflow manual de [release](.github/workflows/release.yaml).
 
 ### Usar stdio
 
 Desde la misma carpeta `docker/`, con la URL y la API key Mealie configuradas:
 
 ```sh
-docker compose --profile stdio run --rm --no-deps -T stdio
+docker compose -f compose.stdio.yaml run --rm --no-deps -T stdio
 ```
 
-El cliente MCP debe iniciar este proceso y mantener stdin abierto. No añadas TTY. El perfil stdio no publica puertos ni recibe el token HTTP.
+El cliente MCP debe iniciar este proceso y mantener stdin abierto. No añadas TTY. El archivo stdio es independiente: no publica puertos ni recibe el token HTTP.
 
 ## Conectar un cliente MCP
 
@@ -100,8 +100,7 @@ Ejemplo de configuración para un cliente que acepte `mcpServers`. Adapta las ru
       "args": [
         "compose",
         "--env-file", "/srv/mealie-mcp/.env",
-        "-f", "/srv/mealie-mcp/compose.yaml",
-        "--profile", "stdio",
+        "-f", "/srv/mealie-mcp/compose.stdio.yaml",
         "run", "--rm", "--no-deps", "-T", "stdio"
       ]
     }
