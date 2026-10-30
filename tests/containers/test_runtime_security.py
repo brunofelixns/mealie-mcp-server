@@ -3,6 +3,7 @@ import os
 from pathlib import Path
 
 from tests.containers.conftest import docker, run_arguments, unique_name
+from tests.support.version import PROJECT_VERSION
 
 
 def test_runtime_nonroot_readonly_without_node_build_tools_or_dev_dependencies(runtime_image):
@@ -48,7 +49,7 @@ def test_runtime_nonroot_readonly_without_node_build_tools_or_dev_dependencies(r
         docker("rm", "--force", preparer, check=False)
         docker("volume", "rm", name, check=False)
     metadata = json.loads(result.stdout)
-    assert metadata["version"] == "2.1.0" and metadata["icu"] == "72.1"
+    assert metadata["version"] == PROJECT_VERSION and metadata["icu"] == "72.1"
 
 
 def test_image_has_expected_architecture_labels_no_env_secrets_and_no_stdio_healthcheck(
@@ -68,7 +69,7 @@ def test_image_has_expected_architecture_labels_no_env_secrets_and_no_stdio_heal
     assert config["User"] == "10001:10001"
     assert config.get("Healthcheck", {}).get("Test", ["NONE"]) == ["NONE"]
     assert config["Labels"]["org.opencontainers.image.licenses"] == "MIT"
-    assert config["Labels"]["org.opencontainers.image.version"] == "2.1.0"
+    assert config["Labels"]["org.opencontainers.image.version"] == PROJECT_VERSION
     assert not any(
         value.startswith(("MEALIE_API_KEY=", "MCP_AUTH_TOKEN=")) for value in config["Env"]
     )

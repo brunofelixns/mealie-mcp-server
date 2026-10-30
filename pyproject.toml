@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "mealie-mcp-server"
-version = "2.1.0"
+version = "0.1.0"
 description = "Python Model Context Protocol server for Mealie"
 readme = "README.md"
 requires-python = ">=3.14"

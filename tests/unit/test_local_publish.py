@@ -9,6 +9,8 @@ from pathlib import Path
 
 import pytest
 
+from tests.support.version import PROJECT_VERSION
+
 ROOT = Path(__file__).resolve().parents[2]
 
 
@@ -380,7 +382,7 @@ def test_image_logs_do_not_capture_embedded_environment_or_unneeded_labels(tmp_p
                 "Architecture": arch,
                 "Config": {
                     "Labels": {
-                        "org.opencontainers.image.version": "2.1.0",
+                        "org.opencontainers.image.version": PROJECT_VERSION,
                         "org.opencontainers.image.revision": "a" * 40,
                     }
                 },

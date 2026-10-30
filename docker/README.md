@@ -29,7 +29,7 @@ Editar estos valores:
 
 Para generar el token HTTP en un servidor con OpenSSL: `openssl rand -hex 32`. Guardar el resultado en MCP_AUTH_TOKEN. Si un valor contiene `$`, escribirlo entre comillas simples en .env para evitar interpolación.
 
-Se puede publicar con release.yaml o [desde el Dev Container sin GitHub Actions](../docs/publishing-local.md). La plantilla apunta a ghcr.io/brunofelixns/mealie-mcp-server:2.1.0, correspondiente a este repositorio. **La plantilla no afirma que esa imagen exista:** esperar a que termine la publicación. Si se utiliza otro fork, cambiar propietario/repositorio. Ambos flujos publican versiones concretas, sin un tag latest.
+Se puede publicar con release.yaml o [desde el Dev Container sin GitHub Actions](../docs/publishing-local.md). La plantilla apunta a ghcr.io/brunofelixns/mealie-mcp-server:0.1.0, correspondiente a este repositorio. **La plantilla no afirma que esa imagen exista:** esperar a que termine la publicación. Si se utiliza otro fork, cambiar propietario/repositorio. Ambos flujos publican versiones concretas, sin un tag latest.
 
 Compose lee .env e inyecta explícitamente las variables necesarias. En esta modalidad las credenciales son variables del contenedor, visibles para administradores Docker; proteger .env y el acceso al daemon. La configuración con secretos de archivo se documenta en [contenedores](../docs/containers.md).
 

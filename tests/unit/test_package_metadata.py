@@ -3,6 +3,8 @@
 import subprocess
 from pathlib import Path
 
+from tests.support.version import PROJECT_VERSION
+
 
 def test_package_version_matches_metadata(tmp_path: Path) -> None:
     """Catch a wheel missing the import package or reporting another distribution version."""
@@ -28,10 +30,11 @@ def test_package_version_matches_metadata(tmp_path: Path) -> None:
             str(executable),
             "-I",
             "-c",
-            "from importlib.metadata import version; "
+            "import sys; from importlib.metadata import version; "
             "import mealie_mcp_server as package; "
-            "assert package.version() == version('mealie-mcp-server'); "
+            "assert package.version() == version('mealie-mcp-server') == sys.argv[1]; "
             "print(package.__file__)",
+            PROJECT_VERSION,
         ],
         cwd=tmp_path,
         capture_output=True,

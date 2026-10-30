@@ -59,7 +59,7 @@ En PowerShell, sustituye el comando de copia por `Copy-Item .env.example .env`.
 Estos son los valores que debes completar en `.env`:
 
 ```dotenv
-MEALIE_MCP_IMAGE=ghcr.io/brunofelixns/mealie-mcp-server:2.1.0
+MEALIE_MCP_IMAGE=ghcr.io/brunofelixns/mealie-mcp-server:0.1.0
 MEALIE_BASE_URL=https://mealie.example.com
 MEALIE_API_KEY=
 MCP_AUTH_TOKEN=
@@ -161,7 +161,7 @@ Compose carga su `.env` y pasa las variables al contenedor. El proceso Python re
 
 | Variable de `docker/.env` | Valor de la plantilla | Uso |
 |---|---|---|
-| `MEALIE_MCP_IMAGE` | `ghcr.io/brunofelixns/mealie-mcp-server:2.1.0` | Imagen publicada; permite versión concreta o digest. |
+| `MEALIE_MCP_IMAGE` | `ghcr.io/brunofelixns/mealie-mcp-server:0.1.0` | Imagen publicada; permite versión concreta o digest. |
 | `COMPOSE_PROJECT_NAME` | `mealie-mcp` | Identifica la instancia Compose. |
 | `MCP_BIND_IP` | `127.0.0.1` | Interfaz del host donde se publica HTTP. |
 | `MCP_PUBLISHED_PORT` | `8000` | Puerto del host; el puerto interno sigue siendo8000. |
@@ -188,7 +188,7 @@ uv run --frozen mealie-mcp-server --transport stdio
 <!-- BEGIN GENERATED TOOLS -->
 ## Herramientas disponibles (78)
 
-Catálogo de la versión 2.1.0. Consulta los [esquemas completos](docs/tools.md) y la [cobertura de API](docs/api-coverage.md).
+Catálogo de la versión 0.1.0. Consulta los [esquemas completos](docs/tools.md) y la [cobertura de API](docs/api-coverage.md).
 
 | Familia | Herramientas |
 |---|---:|

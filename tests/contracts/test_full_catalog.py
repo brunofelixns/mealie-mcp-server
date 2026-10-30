@@ -9,6 +9,7 @@ from mealie_mcp_server import version
 from mealie_mcp_server.config import load_settings
 from mealie_mcp_server.server import create_server
 from tests.support.fake_mealie import FakeMealie
+from tests.support.version import PROJECT_VERSION
 
 FIXTURES = Path(__file__).parents[1] / "fixtures/compatibility"
 ORIGINAL = json.loads((FIXTURES / "catalog.json").read_text())["tools"]
@@ -42,9 +43,7 @@ async def test_identity_and_native_protocol_capabilities_are_declared(mode):
         settings = load_settings({"MEALIE_BASE_URL": fake.server_url, "MEALIE_API_KEY": "fixture"})
         async with Client(create_server(settings), mode=mode) as client:
             assert client.server_info.name == "mealie-mcp-server"
-            assert (
-                client.server_info.version == version() == DIFFERENCES["D04"]["pythonServerVersion"]
-            )
+            assert client.server_info.version == version() == PROJECT_VERSION
             assert DIFFERENCES["D04"]["originalServerVersion"] == "1.0.0"
             capability_key = (
                 "pythonLegacyCapabilities" if mode == "legacy" else "pythonModernCapabilities"

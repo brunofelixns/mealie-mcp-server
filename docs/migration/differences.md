@@ -8,7 +8,7 @@ Referencia: d027e1b4a314d781a322f1f91e37840f01464d77.
 | D01 | FastMCP/Python y superficie nativa de protocolo | Herramientas y efectos preservados; capacidades, recursos vacíos y sobre de respuesta moderno explícitos en catalog-differences.json | P02..P24 | Catálogo/eras P20 y transportes reales P21/P22/P24 verificados |
 | D02 | HTTP Streamable con token Bearer independiente | Uso remoto personal elegido por el usuario, además de stdio | P22 | Verificada: SDK oficial/FastMCP, Bearer y contenedor |
 | D03 | Dev Container, paquete Python y runtime OCI Python | Entorno y entrega de producción solicitados | P01/P02/P23 | Verificada: Dev Container, wheel y ambos runtimes |
-| D04 | Una versión coherente de paquete/CLI/MCP | El original declara paquete2.1.0 y servidor1.0.0 | P02/P20/P21/P23 | Paquete, MCP, CLI y ambas imágenes2.1.0 verificados |
+| D04 | Una versión coherente de paquete/CLI/MCP | El original declara paquete 2.1.0 y servidor 1.0.0; el usuario elige 0.1.0 para publicar el port Python el 2026-10-30 | P02/P20/P21/P23 y publicación local | Metadata actual 0.1.0; las evidencias históricas 2.1.0 se conservan |
 | D05 | Documentación con78 herramientas y prompt con perPage | Corregir recuentos/argumento que difieren del registro; instrucciones generales preservadas íntegramente | P20/P24 | Prompt P20 y documentos/generador P24 verificados |
 | D06 | Salud HTTP y mensajes/logs con redacción de secretos | No copiar cuerpos crudos de errores del proveedor ni excepciones de descarga que puedan contener URLs firmadas; conservar estado/isError | P05/P08/P18/P22 | Errores/redacción P08/P18 y salud HTTP P22/P24 verificados |
 | D07 | Texto JSON null válido si un DELETE devuelve204 | Original observado: MCPError-32602 por text undefined; DELETE no se repite | P08..P20 | Verificada en delete_tag.edge204 |
@@ -18,6 +18,8 @@ Referencia: d027e1b4a314d781a322f1f91e37840f01464d77.
 | D11 | `delete_shopping_list_items_bulk` repite el parámetro `ids` por identificador, sin CSV | Mealie3.29.0 valida cada valor de la query como UUID y rechaza el CSV con422; un lote vacío omite la query y es un no-op del proveedor | E2E local | Pruebas unitarias de serialización y contratos separados; verificación real registrada en docs/testing/local-e2e.md |
 
 ## Regla para añadir una diferencia
+
+La versión del port Python es **0.1.0**, por decisión explícita del usuario el 2026-10-30. Se alinea `pyproject.toml`, lock, label OCI, ejemplos de despliegue y entrada de release. Las capturas de `tests/fixtures/compatibility`, incluidas las descripciones originales de diferencias, no se reescriben. Las pruebas verifican la identidad contra la versión del proyecto y la metadata instalada; al comparar el sobre moderno del prompt solo se sustituye el campo de versión contemplado por D04. Todos los demás campos, capacidades, catálogo y mensajes mantienen su comparación estricta con las capturas.
 
 Registrar herramienta/entrada, salida o efecto original observado, cambio propuesto, motivo, compatibilidad afectada y prueba que lo demuestra. Diferenciar corrección de defecto, cambio de transporte/metadata y cambio de negocio. No normalizar ni borrar una diferencia en el comparador para ocultarla.
 

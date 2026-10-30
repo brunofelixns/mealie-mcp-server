@@ -8,6 +8,7 @@ from fastmcp import Client
 from mealie_mcp_server.config import load_settings
 from mealie_mcp_server.server import create_server
 from tests.support.fake_mealie import FakeMealie
+from tests.support.version import PROJECT_VERSION
 
 FIXTURES = Path(__file__).parents[1] / "fixtures/compatibility"
 ORIGINAL = json.loads((FIXTURES / "prompts.json").read_text())
@@ -37,6 +38,8 @@ async def test_weekly_prompt_preserves_messages_roles_and_confirmation(mode, pre
         expected["messages"][1]["content"]["text"] += " My preferences are: " + preferences
     if mode == "auto":
         expected.update(copy.deepcopy(DIFFERENCES["D01"]["modernResultEnvelope"]))
+        # D04: release metadata changes; the immutable capture and all other fields remain.
+        expected["_meta"]["io.modelcontextprotocol/serverInfo"]["version"] = PROJECT_VERSION
     assert result.model_dump(mode="json", by_alias=True, exclude_unset=True) == expected
     assert [message.role for message in result.messages] == ["assistant", "user"]
     assert (

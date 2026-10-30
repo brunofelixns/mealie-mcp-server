@@ -91,3 +91,25 @@ No se repite la suite ordinaria completa de 977 casos tras los seis tests de reg
 Autenticación y publicación remota quedan sin ejecutar: no hay login, push GHCR, manifest remoto ni prueba de descarga pública nuevos. El proceso de publicación se verifica con simulación y pruebas de fallos; su validación real requiere la sesión Docker del usuario y ejecutar `--publish` sobre un checkout limpio.
 
 Checks finales: Ruff y formato correctos (244 archivos), mypy correcto (82 archivos), generador de documentos correcto, gate de release con 24 tareas verificado y las 51 pruebas focalizadas correctas (3,32s). Se comprueba además que no quedan recursos del proyecto E2E ARM. Destino de entrega del código: rama `migration/python` de `origin`; las imágenes no forman parte de esa subida Git.
+
+## Ampliación Windows
+
+El usuario pide un paso a paso o un `.ps1`. Se añade un launcher PowerShell que usa únicamente Docker en Windows y delega al Dev Container. Acciones: `Plan` por defecto (dry-run), `Login` interactivo con navegador, `Verify` local y `Publish` explícito mediante el orquestador existente. El token se canaliza dentro de Linux; nunca pasa por variables, archivos o logs de PowerShell. El contenedor debe montar este checkout; si hay ambigüedad se exige `-Container`.
+
+Pruebas de comportamiento del launcher con Docker simulado, ejecutadas desde el Dev Container en PowerShell Linux; comprobación Windows real solo con `Plan`, sin login ni publicación. Documentar reconstrucción del Dev Container, autorización del navegador, comandos PowerShell y límites de la validación.
+
+El usuario confirmó **0.1.0** como versión inicial del port. Se conservó su cambio de `pyproject.toml` y se alinearon lock, label OCI, ejemplos actuales y valor predeterminado de release. D04 registra la decisión. Las expectativas de identidad se obtienen de la versión del proyecto y se contrastan con la metadata instalada; las capturas originales siguen intactas.
+
+Resultados de la ampliación:
+
+- RED del launcher por ausencia del `.ps1`; GREEN de 13 comprobaciones, incluidas acciones sin publicación, errores de login/registry, cuenta incorrecta, selección del checkout y ausencia de reintentos. Runner reproducible: `uv run python tests/windows/runner.py` desde el Dev Container.
+- `Plan` real comprobado desde Windows en PowerShell7.6.5 y Windows PowerShell5.1. La comprobación5.1 detectó que el array JSON de montajes quedaba anidado; se corrigió la asignación sin relajar el cotejo del checkout y se repitió correctamente.
+- El usuario observó `gh: executable file not found` en el Dev Container anterior. Se instaló GitHub CLI2.103.3 en ese contenedor desde el repositorio Debian oficial, comprobando el SHA256 publicado del keyring y usando metadata APT firmada. La feature de VS Code conserva la instalación para futuras reconstrucciones. Se verificó `gh --version`; el agente no ejecuta el login del usuario.
+- El usuario intentó `Publish` durante los cambios y recibió `Publishing requires a clean committed checkout`. Es el guard previsto: impide publicar código sin commit; se conserva y se completa la entrega Git después de verificarla.
+- El cambio de versión mostró primero siete fallos esperados de identidad/metadata. Tras el ajuste pasan los 44 casos focalizados, incluido el wheel instalado fuera del source tree, y las comprobaciones estáticas, de documentación y gate0.1.0.
+- Se construyeron nuevamente ambas arquitecturas0.1.0 con SBOM/provenance. La CLI instalada y las dos pruebas de seguridad/metadata por arquitectura pasan; ARM usa QEMU. Evidencia: `artifacts/windows-version-images-654639d7eb/`. Esto no se presenta como una nueva ejecución E2E ni escaneo completo de esas imágenes.
+- La suite ordinaria completa obtuvo **982 passed, 1 failed, 4 deselected** en833,34s. El fallo fue `test_fastmcp_stdio_roundtrip[legacy]`, por agotarse20s al inicializar el subprocess mientras coexistían builds. Una repetición aislada de ambas eras pasa2/2 en15,85s. Se conserva el fallo original y no se cambian sus expectativas ni sus límites; la repetición no se presenta como una suite completa correcta.
+
+La repetición posterior del módulo stdio completo pasa **10/10 en 105,26s**, con los límites originales. El checker con JUnit y cobertura actuales confirma **78/78 herramientas**, 246 casos, 95,99% de líneas y 87,50% de ramas. Ruff, formato (246 archivos), mypy (82 archivos), documentación generada, 91 enlaces locales y el gate de versión0.1.0 también pasan. El agente entrega el código mediante commit y subida a `origin/migration/python`; el checkout limpio se comprueba después del commit. La validación completa que ejecutará `Publish` sigue siendo obligatoria antes de cualquier push GHCR.
+
+Ningún push de imagen ni manifest GHCR se ejecuta por parte del agente. El usuario realiza su login y, tras quedar el checkout limpio, ejecuta el flujo real con `-Action Publish` y todos sus gates.

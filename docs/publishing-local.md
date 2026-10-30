@@ -12,6 +12,78 @@ El script `scripts/publish_local.py` ejecuta el proceso en tu máquina, sin GitH
 
 El script usa la red del Dev Container con alias `dev`, necesaria para las pruebas de sockets de contenedor. Si el contenedor tiene varias redes, definir `MCP_TEST_NETWORK` con esa red. No crear ni modificar una red de producción.
 
+## Windows: paso a paso con PowerShell
+
+Los comandos `gh ...`, `set -o pipefail` y `uv ...` de las secciones Linux se ejecutan en **Bash dentro del Dev Container**. Para trabajar desde PowerShell en Windows, usar el launcher [scripts/publish-local.ps1](../scripts/publish-local.ps1). Windows solo necesita Docker Desktop y PowerShell; GitHub CLI, Python, las pruebas y los builds se ejecutan en Linux.
+
+### 1. Preparar Docker y el Dev Container
+
+1. Abrir Docker Desktop y esperar a que esté listo, con contenedores Linux y el almacén containerd activado.
+2. Abrir este repositorio en VS Code con la extensión **Dev Containers**.
+3. Pulsar `Ctrl+Shift+P` y ejecutar **Dev Containers: Rebuild and Reopen in Container**. Esto incorpora GitHub CLI si el contenedor existente se creó antes de añadir esa feature. Esperar a que termine la preparación; no basta con `docker compose up`, que por sí solo no instala las features de VS Code.
+4. Mantener el Dev Container en ejecución y abrir una ventana **PowerShell de Windows**, por ejemplo desde Windows Terminal.
+
+### 2. Entrar en la carpeta y comprobar el plan
+
+```powershell
+Set-Location E:\GitHub\mealie-mcp-server
+.\scripts\publish-local.ps1
+```
+
+La acción por defecto es `Plan`: localiza el contenedor que monta este checkout y muestra lo que se construiría y publicaría, sin iniciar sesión, construir ni subir imágenes. Los valores `<tested-...>` y `<verified-...>` son marcadores del plan, no texto que debas copiar.
+
+Si Windows bloquea la ejecución del `.ps1`, se puede permitir **solo en esa ventana** y repetirlo:
+
+```powershell
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+.\scripts\publish-local.ps1
+```
+
+Cerrar la ventana retira ese cambio de política. Una política de empresa puede tener prioridad; en ese caso utilizar el terminal Bash del Dev Container o seguir la configuración de tu organización, sin cambiar la política del equipo.
+
+### 3. Iniciar sesión una vez
+
+```powershell
+.\scripts\publish-local.ps1 -Action Login
+```
+
+El launcher solicita acceso a GitHub con `write:packages`. Si pregunta si debe autenticar Git con las credenciales de GitHub, puedes responder `Y`. GitHub CLI muestra un código de un solo uso y te pide continuar en el navegador. Si no se abre automáticamente desde Linux, abrir [github.com/login/device](https://github.com/login/device) **en el navegador de Windows**, introducir ese código, entrar con **brunofelixns** y autorizar **GitHub CLI**. Volver a la terminal y esperar a ver `Login GHCR completado`.
+
+Ese código del navegador no es una API key que debas pegar en el script. Después de la autorización, el launcher comprueba la cuenta y conecta `gh auth token` directamente con `docker login --password-stdin` **dentro del contenedor**, sin que el token pase por PowerShell ni por `.env`. La acción `Login` no construye ni publica. Si se reconstruye el Dev Container y se pierde la sesión, repetir este paso. [Flujo de login de GitHub CLI](https://cli.github.com/manual/gh_auth_login).
+
+### 4. Construir, probar y publicar
+
+Con los cambios guardados en commits y el checkout limpio:
+
+```powershell
+.\scripts\publish-local.ps1 -Action Publish
+```
+
+Este es el comando que **sí publica**. Delega en `scripts/publish_local.py --publish`, que obtiene la versión de `pyproject.toml`: no hay que introducir un token ni escribir la versión en PowerShell. Construye amd64/arm64, ejecuta los gates y solo después sube las imágenes al destino configurado. ARM bajo emulación tarda más. No editar el checkout durante la ejecución; los logs y resultados quedan en `artifacts/local-release/<id>/`.
+
+Si quieres construir y probar antes sin subir nada:
+
+```powershell
+.\scripts\publish-local.ps1 -Action Verify
+```
+
+`Publish` vuelve a ejecutar las validaciones completas; `Verify` no crea un atajo para publicar después sin comprobarlas.
+
+| Acción | Resultado |
+|---|---|
+| Sin parámetros o `-Action Plan` | Vista previa del flujo, sin login/build/push |
+| `-Action Login` | Login de GitHub y Docker GHCR, sin build/push |
+| `-Action Verify` | Construcción y validación local de ambas arquitecturas |
+| `-Action Publish` | Validación completa y publicación si todos los gates pasan |
+
+El launcher detecta el contenedor por su montaje del checkout, sin depender de un nombre fijo. Si hay varios, indicar el nombre concreto; para otra cuenta, cambiar el usuario de login:
+
+```powershell
+.\scripts\publish-local.ps1 -Action Login -Container mealie-mcp-development-dev-1 -GitHubUser brunofelixns
+```
+
+`-GitHubUser` cambia la cuenta de autenticación, no el destino GHCR del proyecto. Un fallo detiene el comando y no reintenta la operación automáticamente. Si falta `gh`, reconstruir el Dev Container como en el paso 1. Si GitHub informa de una credencial heredada mediante `GH_TOKEN`/`GITHUB_TOKEN`, revisar esa configuración del Dev Container antes de intentar otro login; no pegar ni imprimir su valor.
+
 ## Revisar el flujo sin ejecutar nada
 
 Desde la raíz del repositorio, en el terminal del Dev Container:
@@ -34,7 +106,6 @@ Por defecto usa `ghcr.io/brunofelixns/mealie-mcp-server`, la versión de `pyproj
 ```bash
 uv run python scripts/publish_local.py \
   --image ghcr.io/brunofelixns/mealie-mcp-server \
-  --version 2.1.0 \
   --builder default
 ```
 
@@ -106,9 +177,9 @@ uv run python scripts/publish_local.py --publish
 `--publish` vuelve a ejecutar todas las validaciones locales. Después etiqueta por ID inmutable y sube:
 
 ```text
-ghcr.io/brunofelixns/mealie-mcp-server:2.1.0-amd64
-ghcr.io/brunofelixns/mealie-mcp-server:2.1.0-arm64
-ghcr.io/brunofelixns/mealie-mcp-server:2.1.0
+ghcr.io/brunofelixns/mealie-mcp-server:<version>-amd64
+ghcr.io/brunofelixns/mealie-mcp-server:<version>-arm64
+ghcr.io/brunofelixns/mealie-mcp-server:<version>
 ```
 
 Antes de crear la última etiqueta comprueba los digests remotos de ambas variantes. Compone el manifest con referencias `image@sha256:...`, verifica que contiene exactamente ambos runtimes probados y las attestations originales vinculadas a sus digests, y registra su digest final. No cambia la visibilidad del paquete ni crea una release GitHub. GHCR crea paquetes privados por defecto; configurar visibilidad/acceso desde Packages según se necesite. El Dockerfile ya incluye la label de repositorio fuente.
@@ -135,7 +206,7 @@ Con un paquete privado, un error de permisos se resuelve revisando login, scopes
 Tras una publicación correcta, configurar la etiqueta multiarch o el digest en `docker/.env`:
 
 ```dotenv
-MEALIE_MCP_IMAGE=ghcr.io/brunofelixns/mealie-mcp-server:2.1.0
+MEALIE_MCP_IMAGE=ghcr.io/brunofelixns/mealie-mcp-server:0.1.0
 ```
 
 Desde la carpeta `docker` del servidor:
@@ -146,3 +217,13 @@ docker compose up --detach --wait mealie-mcp
 ```
 
 Docker selecciona la arquitectura adecuada. [Despliegue Docker](../docker/README.md) · [Contenedores](containers.md) · [E2E local](testing/local-e2e.md). Los resultados de preparación de este script se registran en el [plan y ledger](superpowers/plans/2026-10-30-local-ghcr.md); preparar el script no significa que se haya publicado una imagen.
+
+## Comprobar el launcher Windows
+
+Desde el **terminal Linux del Dev Container**:
+
+```bash
+uv run python tests/windows/runner.py
+```
+
+El runner descarga una imagen PowerShell fijada por digest y ejecuta el launcher con Docker simulado en un contenedor sin red ni socket Docker; comprueba acciones, separación de credenciales, selección del checkout y propagación de errores. Elimina únicamente su propio contenedor al terminar. No inicia sesión ni publica. La comprobación real en Windows se hace con `Plan`; las pruebas simuladas no demuestran un login OAuth ni una publicación GHCR reales.

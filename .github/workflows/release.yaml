@@ -5,7 +5,7 @@ on:
       version:
         description: Exact package version to release
         required: true
-        default: "2.1.0"
+        default: "0.1.0"
         type: string
       publish:
         description: Publish images to this repository owner's GHCR namespace

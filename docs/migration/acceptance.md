@@ -2,6 +2,8 @@
 
 Estado a2026-10-28: **migración Python completa y verificada localmente;24/24 tareas cerradas**. Publicación y endpoint público no ejecutados. La imagen conserva avisos Debian materiales descritos abajo.
 
+El 2026-10-30 el usuario elige **0.1.0** para publicar el port Python. La tabla y los resultados siguientes corresponden a la evidencia histórica 2.1.0; no se renombra esa evidencia ni se afirma que las imágenes antiguas tengan la nueva versión. El ajuste se registra en [D04](differences.md) y en el [flujo de publicación local](../publishing-local.md).
+
 Referencias: [plan](../superpowers/plans/2026-10-27-python-migration.md), [estado](implementation-state.json), [inventario](compatibility-inventory.md), [diferencias](differences.md), [evidencia P24](evidence/P24.md) y [revisión independiente](evidence/final-review.md).
 
 La [limpieza posterior](cleanup.md) retira las herramientas Node temporales y restos de estructura. Los resultados P24 siguientes describen la entrega antes de esa limpieza. Verificación posterior:929 tests pasan,1 deseleccionado, checker78/78 y cobertura95,982974% líneas/87,472284% ramas; detalle y artefactos en el registro de limpieza.

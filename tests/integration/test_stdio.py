@@ -13,6 +13,7 @@ from mcp.client.stdio import StdioServerParameters
 
 from tests.support.contracts import FIXTURES, load_cases
 from tests.support.fake_mealie import FakeMealie
+from tests.support.version import PROJECT_VERSION
 
 
 def environment(fake, **extra):
@@ -136,7 +137,7 @@ async def test_stdout_is_only_jsonrpc_and_shutdown_closes_live_pool(shutdown):
                 }
             )
             initialized = await response(1)
-            assert initialized["result"]["serverInfo"]["version"] == "2.1.0"
+            assert initialized["result"]["serverInfo"]["version"] == PROJECT_VERSION
             await send({"jsonrpc": "2.0", "method": "notifications/initialized"})
             await send(
                 {
