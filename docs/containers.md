@@ -4,6 +4,8 @@ Para instalar un servicio desde una imagen ya publicada en GHCR, usar [docker/](
 
 El Dockerfile tiene etapas development, builder y runtime. El runtime instala el wheel y sus dependencias de producción; conserva CA, tzdata e ICU72. No incorpora Node, compiladores, uv, pip, ensurepip, herramientas de tests ni secretos. Ejecuta como10001:10001 y admite raíz de solo lectura con /tmp temporal.
 
+Para construir, probar y publicar amd64/arm64 desde el Dev Container sin GitHub Actions, usar `uv run python scripts/publish_local.py`; solo añadir `--publish` para enviar las imágenes verificadas a GHCR. El [runbook de publicación local](publishing-local.md) explica login, attestations, checks, artefactos y fallos parciales.
+
 ## Construcción y prueba
 
 Ejecutar dentro del Dev Container:

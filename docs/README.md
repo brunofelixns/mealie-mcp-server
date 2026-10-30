@@ -12,6 +12,7 @@ La implementación y verificación local están completas (24/24). [Avance](migr
 | Conectar clientes stdio/HTTP | [Clientes](clients.md) |
 | Proteger el endpoint remoto | [Despliegue HTTP](http-deployment.md) |
 | Construir y ejecutar la imagen | [Contenedores](containers.md) |
+| Publicar amd64/arm64 desde tu máquina, sin Actions | [Publicación local GHCR](publishing-local.md) |
 | Descargar una imagen de GHCR y crear el servicio | [Despliegue Docker](../docker/README.md) |
 | Módulos y ciclo de vida | [Arquitectura](architecture.md) |
 | CI, release y mantenimiento | [Workflows](workflows.md) |

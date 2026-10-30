@@ -31,7 +31,17 @@ def deployment(tmp_path, image, fake, *, http):
     override.write_text(
         json.dumps(
             {
-                "services": {"mealie-mcp": {"healthcheck": {"interval": "1s"}}},
+                # ARM under QEMU starts in ~33s; short retries must not declare it
+                # unhealthy before startup. The Compose wait remains bounded at 60s.
+                "services": {
+                    "mealie-mcp": {
+                        "healthcheck": {
+                            "interval": "2s",
+                            "start_period": "60s",
+                            "timeout": "10s",
+                        }
+                    }
+                },
                 "networks": {
                     "default": {
                         "external": True,
@@ -72,12 +82,15 @@ async def test_portable_compose_http_auth_and_provider_credentials(runtime_image
                 "--no-build",
                 "mealie-mcp",
             )
-            async with httpx.AsyncClient(base_url=f"http://{hostname}:8000") as http:
+            # Match the installed-runtime tests: MCP initialization under QEMU
+            # can exceed httpx's default five-second read timeout.
+            async with httpx.AsyncClient(base_url=f"http://{hostname}:8000", timeout=40) as http:
                 assert (await http.get("/readyz")).json() == {"status": "ok"}
                 assert (await http.post("/mcp", json={})).status_code == 401
                 http.headers["Authorization"] = "Bearer " + AUTH_TOKEN
                 async with Client(
-                    streamable_http_client(f"http://{hostname}:8000/mcp", http_client=http)
+                    streamable_http_client(f"http://{hostname}:8000/mcp", http_client=http),
+                    read_timeout_seconds=40,
                 ) as client:
                     assert len((await client.list_tools()).tools) == 78
                     result = await client.call_tool("get_categories", {"page": 1, "perPage": 20})

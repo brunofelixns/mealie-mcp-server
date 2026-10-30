@@ -17,6 +17,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--image", default="mealie-mcp-server:e2e")
     parser.add_argument("--no-build", action="store_true")
+    parser.add_argument("--summary", type=Path, help="Optional independent summary destination")
     args = parser.parse_args()
     project = "mealie-mcp-e2e-" + uuid.uuid4().hex[:12]
     artifacts = ROOT / "artifacts/e2e" / project
@@ -78,7 +79,9 @@ def main():
             report["cleanupPassed"] = cleanup
             report["status"] = "passed" if success and cleanup else "failed"
             write_report(artifacts / "summary.json", report, secrets=stack.secrets)
-            write_report(ROOT / "artifacts/e2e-summary.json", report, secrets=stack.secrets)
+            write_report(
+                args.summary or ROOT / "artifacts/e2e-summary.json", report, secrets=stack.secrets
+            )
     print(json.dumps(report, indent=2), flush=True)
     return 0 if success and cleanup else 1
 
