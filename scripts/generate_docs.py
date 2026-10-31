@@ -18,6 +18,16 @@ GROUPS = {
     "units": "Unidades",
     "equipment": "Equipamiento",
 }
+ENGLISH_GROUPS = {
+    "recipes": "Recipes",
+    "mealplans": "Meal planning",
+    "categories": "Categories",
+    "tags": "Tags",
+    "shopping_lists": "Shopping lists",
+    "foods": "Foods",
+    "units": "Units",
+    "equipment": "Equipment",
+}
 BEGIN, END = "<!-- BEGIN GENERATED TOOLS -->", "<!-- END GENERATED TOOLS -->"
 
 
@@ -32,14 +42,24 @@ def render(root: Path) -> dict[Path, str]:
     if unsupported:
         raise ValueError("Unsupported documentation groups: " + ", ".join(sorted(unsupported)))
     version = tomllib.loads((root / "pyproject.toml").read_text())["project"]["version"]
-    section = [
-        f"## Herramientas disponibles ({len(tools)})",
-        "",
-        f"Catálogo de la versión {version}. "
-        "Consulta los [esquemas completos](docs/tools.md) y "
-        "la [cobertura de API](docs/api-coverage.md).",
-        "",
-    ]
+    sections = {
+        "README.md": [
+            f"## Available tools ({len(tools)})",
+            "",
+            f"Catalog for version {version}. "
+            "See the [full schemas](docs/tools.md) and "
+            "[API coverage](docs/api-coverage.md) (in Spanish).",
+            "",
+        ],
+        "docs/README.es.md": [
+            f"## Herramientas disponibles ({len(tools)})",
+            "",
+            f"Catálogo de la versión {version}. "
+            "Consulta los [esquemas completos](tools.md) y "
+            "la [cobertura de API](api-coverage.md).",
+            "",
+        ],
+    }
     coverage = [
         "# Cobertura de API",
         "",
@@ -65,23 +85,29 @@ def render(root: Path) -> dict[Path, str]:
         )
         for group in GROUPS
     }
-    section.extend(["| Familia | Herramientas |", "|---|---:|"])
-    section.extend(f"| {title} | {len(grouped[group])} |" for group, title in GROUPS.items())
-    section.extend([f"| **Total** | **{len(tools)}** |", ""])
-    for group, title in GROUPS.items():
-        members = grouped[group]
+    for relative, section in sections.items():
+        spanish = relative == "docs/README.es.md"
+        titles = GROUPS if spanish else ENGLISH_GROUPS
         section.extend(
-            [
-                "<details>",
-                f"<summary><strong>{title}</strong> · {len(members)} herramientas</summary>",
-                "",
-                ", ".join("`" + tool["name"] + "`" for tool in members),
-                "",
-                "</details>",
-                "",
-            ]
+            ["| Familia | Herramientas |" if spanish else "| Family | Tools |", "|---|---:|"]
         )
-        coverage.append(f"| {title} | {len(members)} |")
+        section.extend(f"| {title} | {len(grouped[group])} |" for group, title in titles.items())
+        section.extend([f"| **Total** | **{len(tools)}** |", ""])
+        for group, title in titles.items():
+            members = grouped[group]
+            noun = "herramientas" if spanish else "tools"
+            section.extend(
+                [
+                    "<details>",
+                    f"<summary><strong>{title}</strong> · {len(members)} {noun}</summary>",
+                    "",
+                    ", ".join("`" + tool["name"] + "`" for tool in members),
+                    "",
+                    "</details>",
+                    "",
+                ]
+            )
+    coverage.extend(f"| {title} | {len(grouped[group])} |" for group, title in GROUPS.items())
     coverage.extend(["| **Total** | **78** |", ""])
     for tool in tools:
         name = tool["name"]
@@ -110,24 +136,25 @@ def render(root: Path) -> dict[Path, str]:
                 "",
             ]
         )
-    readme = (root / "README.md").read_text()
-    if readme.count(BEGIN) != 1 or readme.count(END) != 1:
-        raise ValueError("README needs one pair of generated-tools markers")
-    readme = re.sub(
-        re.escape(BEGIN) + r".*?" + re.escape(END),
-        lambda _: BEGIN + "\n" + "\n".join(section).rstrip() + "\n" + END,
-        readme,
-        flags=re.DOTALL,
-    )
-    return {
-        root / "README.md": readme,
+    rendered = {
         root / "API_COVERAGE.md": (
-            "# Cobertura de API\n\nVer [la documentación generada](docs/api-coverage.md) "
-            "y [los esquemas completos](docs/tools.md).\n"
+            "# API coverage\n\nSee the [generated documentation](docs/api-coverage.md) "
+            "and [full schemas](docs/tools.md), maintained in Spanish.\n"
         ),
         root / "docs/api-coverage.md": "\n".join(coverage),
         root / "docs/tools.md": "\n".join(reference),
     }
+    for relative, section in sections.items():
+        readme = (root / relative).read_text()
+        if readme.count(BEGIN) != 1 or readme.count(END) != 1:
+            raise ValueError(f"{relative} needs one pair of generated-tools markers")
+        rendered[root / relative] = re.sub(
+            re.escape(BEGIN) + r".*?" + re.escape(END),
+            lambda _, section=section: BEGIN + "\n" + "\n".join(section).rstrip() + "\n" + END,
+            readme,
+            flags=re.DOTALL,
+        )
+    return rendered
 
 
 def main() -> int:

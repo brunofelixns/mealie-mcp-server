@@ -1,4 +1,8 @@
-# Mealie MCP en Python
+# Documentación en español
+
+[English README](../README.md) · [Guía del proyecto en español](README.es.md)
+
+## Mealie MCP en Python
 
 Migración completa de las78 herramientas y el prompt weekly-meal-plan a FastMCP. Admite stdio local y Streamable HTTP con token Bearer personal independiente de la API key de Mealie. Desarrollo y verificación en Dev Container; imagen de producción para amd64 y arm64.
 

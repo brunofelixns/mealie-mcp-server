@@ -1,3 +1,3 @@
-# Cobertura de API
+# API coverage
 
-Ver [la documentación generada](docs/api-coverage.md) y [los esquemas completos](docs/tools.md).
+See the [generated documentation](docs/api-coverage.md) and [full schemas](docs/tools.md), maintained in Spanish.

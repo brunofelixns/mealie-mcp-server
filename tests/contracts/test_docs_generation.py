@@ -5,14 +5,17 @@ import subprocess
 import sys
 from pathlib import Path
 
+import pytest
+
 ROOT = Path(__file__).resolve().parents[2]
 SCRIPT = ROOT / "scripts/generate_docs.py"
 
 
-def test_generated_readme_includes_each_tool_once_and_family_counts_sum_to_78():
+@pytest.mark.parametrize("relative", ["README.md", "docs/README.es.md"])
+def test_generated_readme_includes_each_tool_once_and_family_counts_sum_to_78(relative):
     catalog = json.loads((ROOT / "src/mealie_mcp_server/resources/tool-catalog.json").read_text())
     section = (
-        (ROOT / "README.md")
+        (ROOT / relative)
         .read_text()
         .split("<!-- BEGIN GENERATED TOOLS -->", 1)[1]
         .split("<!-- END GENERATED TOOLS -->", 1)[0]
@@ -67,6 +70,7 @@ def test_generator_preserves_manual_readme_and_detects_schema_drift(tmp_path):
         "pyproject.toml",
         "src/mealie_mcp_server/resources/tool-catalog.json",
         "docs/migration/compatibility-inventory.json",
+        "docs/README.es.md",
     ):
         destination = tmp_path / relative
         destination.parent.mkdir(parents=True, exist_ok=True)
@@ -88,3 +92,37 @@ def test_generator_preserves_manual_readme_and_detects_schema_drift(tmp_path):
     path.write_text(json.dumps(catalog))
     stale = subprocess.run([*base, "--check"], capture_output=True, text=True)
     assert stale.returncode != 0 and "stale" in stale.stderr.lower()
+
+
+def test_generator_localizes_both_readmes_and_detects_spanish_catalog_drift(tmp_path):
+    for relative in (
+        "pyproject.toml",
+        "src/mealie_mcp_server/resources/tool-catalog.json",
+        "docs/migration/compatibility-inventory.json",
+    ):
+        destination = tmp_path / relative
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copyfile(ROOT / relative, destination)
+    for relative in ("README.md", "docs/README.es.md"):
+        (tmp_path / relative).write_text(
+            "Manual introduction\n<!-- BEGIN GENERATED TOOLS -->\nold\n"
+            "<!-- END GENERATED TOOLS -->\nManual ending\n"
+        )
+    base = [sys.executable, str(SCRIPT), "--root", str(tmp_path)]
+    written = subprocess.run(base, capture_output=True, text=True)
+    assert written.returncode == 0, written.stderr
+    english = (tmp_path / "README.md").read_text()
+    spanish_path = tmp_path / "docs/README.es.md"
+    spanish = spanish_path.read_text()
+    assert "## Available tools (78)" in english
+    assert "| Recipes | 26 |" in english and "| Shopping lists | 13 |" in english
+    assert "[full schemas](docs/tools.md)" in english
+    assert "## Herramientas disponibles (78)" in spanish
+    assert "| Recetas | 26 |" in spanish and "| Compras | 13 |" in spanish
+    assert "[esquemas completos](tools.md)" in spanish
+    assert spanish.startswith("Manual introduction\n") and spanish.endswith("Manual ending\n")
+    assert subprocess.run([*base, "--check"], capture_output=True).returncode == 0
+    spanish_path.write_text(spanish.replace("`get_recipes`", "`missing_tool`"))
+    stale = subprocess.run([*base, "--check"], capture_output=True, text=True)
+    assert stale.returncode != 0 and "docs/README.es.md" in stale.stderr
+    assert (tmp_path / "README.md").read_text() == english

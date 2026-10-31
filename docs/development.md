@@ -25,7 +25,7 @@ uv build
 
 Construir primero la imagen runtime como indica [contenedores](containers.md): la suite incluye pruebas reales de esa imagen. Los umbrales se comprueban independientemente: líneas >=90% y ramas >=85%. coverage activa la medición de los subprocess Python para observar el CLI real; la imagen de producción no incorpora coverage. El JUnit demuestra la ejecución de casos positivos y rechazos para las78 herramientas; un índice de fixtures por sí solo no demuestra que pasaron.
 
-`uv run python scripts/generate_docs.py` regenera docs/tools.md, docs/api-coverage.md, el índice API_COVERAGE.md y únicamente la sección delimitada de herramientas en README.md. Conserva el texto manual y escribe mediante reemplazo atómico. `--check` falla ante diferencias, incluidos cambios de esquema.
+`uv run python scripts/generate_docs.py` regenera docs/tools.md, docs/api-coverage.md, el índice API_COVERAGE.md y únicamente las secciones delimitadas de herramientas en README.md (inglés) y docs/README.es.md (español). Conserva el texto manual de ambas versiones y escribe mediante reemplazo atómico. `--check` falla ante diferencias en cualquiera de los dos idiomas, incluidos cambios de esquema.
 
 ## Integración real desechable
 

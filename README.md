@@ -1,62 +1,66 @@
 <p align="center">
-  <img src="docs/assets/mealie-mcp-banner.png" alt="Un recetario conectado a la planificación semanal, la lista de compra y las herramientas de un asistente" width="1200">
+  <img src="docs/assets/mealie-mcp-banner.png" alt="A recipe book connected to weekly meal planning, a shopping list, and assistant tools" width="1200">
 </p>
 
 <h1 align="center">Mealie MCP · Python</h1>
 
 <p align="center">
-  Tu recetario, tus menús y tu compra, conectados a tu asistente.
+  Your recipes, meal plans, and shopping lists, connected to your assistant.
 </p>
 
 <p align="center">
-  <a href="https://github.com/brunofelixns/mealie-mcp-server/actions/workflows/ci.yaml"><img src="https://github.com/brunofelixns/mealie-mcp-server/actions/workflows/ci.yaml/badge.svg?branch=main" alt="Estado del CI"></a>
+  <strong>English</strong> · <a href="docs/README.es.md">Español</a> · <a href="docs/README.md">Documentación en español</a>
+</p>
+
+<p align="center">
+  <a href="https://github.com/brunofelixns/mealie-mcp-server/actions/workflows/ci.yaml"><img src="https://github.com/brunofelixns/mealie-mcp-server/actions/workflows/ci.yaml/badge.svg?branch=main" alt="CI status"></a>
   <a href="pyproject.toml"><img src="https://img.shields.io/badge/Python-3.14-3776AB?logo=python&amp;logoColor=white" alt="Python 3.14"></a>
   <a href="pyproject.toml"><img src="https://img.shields.io/badge/FastMCP-4.1.4-245348" alt="FastMCP 4.1.4"></a>
   <a href="docs/clients.md"><img src="https://img.shields.io/badge/MCP-2026--07--28-245348" alt="MCP 2026-07-28"></a>
-  <a href="#herramientas-disponibles-78"><img src="https://img.shields.io/badge/Herramientas-78-C5653E" alt="78 herramientas"></a>
-  <a href="LICENSE"><img src="https://img.shields.io/badge/Licencia-MIT-C5653E" alt="Licencia MIT"></a>
+  <a href="#available-tools-78"><img src="https://img.shields.io/badge/Tools-78-C5653E" alt="78 tools"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-C5653E" alt="MIT license"></a>
 </p>
 
 <p align="center">
-  <a href="#inicio-rápido">Inicio rápido</a> ·
-  <a href="#conectar-un-cliente-mcp">Clientes MCP</a> ·
-  <a href="#configuración">Configuración</a> ·
-  <a href="#herramientas-disponibles-78">Herramientas</a> ·
-  <a href="#documentación">Documentación</a>
+  <a href="#quick-start">Quick start</a> ·
+  <a href="#connect-your-mcp-client">MCP clients</a> ·
+  <a href="#configuration">Configuration</a> ·
+  <a href="#available-tools-78">Tools</a> ·
+  <a href="#documentation">Documentation</a>
 </p>
 
-Servidor del **Model Context Protocol** para [Mealie](https://github.com/mealie-recipes/mealie), escrito en Python con FastMCP. Ofrece **78 herramientas**, el prompt **`weekly-meal-plan`** y dos formas de conexión: **stdio local** y **Streamable HTTP con Bearer personal**.
+A **Model Context Protocol server for [Mealie](https://github.com/mealie-recipes/mealie)**, built with Python and FastMCP. Give your assistant access to **78 tools** for recipes, meal planning, and shopping, plus the **`weekly-meal-plan`** prompt. Connect locally over **stdio** or remotely over **Streamable HTTP with a personal Bearer token**.
 
-Mealie conserva las recetas; el cliente MCP aporta el modelo y utiliza las herramientas para consultar o aplicar cambios. El servidor admite el protocolo **2026-07-28** y clientes de la era **2025-11-25**.
+Mealie stores your recipes; your MCP client supplies the model and uses the tools to read data or make changes. The server supports protocol **2026-07-28** and clients from the **2025-11-25** protocol era.
 
-## Qué puedes hacer
+## What you can do
 
-| Flujo | Capacidades |
+| Bring your… | Into your assistant |
 |---|---|
-| **Tu recetario** | Buscar por texto, categorías y etiquetas; crear, duplicar y editar recetas. |
-| **Una semana organizada** | Proponer un menú con `weekly-meal-plan` y gestionar las entradas del plan. |
-| **La compra preparada** | Crear listas, añadir ingredientes y asociar recetas a la compra. |
-| **Ingredientes e instrucciones** | Trabajar con alimentos, unidades y referencias; verificar escrituras y restaurar ante fallos cuando corresponda. |
-| **Recetas completas** | Gestionar imágenes, equipamiento, valoraciones, favoritos y última preparación. |
-| **El cliente que prefieras** | Conexión por stdio o HTTP con credenciales independientes para Mealie y el MCP. |
+| **Recipe collection** | Search by text, categories, and tags; create, duplicate, and edit recipes. |
+| **Weekly routine** | Draft a menu with `weekly-meal-plan` and manage meal plan entries. |
+| **Shopping list** | Create lists, add ingredients, and link recipes to your shopping. |
+| **Ingredients and instructions** | Manage foods, units, and references, with write verification and recovery where supported. |
+| **Recipe details** | Manage images, equipment, ratings, favorites, and the last-made date. |
+| **Preferred MCP client** | Use stdio or HTTP, with separate credentials for Mealie and the MCP endpoint. |
 
-## Inicio rápido
+## Quick start
 
-### Desplegar con Docker
+### Deploy with Docker
 
-La carpeta **[docker/](docker/README.md)** funciona de forma independiente en el servidor de destino. Configura una versión publicada en GHCR; el Compose descarga la imagen y no necesita construirla ni instalar Python en el host.
+The **[docker/](docker/README.md)** directory is self-contained: copy it to your server, configure a published GHCR image, and start the service. Compose downloads the image; Python installation and local builds are unnecessary on the deployment host.
 
 ```sh
 cd docker
 cp .env.example .env
-# Edita .env antes de continuar.
+# Edit .env before continuing.
 docker compose pull mealie-mcp
 docker compose up --detach --wait --wait-timeout 60 mealie-mcp
 ```
 
-En PowerShell, sustituye el comando de copia por `Copy-Item .env.example .env`.
+In PowerShell, replace the copy command with `Copy-Item .env.example .env`.
 
-Estos son los valores que debes completar en `.env`:
+Set these values in `.env`:
 
 ```dotenv
 MEALIE_MCP_IMAGE=ghcr.io/brunofelixns/mealie-mcp-server:0.1.0
@@ -66,31 +70,31 @@ MCP_AUTH_TOKEN=
 MCP_PUBLIC_URL=https://mcp.example.com/mcp
 ```
 
-La API key y el Bearer deben ser distintos. Genera el Bearer con al menos32 bytes aleatorios; por ejemplo, `openssl rand -hex 32`. El archivo `.env` queda fuera de Git y del contexto de build. La [guía Docker](docker/README.md) explica también el acceso a paquetes privados, las redes y las actualizaciones.
+Use different values for the Mealie API key and MCP Bearer token. Generate the Bearer token with at least 32 random bytes, for example with `openssl rand -hex 32`. The `.env` file is excluded from Git and the build context. See the [Docker guide](docker/README.md) for private registry access, networking, and updates.
 
 > [!IMPORTANT]
-> El servicio HTTP se publica en `127.0.0.1:8000`. Para conectarte desde fuera del host, configura un proxy HTTPS hacia ese puerto y conserva el streaming de MCP. [Ejemplo de proxy](docs/http-deployment.md#tls-y-proxy).
+> HTTP binds to `127.0.0.1:8000`. For access from another machine, place an HTTPS reverse proxy in front of the service and preserve MCP streaming. See the [proxy example](docs/http-deployment.md#tls-y-proxy).
 
-La versión `0.1.0` ya está publicada en GHCR para amd64 y arm64. Para publicar futuras versiones desde tu máquina, consulta la [guía de publicación local](docs/publishing-local.md); también existe el workflow manual de [release](.github/workflows/release.yaml).
+Version `0.1.0` is published on GHCR for amd64 and arm64. To publish future versions from your machine, follow the [local publishing guide](docs/publishing-local.md). A manual [release workflow](.github/workflows/release.yaml) is also available.
 
-### Usar stdio
+### Run over stdio
 
-Desde la misma carpeta `docker/`, con la URL y la API key Mealie configuradas:
+From the same `docker/` directory, with your Mealie URL and API key configured:
 
 ```sh
 docker compose -f compose.stdio.yaml run --rm --no-deps -T stdio
 ```
 
-El cliente MCP debe iniciar este proceso y mantener stdin abierto. No añadas TTY. El archivo stdio es independiente: no publica puertos ni recibe el token HTTP.
+Your MCP client must launch this process and keep stdin open. Do not allocate a TTY. The separate stdio Compose file exposes no ports and does not receive the HTTP token.
 
-## Conectar un cliente MCP
+## Connect your MCP client
 
-### Local por stdio
+### Local connection over stdio
 
-Ejemplo de configuración para un cliente que acepte `mcpServers`. Adapta las rutas a la carpeta Docker del host:
+For clients that accept an `mcpServers` configuration, adapt these paths to the Docker directory on your host:
 
 <details>
-<summary>Ver ejemplo de configuración JSON</summary>
+<summary>Show client configuration</summary>
 
 ```json
 {
@@ -110,20 +114,20 @@ Ejemplo de configuración para un cliente que acepte `mcpServers`. Adapta las ru
 
 </details>
 
-### Remoto por HTTP
+### Remote connection over HTTP
 
-En un cliente que permita configurar un Bearer manualmente:
+For clients that let you configure a Bearer token manually:
 
 ```text
 URL: https://mcp.example.com/mcp
-Authorization: Bearer <tu-token-personal>
+Authorization: Bearer <your-personal-token>
 ```
 
-El token personal autentica al cliente frente al MCP; la API key Mealie se configura en el servidor. El formato de configuración depende del cliente. Consulta [clientes MCP](docs/clients.md) para más ejemplos y las limitaciones del modo personal.
+The personal token authenticates your client to the MCP server. Configure the Mealie API key on the server itself. Client configuration formats vary; see the [MCP client guide](docs/clients.md) for examples and the limits of personal-token mode.
 
-### Una primera consulta
+### Try your first query
 
-Selecciona `get_recipes` en tu cliente y usa estos argumentos:
+Select `get_recipes` in your client and use:
 
 ```json
 {
@@ -133,134 +137,134 @@ Selecciona `get_recipes` en tu cliente y usa estos argumentos:
 }
 ```
 
-Para preparar un menú, selecciona el prompt `weekly-meal-plan` y utiliza `preferences`, por ejemplo: «Cenas vegetarianas para dos, con ingredientes de temporada». Revisa la propuesta antes de guardar el plan.
+To draft a menu, select the `weekly-meal-plan` prompt and set `preferences`, for example: “Vegetarian dinners for two, using seasonal ingredients.” Review the suggestion before saving the plan.
 
-## Configuración
+## Configuration
 
-### Variables del servidor
+### Server environment variables
 
-| Variable | Valor por defecto | Uso |
+| Variable | Default | Purpose |
 |---|---|---|
-| `MEALIE_BASE_URL` | Obligatoria | URL de Mealie accesible desde el contenedor; admite subruta. |
-| `MEALIE_API_KEY` / `MEALIE_API_KEY_FILE` | Obligatoria | Credencial Mealie como valor o archivo; elegir una sola forma. |
-| `MCP_TRANSPORT` | `stdio` | `stdio` o `http`; los argumentos CLI prevalecen. |
-| `MCP_HOST` / `MCP_PORT` | `127.0.0.1` / `8000` | Dirección y puerto internos del servidor HTTP. |
-| `MCP_AUTH_TOKEN` / `MCP_AUTH_TOKEN_FILE` | Obligatoria en HTTP | Bearer independiente; mínimo32 caracteres ASCII visibles, sin espacios. Elegir una sola forma. |
-| `MCP_PUBLIC_URL` | Sin definir | URL pública; obligatoria con HTTPS cuando `MCP_REQUIRE_HTTPS=true`. |
-| `MCP_REQUIRE_HTTPS` | `false` | El Compose de producción lo activa como `true`. TLS termina en el proxy. |
-| `MCP_ALLOWED_HOSTS` | `localhost,127.0.0.1,[::1]` | Hosts adicionales separados por comas; el host de la URL pública se añade automáticamente. |
-| `MCP_ALLOWED_ORIGINS` | Vacío | Orígenes de navegador de confianza separados por comas. |
-| `TZ` | `UTC` | Zona horaria para las fechas; por ejemplo, `Europe/Madrid`. |
-| `LOG_LEVEL` | `INFO` | `DEBUG`, `INFO`, `WARNING`, `ERROR` o `CRITICAL`. |
-| `MEALIE_MCP_DEBUG` | `false` | Activa mediciones de tiempos en stderr. |
+| `MEALIE_BASE_URL` | Required | Mealie URL reachable from the container; subpaths are supported. |
+| `MEALIE_API_KEY` / `MEALIE_API_KEY_FILE` | Required | Mealie credential as a value or file; choose one source. |
+| `MCP_TRANSPORT` | `stdio` | `stdio` or `http`; CLI arguments take precedence. |
+| `MCP_HOST` / `MCP_PORT` | `127.0.0.1` / `8000` | Internal HTTP bind address and port. |
+| `MCP_AUTH_TOKEN` / `MCP_AUTH_TOKEN_FILE` | Required for HTTP | Separate Bearer token; at least 32 visible ASCII characters, without spaces. Choose one source. |
+| `MCP_PUBLIC_URL` | Unset | Public URL; required and must use HTTPS when `MCP_REQUIRE_HTTPS=true`. |
+| `MCP_REQUIRE_HTTPS` | `false` | Production Compose enables it; TLS terminates at the proxy. |
+| `MCP_ALLOWED_HOSTS` | `localhost,127.0.0.1,[::1]` | Additional comma-separated hosts; the public URL host is added automatically. |
+| `MCP_ALLOWED_ORIGINS` | Empty | Comma-separated trusted browser origins. |
+| `TZ` | `UTC` | Time zone for date handling, for example `Europe/Madrid`. |
+| `LOG_LEVEL` | `INFO` | `DEBUG`, `INFO`, `WARNING`, `ERROR`, or `CRITICAL`. |
+| `MEALIE_MCP_DEBUG` | `false` | Enables timing diagnostics on stderr. |
 
-Compose carga su `.env` y pasa las variables al contenedor. El proceso Python recibe variables explícitas y no carga `.env` automáticamente. Los perfiles Docker seleccionan el transporte mediante argumentos CLI. [Configuración completa](docs/configuration.md).
+Compose loads `.env` and passes variables to the container. The Python process reads explicit environment variables and does not load `.env` automatically. Docker configurations select the transport through CLI arguments. See the [full configuration guide](docs/configuration.md).
 
-### Parámetros de Docker Compose
+### Docker Compose settings
 
-| Variable de `docker/.env` | Valor de la plantilla | Uso |
+| Variable in `docker/.env` | Template value | Purpose |
 |---|---|---|
-| `MEALIE_MCP_IMAGE` | `ghcr.io/brunofelixns/mealie-mcp-server:0.1.0` | Imagen publicada; permite versión concreta o digest. |
-| `COMPOSE_PROJECT_NAME` | `mealie-mcp` | Identifica la instancia Compose. |
-| `MCP_BIND_IP` | `127.0.0.1` | Interfaz del host donde se publica HTTP. |
-| `MCP_PUBLISHED_PORT` | `8000` | Puerto del host; el puerto interno sigue siendo8000. |
+| `MEALIE_MCP_IMAGE` | `ghcr.io/brunofelixns/mealie-mcp-server:0.1.0` | Published image; supports a version tag or digest. |
+| `COMPOSE_PROJECT_NAME` | `mealie-mcp` | Compose project name. |
+| `MCP_BIND_IP` | `127.0.0.1` | Host interface for HTTP. |
+| `MCP_PUBLISHED_PORT` | `8000` | Host port; the internal port remains `8000`. |
 
-### Argumentos CLI
+### CLI arguments
 
-Desde el Dev Container:
+Inside the Dev Container:
 
 ```sh
 uv run --frozen mealie-mcp-server --help
 uv run --frozen mealie-mcp-server --transport stdio
 ```
 
-| Argumento | Descripción |
+| Argument | Purpose |
 |---|---|
-| `--transport stdio\|http` | Selecciona el transporte. |
-| `--host HOST` | Cambia la dirección de escucha HTTP. |
-| `--port PORT` | Cambia el puerto HTTP. |
-| `--log-level NIVEL` | Selecciona el nivel de logs. |
-| `--debug` | Activa mediciones de tiempos en stderr. |
-| `--version` | Muestra la versión del paquete. |
-| `--help` | Muestra la ayuda. |
+| `--transport stdio\|http` | Select the transport. |
+| `--host HOST` | Set the HTTP bind address. |
+| `--port PORT` | Set the HTTP port. |
+| `--log-level LEVEL` | Set the logging level. |
+| `--debug` | Enable timing diagnostics on stderr. |
+| `--version` | Print the package version. |
+| `--help` | Show CLI help. |
 
 <!-- BEGIN GENERATED TOOLS -->
-## Herramientas disponibles (78)
+## Available tools (78)
 
-Catálogo de la versión 0.1.0. Consulta los [esquemas completos](docs/tools.md) y la [cobertura de API](docs/api-coverage.md).
+Catalog for version 0.1.0. See the [full schemas](docs/tools.md) and [API coverage](docs/api-coverage.md) (in Spanish).
 
-| Familia | Herramientas |
+| Family | Tools |
 |---|---:|
-| Recetas | 26 |
-| Planificación | 6 |
-| Categorías | 7 |
-| Etiquetas | 7 |
-| Compras | 13 |
-| Alimentos | 7 |
-| Unidades | 6 |
-| Equipamiento | 6 |
+| Recipes | 26 |
+| Meal planning | 6 |
+| Categories | 7 |
+| Tags | 7 |
+| Shopping lists | 13 |
+| Foods | 7 |
+| Units | 6 |
+| Equipment | 6 |
 | **Total** | **78** |
 
 <details>
-<summary><strong>Recetas</strong> · 26 herramientas</summary>
+<summary><strong>Recipes</strong> · 26 tools</summary>
 
 `create_recipe`, `delete_recipe`, `duplicate_recipe`, `find_recipes_for_ingredients`, `get_recipe_concise`, `get_recipe_detailed`, `get_recipes`, `get_recipes_batch`, `get_recipes_detailed_batch`, `get_recipes_for_classification`, `get_recipes_for_data_enrichment`, `get_recipes_for_ingredient_parsing`, `mark_recipe_last_made`, `patch_recipe`, `set_recipe_image`, `set_recipe_image_from_file`, `set_recipe_image_from_url`, `set_recipe_rating`, `update_recipe_ingredients`, `update_recipe_ingredients_batch`, `update_recipe_instructions`, `update_recipe_instructions_batch`, `update_recipe_taxonomy`, `update_recipe_taxonomy_batch`, `update_recipe_tools`, `update_recipe_tools_batch`
 
 </details>
 
 <details>
-<summary><strong>Planificación</strong> · 6 herramientas</summary>
+<summary><strong>Meal planning</strong> · 6 tools</summary>
 
 `create_mealplan`, `create_mealplan_bulk`, `get_all_mealplans`, `get_mealplan_with_recipes`, `get_todays_mealplan`, `patch_mealplan`
 
 </details>
 
 <details>
-<summary><strong>Categorías</strong> · 7 herramientas</summary>
+<summary><strong>Categories</strong> · 7 tools</summary>
 
 `create_category`, `delete_category`, `get_categories`, `get_category`, `get_category_by_slug`, `get_empty_categories`, `update_category`
 
 </details>
 
 <details>
-<summary><strong>Etiquetas</strong> · 7 herramientas</summary>
+<summary><strong>Tags</strong> · 7 tools</summary>
 
 `create_tag`, `delete_tag`, `get_empty_tags`, `get_tag`, `get_tag_by_slug`, `get_tags`, `update_tag`
 
 </details>
 
 <details>
-<summary><strong>Compras</strong> · 13 herramientas</summary>
+<summary><strong>Shopping lists</strong> · 13 tools</summary>
 
 `add_recipe_to_shopping_list`, `create_shopping_list`, `create_shopping_list_item`, `create_shopping_list_items_bulk`, `delete_shopping_list`, `delete_shopping_list_item`, `delete_shopping_list_items_bulk`, `get_shopping_list`, `get_shopping_list_items`, `get_shopping_lists`, `remove_recipe_from_shopping_list`, `update_shopping_list`, `update_shopping_list_item`
 
 </details>
 
 <details>
-<summary><strong>Alimentos</strong> · 7 herramientas</summary>
+<summary><strong>Foods</strong> · 7 tools</summary>
 
 `create_food`, `delete_food`, `get_food`, `get_food_matches`, `get_foods`, `merge_foods`, `update_food`
 
 </details>
 
 <details>
-<summary><strong>Unidades</strong> · 6 herramientas</summary>
+<summary><strong>Units</strong> · 6 tools</summary>
 
 `create_unit`, `delete_unit`, `get_unit`, `get_unit_matches`, `get_units`, `update_unit`
 
 </details>
 
 <details>
-<summary><strong>Equipamiento</strong> · 6 herramientas</summary>
+<summary><strong>Equipment</strong> · 6 tools</summary>
 
 `create_tool`, `delete_tool`, `get_tool`, `get_tool_matches`, `get_tools`, `update_tool`
 
 </details>
 <!-- END GENERATED TOOLS -->
 
-## Desarrollo
+## Development
 
-Abrir el repositorio con **Dev Containers: Reopen in Container**. Docker Desktop debe usar contenedores Linux. Python, dependencias, tests y builds se ejecutan dentro del Dev Container.
+Open this repository with **Dev Containers: Reopen in Container** and Docker Desktop set to Linux containers. Run Python, dependency installation, tests, and builds inside the Dev Container.
 
 ```sh
 uv sync --frozen --group dev
@@ -271,35 +275,37 @@ uv run python scripts/generate_docs.py --check
 uv run pytest
 ```
 
-La suite incluye pruebas reales de la imagen runtime: constrúyela primero como indica la [guía de desarrollo](docs/development.md). El generador actualiza el catálogo de este README desde el registro público y conserva el texto manual.
+The suite includes tests against the real runtime image: build it first as described in the [development guide](docs/development.md). The documentation generator updates the tool catalog in both README languages from the public registry while preserving the surrounding text.
 
-## Documentación
+## Documentation
 
-| Necesitas… | Documento |
+**[Read this guide in Spanish](docs/README.es.md)** · **[Browse all Spanish documentation](docs/README.md)**
+
+The detailed guides, tool schemas, and migration evidence below are maintained in Spanish.
+
+| I want to… | Read |
 |---|---|
-| Instalar una imagen de GHCR | [Despliegue Docker](docker/README.md) |
-| Configurar variables y credenciales | [Configuración](docs/configuration.md) |
-| Conectar tu cliente | [Clientes MCP](docs/clients.md) |
-| Preparar HTTPS, proxy y acceso remoto | [Despliegue HTTP](docs/http-deployment.md) |
-| Construir la imagen o usar secretos de archivo | [Contenedores](docs/containers.md) |
-| Consultar parámetros de cada herramienta | [Referencia MCP](docs/tools.md) |
-| Conocer módulos y flujos | [Arquitectura](docs/architecture.md) · [Flujos](docs/workflows.md) |
-| Revisar la migración y sus resultados | [Aceptación](docs/migration/acceptance.md) · [Diferencias](docs/migration/differences.md) |
+| Deploy a published GHCR image | [Docker deployment](docker/README.md) |
+| Configure variables and credentials | [Configuration](docs/configuration.md) |
+| Connect an MCP client | [MCP clients](docs/clients.md) |
+| Set up HTTPS and remote access | [HTTP deployment](docs/http-deployment.md) |
+| Build the image or use file-based secrets | [Containers](docs/containers.md) |
+| Look up tool parameters | [MCP reference](docs/tools.md) |
+| Understand modules and workflows | [Architecture](docs/architecture.md) · [Workflows](docs/workflows.md) |
+| Review migration results and compatibility | [Acceptance](docs/migration/acceptance.md) · [Intentional differences](docs/migration/differences.md) |
 
-[Índice completo de documentación](docs/README.md).
+## Quality and security
 
-## Calidad y seguridad
+The project uses strict models, contract tests against original snapshots, real-socket and installed-image tests, Ruff, and mypy. Verified mutations have bounded cancellation recovery. Check the current Mealie state before repeating a write whose outcome is unknown.
 
-El proyecto usa modelos estrictos, pruebas de contrato frente a capturas originales, tests con sockets reales e imágenes instaladas, Ruff y mypy. Las mutaciones verificadas tienen recuperación acotada ante cancelación; consultar el estado de Mealie antes de repetir una escritura cuyo resultado se desconoce.
+To test **all 78 tools against real Mealie in Docker**, over stdio and Bearer-authenticated HTTP, run `uv run python -m tests.e2e.runner` inside the Dev Container. The environment is local and disposable. The [E2E guide](docs/testing/local-e2e.md) describes the four runs and private-download rejection checks.
 
-Para probar las **78 herramientas con Mealie real en Docker**, por stdio y HTTP con Bearer, ejecutar `uv run python -m tests.e2e.runner` dentro del Dev Container. El entorno es local y desechable; los cuatro recorridos y el rechazo de descargas privadas se explican en [pruebas E2E](docs/testing/local-e2e.md).
+To **build and publish amd64/arm64 images locally without GitHub Actions**, run `uv run python scripts/publish_local.py` inside the Dev Container. It validates everything locally first; `--publish` enables GHCR uploads. See the [local publishing guide](docs/publishing-local.md).
 
-Para **construir y publicar amd64/arm64 desde tu máquina sin GitHub Actions**, usar `uv run python scripts/publish_local.py` en el Dev Container. Primero valida todo en local; `--publish` habilita la subida a GHCR. [Guía de publicación local](docs/publishing-local.md).
+The runtime is tested as a non-root user, with a read-only root filesystem and both architectures; local ARM verification used emulation. Measured results and their limits are recorded in the [acceptance report](docs/migration/acceptance.md). The last documented scan retains critical and high Debian advisories; review the [image security analysis](docs/migration/evidence/P23-security.md) and its limits before exposing a public service.
 
-El runtime se prueba con usuario sin privilegios, raíz de solo lectura y ambas arquitecturas; ARM local se verificó mediante emulación. Los resultados medidos están en el [informe de aceptación](docs/migration/acceptance.md). El último escaneo documentado conserva avisos críticos y altos de Debian: consulta [el análisis](docs/migration/evidence/P23-security.md) y sus límites antes de exponer un servicio público.
+## License and credits
 
-## Licencia y procedencia
+[MIT license](LICENSE). This is a Python migration of [Timo Reymann's original project](https://github.com/timo-reymann/mealie-mcp-server), pinned to `d027e1b4a314d781a322f1f91e37840f01464d77`. Its attribution, license, and contract snapshots are preserved. See the documented [intentional differences](docs/migration/differences.md).
 
-[Licencia MIT](LICENSE). Migración a Python del proyecto de [Timo Reymann](https://github.com/timo-reymann/mealie-mcp-server), con referencia fijada en `d027e1b4a314d781a322f1f91e37840f01464d77`. Se conservan su atribución, licencia y capturas de contrato. Las diferencias intencionadas están [documentadas](docs/migration/differences.md).
-
-La [ilustración de cabecera](docs/assets/README.md) se creó para este repositorio.
+The [header illustration](docs/assets/README.md) was created for this repository.
