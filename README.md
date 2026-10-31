@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/brunofelixns/mealie-mcp-server/actions/workflows/ci.yaml"><img src="https://github.com/brunofelixns/mealie-mcp-server/actions/workflows/ci.yaml/badge.svg?branch=migration%2Fpython" alt="Estado del CI"></a>
+  <a href="https://github.com/brunofelixns/mealie-mcp-server/actions/workflows/ci.yaml"><img src="https://github.com/brunofelixns/mealie-mcp-server/actions/workflows/ci.yaml/badge.svg?branch=main" alt="Estado del CI"></a>
   <a href="pyproject.toml"><img src="https://img.shields.io/badge/Python-3.14-3776AB?logo=python&amp;logoColor=white" alt="Python 3.14"></a>
   <a href="pyproject.toml"><img src="https://img.shields.io/badge/FastMCP-4.1.4-245348" alt="FastMCP 4.1.4"></a>
   <a href="docs/clients.md"><img src="https://img.shields.io/badge/MCP-2026--07--28-245348" alt="MCP 2026-07-28"></a>
