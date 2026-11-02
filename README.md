@@ -76,8 +76,8 @@ Use different values for the Mealie API key and MCP Bearer token. Generate the B
 > HTTP binds to `127.0.0.1:8000`. For access from another machine, place an HTTPS reverse proxy in front of the service and preserve MCP streaming. See the [proxy example](docs/http-deployment.md#tls-y-proxy).
 
 Every push and pull request runs CI on native amd64 and arm64 runners. Successful
-changes reach protected `main` through PRs. CI maintains one release PR with the
-next semantic version and accumulated notes. Merge that PR when ready to publish;
+changes reach protected `main` through PRs. Official Release Please maintains one release PR with the
+next semantic version and accumulated `CHANGELOG`. Merge that PR when ready to publish;
 after both native checks pass, CI publishes `X.Y.Z`, `latest`, and `sha-<merge-commit>`
 to GHCR, with a Git tag and GitHub Release. Breaking changes increment major,
 `feat`/`fix` increment minor, and other commits increment patch.
@@ -211,7 +211,7 @@ uv run --frozen mealie-mcp-server --transport stdio
 <!-- BEGIN GENERATED TOOLS -->
 ## Available tools (78)
 
-Catalog for version 0.1.0. See the [full schemas](docs/tools.md) and [API coverage](docs/api-coverage.md) (in Spanish).
+Catalog for version 0.1.0. See the [full schemas](docs/tools.md) and [API coverage](docs/api-coverage.md) (in Spanish). <!-- x-release-please-version -->
 
 | Family | Tools |
 |---|---:|

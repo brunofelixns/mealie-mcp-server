@@ -13,10 +13,10 @@ def workflow():
     return yaml.load((ROOT / ".github/workflows/ci.yaml").read_text(), Loader=yaml.BaseLoader)
 
 
-def test_only_main_pushes_publish_after_all_native_checks():
+def test_only_released_tag_dispatches_publish_after_all_native_checks():
     config = workflow()
     assert set(config["on"]) == {"push", "pull_request", "workflow_dispatch"}
-    assert config["permissions"] == {"contents": "read", "pull-requests": "read"}
+    assert config["permissions"] == {"contents": "read"}
     checks = config["jobs"]["checks"]
     assert checks["strategy"]["fail-fast"] == "false"
     assert checks["strategy"]["matrix"]["include"] == [
@@ -24,22 +24,18 @@ def test_only_main_pushes_publish_after_all_native_checks():
         {"runner": "ubuntu-24.04-arm", "arch": "arm64"},
     ]
     publish = config["jobs"]["publish"]
-    assert publish["needs"] == ["release_status", "checks"]
-    assert "needs.release_status.outputs.number != ''" in publish["if"]
-    assert "github.event_name == 'push' && github.ref == 'refs/heads/main'" in publish["if"]
-    assert publish["permissions"] == {
-        "contents": "write",
-        "packages": "write",
-        "pull-requests": "write",
-    }
-    release_pr = config["jobs"]["release_pr"]
-    assert release_pr["needs"] == ["release_status", "checks"]
-    assert "needs.release_status.outputs.number == ''" in release_pr["if"]
-    assert release_pr["permissions"] == {
-        "contents": "write",
-        "pull-requests": "write",
-        "actions": "write",
-    }
+    assert publish["needs"] == "checks"
+    assert publish["if"] == "github.event_name == 'workflow_dispatch' && inputs.release_tag != ''"
+    assert publish["permissions"] == {"contents": "read", "packages": "write"}
+    release = yaml.load(
+        (ROOT / ".github/workflows/release-please.yaml").read_text(),
+        Loader=yaml.BaseLoader,
+    )
+    official = next(s for s in release["jobs"]["release"]["steps"] if s.get("id") == "release")
+    assert (
+        official["uses"]
+        == "googleapis/release-please-action@45996ed1f6d02564a971a2fa1b5860e934307cf7"
+    )
     assert not (ROOT / ".github/workflows/release.yaml").exists()
 
 
@@ -136,6 +132,7 @@ else:
         "version-promote",
         "version-verification",
         "newer-release",
+        "legacy-tag",
     ],
 )
 def test_publisher_uses_verified_artifacts_and_never_promotes_a_failed_release(tmp_path, defect):
@@ -146,6 +143,13 @@ def test_publisher_uses_verified_artifacts_and_never_promotes_a_failed_release(t
     docker = binary / "docker"
     docker.write_text(FAKE_DOCKER)
     docker.chmod(0o755)
+    gh = binary / "gh"
+    gh.write_text(
+        "#!/usr/bin/env python3\nimport base64,json,os\n"
+        "version='0.3.0' if os.environ.get('DEFECT')=='newer-release' else '0.2.0'\n"
+        "print(base64.b64encode(json.dumps({'.':version}).encode()).decode())\n"
+    )
+    gh.chmod(0o755)
     images = tmp_path / "artifacts/images"
     images.mkdir(parents=True)
     for arch in ("amd64", "arm64"):
@@ -173,7 +177,10 @@ def test_publisher_uses_verified_artifacts_and_never_promotes_a_failed_release(t
     if defect == "git-tag":
         git("tag", "v0.2.0", source)
         git("push", "-q", "origin", "refs/tags/v0.2.0")
-    elif defect == "git-race":
+    else:
+        git("tag", "v0.2.0", revision)
+        git("push", "-q", "origin", "refs/tags/v0.2.0")
+    if defect == "git-race":
         # Simulate an unrelated newer main without modifying the release checkout.
         other = tmp_path / "concurrent"
         subprocess.run(["git", "clone", "-qb", "main", str(remote), str(other)], check=True)
@@ -189,6 +196,9 @@ def test_publisher_uses_verified_artifacts_and_never_promotes_a_failed_release(t
     elif defect == "newer-release":
         git("tag", "v0.3.0", source)
         git("push", "-q", "origin", "refs/tags/v0.3.0")
+    elif defect == "legacy-tag":
+        git("tag", "v2.1.0", source)
+        git("push", "-q", "origin", "refs/tags/v2.1.0")
     # A protected main rejects every raw push, including a no-op update.
     hook = remote / "hooks/pre-receive"
     hook.write_text(
@@ -219,7 +229,7 @@ def test_publisher_uses_verified_artifacts_and_never_promotes_a_failed_release(t
     commands = [json.loads(line) for line in log.read_text().splitlines()] if log.exists() else []
     creates = [command for command in commands if command[:3] == ["buildx", "imagetools", "create"]]
     assert not any(command[:2] == ["buildx", "build"] for command in commands)
-    succeeds = defect in {"", "git-race", "git-late-race", "newer-release"}
+    succeeds = defect in {"", "git-race", "git-late-race", "newer-release", "legacy-tag"}
     if not succeeds:
         assert result.returncode != 0
         assert not any(any(value.endswith(":latest") for value in command) for command in creates)
@@ -246,6 +256,7 @@ def test_publisher_uses_verified_artifacts_and_never_promotes_a_failed_release(t
                 **os.environ,
                 "PATH": str(binary) + os.pathsep + os.environ["PATH"],
                 "FAKE_STATE": str(tmp_path),
+                "DEFECT": defect,
                 "GITHUB_REPOSITORY": "brunofelixns/mealie-mcp-server",
                 "GITHUB_SHA": revision,
                 "RELEASE_REVISION": revision,

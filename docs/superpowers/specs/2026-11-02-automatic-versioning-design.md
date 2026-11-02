@@ -1,33 +1,27 @@
-# Versiones mediante PR de release y main protegida
+# Main protegida y Release Please oficial
 
-El usuario pide versionado automático y concreta que main solo admita PRs y que
-una propuesta de release acumule los cambios. La propuesta queda abierta hasta
-que el usuario decida fusionarla. No se introducen Node ni publicaciones locales.
+El usuario requiere PRs obligatorias en main y una PR de publicación acumulativa.
+Ha elegido Release Please **oficial**, autorizando Node solo para esa herramienta
+en CI. El producto, Dev Container y tests/builds permanecen en Python.
 
-Se conserva el preparador Python de versiones. Major para `!` / breaking footer,
-minor para feat/fix y patch para el resto. Actualiza pyproject, lock propio, OCI,
-README bilingüe y el ancla de cambios. La historia first-parent del ancla reconoce
-el merge real de una release, incluyendo squash, y evita un incremento recursivo.
+Release Please mantiene el manifest, versión, CHANGELOG, lock propio, etiquetas OCI
+y catálogos README. Se conserva el historial. Un helper Python sin escrituras calcula
+`--release-as` para respetar major breaking / minor feat-fix / patch otros, con los
+tipos Conventional Commit configurados. El CLI oficial admite ese override en modo
+manifest; la acción oficial se dedica a crear las Releases tras fusionar sus PRs.
 
-Los checks nativos de ambas arquitecturas son obligatorios en las PRs. Tras un
-merge normal a main, un job serializado prepara y actualiza `codex/release-main`
-con force-with-lease, mantiene una única PR y despacha sus checks explícitamente.
-El bot nunca aprueba ni fusiona la propuesta. No se usan skip directives, para
-que fusionarla sí ejecute el CI del commit definitivo.
+El código funcional ya está en main cuando se actualiza la propuesta. El usuario
+decide cuándo fusionarla. Main exige PR, checks nativos al día, historial lineal y
+conversaciones resueltas, incluso para admins, sin force/borrado ni bypass del bot.
+Se exigen cero revisiones adicionales para permitir mantenimiento individual.
 
-Solo un push asociado a una PR de release fusionada del repositorio propio puede
-publicar, después de ambos checks. Se suben las imágenes probadas sin reconstruir,
-el tag Git del merge, X.Y.Z, latest y GitHub Release. Solo se escriben tags en Git;
-main no recibe pushes de ningún job. Las publicaciones se serializan, los tags
-no se sobrescriben y una repetición antigua no reduce latest.
+Al fusionar una propuesta, Release Please crea el tag y Release y despacha CI sobre
+ese tag exacto. CI comprueba revisión, versión y Release, prueba amd64 y arm64 nativos
+y publica las imágenes probadas sin reconstrucción. El publicador solo tiene lectura
+Git y escritura GHCR. Serialización y tags inmutables evitan sobrescrituras o reducir
+latest. Los dispatches explícitos eliminan la necesidad de un PAT permanente.
 
-Main exige PR, checks Verify amd64 / Verify arm64 estrictos, historial lineal y
-conversaciones resueltas, incluso para administradores. Se exige cero aprobaciones
-de otra persona para permitir mantenimiento individual, sin eliminar la PR. No
-hay bypass del bot, force push ni borrado. El ajuste agrupado de GitHub para crear
-y aprobar PRs se habilita para crear propuestas; el CI no utiliza aprobación.
-
-Se descartó el commit automático directo a main por la aclaración del usuario.
-Release Please ofrece el patrón solicitado, pero introducir su runtime Node
-contradice AGENTS.md; se reutiliza el preparador Python con Git/gh y jq. Los
-baselines de compatibilidad permanecen intactos.
+La PR de release queda abierta, sin auto-merge. Una Release cuyo dispatch falló se
+recupera despachando CI explícitamente sobre su tag, no volviendo a ejecutar Release
+Please. La última comprobación operativa debe verificar protección, PR de configuración
+y propuesta generada por Release Please con sus checks verdes.

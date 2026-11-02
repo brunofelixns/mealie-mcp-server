@@ -9,11 +9,12 @@ PyICU2.17 e ICU72.1 reproducen la ordenación de la referencia. Development incl
 La feature docker-outside-of-docker permite ejecutar las pruebas de contenedor.
 La [publicación automática](ci.md) se realiza en GitHub Actions con su token
 temporal; el entorno de desarrollo no necesita credenciales de publicación.
-Todos los cambios a main requieren PR y los checks nativos. El CI acumula los
-cambios en una PR de release y sincroniza paquete/lock/imagen/documentación.
-Fusionar esa propuesta para publicar tras los tests; el bot no escribe commits
-directamente a main. No editar la versión a mano; usar los mensajes descritos en
-[CI](ci.md#cálculo-de-la-versión). Antes de crear otra rama, actualizar main
+Todos los cambios a main requieren PR y los checks nativos. Release Please oficial
+acumula los cambios en una PR y sincroniza versión, CHANGELOG, lock e imagen/docs.
+Fusionar esa propuesta crea el tag/Release y despacha las pruebas y publicación de
+su commit exacto; el bot no escribe commits directamente a main. Node se permite
+solo para Release Please en CI, como autoriza AGENTS.md. No editar versiones a mano;
+usar los mensajes descritos en [CI](ci.md#versiones-y-archivos). Actualizar main
 mediante `git pull --ff-only`.
 
 ## Comprobaciones

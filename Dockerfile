@@ -57,9 +57,11 @@ HEALTHCHECK NONE
 ENTRYPOINT ["/opt/venv/bin/mealie-mcp-server"]
 CMD []
 ARG VCS_REF=unknown
+# x-release-please-start-version
 LABEL org.opencontainers.image.title="Mealie MCP server" \
       org.opencontainers.image.description="Python MCP server for Mealie: stdio and authenticated Streamable HTTP" \
       org.opencontainers.image.version="0.1.0" \
       org.opencontainers.image.licenses="MIT" \
       org.opencontainers.image.source="https://github.com/brunofelixns/mealie-mcp-server" \
       org.opencontainers.image.revision="${VCS_REF}"
+# x-release-please-end
