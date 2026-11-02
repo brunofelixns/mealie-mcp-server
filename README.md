@@ -213,7 +213,7 @@ uv run --frozen mealie-mcp-server --transport stdio
 <!-- BEGIN GENERATED TOOLS -->
 ## Available tools (78)
 
-Catalog for version 0.1.0. See the [full schemas](docs/tools.md) and [API coverage](docs/api-coverage.md) (in Spanish). <!-- x-release-please-version -->
+Catalog for version 0.2.0. See the [full schemas](docs/tools.md) and [API coverage](docs/api-coverage.md) (in Spanish). <!-- x-release-please-version -->
 
 | Family | Tools |
 |---|---:|

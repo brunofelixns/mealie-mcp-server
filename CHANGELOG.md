@@ -67,6 +67,21 @@
 
 * add set_recipe_rating tool ([1454807](https://github.com/timo-reymann/mealie-mcp-server/commit/14548075ebe9d27020801d9541111cf7ef92dd6d))
 
+## [0.2.0](https://github.com/brunofelixns/mealie-mcp-server/compare/v0.1.0...v0.2.0) (2026-11-02)
+
+
+### Features
+
+* **ci:** add security checks and release attestations ([#5](https://github.com/brunofelixns/mealie-mcp-server/issues/5)) ([274785f](https://github.com/brunofelixns/mealie-mcp-server/commit/274785f437e0ad26035d855db8d056537493d109))
+* **ci:** authenticate release proposals with a dedicated app ([#4](https://github.com/brunofelixns/mealie-mcp-server/issues/4)) ([255b7a5](https://github.com/brunofelixns/mealie-mcp-server/commit/255b7a5257fecbcc87aef61bb1b1ba3eae5d05da))
+* **ci:** automate protected releases with Release Please ([#1](https://github.com/brunofelixns/mealie-mcp-server/issues/1)) ([9843481](https://github.com/brunofelixns/mealie-mcp-server/commit/984348119e424459b86a567ef45aed0c93c90fdf))
+* **ci:** automate semantic versions for tested releases ([23faf2d](https://github.com/brunofelixns/mealie-mcp-server/commit/23faf2d233b993b4167f04ddbc82b2b27b86bfdb))
+
+
+### Bug Fixes
+
+* **ci:** handle approval of Release Please proposal checks ([#3](https://github.com/brunofelixns/mealie-mcp-server/issues/3)) ([f8b8a34](https://github.com/brunofelixns/mealie-mcp-server/commit/f8b8a343a0d14756e6b9eb94eb44d1a2cfc08d54))
+
 ## [1.17.1](https://github.com/timo-reymann/mealie-mcp-server/compare/v1.17.0...v1.17.1) (2026-10-07)
 
 
