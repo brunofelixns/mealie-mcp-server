@@ -34,6 +34,7 @@ def fake_gh(tmp_path, response):
         "FAKE_STATE": str(tmp_path),
         "GITHUB_REPOSITORY": "brunofelixns/mealie-mcp-server",
         "GITHUB_OUTPUT": str(tmp_path / "output.txt"),
+        "GITHUB_STEP_SUMMARY": str(tmp_path / "summary.md"),
     }
 
 
@@ -76,7 +77,7 @@ def test_publisher_requires_matching_tested_version_revision_and_existing_releas
 
 
 @pytest.mark.parametrize("delayed", [False, True])
-def test_only_owned_release_please_proposals_are_dispatched(tmp_path, delayed):
+def test_only_owned_release_please_proposals_are_reported_for_native_checks(tmp_path, delayed):
     response = (
         "if sys.argv[1] == 'api':\n"
         "    counter=root/'poll-count'\n"
@@ -85,8 +86,10 @@ def test_only_owned_release_please_proposals_are_dispatched(tmp_path, delayed):
         f"    delayed={delayed!r} and count==0\n"
         "    print(json.dumps([] if delayed else ["
         "{'head':{'ref':'release-please--branches--main','repo':{'full_name':'brunofelixns/mealie-mcp-server'}},"
+        "'html_url':'https://github.com/brunofelixns/mealie-mcp-server/pull/2',"
         "'labels':[{'name':'autorelease: pending'}]},"
         "{'head':{'ref':'fork-proposal','repo':{'full_name':'someone/fork'}},"
+        "'html_url':'https://github.com/someone/fork/pull/3',"
         "'labels':[{'name':'autorelease: pending'}]}]))\n"
     )
     env = fake_gh(tmp_path, response)
@@ -100,9 +103,11 @@ def test_only_owned_release_please_proposals_are_dispatched(tmp_path, delayed):
     )
     assert result.returncode == 0, result.stderr
     calls = [json.loads(line) for line in (tmp_path / "calls.jsonl").read_text().splitlines()]
-    dispatches = [call for call in calls if call[:2] == ["workflow", "run"]]
-    assert len(dispatches) == 1
-    assert dispatches[0][-1] == "release-please--branches--main"
+    assert not any(call[:2] == ["workflow", "run"] for call in calls)
+    summary = (tmp_path / "summary.md").read_text()
+    assert "https://github.com/brunofelixns/mealie-mcp-server/pull/2" in summary
+    assert "Approve workflows to run" in summary
+    assert "someone/fork" not in summary
     assert len([call for call in calls if call[0] == "api"]) == (2 if delayed else 1)
 
 

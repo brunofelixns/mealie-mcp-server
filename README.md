@@ -81,6 +81,8 @@ next semantic version and accumulated `CHANGELOG`. Merge that PR when ready to p
 after both native checks pass, CI publishes `X.Y.Z`, `latest`, and `sha-<merge-commit>`
 to GHCR, with a Git tag and GitHub Release. Breaking changes increment major,
 `feat`/`fix` increment minor, and other commits increment patch.
+Select **Approve workflows to run** on the release PR when GitHub requests it,
+then wait for both checks before merging.
 See [CI and automatic publication](docs/ci.md).
 
 ### Run over stdio

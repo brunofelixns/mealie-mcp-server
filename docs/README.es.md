@@ -79,6 +79,8 @@ la siguiente versión y el `CHANGELOG` acumulado. Fusionar esa PR cuando se quie
 los checks nativos, el CI publica `X.Y.Z`, `latest` y `sha-<commit-fusionado>` en
 GHCR, con tag Git y GitHub Release. Los breaking changes suben major,
 `feat`/`fix` suben minor y el resto sube patch.
+Seleccionar **Approve workflows to run** en la PR de release cuando GitHub lo pida
+y esperar ambos checks antes de fusionarla.
 Consulta [CI y publicación automática](ci.md).
 
 ### Usar stdio

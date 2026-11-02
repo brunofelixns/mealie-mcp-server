@@ -19,7 +19,13 @@ Al fusionar una propuesta, Release Please crea el tag y Release y despacha CI so
 ese tag exacto. CI comprueba revisión, versión y Release, prueba amd64 y arm64 nativos
 y publica las imágenes probadas sin reconstrucción. El publicador solo tiene lectura
 Git y escritura GHCR. Serialización y tags inmutables evitan sobrescrituras o reducir
-latest. Los dispatches explícitos eliminan la necesidad de un PAT permanente.
+latest. El dispatch del tag elimina la necesidad de un PAT permanente para publicar.
+
+Con GITHUB_TOKEN, GitHub requiere autorizar los workflows de la PR de release mediante
+**Approve workflows to run** cuando lo solicite; el token temporal no puede autorizar
+sus propios workflows. Despachar CI sobre su rama prueba el código pero no sustituye
+los checks de PR exigidos por esta protección. El resumen enlaza la propuesta y explica
+ese paso. Automatizar también esa autorización necesita una credencial dedicada adicional.
 
 La PR de release queda abierta, sin auto-merge. Una Release cuyo dispatch falló se
 recupera despachando CI explícitamente sobre su tag, no volviendo a ejecutar Release

@@ -9,8 +9,8 @@ funcional ni se escriben commits de versión directamente en main.
 
 La detección de la propuesta consulta la API REST directamente, con espera acotada
 para propagación de metadatos. No depende de la indexación de búsqueda por labels.
-Si no aparece una PR propia pendiente, el workflow falla visiblemente en lugar de
-terminar sin ejecutar sus checks. Las PR de forks no se seleccionan.
+Si no aparece una PR propia pendiente, el workflow falla visiblemente. Su resumen
+enlaza la propuesta e indica cómo iniciar sus checks. Las PR de forks no se seleccionan.
 
 ## Flujo
 
@@ -21,7 +21,8 @@ terminar sin ejecutar sus checks. Las PR de forks no se seleccionan.
    no admite force pushes ni borrado.
 3. El workflow [release-please.yaml](../.github/workflows/release-please.yaml) utiliza
    Release Please para crear o actualizar una sola PR, con los cambios pendientes.
-   Sus checks se despachan explícitamente y la propuesta **queda abierta**.
+   La propuesta **queda abierta**. En ella, seleccionar **Approve workflows to run**
+   cuando GitHub lo solicite y esperar a ambos checks antes de fusionarla.
 4. Cuando el usuario fusiona esa PR, la acción oficial crea el tag y la GitHub
    Release. El workflow despacha [ci.yaml](../.github/workflows/ci.yaml) sobre ese
    tag exacto, incluyendo el parámetro `release_tag`.
@@ -32,7 +33,7 @@ terminar sin ejecutar sus checks. Las PR de forks no se seleccionan.
 flowchart TD
     A[PR funcional y checks] --> B[Merge a main protegida]
     B --> C[Release Please actualiza PR de versión y CHANGELOG]
-    C --> D[Checks de la propuesta]
+    C --> D[Aprobar workflows y pasar checks de la propuesta]
     D --> E[El usuario fusiona la PR de release]
     E --> F[Release Please crea tag y Release]
     F --> G[CI del tag exacto en amd64 y arm64]
@@ -84,7 +85,7 @@ para estas herramientas de CI; la excepción está en [AGENTS.md](../AGENTS.md).
 Producto, instalación, Dev Container, tests y builds continúan siendo Python.
 
 Release Please se serializa por repositorio y recibe escritura de contenido,
-issues/PRs y Actions para gestionar sus ramas, labels, tags, Releases y dispatches.
+issues/PRs y Actions para gestionar sus ramas, labels, tags, Releases y el dispatch del tag.
 Main no concede bypass al bot. El publicador GHCR solo recibe `contents: read` y
 `packages: write`: no puede escribir commits, tags ni Releases en GitHub.
 
@@ -93,11 +94,20 @@ Se utiliza `GITHUB_TOKEN`, sin PAT permanente ni credenciales Mealie personales.
 para permitir crear propuestas. GitHub agrupa ambas capacidades; el workflow no
 aprueba ni fusiona PRs. Los permisos por defecto del repositorio permanecen en lectura.
 
-Los dispatches explícitos activan los checks de las propuestas y la publicación de
-tags creados con el token temporal. Así no se depende de los eventos suprimidos
-o puestos en espera por GitHub. Un dispatch de propuesta solo comprueba; un dispatch
-de publicación exige versión semántica, coincidencia de ambas imágenes, revisión
-Git, tag y una Release existente que no sea draft.
+GitHub pone en espera de aprobación los workflows `pull_request` creados o
+actualizados con `GITHUB_TOKEN`. Se requiere **Approve workflows to run** en cada
+actualización que lo solicite. Es una autorización para ejecutar CI, distinta de
+aprobar o fusionar la PR. El token temporal no puede aprobar sus propios workflows.
+Un `workflow_dispatch` de la rama ejecuta pruebas, pero no sustituye esos checks
+de PR para esta protección: se verificó en la propuesta inicial.
+
+Para eliminar ese clic se necesita crear la propuesta con una GitHub App o un PAT
+dedicado al repositorio; esa credencial adicional no está configurada. No copiar el
+token personal del CLI al CI. El flujo actual no necesita secretos permanentes.
+
+Un dispatch explícito activa la publicación del tag creado con el token temporal.
+Exige versión semántica, coincidencia de ambas imágenes, revisión Git, tag y una
+Release existente que no sea draft. Un dispatch sin `release_tag` solo ejecuta pruebas.
 
 La configuración aplicada a main está en [main-protection.json](main-protection.json).
 Exige ambos checks de GitHub Actions, sin aprobaciones de otra persona para permitir
