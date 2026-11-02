@@ -1,3 +1,4 @@
+import json
 import os
 import subprocess
 import uuid
@@ -22,16 +23,16 @@ def docker(*arguments, check=True, input=None, timeout=75):
 @pytest.fixture
 def runtime_image():
     image = os.environ.get("MCP_TEST_IMAGE", "mealie-mcp-server:local")
-    result = docker(
-        "image",
-        "inspect",
-        "--platform",
-        "linux/" + os.environ.get("MCP_TEST_ARCH", "amd64"),
-        image,
-        check=False,
-    )
+    # Each test job builds one native platform. Inspect its actual metadata
+    # instead of requiring the Docker API 1.49 multi-platform selector.
+    result = docker("image", "inspect", image, check=False)
     assert result.returncode == 0, (
         "Build the production runtime image before container tests: " + result.stderr
+    )
+    metadata = json.loads(result.stdout)[0]
+    expected = "linux/" + os.environ.get("MCP_TEST_ARCH", "amd64")
+    assert metadata["Os"] + "/" + metadata["Architecture"] == expected, (
+        "Runtime image platform does not match the test target: " + expected
     )
     return image
 

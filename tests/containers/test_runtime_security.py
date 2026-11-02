@@ -55,15 +55,8 @@ def test_runtime_nonroot_readonly_without_node_build_tools_or_dev_dependencies(r
 def test_image_has_expected_architecture_labels_no_env_secrets_and_no_stdio_healthcheck(
     runtime_image,
 ):
-    inspected = json.loads(
-        docker(
-            "image",
-            "inspect",
-            "--platform",
-            "linux/" + os.environ.get("MCP_TEST_ARCH", "amd64"),
-            runtime_image,
-        ).stdout
-    )[0]
+    inspected = json.loads(docker("image", "inspect", runtime_image).stdout)[0]
+    assert inspected["Os"] == "linux"
     assert inspected["Architecture"] == os.environ.get("MCP_TEST_ARCH", "amd64")
     config = inspected["Config"]
     assert config["User"] == "10001:10001"

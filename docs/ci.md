@@ -24,6 +24,8 @@ flowchart TD
 Los jobs usan runners nativos `ubuntu-24.04` y `ubuntu-24.04-arm`. Python, tests
 y builds se ejecutan dentro del Dev Container Linux. No se introduce un runtime
 Node/TypeScript en el producto ni en sus comandos de instalación o pruebas.
+La inspección de imágenes comprueba `Os` y `Architecture` explícitamente y no
+requiere `image inspect --platform`, que solo existe desde Docker API1.49.
 
 Cada plataforma ejecuta:
 
