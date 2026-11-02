@@ -48,9 +48,30 @@ jobs:
         uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
         with:
           node-version: '24'
+      - name: Create the dedicated Release Please App token
+        if: steps.version.outputs.version != ''
+        id: app-token
+        uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
+        with:
+          client-id: ${{ vars.RELEASE_PLEASE_APP_CLIENT_ID }}
+          private-key: ${{ secrets.RELEASE_PLEASE_APP_PRIVATE_KEY }}
+          owner: ${{ github.repository_owner }}
+          repositories: ${{ github.event.repository.name }}
+          permission-contents: write
+          permission-pull-requests: write
+          skip-token-revoke: false
+      - name: Verify the App token repository scope
+        if: steps.version.outputs.version != ''
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+        run: |
+          set -euo pipefail
+          repositories=$(gh api --paginate installation/repositories --jq '.repositories[].full_name')
+          test "$repositories" = "$GITHUB_REPOSITORY"
       - name: Maintain the accumulated Release Please PR
         if: steps.version.outputs.version != ''
         env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
           RELEASE_VERSION: ${{ steps.version.outputs.version }}
         run: |
           set -euo pipefail
@@ -73,7 +94,7 @@ jobs:
           fi
           {
             printf '### Release Please proposal\n\n'
-            printf 'Open the PR and select **Approve workflows to run** if GitHub requests approval. Wait for both native checks, then merge when ready to publish.\n\n'
+            printf 'The dedicated GitHub App updates this proposal, so its native checks start automatically. Wait for both checks, then merge when ready to publish.\n\n'
             while IFS= read -r proposal; do
               test -n "$proposal" || continue
               printf -- '- %s\n' "$proposal"

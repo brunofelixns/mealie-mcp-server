@@ -106,7 +106,8 @@ def test_only_owned_release_please_proposals_are_reported_for_native_checks(tmp_
     assert not any(call[:2] == ["workflow", "run"] for call in calls)
     summary = (tmp_path / "summary.md").read_text()
     assert "https://github.com/brunofelixns/mealie-mcp-server/pull/2" in summary
-    assert "Approve workflows to run" in summary
+    assert "checks start automatically" in summary
+    assert "Approve workflows to run" not in summary
     assert "someone/fork" not in summary
     assert len([call for call in calls if call[0] == "api"]) == (2 if delayed else 1)
 
@@ -125,6 +126,74 @@ def test_missing_proposal_cannot_silently_skip_its_checks(tmp_path):
     calls = [json.loads(line) for line in (tmp_path / "calls.jsonl").read_text().splitlines()]
     assert not any(call[:2] == ["workflow", "run"] for call in calls)
     assert len([call for call in calls if call[0] == "api"]) == 5
+
+
+@pytest.mark.parametrize(
+    ("repositories", "api_status"),
+    [
+        ("brunofelixns/mealie-mcp-server", 0),
+        ("", 0),
+        ("someone/fork", 0),
+        ("brunofelixns/mealie-mcp-server\nother/repo", 0),
+        ("brunofelixns/mealie-mcp-server", 1),
+    ],
+)
+def test_app_token_scope_must_be_exactly_the_current_repository(tmp_path, repositories, api_status):
+    env = fake_gh(tmp_path, f"print({repositories!r})\nsys.exit({api_status})\n")
+    result = subprocess.run(
+        [
+            "bash",
+            "-euo",
+            "pipefail",
+            "-c",
+            step("release-please.yaml", "release", "Verify the App token repository scope"),
+        ],
+        cwd=tmp_path,
+        env=env,
+        capture_output=True,
+        text=True,
+    )
+    valid = repositories == env["GITHUB_REPOSITORY"] and api_status == 0
+    assert (result.returncode == 0) == valid, result.stderr
+    calls = [json.loads(line) for line in (tmp_path / "calls.jsonl").read_text().splitlines()]
+    assert calls == [
+        ["api", "--paginate", "installation/repositories", "--jq", ".repositories[].full_name"]
+    ]
+
+
+def test_only_proposal_steps_receive_a_restricted_revoked_app_token():
+    config = yaml.load(
+        (ROOT / ".github/workflows/release-please.yaml").read_text(), Loader=yaml.BaseLoader
+    )
+    job = config["jobs"]["release"]
+    assert job["env"]["GH_TOKEN"] == "${{ github.token }}"
+    token_step = next(s for s in job["steps"] if s.get("id") == "app-token")
+    assert (
+        token_step["uses"]
+        == "actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510"
+    )
+    assert token_step["if"] == "steps.version.outputs.version != ''"
+    assert token_step["with"] == {
+        "client-id": "${{ vars.RELEASE_PLEASE_APP_CLIENT_ID }}",
+        "private-key": "${{ secrets.RELEASE_PLEASE_APP_PRIVATE_KEY }}",
+        "owner": "${{ github.repository_owner }}",
+        "repositories": "${{ github.event.repository.name }}",
+        "permission-contents": "write",
+        "permission-pull-requests": "write",
+        "skip-token-revoke": "false",
+    }
+    app_token_consumers = [
+        s
+        for s in job["steps"]
+        if s.get("env", {}).get("GH_TOKEN") == "${{ steps.app-token.outputs.token }}"
+    ]
+    assert [s["name"] for s in app_token_consumers] == [
+        "Verify the App token repository scope",
+        "Maintain the accumulated Release Please PR",
+    ]
+    assert all(s["if"] == token_step["if"] for s in app_token_consumers)
+    official = next(s for s in job["steps"] if s.get("id") == "release")
+    assert official["with"]["token"] == "${{ github.token }}"
 
 
 @pytest.mark.parametrize("stale", [False, True])

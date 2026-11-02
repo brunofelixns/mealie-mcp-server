@@ -21,8 +21,8 @@ enlaza la propuesta e indica cómo iniciar sus checks. Las PR de forks no se sel
    no admite force pushes ni borrado.
 3. El workflow [release-please.yaml](../.github/workflows/release-please.yaml) utiliza
    Release Please para crear o actualizar una sola PR, con los cambios pendientes.
-   La propuesta **queda abierta**. En ella, seleccionar **Approve workflows to run**
-   cuando GitHub lo solicite y esperar a ambos checks antes de fusionarla.
+   La propuesta **queda abierta**. Una GitHub App dedicada inicia sus checks
+   automáticamente; esperar a ambos checks antes de fusionarla.
 4. Cuando el usuario fusiona esa PR, la acción oficial crea el tag y la GitHub
    Release. El workflow despacha [ci.yaml](../.github/workflows/ci.yaml) sobre ese
    tag exacto, incluyendo el parámetro `release_tag`.
@@ -33,7 +33,7 @@ enlaza la propuesta e indica cómo iniciar sus checks. Las PR de forks no se sel
 flowchart TD
     A[PR funcional y checks] --> B[Merge a main protegida]
     B --> C[Release Please actualiza PR de versión y CHANGELOG]
-    C --> D[Aprobar workflows y pasar checks de la propuesta]
+    C --> D[Checks automáticos de la propuesta]
     D --> E[El usuario fusiona la PR de release]
     E --> F[Release Please crea tag y Release]
     F --> G[CI del tag exacto en amd64 y arm64]
@@ -89,21 +89,50 @@ issues/PRs y Actions para gestionar sus ramas, labels, tags, Releases y el dispa
 Main no concede bypass al bot. El publicador GHCR solo recibe `contents: read` y
 `packages: write`: no puede escribir commits, tags ni Releases en GitHub.
 
-Se utiliza `GITHUB_TOKEN`, sin PAT permanente ni credenciales Mealie personales.
-**Allow GitHub Actions to create and approve pull requests** debe estar activado
-para permitir crear propuestas. GitHub agrupa ambas capacidades; el workflow no
-aprueba ni fusiona PRs. Los permisos por defecto del repositorio permanecen en lectura.
+La creación y actualización de la propuesta usa un **token de instalación de una
+GitHub App privada**, instalada únicamente en este repositorio. La acción oficial
+`actions/create-github-app-token` v3.3.0, fijada por SHA, lo genera solo cuando hay
+una versión pendiente. Solicita explícitamente un repositorio y dos permisos:
 
-GitHub pone en espera de aprobación los workflows `pull_request` creados o
-actualizados con `GITHUB_TOKEN`. Se requiere **Approve workflows to run** en cada
-actualización que lo solicite. Es una autorización para ejecutar CI, distinta de
-aprobar o fusionar la PR. El token temporal no puede aprobar sus propios workflows.
-Un `workflow_dispatch` de la rama ejecuta pruebas, pero no sustituye esos checks
-de PR para esta protección: se verificó en la propuesta inicial.
+| Permiso de la App | Uso |
+|---|---|
+| Contents: read and write | Crear y actualizar la rama y los archivos de versión |
+| Pull Requests: read and write | Mantener la propuesta y sus etiquetas |
+| Metadata: read-only | Permiso obligatorio de GitHub |
 
-Para eliminar ese clic se necesita crear la propuesta con una GitHub App o un PAT
-dedicado al repositorio; esa credencial adicional no está configurada. No copiar el
-token personal del CLI al CI. El flujo actual no necesita secretos permanentes.
+No requiere Issues write: la API de etiquetas admite Pull Requests write. La App
+no recibe permisos de Actions, Workflows, Packages ni Administration, ni bypass de
+main. El workflow comprueba que el token enumere exactamente el repositorio actual
+antes de pasarlo al CLI. Si faltan credenciales o el ámbito no coincide, falla; no
+hay fallback a GITHUB_TOKEN. El token solo llega a esa comprobación y al CLI y se
+revoca al terminar el job. No se usa un PAT personal ni credenciales Mealie.
+
+GitHub pone en espera de aprobación los workflows de PR creados o actualizados con
+GITHUB_TOKEN. La App evita ese clic porque la actualización usa otra identidad;
+no aprueba ni fusiona PRs. Las Releases ya fusionadas y su dispatch siguen usando
+GITHUB_TOKEN. Los permisos por defecto del repositorio permanecen en lectura.
+
+### Configurar o rotar la App
+
+1. En **Settings → Developer settings → GitHub Apps**, registrar una App privada
+   para la cuenta propietaria, sin webhook ni OAuth de usuario. Usar el repositorio
+   como Homepage URL y los permisos de la tabla anterior.
+2. Instalarla con **Only select repositories**, eligiendo únicamente
+   `brunofelixns/mealie-mcp-server` (o el repositorio del fork).
+3. En **Repository settings → Secrets and variables → Actions**, guardar el
+   **Client ID** público en la variable `RELEASE_PLEASE_APP_CLIENT_ID` y una clave
+   privada de la App en el secreto `RELEASE_PLEASE_APP_PRIVATE_KEY`. Generar y
+   transferir la clave directamente al secreto; no incluirla en Git, logs,
+   artefactos, imágenes ni archivos de configuración de clientes MCP.
+4. Ejecutar Release Please y verificar que el siguiente evento `pull_request`
+   arranque sin aprobación manual. El resumen de Actions enlaza la propuesta.
+
+Para rotar, generar otra clave, actualizar el mismo secreto y comprobar una
+ejecución correcta antes de revocar la clave antigua en GitHub. Para desactivar la
+integración, desinstalar la App del repositorio y retirar su secreto/variable.
+Si falla la creación del token, revisar Client ID, clave, instalación, repositorio
+seleccionado y permisos; no ampliar el ámbito ni reemplazarlo por el token personal
+del CLI. El entorno local de desarrollo no necesita la clave.
 
 Un dispatch explícito activa la publicación del tag creado con el token temporal.
 Exige versión semántica, coincidencia de ambas imágenes, revisión Git, tag y una
@@ -156,4 +185,6 @@ de GHCR revisar **Package settings → Manage Actions access**.
 Referencias: [Release Please oficial](https://github.com/googleapis/release-please),
 [acción oficial](https://github.com/googleapis/release-please-action),
 [protección de ramas](https://docs.github.com/en/rest/branches/branch-protection),
-[eventos y GITHUB_TOKEN](https://docs.github.com/en/actions/how-tos/write-workflows/choose-when-workflows-run/trigger-a-workflow).
+[eventos y GITHUB_TOKEN](https://docs.github.com/en/actions/how-tos/write-workflows/choose-when-workflows-run/trigger-a-workflow),
+[token oficial de App](https://github.com/actions/create-github-app-token),
+[permisos de etiquetas](https://docs.github.com/en/rest/issues/labels#create-a-label).
