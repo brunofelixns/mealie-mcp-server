@@ -1,5 +1,54 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["config:recommended"],
-  "automerge": false
+  "extends": ["config:recommended", "helpers:pinGitHubActionDigests"],
+  "automerge": false,
+  "semanticCommits": "enabled",
+  "semanticCommitType": "chore",
+  "semanticCommitScope": "deps",
+  "timezone": "Europe/Madrid",
+  "schedule": ["* 0-5 * * 1"],
+  "updateNotScheduled": false,
+  "lockFileMaintenance": {
+    "enabled": true,
+    "schedule": ["* 0-5 * * 1"]
+  },
+  "packageRules": [
+    {
+      "matchManagers": ["github-actions"],
+      "pinDigests": true
+    },
+    {
+      "matchDatasources": ["docker"],
+      "pinDigests": true
+    },
+    {
+      "matchPackageNames": ["*"],
+      "groupName": "weekly dependencies",
+      "groupSlug": "weekly-dependencies",
+      "semanticCommitType": "chore",
+      "semanticCommitScope": "deps",
+      "separateMajorMinor": false,
+      "separateMinorPatch": false,
+      "separateMultipleMajor": false,
+      "separateMultipleMinor": false
+    }
+  ],
+  "customManagers": [
+    {
+      "customType": "regex",
+      "managerFilePatterns": ["/^scripts/(scan_runtime|check_workflows)\\.py$/"],
+      "matchStrings": [
+        "(?:SCANNER|ACTIONLINT|ZIZMOR)\\s*=\\s*\\(\\s*\"(?<depName>[^\"@\\s]+):(?<currentValue>[^\"@\\s]+)@(?:\"\\s*\")?(?<currentDigest>sha256:[a-f0-9]{64})\""
+      ],
+      "datasourceTemplate": "docker",
+      "versioningTemplate": "docker"
+    },
+    {
+      "customType": "regex",
+      "managerFilePatterns": ["/^\\.github/workflows/release-please\\.yaml$/"],
+      "matchStrings": ["--package=(?<depName>release-please)@(?<currentValue>[0-9]+\\.[0-9]+\\.[0-9]+)"],
+      "datasourceTemplate": "npm",
+      "versioningTemplate": "npm"
+    }
+  ]
 }

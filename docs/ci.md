@@ -14,9 +14,11 @@ enlaza la propuesta e indica cómo iniciar sus checks. Las PR de forks no se sel
 
 ## Flujo
 
-1. Crear una rama y una PR hacia `main`, con título Conventional Commit. Preferir
+1. Crear una rama y una PR hacia `main`, con título Conventional Commit validado. Preferir
    squash para que el título y los breaking footers de la PR describan el merge.
-2. Pasar `Verify amd64` y `Verify arm64`, con la rama actualizada. Main exige PR
+2. Pasar la política de workflows/dependencias y `Verify amd64` / `Verify arm64`,
+   con la rama actualizada. Los checks nativos fallan si falla la política previa;
+   no quedan simplemente omitidos, porque GitHub admite checks omitidos. Main exige PR
    incluso para administradores, historial lineal y conversaciones resueltas;
    no admite force pushes ni borrado.
 3. El workflow [release-please.yaml](../.github/workflows/release-please.yaml) utiliza
@@ -71,6 +73,13 @@ usa `.name.value` porque el actualizador oficial 17.11.2 conserva valores etique
 para cambiar solo el campo elegido, manteniendo el formato y las dependencias.
 `uv lock --check --offline` comprueba la coherencia del resultado.
 
+La sincronización de `uv.lock` ya está declarada en `extra-files` como actualización
+TOML del paquete `mealie-mcp-server`. No se ejecuta un `uv lock` que re-resuelva
+dependencias en la PR de release ni se relaja `uv sync --frozen`. `__init__.py`
+consulta la versión instalada mediante `importlib.metadata`, sin otra constante
+que sincronizar. La PR real de release #2 verificó ambos archivos en `0.2.0` con
+checks nativos correctos; los flags de bump de este repositorio se conservan.
+
 Usar los tipos Conventional Commit configurados: feat, fix, refactor, perf, style,
 test, docs, build, ops, chore, ci y revert. Release Please puede omitir una propuesta
 si solo hay mensajes no convencionales o tipos ajenos a esa lista, aunque se
@@ -86,8 +95,11 @@ Producto, instalación, Dev Container, tests y builds continúan siendo Python.
 
 Release Please se serializa por repositorio y recibe escritura de contenido,
 issues/PRs y Actions para gestionar sus ramas, labels, tags, Releases y el dispatch del tag.
-Main no concede bypass al bot. El publicador GHCR solo recibe `contents: read` y
-`packages: write`: no puede escribir commits, tags ni Releases en GitHub.
+Main no concede bypass al bot. El publicador GHCR recibe `contents: read`,
+`packages: write`, `id-token: write` y `attestations: write`. Firma con la identidad
+OIDC temporal del workflow; no puede escribir commits, tags ni Releases. Otro job,
+sin permiso de Packages, recibe `contents: write` para adjuntar evidencias a la
+Release existente.
 
 La creación y actualización de la propuesta usa un **token de instalación de una
 GitHub App privada**, instalada únicamente en este repositorio. La acción oficial
@@ -144,19 +156,35 @@ mantenimiento individual. La PR y sus checks siguen siendo obligatorios.
 
 ## Checks, tags y recuperación
 
-Cada rama/PR y dispatch se verifica en `ubuntu-24.04` y `ubuntu-24.04-arm`, dentro
+Los pushes a `main`, las PR y los dispatch se verifican en `ubuntu-24.04` y
+`ubuntu-24.04-arm`, dentro
 del Dev Container: frozen sync y lock check, Ruff, formato, mypy, suite completa con
 cobertura/JUnit, compatibilidad 78/78 con líneas >=90% y ramas >=85%, documentación
 vigente, Mealie real desechable, escaneo de imagen y wheel/sdist. El escaneo bloquea
 secretos y HIGH/CRITICAL corregibles; los avisos restantes y el SBOM se conservan.
 Ver [desarrollo](development.md) y [E2E](testing/local-e2e.md).
 
-Los informes duran 14 días y las imágenes probadas un día. El publicador verifica
+Los informes ordinarios duran 14 días y las imágenes probadas un día. El publicador verifica
 image IDs, plataformas, versión, revisión y los dos digests del índice. No reconstruye
-ni incorpora attestations OCI; el SBOM es un artefacto separado. Las publicaciones
+las imágenes durante la promoción. Antes de promover la versión y `latest`, genera
+procedencia SLSA firmada para el índice y ambos manifests, además de una acreditación
+del SBOM CycloneDX de cada arquitectura. Verifica sujetos, repositorio, workflow,
+commit e identidad de runner con `gh attestation verify`. Estas acreditaciones se
+adjuntan como referencias OCI y no cambian los digests probados ni añaden plataformas
+al índice. Las publicaciones
 se serializan con `queue: max` para conservar hasta 100 publicaciones pendientes.
 La promoción consulta el manifest Python de main, no los tags upstream heredados;
 repetir una versión antigua no reduce `latest`.
+
+Los bundles firmados y los informes se conservan durante 90 días en Actions.
+Tras una publicación correcta, otro job los adjunta a la GitHub Release en un
+archivo `release-evidence-<tag>-<run>-<attempt>.tar.gz`, con checksums internos y
+checksum del archivo. Los assets no dependen de la caducidad de los artefactos de
+Actions. Cada reintento usa otro nombre, sin sobrescribir evidencias anteriores.
+Si falla la firma o su verificación, no se promueven los tags de versión ni `latest`.
+Si falla únicamente el archivo de la Release, repetir ese job mientras exista el
+artefacto firmado. La versión histórica `0.1.0` no adquiere estas garantías por
+modificar el workflow; se verifican en la siguiente publicación que lo ejecute.
 
 ```text
 ghcr.io/brunofelixns/mealie-mcp-server:X.Y.Z
@@ -182,9 +210,96 @@ de imagen expiraron y ya existe una publicación parcial, revisar el estado y pr
 la siguiente versión; no sobrescribirla con un build distinto sin tests. Ante rechazo
 de GHCR revisar **Package settings → Manage Actions access**.
 
+## Validación de workflows y dependencias
+
+La CI funcional conserva `push` solo para `main`: una actualización de PR ya no
+ejecuta otra matriz completa por el push de su rama. Las PR se revisan al abrir,
+sincronizar, reabrir, editar o pasar a listas para revisión. Un cambio de título
+vuelve a ejecutar su validación.
+
+El job `Workflow and dependency policy` ejecuta actionlint y zizmor fijados por
+digest mediante `scripts/check_workflows.py`, dentro del Dev Container. Sus
+contenedores desechables reciben únicamente `.github`, sin red, socket Docker
+ni credenciales. La excepción de actionlint 1.7.12 ignora únicamente su diagnóstico
+exacto para `queue` en `ci.yaml`; un guard adicional impide usarlo fuera de
+`publish.concurrency.queue: max`. Los demás errores siguen bloqueando.
+
+`scripts/check_pr_title.py` lee el evento como JSON, sin insertar el título en
+shell. Los tipos permitidos provienen de `release-please-config.json`; admite
+scope y `!`, y exige una descripción legible en una sola línea.
+
+Dependency review bloquea nuevas vulnerabilidades HIGH/CRITICAL en los formatos
+que entiende el grafo de GitHub, sin escribir comentarios ni requerir credenciales
+personales. Ese grafo no garantiza cobertura de `uv.lock`. Por eso una revisión
+Python adicional compara sus versiones PyPI con el lock del commit base y consulta
+avisos globales de GitHub, incluidas versiones transitivas y de desarrollo. Los
+errores del proveedor no se presentan como ausencia de vulnerabilidades.
+La consulta recibe el token temporal de GitHub con permisos de lectura, limitado
+al endpoint oficial; rechaza redirecciones y no guarda el token en las evidencias.
+Esto evita depender del pequeño cupo anónimo compartido por las IP de CI.
+
+CodeQL analiza Python y Actions en PR, push a main, dispatch y semanalmente. Es
+análisis estático sin ejecutar ni construir la aplicación. Publica resultados
+en Security; la compatibilidad del extractor con Python 3.14 deberá comprobarse
+en su primera ejecución remota. El setup avanzado no requiere activar default setup.
+
+Renovate es el único bot de actualizaciones de versiones: ventana semanal de
+lunes 00:00–05:59 Europe/Madrid, un grupo semanal para Actions, imágenes Docker,
+Python y el CLI npm de Release Please, con mensajes `chore(deps)`. Incluye los
+pins de Trivy, actionlint y zizmor. El CLI se actualiza sin introducir un
+proyecto npm ni Node en el producto. `automerge` sigue desactivado. La App de
+Renovate debe estar instalada y habilitada; un archivo de configuración por sí
+solo no demuestra que el servicio esté ejecutándose. Las alertas existentes de
+Dependabot pueden coexistir; no se añade un segundo bot de PR de versiones.
+
+El mantenimiento semanal de `uv.lock` puede abrir otra PR `chore(deps)`: Renovate
+lo separa de las actualizaciones de versiones mediante su rama nativa
+`lock-file-maintenance-*`. No se fuerzan colisiones de ramas para fusionar ambos
+procesos. El grupo de versiones sí combina actualizaciones major/minor/patch y
+digests en una propuesta para revisión humana.
+
+## Etiquetado de PR
+
+`labeler.yaml` aplica etiquetas `api`, `db`, `tests`, `docs` y `ci` según
+`.github/labeler.yaml`. Las reglas corresponden a los módulos y archivos reales;
+`db` queda preparada para futuras carpetas de base de datos, sin añadirlas al
+producto. El job usa `pull_request_target` para leer la configuración de la rama
+base: no descarga el código de la PR ni ejecuta scripts de su rama.
+
+El token temporal dispone de lectura de contenido y escritura de PR/Issues solo
+en ese job; Issues write permite al etiquetador crear las etiquetas ausentes.
+No requiere credenciales personales. La sincronización que elimina etiquetas
+está desactivada. Las propuestas administradas por Release Please se omiten para
+evitar carreras con sus etiquetas `autorelease: pending` / `autorelease: tagged`.
+
+## Vigilancia de las imágenes publicadas
+
+`published-security.yaml` se ejecuta los lunes a las 05:23 UTC y por dispatch en
+main. Resuelve `latest` a un índice inmutable y escanea sus manifests amd64/arm64
+con el mismo Trivy, descargando su base de vulnerabilidades vigente. No construye,
+publica ni modifica imágenes ni consulta una instancia Mealie. Aquí existe una
+imagen runtime con dos arquitecturas; no existe una variante BEDCA.
+
+La comparación conserva identidades de vulnerabilidades HIGH/CRITICAL corregibles
+y secretos, sin valores secretos. Un hallazgo nuevo hace fallar el workflow para
+emitir la notificación habitual de GitHub Actions. Hallazgos idénticos no repiten
+el fallo; continúan visibles en el resumen. La vigilancia no sustituye el bloqueo
+de todas las vulnerabilidades accionables durante cada publicación.
+
+El estado procede exclusivamente de una ejecución anterior completa de este mismo
+workflow en main y se retiene 90 días. Sin baseline retenido se consideran nuevos
+todos los hallazgos actuales. Los fallos de red, plataforma, scanner o evidencia
+incompleta fallan visiblemente y no generan baseline. Los informes y SBOM quedan
+como evidencias; el informe retenido omite matches secretos y variables de imagen.
+
 Referencias: [Release Please oficial](https://github.com/googleapis/release-please),
 [acción oficial](https://github.com/googleapis/release-please-action),
 [protección de ramas](https://docs.github.com/en/rest/branches/branch-protection),
 [eventos y GITHUB_TOKEN](https://docs.github.com/en/actions/how-tos/write-workflows/choose-when-workflows-run/trigger-a-workflow),
 [token oficial de App](https://github.com/actions/create-github-app-token),
-[permisos de etiquetas](https://docs.github.com/en/rest/issues/labels#create-a-label).
+[permisos de etiquetas](https://docs.github.com/en/rest/issues/labels#create-a-label),
+[formatos del grafo de dependencias](https://docs.github.com/en/code-security/reference/supply-chain-security/dependency-graph-supported-package-ecosystems),
+[avisos globales](https://docs.github.com/en/rest/security-advisories/global-advisories),
+[attestations oficiales](https://github.com/actions/attest),
+[Renovate y uv.lock](https://docs.renovatebot.com/modules/manager/pep621/#lock-file-maintenance),
+[actionlint](https://github.com/rhysd/actionlint) y [zizmor](https://docs.zizmor.sh/).

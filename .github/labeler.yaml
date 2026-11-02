@@ -1,0 +1,43 @@
+api:
+  - changed-files:
+      - any-glob-to-any-file:
+          - src/mealie_mcp_server/mealie/api/**
+          - src/mealie_mcp_server/mealie/client.py
+          - src/mealie_mcp_server/tools/**
+          - src/mealie_mcp_server/http.py
+          - src/mealie_mcp_server/server.py
+          - src/mealie_mcp_server/resources/tool-catalog.json
+
+# Dormant paths: this server has no database or migrations today.
+db:
+  - changed-files:
+      - any-glob-to-any-file:
+          - src/mealie_mcp_server/db/**
+          - src/mealie_mcp_server/database/**
+          - migrations/**
+
+tests:
+  - changed-files:
+      - any-glob-to-any-file:
+          - tests/**
+
+docs:
+  - changed-files:
+      - any-glob-to-any-file:
+          - docs/**
+          - '**/*.md'
+
+ci:
+  - changed-files:
+      - any-glob-to-any-file:
+          - .github/workflows/**
+          - .github/labeler.yaml
+          - .github/actionlint.yaml
+          - .devcontainer/**
+          - renovate.json
+          - scripts/check_workflows.py
+          - scripts/check_pr_title.py
+          - scripts/ci_summary.py
+          - scripts/review_python_dependencies.py
+          - scripts/published_security.py
+          - scripts/scan_runtime.py

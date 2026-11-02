@@ -1,12 +1,13 @@
-"""Scan an exported image without granting a scanner access to the Docker socket.
+"""Scan a local image or immutable registry image without exposing the Docker socket.
 
-Run inside the Dev Container. The scanner owns only its disposable container and
-an image archive copied through the Docker API; no host filesystem bind mounts.
+Run inside the Dev Container. The disposable scanner reads an immutable registry
+reference or an archive copied through the Docker API; no host filesystem bind mounts.
 """
 
 import argparse
 import json
 import platform
+import re
 import subprocess
 from pathlib import Path
 
@@ -27,15 +28,36 @@ def main() -> None:
     parser.add_argument("--platform", choices=["linux/amd64", "linux/arm64"], default="linux/amd64")
     parser.add_argument("--output", type=Path, default=Path("artifacts/runtime-security.json"))
     parser.add_argument(
+        "--registry", action="store_true", help="scan an immutable registry digest directly"
+    )
+    parser.add_argument(
         "--enforce", action="store_true", help="fail on secrets or fixable HIGH/CRITICAL findings"
     )
     args = parser.parse_args()
+    if args.registry and not re.fullmatch(
+        r"[a-z0-9][a-z0-9./:_-]*@sha256:[0-9a-f]{64}", args.image
+    ):
+        parser.error("registry scanning requires an immutable image reference")
     args.output.parent.mkdir(parents=True, exist_ok=True)
     archive = args.output.with_suffix(".tar")
     scanner_platform = (
         "linux/arm64" if platform.machine() in {"aarch64", "arm64"} else "linux/amd64"
     )
-    docker("image", "save", "--platform", args.platform, "--output", str(archive), args.image)
+    if not args.registry:
+        docker("image", "save", "--platform", args.platform, "--output", str(archive), args.image)
+    trivy_command = (
+        'trivy image --image-src remote --platform "$1" '
+        "--scanners vuln,secret --list-all-pkgs --format json --output /tmp/report.json "
+        '--timeout 10m "$2" && '
+        if args.registry
+        else "trivy image --input /tmp/runtime.tar --scanners vuln,secret --list-all-pkgs "
+        "--format json --output /tmp/report.json --timeout 10m && "
+    )
+    trivy_command += (
+        "trivy convert --format cyclonedx --output /tmp/sbom.cdx.json /tmp/report.json && "
+        "trivy --version > /tmp/scanner-version.txt"
+    )
+    registry_arguments = ("scan-registry", args.platform, args.image) if args.registry else ()
     container = docker(
         "create",
         "--platform",
@@ -44,17 +66,19 @@ def main() -> None:
         "/bin/sh",
         SCANNER,
         "-c",
-        "trivy image --input /tmp/runtime.tar --scanners vuln,secret --list-all-pkgs "
-        "--format json --output /tmp/report.json --timeout 10m && "
-        "trivy convert --format cyclonedx --output /tmp/sbom.cdx.json /tmp/report.json && "
-        "trivy --version > /tmp/scanner-version.txt",
+        trivy_command,
+        *registry_arguments,
     ).stdout.strip()
     try:
-        docker("cp", str(archive), container + ":/tmp/runtime.tar")
-        docker("start", "--attach", container)
+        if not args.registry:
+            docker("cp", str(archive), container + ":/tmp/runtime.tar")
+        docker("start", container)
         exit_code = docker("wait", container).stdout.strip()
         logs = docker("logs", container)
-        args.output.with_suffix(".log").write_text(logs.stdout + logs.stderr)
+        log_text = logs.stdout + logs.stderr
+        if args.registry:
+            log_text = re.sub(r"https?://[^\s\"<>]+", "[URL redacted]", log_text)
+        args.output.with_suffix(".log").write_text(log_text)
         if exit_code != "0":
             raise RuntimeError("Image scan failed; inspect its log.")
         docker("cp", container + ":/tmp/report.json", str(args.output))

@@ -1,5 +1,6 @@
 import json
 import os
+import re
 import subprocess
 from pathlib import Path
 
@@ -26,17 +27,58 @@ def test_only_released_tag_dispatches_publish_after_all_native_checks():
     publish = config["jobs"]["publish"]
     assert publish["needs"] == "checks"
     assert publish["if"] == "github.event_name == 'workflow_dispatch' && inputs.release_tag != ''"
-    assert publish["permissions"] == {"contents": "read", "packages": "write"}
+    assert publish["permissions"] == {
+        "contents": "read",
+        "packages": "write",
+        "id-token": "write",
+        "attestations": "write",
+    }
     release = yaml.load(
         (ROOT / ".github/workflows/release-please.yaml").read_text(),
         Loader=yaml.BaseLoader,
     )
     official = next(s for s in release["jobs"]["release"]["steps"] if s.get("id") == "release")
-    assert (
-        official["uses"]
-        == "googleapis/release-please-action@45996ed1f6d02564a971a2fa1b5860e934307cf7"
-    )
+    assert re.fullmatch(r"googleapis/release-please-action@[0-9a-f]{40}", official["uses"])
     assert not (ROOT / ".github/workflows/release.yaml").exists()
+
+
+def test_runtime_checks_depend_on_workflow_and_dependency_policy():
+    config = workflow()
+    assert config["on"]["push"]["branches"] == ["main"]
+    assert config["jobs"]["checks"]["needs"] == "quality"
+    # A skipped required job is accepted by GitHub branch protection: make policy
+    # failures produce FAILED native checks instead of skipping them.
+    assert config["jobs"]["checks"]["if"] == "always()"
+    guard = config["jobs"]["checks"]["steps"][0]
+    for result, expected in (("success", 0), ("failure", 1), ("skipped", 1), ("cancelled", 1)):
+        observed = subprocess.run(
+            ["bash", "-c", guard["run"]],
+            env={**os.environ, "POLICY_RESULT": result},
+            capture_output=True,
+        )
+        assert observed.returncode == expected
+    steps = config["jobs"]["quality"]["steps"]
+    review = next(s for s in steps if s.get("name") == "Review dependency changes")
+    assert review["if"] == "github.event_name == 'pull_request'"
+    assert review["with"]["fail-on-severity"] == "high"
+    commands = next(s["with"]["runCmd"] for s in steps if "runCmd" in s.get("with", {}))
+    assert "scripts/check_workflows.py" in commands
+    assert "scripts/check_pr_title.py" in commands
+
+
+def test_signed_evidence_precedes_promotion_and_is_retained_with_release():
+    config = workflow()
+    steps = config["jobs"]["publish"]["steps"]
+    stage = next(i for i, s in enumerate(steps) if s.get("id") == "stage")
+    promotion = next(i for i, s in enumerate(steps) if s.get("id") == "publish")
+    attestations = [
+        i for i, s in enumerate(steps) if s.get("uses", "").startswith("actions/attest@")
+    ]
+    assert len(attestations) == 5
+    assert all(stage < i < promotion for i in attestations)
+    assert config["jobs"]["release-evidence"]["needs"] == "publish"
+    assert config["jobs"]["release-evidence"]["permissions"] == {"contents": "write"}
+    assert config["jobs"]["publish"]["permissions"]["id-token"] == "write"
 
 
 FAKE_DOCKER = """#!/usr/bin/env python3
@@ -133,11 +175,13 @@ else:
         "version-verification",
         "newer-release",
         "legacy-tag",
+        "attestation",
     ],
 )
 def test_publisher_uses_verified_artifacts_and_never_promotes_a_failed_release(tmp_path, defect):
     steps = workflow()["jobs"]["publish"]["steps"]
-    script = next(step["run"] for step in steps if step.get("id") == "publish")
+    stage = next((s["run"] for s in steps if s.get("id") == "stage"), "")
+    script = stage + "\n" + next(step["run"] for step in steps if step.get("id") == "publish")
     binary = tmp_path / "bin"
     binary.mkdir()
     docker = binary / "docker"
@@ -145,7 +189,9 @@ def test_publisher_uses_verified_artifacts_and_never_promotes_a_failed_release(t
     docker.chmod(0o755)
     gh = binary / "gh"
     gh.write_text(
-        "#!/usr/bin/env python3\nimport base64,json,os\n"
+        "#!/usr/bin/env python3\nimport base64,json,os,sys\n"
+        "if sys.argv[1] == 'attestation':\n"
+        "    sys.exit(1 if os.environ.get('DEFECT')=='attestation' else 0)\n"
         "version='0.3.0' if os.environ.get('DEFECT')=='newer-release' else '0.2.0'\n"
         "print(base64.b64encode(json.dumps({'.':version}).encode()).decode())\n"
     )
@@ -219,6 +265,9 @@ def test_publisher_uses_verified_artifacts_and_never_promotes_a_failed_release(t
             "GITHUB_SHA": revision,
             "RELEASE_REVISION": revision,
             "RELEASE_VERSION": "0.2.0",
+            "STAGED_DIGEST": "sha256:" + "c" * 64,
+            "STAGED_AMD64_DIGEST": "sha256:" + "a" * 64,
+            "STAGED_ARM64_DIGEST": "sha256:" + "b" * 64,
             "GITHUB_STEP_SUMMARY": str(tmp_path / "summary.md"),
             "GITHUB_OUTPUT": str(tmp_path / "output.txt"),
         },
@@ -235,6 +284,10 @@ def test_publisher_uses_verified_artifacts_and_never_promotes_a_failed_release(t
         assert not any(any(value.endswith(":latest") for value in command) for command in creates)
         if defect in {"identity", "platform"}:
             assert not any(command[0] == "push" for command in commands)
+        if defect == "attestation":
+            assert not any(
+                any(value.endswith(":0.2.0") for value in command) for command in creates
+            )
         if defect == "git-tag":
             assert git("ls-remote", "origin", "refs/tags/v0.2.0").split()[0] == source
         assert git("ls-remote", "origin", "refs/heads/main").split()[0] == main_before
@@ -261,6 +314,9 @@ def test_publisher_uses_verified_artifacts_and_never_promotes_a_failed_release(t
                 "GITHUB_SHA": revision,
                 "RELEASE_REVISION": revision,
                 "RELEASE_VERSION": "0.2.0",
+                "STAGED_DIGEST": "sha256:" + "c" * 64,
+                "STAGED_AMD64_DIGEST": "sha256:" + "a" * 64,
+                "STAGED_ARM64_DIGEST": "sha256:" + "b" * 64,
                 "GITHUB_STEP_SUMMARY": str(tmp_path / "summary.md"),
                 "GITHUB_OUTPUT": str(tmp_path / "output.txt"),
             },
