@@ -1,169 +1,144 @@
-# CI y publicación automática en GHCR
+# Main protegida, Release Please oficial y GHCR
 
 [English README](../README.md) · [Índice](README.md)
 
-El workflow único [ci.yaml](../.github/workflows/ci.yaml) comprueba el código en
-cada push y pull request. Un push a `main` publica la imagen únicamente cuando
-todas las comprobaciones de ambas arquitecturas terminan correctamente.
+El código funcional entra en `main` mediante PR. **Release Please oficial** mantiene
+otra PR con la versión siguiente y el [CHANGELOG](../CHANGELOG.md) acumulado.
+Fusionar esa propuesta decide cuándo sale la versión. No se publica en cada merge
+funcional ni se escriben commits de versión directamente en main.
 
 ## Flujo
 
+1. Crear una rama y una PR hacia `main`, con título Conventional Commit. Preferir
+   squash para que el título y los breaking footers de la PR describan el merge.
+2. Pasar `Verify amd64` y `Verify arm64`, con la rama actualizada. Main exige PR
+   incluso para administradores, historial lineal y conversaciones resueltas;
+   no admite force pushes ni borrado.
+3. El workflow [release-please.yaml](../.github/workflows/release-please.yaml) utiliza
+   Release Please para crear o actualizar una sola PR, con los cambios pendientes.
+   Sus checks se despachan explícitamente y la propuesta **queda abierta**.
+4. Cuando el usuario fusiona esa PR, la acción oficial crea el tag y la GitHub
+   Release. El workflow despacha [ci.yaml](../.github/workflows/ci.yaml) sobre ese
+   tag exacto, incluyendo el parámetro `release_tag`.
+5. CI prueba y construye ese commit en amd64 y arm64 nativos. Solo después publica
+   las imágenes probadas, sin reconstrucción, como `X.Y.Z`, `sha-<commit>` y `latest`.
+
 ```mermaid
 flowchart TD
-    P[Push o pull request] --> V[Preparar versión solo en main]
-    V --> A[Checks Linux amd64]
-    V --> B[Checks Linux arm64]
-    A --> C{Ambos pasan y es push a main}
-    B --> C
-    C -->|Sí| D[Cargar las dos imágenes probadas]
-    D --> E[Verificar IDs y plataformas]
-    E --> F[Subir tags por arquitectura a GHCR]
-    F --> G[Crear y verificar manifest del commit]
-    G --> H[Persistir versión y tag Git atómicamente]
-    H --> I[Publicar y verificar X.Y.Z y latest]
-    I --> J[Crear GitHub Release]
+    A[PR funcional y checks] --> B[Merge a main protegida]
+    B --> C[Release Please actualiza PR de versión y CHANGELOG]
+    C --> D[Checks de la propuesta]
+    D --> E[El usuario fusiona la PR de release]
+    E --> F[Release Please crea tag y Release]
+    F --> G[CI del tag exacto en amd64 y arm64]
+    G --> H[Publicar las imágenes probadas en GHCR]
 ```
 
-Los jobs usan runners nativos `ubuntu-24.04` y `ubuntu-24.04-arm`. Python, tests
-y builds se ejecutan dentro del Dev Container Linux. No se introduce un runtime
-Node/TypeScript en el producto ni en sus comandos de instalación o pruebas.
-La inspección de imágenes comprueba `Os` y `Architecture` explícitamente y no
-requiere `image inspect --platform`, que solo existe desde Docker API1.49.
+La Release puede aparecer antes de que termine su imagen; revisar la ejecución de
+CI antes de desplegarla. Un dispatch sin `release_tag` solo ejecuta checks.
 
-Cada plataforma ejecuta:
+## Versiones y archivos
 
-1. `uv sync --frozen --group dev`, Ruff, formato y mypy.
-2. Build del runtime para esa arquitectura desde el mismo commit.
-3. La suite completa con cobertura y JUnit, incluyendo la imagen instalada,
-   stdio, HTTP, autenticación y skills.
-4. Compatibilidad:78 herramientas con casos positivos y negativos, cobertura de
-   líneas >=90% y ramas >=85%, y documentación generada vigente.
-5. Integración con Mealie desechable: cuatro combinaciones de stdio/HTTP y
-   protocolos2026-07-28/2025-11-25. No utiliza una instancia personal.
-6. Escaneo del runtime: rechaza secretos y HIGH/CRITICAL con versión corregida
-   disponible; conserva informe, SBOM CycloneDX y los avisos restantes.
-7. Build de wheel y sdist.
-
-Los fallos bloquean la publicación. Los informes se conservan aunque un job
-falle. Ver [E2E](testing/local-e2e.md) y [desarrollo](development.md).
-
-## Versión automática
-
-Cada push a `main` calcula una única versión para todo el lote de commits nuevos:
-
-| Commits del lote | Incremento | Ejemplo desde 0.2.3 |
+| Commits pendientes | Incremento | Ejemplo desde 0.2.3 |
 |---|---|---|
 | Header con `!` o footer `BREAKING CHANGE:` / `BREAKING-CHANGE:` | Major | 1.0.0 |
 | `feat` o `fix`, con scope opcional | Minor | 0.3.0 |
-| Resto: `docs`, `test`, `ops`, `chore`, etc. | Patch | 0.2.4 |
+| `docs`, `test`, `ops`, `chore`, `build`, etc. | Patch | 0.2.4 |
 
-Prevalece la regla de mayor impacto. La subida minor para `fix` es la convención
-de este proyecto. Las PR y pushes a otras ramas no incrementan la versión.
+Prevalece el mayor incremento. Subir minor para `fix` es la convención de este
+repositorio, que difiere del default de Release Please. El pequeño helper Python
+[release_policy.py](../scripts/release_policy.py), ejecutado en Dev Container,
+calcula únicamente el argumento oficial `--release-as`. No cambia archivos, crea
+commits ni publica. La creación y actualización de PRs, versiones, CHANGELOG,
+tags y Releases corresponde íntegramente a Release Please.
 
-`pyproject.toml` es la fuente de versión. `scripts/ci_version.py` sincroniza el
-paquete propio en `uv.lock`, la etiqueta OCI del Dockerfile y los catálogos README
-en ambos idiomas. No cambia dependencias, el catálogo MCP ni sus baselines.
-`.release.json` delimita los commits pendientes: inicialmente apunta al último
-runtime Python publicado antes de activar esta automatización. Los tags upstream
-heredados no se usan para calcular la versión Python.
+La configuración es [release-please-config.json](../release-please-config.json),
+con estado en [.release-please-manifest.json](../.release-please-manifest.json).
+El bootstrap parte del último runtime Python publicado antes de esta automatización;
+los tags upstream antiguos no determinan la versión Python. La historia first-parent
+del manifest delimita cada lote posterior e incluye correctamente merges squash.
 
-El job `prepare`, sin permisos de escritura, crea un commit **local**, reproducible
-por su contenido y la fecha del commit fuente, y un Git bundle. Ambos runners
-restauran ese mismo commit, incluso con checkout superficial. Así las pruebas
-ejercitan la versión que llegará al wheel, CLI, MCP y contenedor. El bundle y las
-notas se conservan un día junto a los archivos de imagen.
+Release Please actualiza pyproject, su manifest, CHANGELOG, la versión del paquete
+propio de `uv.lock`, la etiqueta OCI y ambos catálogos README. Los comentarios
+`x-release-please-*` delimitan las versiones genéricas. El selector TOML del lock
+usa `.name.value` porque el actualizador oficial 17.11.2 conserva valores etiquetados
+para cambiar solo el campo elegido, manteniendo el formato y las dependencias.
+`uv lock --check --offline` comprueba la coherencia del resultado.
 
-Después de pasar todos los checks, `publish` comprueba que `main` no ha avanzado,
-sube el manifest del commit probado y envía el commit de versión y `vX.Y.Z` mediante
-un push Git atómico, sin force. A continuación verifica `X.Y.Z` y `latest`, y crea
-la GitHub Release con las notas del lote. Los tags existentes con otro contenido
-provocan error; no se sobrescriben. Si los tests fallan, la versión no se persiste.
+Usar los tipos Conventional Commit configurados: feat, fix, refactor, perf, style,
+test, docs, build, ops, chore, ci y revert. Release Please puede omitir una propuesta
+si solo hay mensajes no convencionales o tipos ajenos a esa lista, aunque se
+calcule una subida patch. No editar versiones ni el manifest manualmente.
 
-El commit automático usa `chore(release): X.Y.Z [skip ci]` y el `GITHUB_TOKEN`
-temporal. Los pushes realizados con ese token no disparan otra ejecución de CI;
-los tags tampoco son triggers de este workflow. Tras una publicación, actualizar
-el checkout local con `git pull --ff-only` antes de enviar más cambios.
+## Herramientas y permisos
 
-## Publicar las mismas imágenes que se probaron
+Se usan la acción oficial `googleapis/release-please-action` v5.0.0, fijada por SHA,
+y su CLI oficial `release-please@17.11.2`. El CLI aplica `--release-as` con manifest;
+la acción crea las Releases de PRs ya fusionadas. El usuario autorizó Node24 solo
+para estas herramientas de CI; la excepción está en [AGENTS.md](../AGENTS.md).
+Producto, instalación, Dev Container, tests y builds continúan siendo Python.
 
-Cada job correcto de `main` conserva un archivo Docker de su runtime y su image
-ID durante un día. `publish` depende de toda la matriz: no se inicia tras el éxito
-de una sola plataforma.
+Release Please se serializa por repositorio y recibe escritura de contenido,
+issues/PRs y Actions para gestionar sus ramas, labels, tags, Releases y dispatches.
+Main no concede bypass al bot. El publicador GHCR solo recibe `contents: read` y
+`packages: write`: no puede escribir commits, tags ni Releases en GitHub.
 
-El publicador descarga ambos archivos, comprueba IDs y `linux/amd64` /
-`linux/arm64`, y sube esas imágenes sin reconstruirlas. Obtiene sus digests del
-registry, crea el índice multiarch del commit y comprueba que contiene exactamente
-esos dos digests. Solo entonces persiste Git, publica la versión y actualiza
-`latest`, verificando ambos digests. El
-resumen del job incluye la referencia publicada y el digest final.
+Se utiliza `GITHUB_TOKEN`, sin PAT permanente ni credenciales Mealie personales.
+**Allow GitHub Actions to create and approve pull requests** debe estar activado
+para permitir crear propuestas. GitHub agrupa ambas capacidades; el workflow no
+aprueba ni fusiona PRs. Los permisos por defecto del repositorio permanecen en lectura.
 
-Un fallo al subir la segunda arquitectura puede dejar un tag de arquitectura del
-commit; no promociona ese resultado incompleto a `latest`. Las imágenes de prueba
-no llevan attestations OCI: el SBOM y el informe de escaneo se conservan como
-artefactos del workflow, separados de la imagen.
+Los dispatches explícitos activan los checks de las propuestas y la publicación de
+tags creados con el token temporal. Así no se depende de los eventos suprimidos
+o puestos en espera por GitHub. Un dispatch de propuesta solo comprueba; un dispatch
+de publicación exige versión semántica, coincidencia de ambas imágenes, revisión
+Git, tag y una Release existente que no sea draft.
 
-## Destino y etiquetas
+La configuración aplicada a main está en [main-protection.json](main-protection.json).
+Exige ambos checks de GitHub Actions, sin aprobaciones de otra persona para permitir
+mantenimiento individual. La PR y sus checks siguen siendo obligatorios.
+
+## Checks, tags y recuperación
+
+Cada rama/PR y dispatch se verifica en `ubuntu-24.04` y `ubuntu-24.04-arm`, dentro
+del Dev Container: frozen sync y lock check, Ruff, formato, mypy, suite completa con
+cobertura/JUnit, compatibilidad 78/78 con líneas >=90% y ramas >=85%, documentación
+vigente, Mealie real desechable, escaneo de imagen y wheel/sdist. El escaneo bloquea
+secretos y HIGH/CRITICAL corregibles; los avisos restantes y el SBOM se conservan.
+Ver [desarrollo](development.md) y [E2E](testing/local-e2e.md).
+
+Los informes duran 14 días y las imágenes probadas un día. El publicador verifica
+image IDs, plataformas, versión, revisión y los dos digests del índice. No reconstruye
+ni incorpora attestations OCI; el SBOM es un artefacto separado. Las publicaciones
+se serializan con `queue: max` para conservar hasta 100 publicaciones pendientes.
+La promoción consulta el manifest Python de main, no los tags upstream heredados;
+repetir una versión antigua no reduce `latest`.
 
 ```text
-ghcr.io/brunofelixns/mealie-mcp-server:latest
 ghcr.io/brunofelixns/mealie-mcp-server:X.Y.Z
-ghcr.io/brunofelixns/mealie-mcp-server:sha-<SHA completo del commit>
+ghcr.io/brunofelixns/mealie-mcp-server:latest
+ghcr.io/brunofelixns/mealie-mcp-server:sha-<commit del tag>
 ```
 
-También se crean tags por arquitectura con sufijos `-amd64` y `-arm64`. `latest`
-sigue el último push a `main` verificado. Usar el tag del commit o su digest para
-fijar un despliegue reproducible. El SHA identifica el commit automático de versión,
-hijo del push original y probado por ambos runners. `vX.Y.Z` es el tag Git y la
-GitHub Release. El pipeline no sobrescribe la imagen histórica `0.1.0`.
-Un fork utiliza su propio namespace, obtenido
-de `GITHUB_REPOSITORY`.
+También existen tags por arquitectura `-amd64` / `-arm64`. No se sobrescribe el
+tag histórico `0.1.0` ni una versión existente con otro digest. Código e imagen
+son públicos; un fork debe configurar sus permisos, protección y paquete propios.
 
-Las PR, incluidas las de forks, y los pushes a otras ramas ejecutan checks sin
-permisos de publicación. La concurrencia cancela ejecuciones anteriores de la
-misma referencia cuando llega código nuevo.
+Si falla un check o una subida, usar **Re-run failed jobs** mientras se conserven
+las imágenes exactas. GitHub y GHCR no comparten una transacción; una Release puede
+quedar pendiente de imagen. Si Release Please creó la Release pero falló su dispatch,
+repetir Release Please no vuelve a emitir `release_created`; despachar CI para el tag:
 
-## Permisos y visibilidad
+```bash
+gh workflow run ci.yaml --repo brunofelixns/mealie-mcp-server --ref vX.Y.Z -f release_tag=vX.Y.Z
+```
 
-El permiso global es `contents: read`. Solo `publish` recibe `contents: write`
-y `packages: write` para el commit/tag/Release y GHCR;
-se autentica con el `GITHUB_TOKEN` temporal. No requiere PAT, `docker login` local
-ni secretos Mealie reales. Las credenciales no se pasan al build.
+Esto ordena una ejecución remota, sin publicar desde el equipo local. Si los archivos
+de imagen expiraron y ya existe una publicación parcial, revisar el estado y preparar
+la siguiente versión; no sobrescribirla con un build distinto sin tests. Ante rechazo
+de GHCR revisar **Package settings → Manage Actions access**.
 
-Si un paquete existente rechaza el push con `permission_denied`, revisar
-**Package settings → Manage Actions access** y conceder escritura al repositorio
-que ejecuta el workflow. El paquete debe estar asociado al mismo repositorio.
-
-La visibilidad del repositorio y la de GHCR son independientes. Hacer público
-el código no cambia automáticamente un paquete existente de privado a público.
-Un paquete privado requiere autenticación para descargarlo; uno público permite
-descarga anónima. La visibilidad del paquete se administra en GitHub Packages.
-
-## Mantenimiento y recuperación
-
-Los scripts de publicación local y el release manual se retiraron; sus versiones
-históricas permanecen en Git. Para publicar código nuevo, hacer push a `main` y
-revisar Actions. Si falla, corregir la causa y subir el cambio, o usar
-**Re-run failed jobs** cuando el fallo sea transitorio. No se añaden retries de
-escrituras a Mealie.
-
-**Re-run failed jobs** reutiliza el bundle y las imágenes: conserva la misma versión
-y el mismo commit y acepta un push Git ya completado. Git y GHCR no comparten una
-transacción: un fallo tras persistir Git puede dejar un tag sin imagen o Release;
-repetir el job completa la publicación. Si `main` avanzó entretanto, la repetición
-se detiene para no promocionar una versión anterior sobre la nueva.
-
-Los archivos de imágenes y versión duran un día para reducir almacenamiento. Si
-expiran antes de persistir Git, repetir todos los jobs. Si ya existe el tag pero
-faltan artefactos, enviar un nuevo commit a `main` para generar la siguiente versión
-y revisar el fallo anterior. No sobrescribir versiones ni sustituir las imágenes
-probadas por un build sin tests.
-Las evidencias de verificación se conservan14 días.
-
-Los [resultados históricos de migración](migration/acceptance.md) describen lo
-probado en aquella fecha. Un workflow configurado o un build local no demuestran
-una ejecución remota: consultar el run y el digest GHCR del commit concreto.
-
-Referencias: [publicación con Actions](https://docs.github.com/en/actions/tutorials/publish-packages/publish-docker-images),
-[GITHUB_TOKEN y GHCR](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry),
-[eventos generados por GITHUB_TOKEN](https://docs.github.com/en/actions/how-tos/write-workflows/choose-when-workflows-run/trigger-a-workflow),
-[permisos y visibilidad](https://docs.github.com/en/packages/learn-github-packages/configuring-a-packages-access-control-and-visibility).
+Referencias: [Release Please oficial](https://github.com/googleapis/release-please),
+[acción oficial](https://github.com/googleapis/release-please-action),
+[protección de ramas](https://docs.github.com/en/rest/branches/branch-protection),
+[eventos y GITHUB_TOKEN](https://docs.github.com/en/actions/how-tos/write-workflows/choose-when-workflows-run/trigger-a-workflow).

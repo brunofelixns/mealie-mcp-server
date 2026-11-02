@@ -48,7 +48,7 @@ def render(root: Path) -> dict[Path, str]:
             "",
             f"Catalog for version {version}. "
             "See the [full schemas](docs/tools.md) and "
-            "[API coverage](docs/api-coverage.md) (in Spanish).",
+            "[API coverage](docs/api-coverage.md) (in Spanish). <!-- x-release-please-version -->",
             "",
         ],
         "docs/README.es.md": [
@@ -56,7 +56,7 @@ def render(root: Path) -> dict[Path, str]:
             "",
             f"Catálogo de la versión {version}. "
             "Consulta los [esquemas completos](tools.md) y "
-            "la [cobertura de API](api-coverage.md).",
+            "la [cobertura de API](api-coverage.md). <!-- x-release-please-version -->",
             "",
         ],
     }

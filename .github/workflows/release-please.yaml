@@ -1,0 +1,69 @@
+name: Release Please
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+  actions: write
+concurrency:
+  group: release-please-${{ github.repository }}
+  cancel-in-progress: false
+jobs:
+  release:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          ref: main
+          fetch-depth: 0
+      - name: Create releases from merged Release Please PRs
+        id: release
+        uses: googleapis/release-please-action@45996ed1f6d02564a971a2fa1b5860e934307cf7 # v5.0.0
+        with:
+          token: ${{ github.token }}
+          config-file: release-please-config.json
+          manifest-file: .release-please-manifest.json
+          skip-github-pull-request: true
+      - name: Build and publish the exact released tag
+        if: steps.release.outputs.release_created == 'true'
+        env:
+          RELEASE_TAG: ${{ steps.release.outputs.tag_name }}
+        run: gh workflow run ci.yaml --repo "$GITHUB_REPOSITORY" --ref "$RELEASE_TAG" -f "release_tag=$RELEASE_TAG"
+      - name: Calculate repository version policy in the Dev Container
+        uses: devcontainers/ci@513af61f4de4f75d37e4438f184ba4358f0fc1ca # v0.3
+        with:
+          push: never
+          runCmd: mkdir -p artifacts && uv run --frozen python scripts/release_policy.py > artifacts/release-version.txt
+      - name: Read the proposed version
+        id: version
+        run: printf 'version=%s\n' "$(cat artifacts/release-version.txt)" >> "$GITHUB_OUTPUT"
+      - name: Set up Node only for the official Release Please CLI
+        if: steps.version.outputs.version != ''
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: '24'
+      - name: Maintain the accumulated Release Please PR
+        if: steps.version.outputs.version != ''
+        env:
+          RELEASE_VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          set -euo pipefail
+          test "$(git ls-remote --exit-code origin refs/heads/main | cut -f1)" = "$(git rev-parse HEAD)"
+          npx --yes --package=release-please@17.11.2 release-please release-pr --repo-url "$GITHUB_REPOSITORY" --token "$GH_TOKEN" --target-branch main --config-file release-please-config.json --manifest-file .release-please-manifest.json --release-as "$RELEASE_VERSION"
+          test "$(git ls-remote --exit-code origin refs/heads/main | cut -f1)" = "$(git rev-parse HEAD)"
+      - name: Check the Release Please proposal explicitly
+        if: steps.version.outputs.version != ''
+        id: dispatch
+        run: |
+          set -euo pipefail
+          branches=$(gh pr list --repo "$GITHUB_REPOSITORY" --state open --base main --label 'autorelease: pending' --json headRefName,isCrossRepository | jq -r '.[] | select(.isCrossRepository == false) | .headRefName')
+          while IFS= read -r branch; do
+            test -n "$branch" || continue
+            gh workflow run ci.yaml --repo "$GITHUB_REPOSITORY" --ref "$branch"
+          done <<< "$branches"

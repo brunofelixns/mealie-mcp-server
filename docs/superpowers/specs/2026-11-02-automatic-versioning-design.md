@@ -1,43 +1,27 @@
-# Versionado automático en CI
+# Main protegida y Release Please oficial
 
-El usuario solicita que la subida de versión también sea automática, como parte
-del CI que ya prueba y publica GHCR. Se conserva Python en el Dev Container y el
-contrato público de las 78 herramientas.
+El usuario requiere PRs obligatorias en main y una PR de publicación acumulativa.
+Ha elegido Release Please **oficial**, autorizando Node solo para esa herramienta
+en CI. El producto, Dev Container y tests/builds permanecen en Python.
 
-## Enfoque
+Release Please mantiene el manifest, versión, CHANGELOG, lock propio, etiquetas OCI
+y catálogos README. Se conserva el historial. Un helper Python sin escrituras calcula
+`--release-as` para respetar major breaking / minor feat-fix / patch otros, con los
+tipos Conventional Commit configurados. El CLI oficial admite ese override en modo
+manifest; la acción oficial se dedica a crear las Releases tras fusionar sus PRs.
 
-Se utiliza Python estándar para preparar una versión semántica desde los commits:
-`!` o un footer `BREAKING CHANGE:` / `BREAKING-CHANGE:` incrementan major;
-`feat` y `fix` incrementan minor; cualquier otro cambio incrementa patch. Prevalece
-el cambio de mayor impacto de todo el lote. La regla sigue las convenciones de
-este repositorio, incluida la subida minor para fixes. Se descartaron herramientas
-que necesitan Node y un gestor de releases adicional con su propia convención.
+El código funcional ya está en main cuando se actualiza la propuesta. El usuario
+decide cuándo fusionarla. Main exige PR, checks nativos al día, historial lineal y
+conversaciones resueltas, incluso para admins, sin force/borrado ni bypass del bot.
+Se exigen cero revisiones adicionales para permitir mantenimiento individual.
 
-`pyproject.toml` es la versión canónica. Un ancla en `.release.json` delimita los
-commits nuevos desde la última publicación Python verificada. No se toma el mayor
-tag histórico: los tags v1/v2 heredados pertenecen al producto anterior.
+Al fusionar una propuesta, Release Please crea el tag y Release y despacha CI sobre
+ese tag exacto. CI comprueba revisión, versión y Release, prueba amd64 y arm64 nativos
+y publica las imágenes probadas sin reconstrucción. El publicador solo tiene lectura
+Git y escritura GHCR. Serialización y tags inmutables evitan sobrescrituras o reducir
+latest. Los dispatches explícitos eliminan la necesidad de un PAT permanente.
 
-## Flujo
-
-Un job sin escritura prepara pyproject, el paquete propio del lock, la etiqueta
-Docker y ambos catálogos README, y crea un commit local reproducible y un bundle.
-Ambos runners nativos restauran ese commit y prueban/construyen su contenido.
-Las PR y ramas distintas de main conservan su versión y carecen de publicación.
-
-Solo tras pasar ambos runners, el publicador restaura el mismo commit, comprueba
-que main no avanzó, sube las imágenes probadas con tag de SHA, y envía main y el
-tag vX.Y.Z de forma atómica, sin force. Publica X.Y.Z y latest con el mismo digest,
-y una GitHub Release con notas del lote. El token temporal evita un bucle de CI.
-
-## Fallos y límites
-
-Un fallo de tests no escribe versiones remotas. Una carrera con otro push impide
-sobrescribir main. Los tags Git/versionados nunca se reasignan a otro contenido.
-Una repetición de jobs fallidos utiliza el mismo bundle, versión y commit; no
-incrementa otra vez. Una publicación parcialmente completada se recupera repitiendo
-el job con sus artefactos, conservados un día. Git y GHCR no ofrecen una transacción
-común: puede existir un tag de Git antes de completarse GHCR, pero el fallo queda
-visible y latest no se promociona antes de verificar la versión publicada.
-
-No se añade publicación local, PAT permanente, Node ni cambios en las capturas
-inmutables. La implementación y verificación se realizan en la sesión actual.
+La PR de release queda abierta, sin auto-merge. Una Release cuyo dispatch falló se
+recupera despachando CI explícitamente sobre su tag, no volviendo a ejecutar Release
+Please. La última comprobación operativa debe verificar protección, PR de configuración
+y propuesta generada por Release Please con sus checks verdes.

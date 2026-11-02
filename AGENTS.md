@@ -9,3 +9,8 @@ No modificar una expectativa de baseline para ocultar una regresión. Documentar
 Añadir pruebas de comportamiento para cambios funcionales; usar los checks de docs/development.md. Regenerar documentación con scripts/generate_docs.py y comprobar scripts/check_compatibility.py. stdout pertenece a JSON-RPC en stdio; no registrar credenciales, cuerpos de recetas o URLs firmadas.
 
 Las capturas originales de tests/fixtures/compatibility son datos de referencia inmutables; no requieren un runtime Node. Los runners de captura temporales se retiraron al finalizar la migración y están disponibles en el historial Git. No introducir Node/TypeScript en el producto, su instalación ni el CI. Publicar imágenes, paquetes, commits remotos o endpoints requiere un destino y autorización correspondientes; los builds locales no publican.
+
+Excepción autorizada por el usuario: usar Release Please oficial y Node24 únicamente
+en su workflow de CI para mantener la PR de release, CHANGELOG, tags y Releases.
+El producto, su instalación, el Dev Container y los tests/builds siguen siendo Python;
+no instalar Node en el host ni añadirlo a los contenedores de aplicación.
