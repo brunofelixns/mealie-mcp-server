@@ -22,6 +22,7 @@ jobs:
         with:
           ref: main
           fetch-depth: 0
+          persist-credentials: false
       - name: Create releases from merged Release Please PRs
         id: release
         uses: googleapis/release-please-action@45996ed1f6d02564a971a2fa1b5860e934307cf7 # v5.0.0
@@ -48,6 +49,7 @@ jobs:
         uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
         with:
           node-version: '24'
+          package-manager-cache: false
       - name: Create the dedicated Release Please App token
         if: steps.version.outputs.version != ''
         id: app-token
@@ -83,7 +85,7 @@ jobs:
         run: |
           set -euo pipefail
           proposals=''
-          for attempt in 1 2 3 4 5; do
+          for _ in 1 2 3 4 5; do
             proposals=$(gh api --paginate "repos/$GITHUB_REPOSITORY/pulls?state=open&base=main&per_page=100" | jq -r --arg repo "$GITHUB_REPOSITORY" '.[] | select(.head.repo.full_name == $repo and any(.labels[]; .name == "autorelease: pending")) | .html_url')
             test -z "$proposals" || break
             sleep 2

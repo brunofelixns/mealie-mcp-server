@@ -28,11 +28,21 @@ uv sync --frozen --group dev
 uv run ruff check .
 uv run ruff format --check .
 uv run mypy src
+uv run python scripts/check_workflows.py
 uv run python scripts/generate_docs.py --check
 uv run pytest -q --cov=mealie_mcp_server --cov-branch --cov-report=json:artifacts/coverage.json --cov-report=xml:artifacts/coverage.xml --junitxml=artifacts/pytest.xml
 uv run python scripts/check_compatibility.py --require-all --coverage-json artifacts/coverage.json --junit-xml artifacts/pytest.xml
 uv build
 ```
+
+`check_workflows.py` ejecuta actionlint y zizmor fijados por digest en contenedores
+Linux desechables. No instala Node ni comparte credenciales o socket Docker con
+los linters. La [guía de CI](ci.md) describe la excepción acotada de `queue`,
+la revisión de dependencias y las acreditaciones de release.
+
+`ci_summary.py` convierte cobertura/JUnit y el resumen de Trivy en un resumen
+visible en Actions, también cuando la verificación se interrumpe. Los umbrales
+siguen perteneciendo a `check_compatibility.py`: 90% de líneas y 85% de ramas.
 
 Construir primero la imagen runtime como indica [contenedores](containers.md): la suite incluye pruebas reales de esa imagen. Los umbrales se comprueban independientemente: líneas >=90% y ramas >=85%. coverage activa la medición de los subprocess Python para observar el CLI real; la imagen de producción no incorpora coverage. El JUnit demuestra la ejecución de casos positivos y rechazos para las78 herramientas; un índice de fixtures por sí solo no demuestra que pasaron.
 

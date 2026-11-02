@@ -1,0 +1,31 @@
+name: Label pull requests
+on:
+  pull_request_target:
+    types: [opened, synchronize, reopened, ready_for_review]
+permissions:
+  contents: read
+concurrency:
+  group: labeler-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+jobs:
+  label:
+    # Release Please owns its proposal's autorelease labels and lifecycle.
+    if: >-
+      ${{ !startsWith(github.event.pull_request.head.ref, 'release-please--') &&
+          !contains(github.event.pull_request.labels.*.name, 'autorelease: pending') &&
+          !contains(github.event.pull_request.labels.*.name, 'autorelease: tagged') }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      pull-requests: write
+      # The official action needs this only to create missing configured labels.
+      # It reads trusted base config over the API; no PR checkout or code runs.
+      issues: write
+    steps:
+      - name: Label changed paths from trusted base configuration
+        uses: actions/labeler@bf12e9b00b37c5c0ca2b87b79b2daf7891dbda13 # v7.0.0
+        with:
+          configuration-path: .github/labeler.yaml
+          sync-labels: false
+          dot: true

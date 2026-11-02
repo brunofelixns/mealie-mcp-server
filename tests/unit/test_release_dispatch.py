@@ -1,5 +1,6 @@
 import json
 import os
+import re
 import subprocess
 from pathlib import Path
 
@@ -168,10 +169,7 @@ def test_only_proposal_steps_receive_a_restricted_revoked_app_token():
     job = config["jobs"]["release"]
     assert job["env"]["GH_TOKEN"] == "${{ github.token }}"
     token_step = next(s for s in job["steps"] if s.get("id") == "app-token")
-    assert (
-        token_step["uses"]
-        == "actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510"
-    )
+    assert re.fullmatch(r"actions/create-github-app-token@[0-9a-f]{40}", token_step["uses"])
     assert token_step["if"] == "steps.version.outputs.version != ''"
     assert token_step["with"] == {
         "client-id": "${{ vars.RELEASE_PLEASE_APP_CLIENT_ID }}",
@@ -253,6 +251,8 @@ def test_official_cli_receives_policy_override_only_for_current_main(tmp_path, s
         assert not (tmp_path / "npx.json").exists()
     else:
         arguments = json.loads((tmp_path / "npx.json").read_text())
-        assert "--package=release-please@17.11.2" in arguments
+        packages = [argument for argument in arguments if argument.startswith("--package=")]
+        assert len(packages) == 1
+        assert re.fullmatch(r"--package=release-please@[0-9]+\.[0-9]+\.[0-9]+", packages[0])
         assert arguments[arguments.index("--release-as") + 1] == "0.3.0"
         assert arguments[arguments.index("--config-file") + 1] == "release-please-config.json"

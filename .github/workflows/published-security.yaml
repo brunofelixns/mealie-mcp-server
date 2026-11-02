@@ -1,0 +1,119 @@
+name: Published image security
+on:
+  schedule:
+    - cron: '23 5 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: published-image-security
+  cancel-in-progress: false
+
+jobs:
+  scan:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    permissions:
+      contents: read
+      actions: read
+      packages: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - name: Read the prior completed main scan baseline
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts/published-baseline
+          runs=$(gh api --method GET "repos/$GITHUB_REPOSITORY/actions/workflows/published-security.yaml/runs" \
+            -f branch=main -f status=completed -f per_page=100)
+          candidates=$(jq -r '[.workflow_runs[] | select(
+            .status == "completed" and .head_branch == "main" and
+            .head_repository.full_name == env.GITHUB_REPOSITORY and
+            (.event == "schedule" or .event == "workflow_dispatch") and
+            .id != (env.GITHUB_RUN_ID | tonumber) and
+            .run_number < (env.GITHUB_RUN_NUMBER | tonumber)
+          )] | sort_by(.run_number) | reverse | .[].id' <<< "$runs")
+          found=false
+          for run in $candidates; do
+            artifacts=$(gh api "repos/$GITHUB_REPOSITORY/actions/runs/$run/artifacts")
+            count=$(jq '[.artifacts[] | select(.name == "published-security-state" and .expired == false)] | length' <<< "$artifacts")
+            test "$count" -le 1
+            if test "$count" -eq 1; then
+              gh run download "$run" --repo "$GITHUB_REPOSITORY" \
+                --name published-security-state --dir artifacts/published-baseline
+              test -f artifacts/published-baseline/state.json
+              printf '%s\n' "$run" > artifacts/published-baseline/source-run-id
+              found=true
+              break
+            fi
+          done
+          if test "$found" = false; then
+            printf '::notice::No retained baseline; all current actionable findings will be reported as new.\n'
+          fi
+      - name: Set up Buildx for immutable registry inspection
+        uses: docker/setup-buildx-action@8d2750c68a42422c14e847fe6c8ac0403b4cbd6f # v3
+      - name: Scan both published architectures inside the Dev Container
+        id: scan
+        uses: devcontainers/ci@513af61f4de4f75d37e4438f184ba4358f0fc1ca # v0.3
+        env:
+          PUBLISHED_IMAGE: ghcr.io/${{ github.repository }}
+          SECURITY_RUN_ID: ${{ github.run_id }}
+        with:
+          push: never
+          env: |
+            PUBLISHED_IMAGE
+            SECURITY_RUN_ID
+          runCmd: |
+            set -eu
+            uv sync --frozen --group dev
+            uv run --frozen python scripts/published_security.py \
+              --image "$(printf '%s' "$PUBLISHED_IMAGE" | tr '[:upper:]' '[:lower:]')" \
+              --run-id "$SECURITY_RUN_ID"
+      - name: Summarize scan and comparison status
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          if test -f artifacts/published-security/summary.md; then
+            cat artifacts/published-security/summary.md >> "$GITHUB_STEP_SUMMARY"
+          elif test -f artifacts/published-security/failure.txt; then
+            cat artifacts/published-security/failure.txt >> "$GITHUB_STEP_SUMMARY"
+          else
+            printf 'Published image surveillance did not complete; no baseline was saved.\n' >> "$GITHUB_STEP_SUMMARY"
+          fi
+      - name: Retain scan and comparison evidence
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: published-security-evidence
+          path: |
+            artifacts/published-security/*.json
+            artifacts/published-security/*.log
+            artifacts/published-security/*.txt
+            artifacts/published-security/*.md
+          if-no-files-found: warn
+          retention-days: 90
+      - name: Retain only a complete validated baseline
+        if: steps.scan.outcome == 'success'
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: published-security-state
+          path: artifacts/published-security/state.json
+          if-no-files-found: error
+          retention-days: 90
+      - name: Notify through workflow failure only for new actionable findings
+        if: steps.scan.outcome == 'success'
+        shell: bash
+        run: |
+          set -euo pipefail
+          if ! jq -e '.new | length == 0' artifacts/published-security/comparison.json; then
+            printf '::error::New actionable findings affect the published image; review the retained comparison and scan evidence.\n'
+            exit 1
+          fi
