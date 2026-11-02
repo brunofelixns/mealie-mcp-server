@@ -35,8 +35,9 @@ Las credenciales Mealie y Bearer personal son independientes. stdio usa solo la 
 ## CI y publicación
 
 La [CI y publicación automática](ci.md) verifica cada push/PR en Linux amd64 y
-arm64 nativos. Los pushes a `main` publican en GHCR cuando ambas plataformas
-pasan; otras ramas y PR no reciben permisos para publicar.
+arm64 nativos. Release Please acumula la versión y el CHANGELOG en una PR.
+Fusionarla crea el tag/Release y despacha los checks y publicación de ese tag;
+otras ramas y PR solo se verifican, sin permisos para publicar.
 
 `.github/workflows/ci.yaml` utiliza el Dev Container. Instala desde el lock frozen,
 comprueba Ruff/mypy y documentación, construye runtime, ejecuta pytest con

@@ -11,6 +11,8 @@ La [publicación automática](ci.md) se realiza en GitHub Actions con su token
 temporal; el entorno de desarrollo no necesita credenciales de publicación.
 Todos los cambios a main requieren PR y los checks nativos. Release Please oficial
 acumula los cambios en una PR y sincroniza versión, CHANGELOG, lock e imagen/docs.
+En esa PR, autorizar **Approve workflows to run** cuando GitHub lo solicite;
+el token temporal no puede aprobar sus propios workflows.
 Fusionar esa propuesta crea el tag/Release y despacha las pruebas y publicación de
 su commit exacto; el bot no escribe commits directamente a main. Node se permite
 solo para Release Please en CI, como autoriza AGENTS.md. No editar versiones a mano;

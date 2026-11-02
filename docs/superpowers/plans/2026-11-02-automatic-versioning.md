@@ -31,7 +31,7 @@ and CLI17.11.2 with Node24 only in CI; GitHub Actions, Git, gh, jq, Docker.
 - [x] Publish only an existing released-tag dispatch, with read-only Git permissions.
 - [x] Document both workflows, exact-tag recovery and Node exception.
 - [x] Verify local tests/checks and independent review of final integration (33 directed cases).
-- [ ] Update implementation PR, pass required checks and merge through protection.
+- [x] Update implementation PR, pass required checks and merge through protection (PR1).
 - [ ] Verify the official automatic release proposal and its CI; leave merge to user.
 
 ## Execution record
@@ -51,3 +51,12 @@ Publisher queue:max follows current GitHub documentation. Latest actionlint1.7.1
 does not recognize that newer provider key: local lint suppresses only its exact
 queue-key diagnostic, and hosted GitHub validation remains required. Latest reads
 the Python manifest on protected main rather than ordering legacy upstream tags.
+
+PR1 merged as9843481 after full native checks. Release Please created PR2 with the
+seven expected version files and preserved CHANGELOG history. The initial label
+search missed the fresh proposal; PR3 replaces it with bounded REST polling. Its
+native checks passed1017 tests per architecture. A separate branch dispatch passed
+but did not satisfy the PR protection while the token-created pull_request run was
+approval-required. Owner approval started that native PR run; primary GitHub docs
+confirm GITHUB_TOKEN cannot approve its own workflows. The final workflow reports
+the proposal and its required approval instead of wasting a duplicate dispatch.
