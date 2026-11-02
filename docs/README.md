@@ -14,6 +14,7 @@ La implementación y verificación local están completas (24/24), y `0.1.0` est
 | Probar las78 herramientas con Mealie real en Docker | [E2E local](testing/local-e2e.md) |
 | Variables y credenciales | [Configuración](configuration.md) |
 | Conectar clientes stdio/HTTP | [Clientes](clients.md) |
+| Skills servidos por MCP e instalación manual | [Skills](skills.md) |
 | Proteger el endpoint remoto | [Despliegue HTTP](http-deployment.md) |
 | Construir y ejecutar la imagen | [Contenedores](containers.md) |
 | Publicar amd64/arm64 desde tu máquina, sin Actions | [Publicación local GHCR](publishing-local.md) |

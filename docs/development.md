@@ -37,6 +37,26 @@ uv run python -m tests.e2e.runner
 
 El controlador construye el runtime y crea un proyecto Compose único con Mealie3.29.0 fijado por digest. Ejecuta las78 herramientas y78 rechazos de argumentos por cada combinación stdio/HTTP y MCP2026-07-28/2025-11-25, con Bearer independiente en HTTP. Usa red interna, sin puertos publicados ni credenciales personales, y elimina sus contenedores/volúmenes incluso si fallan las pruebas. La descarga privada por archivo se verifica como rechazo SSRF esperado; las otras77 herramientas requieren operaciones positivas. Consultar el [runbook E2E](testing/local-e2e.md) para requisitos, evidencias, limpieza tras interrupciones y límites.
 
+## Skills portables y extensión MCP
+
+La fuente única está en `skills/mealie/`. Editar allí `SKILL.md` y sus referencias;
+no modificar la copia generada del wheel. La [guía de skills](skills.md) explica
+el consumo remoto y la instalación manual. El proveedor nativo de FastMCP publica
+metadatos, manifiestos SHA-256 y recursos sin consultar Mealie.
+
+Pruebas dirigidas, dentro del Dev Container:
+
+```bash
+uv run --frozen pytest -q tests/contracts/test_skills.py tests/unit/test_skills.py tests/integration/test_skills.py
+uv run --frozen pytest -q tests/containers/test_runtime_skills.py
+```
+
+Construir la imagen runtime antes de las pruebas de contenedor, como en el resto
+de la suite. Estas últimas comparan los archivos instalados con la carpeta manual
+sin montar el código en el runtime. El catálogo y las capturas originales no se
+regeneran por añadir un skill; registrar cambios deliberados de superficie MCP
+en [D12](migration/differences.md#d12-skills-distribuidos-por-mcp-y-como-archivos-portables).
+
 ## Referencia de compatibilidad
 
 Las capturas declarativas originales de tests/fixtures/compatibility, su procedencia y la licencia se conservan y se verifican mediante las pruebas Python. Node no es necesario para desarrollo, tests ni producción. Los runners temporales y sus scripts de captura se retiraron; su versión histórica está identificada en [baseline.md](migration/baseline.md).

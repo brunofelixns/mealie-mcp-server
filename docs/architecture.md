@@ -17,6 +17,7 @@ flowchart LR
 | config.py | Carga explícita, secretos por transporte, TZ, hosts y límites. Sin lecturas de entorno al importar. |
 | cli.py y support/stdio.py | Entrada instalada/módulo, logging seguro, proceso stdio y señales. |
 | server.py | Factory sin red al construir; un AppState y MealieClient por lifespan. |
+| skills.py y skills/mealie/ en la raíz | Proveedor nativo SEP-2640 y fuente única del skill portable; el wheel incluye una copia bajo resources/skills. |
 | auth.py, http.py, health.py | Verificador Bearer, app ASGI, límites32MiB y salud mínima. |
 | tools/* y models/inputs/* | Catálogo, aliases, presencia de campos, validación y adaptación de errores/resultados MCP. |
 | services/* | Matching, resoluciones, batches, colas, snapshots, verificación/restauración y reglas de fecha. |

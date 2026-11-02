@@ -13,6 +13,7 @@ from mealie_mcp_server.auth import PersonalTokenVerifier
 from mealie_mcp_server.config import Settings
 from mealie_mcp_server.mealie.client import MealieClient
 from mealie_mcp_server.prompts import register_prompts
+from mealie_mcp_server.skills import register_skills
 from mealie_mcp_server.tools.registry import register_all_tools
 
 
@@ -51,4 +52,5 @@ def create_server(
     )
     register_all_tools(server)
     register_prompts(server)
+    register_skills(server)
     return server

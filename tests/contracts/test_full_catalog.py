@@ -12,6 +12,7 @@ from tests.support.fake_mealie import FakeMealie
 from tests.support.version import PROJECT_VERSION
 
 FIXTURES = Path(__file__).parents[1] / "fixtures/compatibility"
+SKILL_ROOT = Path(__file__).resolve().parents[2] / "skills/mealie"
 ORIGINAL = json.loads((FIXTURES / "catalog.json").read_text())["tools"]
 DIFFERENCES = json.loads((FIXTURES / "catalog-differences.json").read_text())
 
@@ -48,13 +49,25 @@ async def test_identity_and_native_protocol_capabilities_are_declared(mode):
             capability_key = (
                 "pythonLegacyCapabilities" if mode == "legacy" else "pythonModernCapabilities"
             )
+            # D12 adds Skills without changing the immutable migration baseline.
+            expected_capabilities = copy.deepcopy(DIFFERENCES["D01"][capability_key])
+            if mode == "auto":
+                expected_capabilities["extensions"]["io.modelcontextprotocol/skills"] = {}
             assert (
                 client.server_capabilities.model_dump(
                     mode="json", by_alias=True, exclude_unset=True
                 )
-                == DIFFERENCES["D01"][capability_key]
+                == expected_capabilities
             )
-            assert await client.list_resources() == DIFFERENCES["D01"]["pythonResources"]
+            assert DIFFERENCES["D01"]["pythonResources"] == []
+            expected_resources = {
+                "skill://mealie/" + path.relative_to(SKILL_ROOT).as_posix()
+                for path in SKILL_ROOT.rglob("*")
+                if path.is_file()
+            } | {"skill://mealie/_manifest"}
+            assert {str(resource.uri) for resource in await client.list_resources()} == (
+                expected_resources
+            )
     original = json.loads((FIXTURES / "upstream-manifest.json").read_text())
     assert original["capabilities"] == DIFFERENCES["D01"]["originalLegacyCapabilities"]
     assert original["resources"] == DIFFERENCES["D01"]["originalResources"]

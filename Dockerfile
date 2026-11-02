@@ -34,6 +34,7 @@ COPY pyproject.toml uv.lock ./
 RUN --mount=type=cache,target=/root/.cache/uv,id=uv-runtime-${TARGETARCH} uv sync --frozen --no-dev --no-install-project
 COPY README.md LICENSE ./
 COPY src/mealie_mcp_server ./src/mealie_mcp_server
+COPY skills ./skills
 RUN uv build --wheel --out-dir /dist \
     && uv pip install --python /opt/venv/bin/python --no-deps /dist/*.whl \
     && uv pip check --python /opt/venv/bin/python

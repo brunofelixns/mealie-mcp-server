@@ -40,8 +40,11 @@ mealie-mcp-server = "mealie_mcp_server.cli:main"
 [tool.hatch.build.targets.wheel]
 packages = ["src/mealie_mcp_server"]
 
+[tool.hatch.build.targets.wheel.force-include]
+"skills" = "mealie_mcp_server/resources/skills"
+
 [tool.hatch.build.targets.sdist]
-include = ["src/mealie_mcp_server", "pyproject.toml", "README.md", "LICENSE", "uv.lock"]
+include = ["src/mealie_mcp_server", "skills", "pyproject.toml", "README.md", "LICENSE", "uv.lock"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

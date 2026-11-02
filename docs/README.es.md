@@ -137,6 +137,20 @@ Selecciona `get_recipes` en tu cliente y usa estos argumentos:
 
 Para preparar un menú, selecciona el prompt `weekly-meal-plan` y utiliza `preferences`, por ejemplo: «Cenas vegetarianas para dos, con ingredientes de temporada». Revisa la propuesta antes de guardar el plan.
 
+## Skills por MCP o instalación manual
+
+El skill **`mealie`** guía el mantenimiento de recetas, la planificación y la
+compra. El servidor construido desde este código lo ofrece por la extensión
+oficial `io.modelcontextprotocol/skills`: `skills/list`, `skills/get` y lectura
+de `skill://mealie/SKILL.md` y sus referencias con `resources/read`. La activación
+depende del cliente y de su soporte de la extensión.
+
+También puedes copiar **[`skills/mealie/`](../skills/mealie/SKILL.md)** a la
+carpeta de skills de tu cliente y configurar el MCP por separado. Ambas vías
+usan los mismos archivos. Consulta la **[guía de ambas formas de uso](skills.md)**.
+Hay que reconstruir el servidor para incorporar esta función; la imagen ya
+publicada no se modifica con este cambio de código.
+
 ## Configuración
 
 ### Variables del servidor
@@ -282,6 +296,7 @@ La suite incluye pruebas reales de la imagen runtime: constrúyela primero como 
 | Instalar una imagen de GHCR | [Despliegue Docker](../docker/README.md) |
 | Configurar variables y credenciales | [Configuración](configuration.md) |
 | Conectar tu cliente | [Clientes MCP](clients.md) |
+| Usar skills por MCP o instalarlos manualmente | [Skills de Mealie](skills.md) |
 | Preparar HTTPS, proxy y acceso remoto | [Despliegue HTTP](http-deployment.md) |
 | Construir la imagen o usar secretos de archivo | [Contenedores](containers.md) |
 | Consultar parámetros de cada herramienta | [Referencia MCP](tools.md) |

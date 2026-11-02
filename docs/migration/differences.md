@@ -16,6 +16,7 @@ Referencia: d027e1b4a314d781a322f1f91e37840f01464d77.
 | D09 | Texto de validación de argumentos identifica campo/regla sin copiar entradas | Validación estricta equivalente con JSON Schema/Pydantic; no exponer entradas ni secretos por mensajes del SDK | P06 | Verificada: tests/contracts/test_strict_inputs.py |
 | D10 | `update_shopping_list` y `update_shopping_list_item` leen el registro antes de enviar un PUT completo | Mealie3.29.0 exige identificadores que no son argumentos MCP y aplica valores predeterminados a campos omitidos; conservar identificadores, elementos y campos desconocidos | E2E local | Pruebas unitarias y contratos separados; verificación real registrada en docs/testing/local-e2e.md |
 | D11 | `delete_shopping_list_items_bulk` repite el parámetro `ids` por identificador, sin CSV | Mealie3.29.0 valida cada valor de la query como UUID y rechaza el CSV con422; un lote vacío omite la query y es un no-op del proveedor | E2E local | Pruebas unitarias de serialización y contratos separados; verificación real registrada en docs/testing/local-e2e.md |
+| D12 | Skills portables y extensión oficial `io.modelcontextprotocol/skills` | Distribuir procedimientos con el servidor y permitir instalación manual | Skills | Contratos, transportes e imagen instalada; detalle y límites al final del documento |
 
 ## Regla para añadir una diferencia
 
@@ -34,3 +35,27 @@ El original envía únicamente los campos solicitados en el PUT. El OpenAPI de l
 ## D11: identificadores repetidos en el borrado de compra
 
 El original concatena `itemIds` con comas en una única query `ids`. La API real espera un array de UUID, serializado como `?ids=uuid1&ids=uuid2`, y devuelve422 para el CSV. Python conserva el orden y el valor de cada identificador con pares de query repetidos; mantiene el único DELETE y su respuesta sin reintentos. Para `itemIds=[]` no envía `ids`: el servicio Mealie3.29.0 no borra elementos cuando la lista es vacía/None. Se conservan los fixtures originales, incluidas las formas CSV y vacía, con expectativas Python explícitas y separadas. El caso de un solo identificador y su diferencia D07 para204 no cambian.
+
+## D12: skills distribuidos por MCP y como archivos portables
+
+Petición explícita del usuario del 2026-11-01. Se añade la extensión oficial
+`io.modelcontextprotocol/skills` a las capacidades modernas, con `skills/list`,
+`skills/get` y lectura de `skill://mealie/SKILL.md` y referencias mediante recursos.
+La operación opcional de directorios no se anuncia. `resources/list`, antes vacío,
+incluye ahora los archivos del skill y el recurso auxiliar `_manifest` de FastMCP.
+En la era legacy se añaden únicamente esos recursos; las operaciones de extensión
+se reservan al protocolo moderno. Las lecturas no producen llamadas a Mealie.
+
+Se usa la implementación nativa experimental de FastMCP 4.1.4. La transformación
+que conserva el orden de herramientas se aplica al proveedor local en lugar de
+todo el servidor, porque la extensión rechaza transformaciones globales; los
+contratos siguen comparando las78 herramientas y su orden con el baseline.
+El prompt semanal y las instrucciones originales se conservan byte por byte.
+
+`skills/mealie/` es la fuente única, instalable manualmente y empaquetada en
+wheel/sdist/runtime. La activación y las decisiones del usuario pertenecen al
+cliente. Los fixtures originales no se modifican: el test de capacidades aplica
+explícitamente esta adición sobre la expectativa histórica y verifica el conjunto
+exacto de recursos. `test_skills.py` en contratos, integración y contenedores
+comprueba descubrimiento, lookup directo, hashes, bytes, errores, autenticación
+y uso sin checkout montado. Ver [guía de uso](../skills.md).

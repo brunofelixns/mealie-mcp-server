@@ -2,6 +2,14 @@
 
 El servidor ofrece el mismo catálogo de 78 herramientas y el prompt weekly-meal-plan por stdio y Streamable HTTP. La negociación automática usa 2026-07-28; clientes anteriores pueden negociar 2025-11-25. Las diferencias declaradas están en [el registro de compatibilidad](migration/differences.md).
 
+## Skills del servidor
+
+El servidor construido desde el código actual ofrece el skill `mealie` con
+`io.modelcontextprotocol/skills` en conexiones modernas. Un cliente compatible
+descubre sus archivos con `skills/list/get` y los lee con `resources/read`.
+La instalación manual de `skills/mealie/` permite usarlo con clientes que
+descubren skills locales. Consultar [ambas vías y sus límites](skills.md).
+
 ## Desarrollo local por stdio
 
 Desde el terminal del Dev Container, inyectar MEALIE_BASE_URL y MEALIE_API_KEY (o MEALIE_API_KEY_FILE) y configurar el cliente:

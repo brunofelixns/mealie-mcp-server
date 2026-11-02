@@ -78,4 +78,6 @@ def register_all_tools(server: FastMCP) -> None:
     register_recipe_instructions(server)
     register_recipe_images(server)
     register_ratings_dates(server)
-    server.add_transform(CatalogOrder(tuple(definitions())))
+    # Only the local tools need ordering. Server-wide transforms prevent the
+    # native Skills extension from validating the resources it publishes.
+    server.local_provider.add_transform(CatalogOrder(tuple(definitions())))
