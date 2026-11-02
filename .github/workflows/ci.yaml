@@ -1,6 +1,7 @@
 name: Test and publish runtime
 on:
   push:
+    branches: ['**']
   pull_request:
 permissions:
   contents: read
@@ -8,8 +9,40 @@ concurrency:
   group: ci-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 jobs:
+  prepare:
+    name: Prepare automatic version
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+      revision: ${{ steps.version.outputs.revision }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        with:
+          fetch-depth: 0
+      - name: Prepare version inside the Dev Container
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: devcontainers/ci@513af61f4de4f75d37e4438f184ba4358f0fc1ca # v0.3
+        with:
+          push: never
+          runCmd: uv run --frozen python scripts/ci_version.py prepare --output artifacts/version
+      - name: Read the prepared version
+        id: version
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          jq -r '"version=" + .version, "revision=" + .revision' artifacts/version/release.json >> "$GITHUB_OUTPUT"
+      - name: Retain the prepared version
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: prepared-version
+          path: artifacts/version/
+          if-no-files-found: error
+          retention-days: 1
   checks:
     name: Verify ${{ matrix.arch }}
+    needs: prepare
     timeout-minutes: 45
     strategy:
       fail-fast: false
@@ -22,6 +55,20 @@ jobs:
     runs-on: ${{ matrix.runner }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - name: Download the prepared version
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7
+        with:
+          name: prepared-version
+          path: artifacts/version
+      - name: Restore the exact release commit
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        env:
+          RELEASE_REVISION: ${{ needs.prepare.outputs.revision }}
+        run: |
+          git fetch --no-tags ./artifacts/version/release.bundle HEAD
+          git checkout --detach FETCH_HEAD
+          test "$(git rev-parse HEAD)" = "$RELEASE_REVISION"
       - name: Verify inside the Dev Container
         uses: devcontainers/ci@513af61f4de4f75d37e4438f184ba4358f0fc1ca # v0.3
         with:
@@ -69,14 +116,30 @@ jobs:
           retention-days: 14
   publish:
     name: Publish tested images to GHCR
-    needs: checks
+    needs: [prepare, checks]
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-24.04
     timeout-minutes: 20
     permissions:
-      contents: read
+      contents: write
       packages: write
+    env:
+      RELEASE_VERSION: ${{ needs.prepare.outputs.version }}
+      RELEASE_REVISION: ${{ needs.prepare.outputs.revision }}
     steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          fetch-depth: 0
+      - name: Download the prepared version
+        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7
+        with:
+          name: prepared-version
+          path: artifacts/version
+      - name: Restore the tested release commit
+        run: |
+          git fetch --no-tags ./artifacts/version/release.bundle HEAD
+          git checkout --detach FETCH_HEAD
+          test "$(git rev-parse HEAD)" = "$RELEASE_REVISION"
       - name: Download both tested runtimes
         uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7
         with:
@@ -97,7 +160,12 @@ jobs:
         run: |
           set -euo pipefail
           image="ghcr.io/${GITHUB_REPOSITORY,,}"
-          commit_tag="sha-$GITHUB_SHA"
+          commit_tag="sha-$RELEASE_REVISION"
+          test "$(git rev-parse HEAD)" = "$RELEASE_REVISION"
+          remote_main=$(git ls-remote --exit-code origin refs/heads/main | cut -f1)
+          test "$remote_main" = "$GITHUB_SHA" || test "$remote_main" = "$RELEASE_REVISION"
+          remote_tag=$(git ls-remote origin "refs/tags/v$RELEASE_VERSION" | cut -f1)
+          test -z "$remote_tag" || test "$remote_tag" = "$RELEASE_REVISION"
           for arch in amd64 arm64; do
             docker image load --input "artifacts/images/runtime-$arch.tar"
             expected_id=$(cat "artifacts/images/runtime-$arch.id")
@@ -120,7 +188,28 @@ jobs:
           test "$actual" = "$expected"
           digest=$(docker buildx imagetools inspect "$image:$commit_tag" --format '{{.Manifest.Digest}}')
           [[ "$digest" =~ ^sha256:[0-9a-f]{64}$ ]]
+          if existing=$(docker buildx imagetools inspect "$image:$RELEASE_VERSION" --format '{{.Manifest.Digest}}' 2> artifacts/version-tag-inspect.log); then
+            test "$existing" = "$digest"
+          else
+            grep -Fq "$image:$RELEASE_VERSION: not found" artifacts/version-tag-inspect.log || grep -Eq 'manifest unknown(:|$)' artifacts/version-tag-inspect.log
+          fi
+          if git show-ref --verify --quiet "refs/tags/v$RELEASE_VERSION"; then
+            test "$(git rev-parse "refs/tags/v$RELEASE_VERSION")" = "$RELEASE_REVISION"
+          else
+            git tag "v$RELEASE_VERSION" "$RELEASE_REVISION"
+          fi
+          git push --atomic origin "$RELEASE_REVISION:refs/heads/main" "refs/tags/v$RELEASE_VERSION"
+          docker buildx imagetools create --tag "$image:$RELEASE_VERSION" "$image@$digest"
+          version_digest=$(docker buildx imagetools inspect "$image:$RELEASE_VERSION" --format '{{.Manifest.Digest}}')
+          test "$version_digest" = "$digest"
           docker buildx imagetools create --tag "$image:latest" "$image@$digest"
           latest=$(docker buildx imagetools inspect "$image:latest" --format '{{.Manifest.Digest}}')
           test "$latest" = "$digest"
-          printf '### Published image\n\n`%s:%s`\n\n`%s:latest`\n\nDigest: `%s`\n' "$image" "$commit_tag" "$image" "$digest" >> "$GITHUB_STEP_SUMMARY"
+          printf '### Published version %s\n\n`%s:%s`\n\n`%s:%s`\n\n`%s:latest`\n\nDigest: `%s`\n' "$RELEASE_VERSION" "$image" "$RELEASE_VERSION" "$image" "$commit_tag" "$image" "$digest" >> "$GITHUB_STEP_SUMMARY"
+      - name: Create the GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if ! gh release view "v$RELEASE_VERSION" --repo "$GITHUB_REPOSITORY" > /dev/null 2>&1; then
+            gh release create "v$RELEASE_VERSION" --repo "$GITHUB_REPOSITORY" --verify-tag --title "v$RELEASE_VERSION" --notes-file artifacts/version/notes.md --latest
+          fi

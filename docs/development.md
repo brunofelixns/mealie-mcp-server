@@ -9,6 +9,10 @@ PyICU2.17 e ICU72.1 reproducen la ordenación de la referencia. Development incl
 La feature docker-outside-of-docker permite ejecutar las pruebas de contenedor.
 La [publicación automática](ci.md) se realiza en GitHub Actions con su token
 temporal; el entorno de desarrollo no necesita credenciales de publicación.
+El CI también incrementa la versión, sincroniza paquete/lock/imagen/documentación
+y crea el commit y tag de release después de los tests. No editar la versión a
+mano; usar los mensajes de commit descritos en [CI](ci.md#versión-automática).
+Después de publicar, ejecutar `git pull --ff-only` antes del siguiente push.
 
 ## Comprobaciones
 
