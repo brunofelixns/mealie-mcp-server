@@ -74,9 +74,11 @@ La API key y el Bearer deben ser distintos. Genera el Bearer con al menos 32 byt
 > El servicio HTTP se publica en `127.0.0.1:8000`. Para conectarte desde fuera del host, configura un proxy HTTPS hacia ese puerto y conserva el streaming de MCP. [Ejemplo de proxy](http-deployment.md#tls-y-proxy).
 
 Cada push y pull request ejecuta CI en runners amd64 y arm64 nativos. Los pushes
-a `main` incrementan automáticamente la versión y publican las imágenes verificadas
-como `X.Y.Z`, `latest` y `sha-<commit-de-versión>`, con tag Git y GitHub Release.
-Los breaking changes suben major, `feat`/`fix` suben minor y el resto sube patch.
+a `main` llegan mediante PR y actualizan una única PR de release con la siguiente
+versión y las notas acumuladas. Fusionar esa PR cuando se quiera publicar: tras
+los checks nativos, el CI publica `X.Y.Z`, `latest` y `sha-<commit-fusionado>` en
+GHCR, con tag Git y GitHub Release. Los breaking changes suben major,
+`feat`/`fix` suben minor y el resto sube patch.
 Consulta [CI y publicación automática](ci.md).
 
 ### Usar stdio

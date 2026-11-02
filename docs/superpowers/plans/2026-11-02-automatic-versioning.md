@@ -1,74 +1,49 @@
-# Automatic versioning implementation plan
+# Release PR implementation plan
 
-> **For agentic workers:** Use superpowers:executing-plans to implement this plan task-by-task.
+> **For agentic workers:** Use superpowers:executing-plans for implementation.
 
-**Goal:** Automatically publish a tested semantic version on each main push.
+**Goal:** Protected main, accumulated release proposal, automatic tested GHCR
+publication when the user merges the release PR.
 
-**Architecture:** Prepare a deterministic release commit and transfer it as a Git
-bundle. Test that exact tree on both native runners; publish its images, Git tag,
-source version commit and GitHub Release only after those checks pass.
+**Architecture:** Python prepares a proposal on a reserved branch. Native checks
+gate every PR and final publication. No CI job writes commits directly to main.
 
-**Tech Stack:** Python standard library, uv, Git, GitHub Actions, Docker Buildx.
+**Tech Stack:** Python/uv in Dev Container; Git, gh, jq, Docker and GitHub Actions.
 
 **Spec:** [Design](../specs/2026-11-02-automatic-versioning-design.md).
 
-## Global constraints
+## Global constraints and review focus
 
-- Python/tests/builds run in the Linux Dev Container.
-- major for breaking changes, minor for feat/fix, patch for other commits.
-- No changes to compatibility baselines, Node runtime or local publishing tools.
-- No forced branch/tag updates; main and Git tag are pushed atomically.
+- No Node, local publishing scripts or changes to immutable fixtures.
+- Major for breaking changes, minor for feat/fix, patch otherwise.
+- Both native checks required, including admins; zero extra approvals for solo use.
+- No stale proposal overwrites, CI skip directives, recursive releases or main pushes.
+- Dispatch bot-created PR checks explicitly; preserve immutable version tags.
 
-## Review focus
+## Tasks
 
-- Multiple commits and breaking footers choose the highest increment.
-- Old upstream tags do not select the Python version.
-- Reruns produce the same release commit and do not bump twice.
-- Concurrent main changes and conflicting tags prevent promotion.
-- Both native runners use the prepared tree; a failed gate cannot publish.
-
-### Task 1: Release preparation
-
-**Files:** `.release.json`, `scripts/ci_version.py`, `tests/unit/test_ci_version.py`.
-
-**Interfaces:** `next_version(current, messages)`; CLI `prepare --output PATH`
-creates `release.bundle`, `release.json`, `notes.md`. Metadata carries source,
-revision, version and tag. Default operation never pushes.
-
-- [x] Write and observe failing semantic-version and real-Git preparation tests.
-- [x] Implement parsing, stamping, deterministic commit/bundle, notes and anchor.
-- [x] Verify version/lock/labels/docs agreement, bundle restoration and rerun SHA.
-
-### Task 2: CI integration
-
-**Files:** `.github/workflows/ci.yaml`, `tests/unit/test_ci_workflow.py`.
-
-**Interfaces:** prepare job outputs version/revision; both checks and publish
-restore `release.bundle`. Publish consumes exact tested image IDs.
-
-- [x] Add failing gate, version promotion and real-Git publication tests.
-- [x] Add prepare/restore, atomic Git publication, version Docker tag and Release.
-- [x] Verify success and refusal paths without remote writes in tests.
-
-### Task 3: Delivery
-
-**Files:** `docs/ci.md`, README guides and development guide.
-
-- [x] Document increments, source sync, tags, recovery and token behavior.
-- [ ] Run Ruff, mypy, full pytest/coverage, compatibility, docs check, uv build,
-  actionlint and real disposable Mealie E2E in the Dev Container.
-- [ ] Review, commit, push; verify actual native CI, Git version/tag, Release,
-  public GHCR versions/digests and anonymous runtime startup.
+- [x] Reuse and test version preparation, bundle reproducibility and aligned files.
+- [x] Anchor after a squash release rather than incrementing from its own merge.
+- [x] Identify only owned merged release PRs as publication triggers.
+- [x] Maintain one release PR, serializing updates and dispatching its native checks.
+- [x] Publish exact tested images and only a Git tag, with main protected.
+- [x] Review independently and fix CI skip and stale proposal race findings.
+- [x] Verify local directed tests, lint/types/docs and actionlint (37 directed cases;
+  the revised complete suite is also required on the implementation PR).
+- [x] Apply/verify main protection and permission to create automated PRs.
+- [ ] Deliver implementation through a checked PR, then verify the automatic release
+  PR exists and its checks are green. Leave its merge to the user.
 
 ## Execution record
 
-Ruling: continue in the existing clean workspace with a task branch. The shared
-Dev Container is already bound here and remote delivery on main is authorized.
-The pre-existing published Python source d9cccee is the bootstrap anchor.
+The initial direct-main design was committed as 23faf2d. Its run 41443352034 was
+cancelled before publication when the user requested the PR-based workflow. Main
+remained at 23faf2d; Python/GHCR version stayed 0.1.0. That earlier local suite
+passed 1005 tests, compatibility 78/78, coverage 96.01%/87.56%, and disposable
+Mealie E2E, but is not evidence of the revised hosted PR workflow.
 
-Local directed checks: 23 passed. These execute the actual publisher Bash against
-real bare Git repositories and a Docker boundary fake, including a main update
-between preflight and atomic push. A clean shallow clone restores the bundle;
-repeated preparation produces the identical commit. Ruff and actionlint passed.
-Independent review: no blocking bugs found; remaining proof is the hosted run
-and actual GitHub/GHCR publication, which local tests cannot establish.
+Review found and tests reproduced that skip-ci proposal commits could suppress
+publication after merging; removed skip directives. Proposal jobs now serialize
+with a repository-wide group to prevent an old run replacing a newer proposal.
+The reviewer confirmed both fixes. Final verification must use actual GitHub PRs,
+required checks, branch settings and the bot-created release proposal.

@@ -76,10 +76,11 @@ Use different values for the Mealie API key and MCP Bearer token. Generate the B
 > HTTP binds to `127.0.0.1:8000`. For access from another machine, place an HTTPS reverse proxy in front of the service and preserve MCP streaming. See the [proxy example](docs/http-deployment.md#tls-y-proxy).
 
 Every push and pull request runs CI on native amd64 and arm64 runners. Successful
-pushes to `main` automatically increment the semantic version and publish the tested
-images to GHCR as `X.Y.Z`, `latest`, and `sha-<release-commit>`, with a Git tag and
-GitHub Release. Breaking changes increment major, `feat`/`fix` increment minor,
-and other commits increment patch.
+changes reach protected `main` through PRs. CI maintains one release PR with the
+next semantic version and accumulated notes. Merge that PR when ready to publish;
+after both native checks pass, CI publishes `X.Y.Z`, `latest`, and `sha-<merge-commit>`
+to GHCR, with a Git tag and GitHub Release. Breaking changes increment major,
+`feat`/`fix` increment minor, and other commits increment patch.
 See [CI and automatic publication](docs/ci.md).
 
 ### Run over stdio

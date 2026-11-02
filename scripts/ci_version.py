@@ -10,7 +10,7 @@ import tomllib
 from pathlib import Path
 
 SEMVER = r"(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)"
-RELEASE_SUBJECT = re.compile(rf"chore\(release\): {SEMVER} \[skip ci\]")
+RELEASE_SUBJECT = re.compile(rf"chore\(release\): {SEMVER}(?: \[skip ci\])?")
 VERSION_FILES = ("pyproject.toml", "uv.lock", "Dockerfile", "README.md", "docs/README.es.md")
 
 
@@ -47,10 +47,14 @@ def prepare(root: Path, output: Path) -> dict[str, str]:
         raise ValueError("Version preparation requires a clean checkout")
     source = git(root, "rev-parse", "HEAD")
     state_path = root / ".release.json"
-    base = json.loads(state_path.read_text())["base_revision"]
+    state = json.loads(state_path.read_text())
+    base = state["base_revision"]
     if not re.fullmatch(r"[0-9a-f]{40}", base):
         raise ValueError("Invalid release anchor")
     git(root, "merge-base", "--is-ancestor", base, source)
+    if "version" in state:
+        # The merged release PR is the anchor, including squash/merge metadata.
+        base = git(root, "log", "--first-parent", "-1", "--format=%H", "--", ".release.json")
     commits = git(root, "rev-list", "--reverse", f"{base}..{source}").splitlines()
     messages = [git(root, "show", "-s", "--format=%B", revision) for revision in commits]
     changes = [
@@ -90,7 +94,9 @@ def prepare(root: Path, output: Path) -> dict[str, str]:
     for path, content in contents.items():
         path.write_text(content)
     subprocess.run([sys.executable, str(root / "scripts/generate_docs.py")], check=True)
-    state_path.write_text(json.dumps({"base_revision": source}, indent=2) + "\n")
+    state_path.write_text(
+        json.dumps({"base_revision": source, "version": version}, indent=2) + "\n"
+    )
     git(root, "add", "--", *VERSION_FILES, ".release.json")
     timestamp = git(root, "show", "-s", "--format=%ct", source)
     environment = dict(os.environ)
@@ -106,7 +112,7 @@ def prepare(root: Path, output: Path) -> dict[str, str]:
         "core.hooksPath=/dev/null",
         "commit",
         "-qm",
-        f"chore(release): {version} [skip ci]",
+        f"chore(release): {version}",
         env=environment,
     )
     revision = git(root, "rev-parse", "HEAD")
@@ -117,7 +123,8 @@ def prepare(root: Path, output: Path) -> dict[str, str]:
     (output / "notes.md").write_text(
         f"# {tag}\n\n"
         + "\n".join(f"- {message.splitlines()[0]} ({sha[:12]})" for sha, message in changes)
-        + f"\n\nSource: `{source}`\n\nTested release commit: `{revision}`\n"
+        + f"\n\nSource: `{source}`\n\nRelease PR commit: `{revision}`\n"
+        + "\nMerge this PR to release after the required checks pass.\n"
     )
     return metadata
 

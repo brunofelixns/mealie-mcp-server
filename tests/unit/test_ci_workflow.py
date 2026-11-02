@@ -15,8 +15,8 @@ def workflow():
 
 def test_only_main_pushes_publish_after_all_native_checks():
     config = workflow()
-    assert set(config["on"]) == {"push", "pull_request"}
-    assert config["permissions"] == {"contents": "read"}
+    assert set(config["on"]) == {"push", "pull_request", "workflow_dispatch"}
+    assert config["permissions"] == {"contents": "read", "pull-requests": "read"}
     checks = config["jobs"]["checks"]
     assert checks["strategy"]["fail-fast"] == "false"
     assert checks["strategy"]["matrix"]["include"] == [
@@ -24,13 +24,22 @@ def test_only_main_pushes_publish_after_all_native_checks():
         {"runner": "ubuntu-24.04-arm", "arch": "arm64"},
     ]
     publish = config["jobs"]["publish"]
-    assert publish["needs"] == ["prepare", "checks"]
-    assert publish["if"] == "github.event_name == 'push' && github.ref == 'refs/heads/main'"
-    assert publish["permissions"] == {"contents": "write", "packages": "write"}
-    assert checks["needs"] == "prepare"
-    prepare = config["jobs"]["prepare"]
-    assert "permissions" not in prepare
-    assert prepare["outputs"]["revision"] == "${{ steps.version.outputs.revision }}"
+    assert publish["needs"] == ["release_status", "checks"]
+    assert "needs.release_status.outputs.number != ''" in publish["if"]
+    assert "github.event_name == 'push' && github.ref == 'refs/heads/main'" in publish["if"]
+    assert publish["permissions"] == {
+        "contents": "write",
+        "packages": "write",
+        "pull-requests": "write",
+    }
+    release_pr = config["jobs"]["release_pr"]
+    assert release_pr["needs"] == ["release_status", "checks"]
+    assert "needs.release_status.outputs.number == ''" in release_pr["if"]
+    assert release_pr["permissions"] == {
+        "contents": "write",
+        "pull-requests": "write",
+        "actions": "write",
+    }
     assert not (ROOT / ".github/workflows/release.yaml").exists()
 
 
@@ -89,13 +98,22 @@ elif args[0] == "tag" or args[:3] == ["buildx", "imagetools", "create"]:
         if defect == "version-promote":
             sys.exit(1)
         (state / "version-published").touch()
-    elif defect == "git-late-race" and args[:3] == ["buildx", "imagetools", "create"]:
+    elif (defect == "git-late-race" and not (state / "main-advanced").exists()
+          and args[:3] == ["buildx", "imagetools", "create"]):
         source = os.environ["GITHUB_SHA"]
         tree = subprocess.check_output(["git", "rev-parse", source + "^{tree}"], text=True).strip()
         concurrent = subprocess.check_output(
             ["git", "commit-tree", tree, "-p", source, "-m", "docs: concurrent"], text=True,
         ).strip()
-        subprocess.run(["git", "push", "-q", "origin", concurrent + ":refs/heads/main"], check=True)
+        remote = subprocess.check_output(["git", "remote", "get-url", "origin"], text=True).strip()
+        subprocess.run(
+            ["git", "push", "-q", "origin", concurrent + ":refs/heads/fixture-concurrent"],
+            check=True,
+        )
+        subprocess.run(
+            ["git", "--git-dir", remote, "update-ref", "refs/heads/main", concurrent], check=True,
+        )
+        (state / "main-advanced").touch()
 else:
     raise SystemExit("Unexpected Docker operation: " + repr(args))
 """
@@ -117,6 +135,7 @@ else:
         "git-late-race",
         "version-promote",
         "version-verification",
+        "newer-release",
     ],
 )
 def test_publisher_uses_verified_artifacts_and_never_promotes_a_failed_release(tmp_path, defect):
@@ -150,6 +169,7 @@ def test_publisher_uses_verified_artifacts_and_never_promotes_a_failed_release(t
     (tmp_path / "source.txt").write_text("release")
     git("commit", "-qam", "chore(release): 0.2.0 [skip ci]")
     revision = git("rev-parse", "HEAD")
+    git("push", "-q", "origin", "HEAD:refs/heads/main")
     if defect == "git-tag":
         git("tag", "v0.2.0", source)
         git("push", "-q", "origin", "refs/tags/v0.2.0")
@@ -166,6 +186,17 @@ def test_publisher_uses_verified_artifacts_and_never_promotes_a_failed_release(t
         subprocess.run(["git", "-C", str(other), "add", "."], check=True)
         subprocess.run(["git", "-C", str(other), "commit", "-qm", "docs: concurrent"], check=True)
         subprocess.run(["git", "-C", str(other), "push", "-q"], check=True)
+    elif defect == "newer-release":
+        git("tag", "v0.3.0", source)
+        git("push", "-q", "origin", "refs/tags/v0.3.0")
+    # A protected main rejects every raw push, including a no-op update.
+    hook = remote / "hooks/pre-receive"
+    hook.write_text(
+        "#!/bin/sh\nwhile read old new ref; do\n"
+        '  if [ "$ref" = refs/heads/main ]; then exit 1; fi\ndone\n'
+    )
+    hook.chmod(0o755)
+    main_before = git("ls-remote", "origin", "refs/heads/main").split()[0]
     result = subprocess.run(
         ["bash", "-euo", "pipefail", "-c", script],
         cwd=tmp_path,
@@ -175,10 +206,11 @@ def test_publisher_uses_verified_artifacts_and_never_promotes_a_failed_release(t
             "FAKE_STATE": str(tmp_path),
             "DEFECT": defect,
             "GITHUB_REPOSITORY": "brunofelixns/mealie-mcp-server",
-            "GITHUB_SHA": source,
+            "GITHUB_SHA": revision,
             "RELEASE_REVISION": revision,
             "RELEASE_VERSION": "0.2.0",
             "GITHUB_STEP_SUMMARY": str(tmp_path / "summary.md"),
+            "GITHUB_OUTPUT": str(tmp_path / "output.txt"),
         },
         capture_output=True,
         text=True,
@@ -187,22 +219,24 @@ def test_publisher_uses_verified_artifacts_and_never_promotes_a_failed_release(t
     commands = [json.loads(line) for line in log.read_text().splitlines()] if log.exists() else []
     creates = [command for command in commands if command[:3] == ["buildx", "imagetools", "create"]]
     assert not any(command[:2] == ["buildx", "build"] for command in commands)
-    if defect:
+    succeeds = defect in {"", "git-race", "git-late-race", "newer-release"}
+    if not succeeds:
         assert result.returncode != 0
         assert not any(any(value.endswith(":latest") for value in command) for command in creates)
         if defect in {"identity", "platform"}:
             assert not any(command[0] == "push" for command in commands)
         if defect == "git-tag":
             assert git("ls-remote", "origin", "refs/tags/v0.2.0").split()[0] == source
-        persisted = git("ls-remote", "origin", "refs/heads/main").split()[0] == revision
-        assert persisted == (defect in {"version-promote", "version-verification"})
+        assert git("ls-remote", "origin", "refs/heads/main").split()[0] == main_before
     else:
         assert result.returncode == 0, result.stderr
         assert len([command for command in commands if command[0] == "push"]) == 2
-        assert len(creates) == 3
-        assert any(value.endswith(":latest") for value in creates[-1])
+        assert len(creates) == (2 if defect == "newer-release" else 3)
+        promoted = any(any(value.endswith(":latest") for value in command) for command in creates)
+        assert promoted == (defect != "newer-release")
         assert "sha-" + revision in (tmp_path / "summary.md").read_text()
-        assert git("ls-remote", "origin", "refs/heads/main").split()[0] == revision
+        if defect != "git-late-race":
+            assert git("ls-remote", "origin", "refs/heads/main").split()[0] == main_before
         assert git("ls-remote", "origin", "refs/tags/v0.2.0").split()[0] == revision
         # Repeating the publisher must not create a new source version/tag.
         rerun = subprocess.run(
@@ -213,10 +247,11 @@ def test_publisher_uses_verified_artifacts_and_never_promotes_a_failed_release(t
                 "PATH": str(binary) + os.pathsep + os.environ["PATH"],
                 "FAKE_STATE": str(tmp_path),
                 "GITHUB_REPOSITORY": "brunofelixns/mealie-mcp-server",
-                "GITHUB_SHA": source,
+                "GITHUB_SHA": revision,
                 "RELEASE_REVISION": revision,
                 "RELEASE_VERSION": "0.2.0",
                 "GITHUB_STEP_SUMMARY": str(tmp_path / "summary.md"),
+                "GITHUB_OUTPUT": str(tmp_path / "output.txt"),
             },
             capture_output=True,
             text=True,

@@ -3,46 +3,33 @@ on:
   push:
     branches: ['**']
   pull_request:
+  workflow_dispatch:
 permissions:
   contents: read
+  pull-requests: read
 concurrency:
-  group: ci-${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+  group: ci-${{ github.workflow }}-${{ github.ref }}-${{ github.event_name == 'push' && github.ref == 'refs/heads/main' && github.sha || '' }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 jobs:
-  prepare:
-    name: Prepare automatic version
+  release_status:
+    name: Identify merged release PR
     runs-on: ubuntu-24.04
-    timeout-minutes: 20
+    timeout-minutes: 5
     outputs:
-      version: ${{ steps.version.outputs.version }}
-      revision: ${{ steps.version.outputs.revision }}
+      number: ${{ steps.release.outputs.number }}
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - name: Identify a release PR merged by this push
+        id: release
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-        with:
-          fetch-depth: 0
-      - name: Prepare version inside the Dev Container
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-        uses: devcontainers/ci@513af61f4de4f75d37e4438f184ba4358f0fc1ca # v0.3
-        with:
-          push: never
-          runCmd: uv run --frozen python scripts/ci_version.py prepare --output artifacts/version
-      - name: Read the prepared version
-        id: version
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
-          jq -r '"version=" + .version, "revision=" + .revision' artifacts/version/release.json >> "$GITHUB_OUTPUT"
-      - name: Retain the prepared version
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
-        with:
-          name: prepared-version
-          path: artifacts/version/
-          if-no-files-found: error
-          retention-days: 1
+          set -euo pipefail
+          number=$(gh api "repos/$GITHUB_REPOSITORY/commits/$GITHUB_SHA/pulls" | jq -r --arg sha "$GITHUB_SHA" --arg repo "$GITHUB_REPOSITORY" '.[] | select(.merged_at != null and .merge_commit_sha == $sha and .base.ref == "main" and .head.ref == "codex/release-main" and .head.repo.full_name == $repo) | .number')
+          test "$(printf '%s' "$number" | wc -l)" -eq 0
+          printf 'number=%s\n' "$number" >> "$GITHUB_OUTPUT"
   checks:
     name: Verify ${{ matrix.arch }}
-    needs: prepare
     timeout-minutes: 45
     strategy:
       fail-fast: false
@@ -55,20 +42,6 @@ jobs:
     runs-on: ${{ matrix.runner }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
-      - name: Download the prepared version
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7
-        with:
-          name: prepared-version
-          path: artifacts/version
-      - name: Restore the exact release commit
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-        env:
-          RELEASE_REVISION: ${{ needs.prepare.outputs.revision }}
-        run: |
-          git fetch --no-tags ./artifacts/version/release.bundle HEAD
-          git checkout --detach FETCH_HEAD
-          test "$(git rev-parse HEAD)" = "$RELEASE_REVISION"
       - name: Verify inside the Dev Container
         uses: devcontainers/ci@513af61f4de4f75d37e4438f184ba4358f0fc1ca # v0.3
         with:
@@ -88,6 +61,7 @@ jobs:
             uv run python -m tests.e2e.runner --image mealie-mcp-server:local --no-build > artifacts/mealie-integration.log 2>&1
             uv run python scripts/scan_runtime.py mealie-mcp-server:local --platform linux/${{ matrix.arch }} --output artifacts/runtime-security.json --enforce
             uv build
+            uv run python -c 'import json,pathlib,subprocess,tomllib; print(json.dumps({"version":tomllib.loads(pathlib.Path("pyproject.toml").read_text())["project"]["version"],"revision":subprocess.check_output(["git","rev-parse","HEAD"],text=True).strip()}))' > artifacts/runtime-${{ matrix.arch }}.json
             docker image inspect --format '{{.Id}}' mealie-mcp-server:local > artifacts/runtime-${{ matrix.arch }}.id
             docker image save --output artifacts/runtime-${{ matrix.arch }}.tar mealie-mcp-server:local
       - name: Retain the exact tested image
@@ -98,6 +72,7 @@ jobs:
           path: |
             artifacts/runtime-${{ matrix.arch }}.tar
             artifacts/runtime-${{ matrix.arch }}.id
+            artifacts/runtime-${{ matrix.arch }}.json
           if-no-files-found: error
           compression-level: 1
           retention-days: 1
@@ -114,38 +89,91 @@ jobs:
             artifacts/e2e/**
             dist/*.whl
           retention-days: 14
-  publish:
-    name: Publish tested images to GHCR
-    needs: [prepare, checks]
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+  release_pr:
+    name: Update release PR
+    needs: [release_status, checks]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && needs.release_status.outputs.number == ''
     runs-on: ubuntu-24.04
     timeout-minutes: 20
+    concurrency:
+      group: release-pr-${{ github.repository }}
+      cancel-in-progress: false
     permissions:
       contents: write
-      packages: write
-    env:
-      RELEASE_VERSION: ${{ needs.prepare.outputs.version }}
-      RELEASE_REVISION: ${{ needs.prepare.outputs.revision }}
+      pull-requests: write
+      actions: write
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           fetch-depth: 0
-      - name: Download the prepared version
-        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7
+      - name: Prepare version inside the Dev Container
+        uses: devcontainers/ci@513af61f4de4f75d37e4438f184ba4358f0fc1ca # v0.3
         with:
-          name: prepared-version
-          path: artifacts/version
-      - name: Restore the tested release commit
+          push: never
+          runCmd: uv run --frozen python scripts/ci_version.py prepare --output artifacts/version
+      - name: Create or update the accumulated release PR
+        id: release_pr
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
-          git fetch --no-tags ./artifacts/version/release.bundle HEAD
-          git checkout --detach FETCH_HEAD
-          test "$(git rev-parse HEAD)" = "$RELEASE_REVISION"
+          set -euo pipefail
+          branch=codex/release-main
+          test "$(git rev-parse HEAD^)" = "$GITHUB_SHA"
+          current=$(git ls-remote --exit-code origin refs/heads/main | cut -f1)
+          if test "$current" != "$GITHUB_SHA"; then
+            echo 'A newer main push will update the release PR.'
+            exit 0
+          fi
+          previous=$(git ls-remote origin "refs/heads/$branch" | cut -f1)
+          git push --force-with-lease="refs/heads/$branch:$previous" origin "HEAD:refs/heads/$branch"
+          version=$(jq -r .version artifacts/version/release.json)
+          number=$(gh pr list --repo "$GITHUB_REPOSITORY" --state open --base main --head "$branch" --json number --jq '.[0].number // empty')
+          if test -n "$number"; then
+            gh pr edit "$number" --repo "$GITHUB_REPOSITORY" --title "chore(release): $version" --body-file artifacts/version/notes.md
+          else
+            gh pr create --repo "$GITHUB_REPOSITORY" --base main --head "$branch" --title "chore(release): $version" --body-file artifacts/version/notes.md
+          fi
+          gh workflow run ci.yaml --repo "$GITHUB_REPOSITORY" --ref "$branch"
+      - name: Retain release proposal
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: release-proposal
+          path: artifacts/version/
+          retention-days: 14
+  publish:
+    name: Publish tested images to GHCR
+    needs: [release_status, checks]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && needs.release_status.outputs.number != ''
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    concurrency:
+      group: publish-${{ github.repository }}
+      cancel-in-progress: false
+    permissions:
+      contents: write
+      packages: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          fetch-depth: 0
       - name: Download both tested runtimes
         uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7
         with:
           pattern: tested-runtime-*
           path: artifacts/images
           merge-multiple: true
+      - name: Read the tested version
+        id: version
+        run: |
+          version=$(jq -r .version artifacts/images/runtime-amd64.json)
+          test "$version" = "$(jq -r .version artifacts/images/runtime-arm64.json)"
+          for arch in amd64 arm64; do
+            test "$(jq -r .revision "artifacts/images/runtime-$arch.json")" = "$GITHUB_SHA"
+          done
+          [[ "$version" =~ ^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$ ]]
+          printf 'version=%s\n' "$version" >> "$GITHUB_OUTPUT"
       - name: Set up Buildx
         uses: docker/setup-buildx-action@8d2750c68a42422c14e847fe6c8ac0403b4cbd6f # v3
       - name: Authenticate to GHCR
@@ -156,16 +184,16 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Publish and verify the tested multi-platform image
         id: publish
+        env:
+          RELEASE_VERSION: ${{ steps.version.outputs.version }}
         shell: bash
         run: |
           set -euo pipefail
           image="ghcr.io/${GITHUB_REPOSITORY,,}"
-          commit_tag="sha-$RELEASE_REVISION"
-          test "$(git rev-parse HEAD)" = "$RELEASE_REVISION"
-          remote_main=$(git ls-remote --exit-code origin refs/heads/main | cut -f1)
-          test "$remote_main" = "$GITHUB_SHA" || test "$remote_main" = "$RELEASE_REVISION"
+          commit_tag="sha-$GITHUB_SHA"
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
           remote_tag=$(git ls-remote origin "refs/tags/v$RELEASE_VERSION" | cut -f1)
-          test -z "$remote_tag" || test "$remote_tag" = "$RELEASE_REVISION"
+          test -z "$remote_tag" || test "$remote_tag" = "$GITHUB_SHA"
           for arch in amd64 arm64; do
             docker image load --input "artifacts/images/runtime-$arch.tar"
             expected_id=$(cat "artifacts/images/runtime-$arch.id")
@@ -194,22 +222,30 @@ jobs:
             grep -Fq "$image:$RELEASE_VERSION: not found" artifacts/version-tag-inspect.log || grep -Eq 'manifest unknown(:|$)' artifacts/version-tag-inspect.log
           fi
           if git show-ref --verify --quiet "refs/tags/v$RELEASE_VERSION"; then
-            test "$(git rev-parse "refs/tags/v$RELEASE_VERSION")" = "$RELEASE_REVISION"
+            test "$(git rev-parse "refs/tags/v$RELEASE_VERSION")" = "$GITHUB_SHA"
           else
-            git tag "v$RELEASE_VERSION" "$RELEASE_REVISION"
+            git tag "v$RELEASE_VERSION" "$GITHUB_SHA"
           fi
-          git push --atomic origin "$RELEASE_REVISION:refs/heads/main" "refs/tags/v$RELEASE_VERSION"
+          git push origin "refs/tags/v$RELEASE_VERSION"
           docker buildx imagetools create --tag "$image:$RELEASE_VERSION" "$image@$digest"
-          version_digest=$(docker buildx imagetools inspect "$image:$RELEASE_VERSION" --format '{{.Manifest.Digest}}')
-          test "$version_digest" = "$digest"
-          docker buildx imagetools create --tag "$image:latest" "$image@$digest"
-          latest=$(docker buildx imagetools inspect "$image:latest" --format '{{.Manifest.Digest}}')
-          test "$latest" = "$digest"
-          printf '### Published version %s\n\n`%s:%s`\n\n`%s:%s`\n\n`%s:latest`\n\nDigest: `%s`\n' "$RELEASE_VERSION" "$image" "$RELEASE_VERSION" "$image" "$commit_tag" "$image" "$digest" >> "$GITHUB_STEP_SUMMARY"
+          test "$(docker buildx imagetools inspect "$image:$RELEASE_VERSION" --format '{{.Manifest.Digest}}')" = "$digest"
+          highest=$(git ls-remote --tags origin 'refs/tags/v*' | cut -f2 | sed -nE 's#^refs/tags/v([0-9]+\.[0-9]+\.[0-9]+)$#\1#p' | sort -V | tail -1)
+          latest=false
+          if test "$highest" = "$RELEASE_VERSION"; then
+            docker buildx imagetools create --tag "$image:latest" "$image@$digest"
+            test "$(docker buildx imagetools inspect "$image:latest" --format '{{.Manifest.Digest}}')" = "$digest"
+            latest=true
+          fi
+          printf 'latest=%s\n' "$latest" >> "$GITHUB_OUTPUT"
+          printf '### Published version %s\n\n`%s:%s`\n\n`%s:%s`\n\nDigest: `%s`\n' "$RELEASE_VERSION" "$image" "$RELEASE_VERSION" "$image" "$commit_tag" "$digest" >> "$GITHUB_STEP_SUMMARY"
       - name: Create the GitHub Release
         env:
           GH_TOKEN: ${{ github.token }}
+          RELEASE_VERSION: ${{ steps.version.outputs.version }}
+          RELEASE_NUMBER: ${{ needs.release_status.outputs.number }}
+          IS_LATEST: ${{ steps.publish.outputs.latest }}
         run: |
+          gh pr view "$RELEASE_NUMBER" --repo "$GITHUB_REPOSITORY" --json body --jq .body > artifacts/release-notes.md
           if ! gh release view "v$RELEASE_VERSION" --repo "$GITHUB_REPOSITORY" > /dev/null 2>&1; then
-            gh release create "v$RELEASE_VERSION" --repo "$GITHUB_REPOSITORY" --verify-tag --title "v$RELEASE_VERSION" --notes-file artifacts/version/notes.md --latest
+            gh release create "v$RELEASE_VERSION" --repo "$GITHUB_REPOSITORY" --verify-tag --title "v$RELEASE_VERSION" --notes-file artifacts/release-notes.md --latest="$IS_LATEST"
           fi

@@ -100,6 +100,7 @@ def test_preparation_keeps_versions_aligned_and_bundle_is_reproducible(repositor
     assert metadata["source"] == source
     assert metadata["tag"] == "v0.2.0"
     revision = git(root, "rev-parse", "HEAD")
+    assert "[skip ci]" not in git(root, "show", "-s", "--format=%B", revision)
     assert metadata["revision"] == revision != source
     project = tomllib.loads((root / "pyproject.toml").read_text())
     assert project["project"]["version"] == "0.2.0"
@@ -179,3 +180,25 @@ def test_preparation_refuses_an_existing_version_tag(repository, tmp_path):
     assert result.returncode != 0
     assert "Release tag already exists" in result.stderr
     assert (root / "pyproject.toml").read_bytes() == before
+
+
+def test_squash_release_is_the_next_anchor_instead_of_a_new_patch(repository, tmp_path):
+    root, source = repository
+    proposal = tmp_path / "proposal"
+    result = prepare(root, proposal)
+    assert result.returncode == 0, result.stderr
+    revision = git(root, "rev-parse", "HEAD")
+    git(root, "checkout", "--detach", source)
+    git(root, "merge", "--squash", revision)
+    commit(root, "chore(release): 0.2.0 (#12)")
+    empty = prepare(root, tmp_path / "empty")
+    assert empty.returncode != 0
+    assert "No unreleased commits" in empty.stderr
+    (root / "feature.txt").write_text("documented\n")
+    commit(root, "docs: explain feature")
+    next_release = tmp_path / "next"
+    result = prepare(root, next_release)
+    assert result.returncode == 0, result.stderr
+    assert json.loads((next_release / "release.json").read_text())["version"] == "0.2.1"
+    assert "docs: explain feature" in (next_release / "notes.md").read_text()
+    assert "(#12)" not in (next_release / "notes.md").read_text()

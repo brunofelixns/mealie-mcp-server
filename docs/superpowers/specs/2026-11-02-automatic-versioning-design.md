@@ -1,43 +1,33 @@
-# Versionado automático en CI
+# Versiones mediante PR de release y main protegida
 
-El usuario solicita que la subida de versión también sea automática, como parte
-del CI que ya prueba y publica GHCR. Se conserva Python en el Dev Container y el
-contrato público de las 78 herramientas.
+El usuario pide versionado automático y concreta que main solo admita PRs y que
+una propuesta de release acumule los cambios. La propuesta queda abierta hasta
+que el usuario decida fusionarla. No se introducen Node ni publicaciones locales.
 
-## Enfoque
+Se conserva el preparador Python de versiones. Major para `!` / breaking footer,
+minor para feat/fix y patch para el resto. Actualiza pyproject, lock propio, OCI,
+README bilingüe y el ancla de cambios. La historia first-parent del ancla reconoce
+el merge real de una release, incluyendo squash, y evita un incremento recursivo.
 
-Se utiliza Python estándar para preparar una versión semántica desde los commits:
-`!` o un footer `BREAKING CHANGE:` / `BREAKING-CHANGE:` incrementan major;
-`feat` y `fix` incrementan minor; cualquier otro cambio incrementa patch. Prevalece
-el cambio de mayor impacto de todo el lote. La regla sigue las convenciones de
-este repositorio, incluida la subida minor para fixes. Se descartaron herramientas
-que necesitan Node y un gestor de releases adicional con su propia convención.
+Los checks nativos de ambas arquitecturas son obligatorios en las PRs. Tras un
+merge normal a main, un job serializado prepara y actualiza `codex/release-main`
+con force-with-lease, mantiene una única PR y despacha sus checks explícitamente.
+El bot nunca aprueba ni fusiona la propuesta. No se usan skip directives, para
+que fusionarla sí ejecute el CI del commit definitivo.
 
-`pyproject.toml` es la versión canónica. Un ancla en `.release.json` delimita los
-commits nuevos desde la última publicación Python verificada. No se toma el mayor
-tag histórico: los tags v1/v2 heredados pertenecen al producto anterior.
+Solo un push asociado a una PR de release fusionada del repositorio propio puede
+publicar, después de ambos checks. Se suben las imágenes probadas sin reconstruir,
+el tag Git del merge, X.Y.Z, latest y GitHub Release. Solo se escriben tags en Git;
+main no recibe pushes de ningún job. Las publicaciones se serializan, los tags
+no se sobrescriben y una repetición antigua no reduce latest.
 
-## Flujo
+Main exige PR, checks Verify amd64 / Verify arm64 estrictos, historial lineal y
+conversaciones resueltas, incluso para administradores. Se exige cero aprobaciones
+de otra persona para permitir mantenimiento individual, sin eliminar la PR. No
+hay bypass del bot, force push ni borrado. El ajuste agrupado de GitHub para crear
+y aprobar PRs se habilita para crear propuestas; el CI no utiliza aprobación.
 
-Un job sin escritura prepara pyproject, el paquete propio del lock, la etiqueta
-Docker y ambos catálogos README, y crea un commit local reproducible y un bundle.
-Ambos runners nativos restauran ese commit y prueban/construyen su contenido.
-Las PR y ramas distintas de main conservan su versión y carecen de publicación.
-
-Solo tras pasar ambos runners, el publicador restaura el mismo commit, comprueba
-que main no avanzó, sube las imágenes probadas con tag de SHA, y envía main y el
-tag vX.Y.Z de forma atómica, sin force. Publica X.Y.Z y latest con el mismo digest,
-y una GitHub Release con notas del lote. El token temporal evita un bucle de CI.
-
-## Fallos y límites
-
-Un fallo de tests no escribe versiones remotas. Una carrera con otro push impide
-sobrescribir main. Los tags Git/versionados nunca se reasignan a otro contenido.
-Una repetición de jobs fallidos utiliza el mismo bundle, versión y commit; no
-incrementa otra vez. Una publicación parcialmente completada se recupera repitiendo
-el job con sus artefactos, conservados un día. Git y GHCR no ofrecen una transacción
-común: puede existir un tag de Git antes de completarse GHCR, pero el fallo queda
-visible y latest no se promociona antes de verificar la versión publicada.
-
-No se añade publicación local, PAT permanente, Node ni cambios en las capturas
-inmutables. La implementación y verificación se realizan en la sesión actual.
+Se descartó el commit automático directo a main por la aclaración del usuario.
+Release Please ofrece el patrón solicitado, pero introducir su runtime Node
+contradice AGENTS.md; se reutiliza el preparador Python con Git/gh y jq. Los
+baselines de compatibilidad permanecen intactos.
