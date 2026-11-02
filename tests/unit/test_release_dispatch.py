@@ -25,6 +25,9 @@ def fake_gh(tmp_path, response):
         "    stream.write(json.dumps(sys.argv[1:])+'\\n')\n" + response
     )
     executable.chmod(0o755)
+    sleeper = binary / "sleep"
+    sleeper.write_text("#!/bin/sh\nexit 0\n")
+    sleeper.chmod(0o755)
     return {
         **os.environ,
         "PATH": str(binary) + os.pathsep + os.environ["PATH"],
@@ -72,11 +75,19 @@ def test_publisher_requires_matching_tested_version_revision_and_existing_releas
         assert (tmp_path / "output.txt").read_text() == "version=0.2.0\n"
 
 
-def test_only_owned_release_please_proposals_are_dispatched(tmp_path):
+@pytest.mark.parametrize("delayed", [False, True])
+def test_only_owned_release_please_proposals_are_dispatched(tmp_path, delayed):
     response = (
-        "if sys.argv[1:3] == ['pr','list']: print(json.dumps(["
-        "{'headRefName':'release-please--branches--main','isCrossRepository':False},"
-        "{'headRefName':'fork-proposal','isCrossRepository':True}]))\n"
+        "if sys.argv[1] == 'api':\n"
+        "    counter=root/'poll-count'\n"
+        "    count=int(counter.read_text()) if counter.exists() else 0\n"
+        "    counter.write_text(str(count+1))\n"
+        f"    delayed={delayed!r} and count==0\n"
+        "    print(json.dumps([] if delayed else ["
+        "{'head':{'ref':'release-please--branches--main','repo':{'full_name':'brunofelixns/mealie-mcp-server'}},"
+        "'labels':[{'name':'autorelease: pending'}]},"
+        "{'head':{'ref':'fork-proposal','repo':{'full_name':'someone/fork'}},"
+        "'labels':[{'name':'autorelease: pending'}]}]))\n"
     )
     env = fake_gh(tmp_path, response)
     script = step("release-please.yaml", "release", "Check the Release Please proposal explicitly")
@@ -92,6 +103,23 @@ def test_only_owned_release_please_proposals_are_dispatched(tmp_path):
     dispatches = [call for call in calls if call[:2] == ["workflow", "run"]]
     assert len(dispatches) == 1
     assert dispatches[0][-1] == "release-please--branches--main"
+    assert len([call for call in calls if call[0] == "api"]) == (2 if delayed else 1)
+
+
+def test_missing_proposal_cannot_silently_skip_its_checks(tmp_path):
+    env = fake_gh(tmp_path, "print('[]')\n")
+    script = step("release-please.yaml", "release", "Check the Release Please proposal explicitly")
+    result = subprocess.run(
+        ["bash", "-euo", "pipefail", "-c", script],
+        cwd=tmp_path,
+        env=env,
+        capture_output=True,
+        text=True,
+    )
+    assert result.returncode != 0
+    calls = [json.loads(line) for line in (tmp_path / "calls.jsonl").read_text().splitlines()]
+    assert not any(call[:2] == ["workflow", "run"] for call in calls)
+    assert len([call for call in calls if call[0] == "api"]) == 5
 
 
 @pytest.mark.parametrize("stale", [False, True])

@@ -4,8 +4,8 @@ Para instalar un servicio desde una imagen ya publicada en GHCR, usar [docker/](
 
 El Dockerfile tiene etapas development, builder y runtime. El runtime instala el wheel y sus dependencias de producción; conserva CA, tzdata e ICU72. No incorpora Node, compiladores, uv, pip, ensurepip, herramientas de tests ni secretos. Ejecuta como10001:10001 y admite raíz de solo lectura con /tmp temporal.
 
-La [CI](ci.md) verifica amd64/arm64 y publica en GHCR después de un push a `main`
-correcto. Los comandos siguientes construyen y prueban en desarrollo; la
+La [CI](ci.md) verifica amd64/arm64 y publica en GHCR el tag creado al fusionar
+la PR de Release Please, cuando pasan sus checks. Los comandos siguientes construyen y prueban en desarrollo; la
 publicación se realiza mediante Actions.
 
 ## Construcción y prueba

@@ -7,6 +7,11 @@ otra PR con la versión siguiente y el [CHANGELOG](../CHANGELOG.md) acumulado.
 Fusionar esa propuesta decide cuándo sale la versión. No se publica en cada merge
 funcional ni se escriben commits de versión directamente en main.
 
+La detección de la propuesta consulta la API REST directamente, con espera acotada
+para propagación de metadatos. No depende de la indexación de búsqueda por labels.
+Si no aparece una PR propia pendiente, el workflow falla visiblemente en lugar de
+terminar sin ejecutar sus checks. Las PR de forks no se seleccionan.
+
 ## Flujo
 
 1. Crear una rama y una PR hacia `main`, con título Conventional Commit. Preferir

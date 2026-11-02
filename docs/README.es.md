@@ -181,7 +181,7 @@ Compose carga su `.env` y pasa las variables al contenedor. El proceso Python re
 
 | Variable de `docker/.env` | Valor de la plantilla | Uso |
 |---|---|---|
-| `MEALIE_MCP_IMAGE` | `ghcr.io/brunofelixns/mealie-mcp-server:latest` | Último main verificado; permite tag de commit o digest. |
+| `MEALIE_MCP_IMAGE` | `ghcr.io/brunofelixns/mealie-mcp-server:latest` | Última versión publicada; permite versión, tag de commit o digest. |
 | `COMPOSE_PROJECT_NAME` | `mealie-mcp` | Identifica la instancia Compose. |
 | `MCP_BIND_IP` | `127.0.0.1` | Interfaz del host donde se publica HTTP. |
 | `MCP_PUBLISHED_PORT` | `8000` | Puerto del host; el puerto interno sigue siendo 8000. |

@@ -62,7 +62,16 @@ jobs:
         id: dispatch
         run: |
           set -euo pipefail
-          branches=$(gh pr list --repo "$GITHUB_REPOSITORY" --state open --base main --label 'autorelease: pending' --json headRefName,isCrossRepository | jq -r '.[] | select(.isCrossRepository == false) | .headRefName')
+          branches=''
+          for attempt in 1 2 3 4 5; do
+            branches=$(gh api --paginate "repos/$GITHUB_REPOSITORY/pulls?state=open&base=main&per_page=100" | jq -r --arg repo "$GITHUB_REPOSITORY" '.[] | select(.head.repo.full_name == $repo and any(.labels[]; .name == "autorelease: pending")) | .head.ref')
+            test -z "$branches" || break
+            sleep 2
+          done
+          if test -z "$branches"; then
+            echo '::error::No owned pending Release Please PR was visible; its checks were not dispatched.'
+            exit 1
+          fi
           while IFS= read -r branch; do
             test -n "$branch" || continue
             gh workflow run ci.yaml --repo "$GITHUB_REPOSITORY" --ref "$branch"
