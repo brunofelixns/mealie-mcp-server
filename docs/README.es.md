@@ -61,7 +61,7 @@ En PowerShell, sustituye el comando de copia por `Copy-Item .env.example .env`.
 Estos son los valores que debes completar en `.env`:
 
 ```dotenv
-MEALIE_MCP_IMAGE=ghcr.io/brunofelixns/mealie-mcp-server:0.1.0
+MEALIE_MCP_IMAGE=ghcr.io/brunofelixns/mealie-mcp-server:latest
 MEALIE_BASE_URL=https://mealie.example.com
 MEALIE_API_KEY=
 MCP_AUTH_TOKEN=
@@ -73,7 +73,9 @@ La API key y el Bearer deben ser distintos. Genera el Bearer con al menos 32 byt
 > [!IMPORTANT]
 > El servicio HTTP se publica en `127.0.0.1:8000`. Para conectarte desde fuera del host, configura un proxy HTTPS hacia ese puerto y conserva el streaming de MCP. [Ejemplo de proxy](http-deployment.md#tls-y-proxy).
 
-La versión `0.1.0` ya está publicada en GHCR para amd64 y arm64. Para publicar futuras versiones desde tu máquina, consulta la [guía de publicación local](publishing-local.md); también existe el workflow manual de [release](../.github/workflows/release.yaml).
+Cada push y pull request ejecuta CI en runners amd64 y arm64 nativos. Los pushes
+a `main` publican las imágenes verificadas como `latest` y `sha-<commit>`.
+Consulta [CI y publicación automática](ci.md).
 
 ### Usar stdio
 
@@ -148,8 +150,7 @@ depende del cliente y de su soporte de la extensión.
 También puedes copiar **[`skills/mealie/`](../skills/mealie/SKILL.md)** a la
 carpeta de skills de tu cliente y configurar el MCP por separado. Ambas vías
 usan los mismos archivos. Consulta la **[guía de ambas formas de uso](skills.md)**.
-Hay que reconstruir el servidor para incorporar esta función; la imagen ya
-publicada no se modifica con este cambio de código.
+Los skills se incluyen en el runtime publicado por [CI](ci.md).
 
 ## Configuración
 
@@ -176,7 +177,7 @@ Compose carga su `.env` y pasa las variables al contenedor. El proceso Python re
 
 | Variable de `docker/.env` | Valor de la plantilla | Uso |
 |---|---|---|
-| `MEALIE_MCP_IMAGE` | `ghcr.io/brunofelixns/mealie-mcp-server:0.1.0` | Imagen publicada; permite versión concreta o digest. |
+| `MEALIE_MCP_IMAGE` | `ghcr.io/brunofelixns/mealie-mcp-server:latest` | Último main verificado; permite tag de commit o digest. |
 | `COMPOSE_PROJECT_NAME` | `mealie-mcp` | Identifica la instancia Compose. |
 | `MCP_BIND_IP` | `127.0.0.1` | Interfaz del host donde se publica HTTP. |
 | `MCP_PUBLISHED_PORT` | `8000` | Puerto del host; el puerto interno sigue siendo 8000. |
@@ -296,6 +297,7 @@ La suite incluye pruebas reales de la imagen runtime: constrúyela primero como 
 | Instalar una imagen de GHCR | [Despliegue Docker](../docker/README.md) |
 | Configurar variables y credenciales | [Configuración](configuration.md) |
 | Conectar tu cliente | [Clientes MCP](clients.md) |
+| Ejecutar CI y publicar imágenes automáticamente | [CI y GHCR](ci.md) |
 | Usar skills por MCP o instalarlos manualmente | [Skills de Mealie](skills.md) |
 | Preparar HTTPS, proxy y acceso remoto | [Despliegue HTTP](http-deployment.md) |
 | Construir la imagen o usar secretos de archivo | [Contenedores](containers.md) |
@@ -311,7 +313,10 @@ El proyecto usa modelos estrictos, pruebas de contrato frente a capturas origina
 
 Para probar las **78 herramientas con Mealie real en Docker**, por stdio y HTTP con Bearer, ejecutar `uv run python -m tests.e2e.runner` dentro del Dev Container. El entorno es local y desechable; los cuatro recorridos y el rechazo de descargas privadas se explican en [pruebas E2E](testing/local-e2e.md).
 
-Para **construir y publicar amd64/arm64 desde tu máquina sin GitHub Actions**, usar `uv run python scripts/publish_local.py` en el Dev Container. Primero valida todo en local; `--publish` habilita la subida a GHCR. [Guía de publicación local](publishing-local.md).
+El [workflow de CI](../.github/workflows/ci.yaml) ejecuta la suite completa,
+integración Mealie desechable, compatibilidad y escaneo antes de publicar. Sube
+las mismas imágenes probadas, sin reconstruirlas. La [guía de CI](ci.md) explica
+etiquetas, permisos, evidencias y recuperación.
 
 El runtime se prueba con usuario sin privilegios, raíz de solo lectura y ambas arquitecturas; ARM local se verificó mediante emulación. Los resultados medidos están en el [informe de aceptación](migration/acceptance.md). El último escaneo documentado conserva avisos críticos y altos de Debian: consulta [el análisis](migration/evidence/P23-security.md) y sus límites antes de exponer un servicio público.
 

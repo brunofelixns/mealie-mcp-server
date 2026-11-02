@@ -113,11 +113,10 @@ se rechazan con `-32602`. El manifiesto oficial no incluye `_manifest`: este
 último es un recurso auxiliar de FastMCP que también puede aparecer en
 `resources/list`. La fuente de integridad de la extensión es `skills/list/get`.
 
-Esta funcionalidad corresponde al código actual. Para tenerla en un servidor
-instalado hay que reconstruir el wheel o la imagen con este código y actualizar
-el despliegue. Una compilación local no cambia la imagen `0.1.0` ya publicada.
-Seguir [Contenedores](containers.md); publicar una nueva imagen es una operación
-separada.
+La [CI](ci.md) incluye estos archivos en el wheel y en las imágenes publicadas.
+Actualizar el despliegue a `latest` o a un tag `sha-<commit>` verificado para usar
+la extensión. La versión histórica `0.1.0` no se sobrescribe. Ver
+[Contenedores](containers.md) para builds de desarrollo.
 
 ## Vía 2: instalación manual
 

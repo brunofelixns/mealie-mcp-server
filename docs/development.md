@@ -6,7 +6,9 @@ El target development fija Python3.14 y uv por digest, usa el usuario vscode y g
 
 PyICU2.17 e ICU72.1 reproducen la ordenación de la referencia. Development incluye libicu-dev, pkg-config y g++; runtime solo necesita libicu72. Reconstruir el Dev Container si cambia Dockerfile. El puerto8000 se reenvía como privado; el servidor arranca mediante el CLI descrito en [clientes](clients.md).
 
-La configuración incluye la feature GitHub CLI para gestionar el login interactivo. Reconstruir el Dev Container para incorporarla si ya existía. La [guía de publicación local](publishing-local.md#autenticarse-y-publicar) explica cómo dar acceso a GHCR desde esa sesión; no se incorporan credenciales a la imagen de producción.
+La feature docker-outside-of-docker permite ejecutar las pruebas de contenedor.
+La [publicación automática](ci.md) se realiza en GitHub Actions con su token
+temporal; el entorno de desarrollo no necesita credenciales de publicación.
 
 ## Comprobaciones
 

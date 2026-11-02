@@ -2,7 +2,7 @@ name: mealie-mcp-stdio
 
 services:
   stdio:
-    image: ${MEALIE_MCP_IMAGE:-ghcr.io/brunofelixns/mealie-mcp-server:0.1.0}
+    image: ${MEALIE_MCP_IMAGE:-ghcr.io/brunofelixns/mealie-mcp-server:latest}
     pull_policy: missing
     command: [--transport, stdio]
     environment:

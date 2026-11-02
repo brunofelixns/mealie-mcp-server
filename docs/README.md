@@ -17,7 +17,7 @@ La implementación y verificación local están completas (24/24), y `0.1.0` est
 | Skills servidos por MCP e instalación manual | [Skills](skills.md) |
 | Proteger el endpoint remoto | [Despliegue HTTP](http-deployment.md) |
 | Construir y ejecutar la imagen | [Contenedores](containers.md) |
-| Publicar amd64/arm64 desde tu máquina, sin Actions | [Publicación local GHCR](publishing-local.md) |
+| Verificar código y publicar amd64/arm64 automáticamente | [CI y GHCR](ci.md) |
 | Descargar una imagen de GHCR y crear el servicio | [Despliegue Docker](../docker/README.md) |
 | Módulos y ciclo de vida | [Arquitectura](architecture.md) |
 | CI, release y mantenimiento | [Workflows](workflows.md) |

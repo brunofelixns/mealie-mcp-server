@@ -70,7 +70,9 @@ Cada ejecución escribe en `artifacts/e2e/<proyecto>/`:
 
 `artifacts/e2e-summary.json` apunta a la última ejecución. El comando solo devuelve0 si pasan pytest, los cuatro informes, el gate exacto de herramientas y la limpieza. El código de salida no se basa únicamente en el resumen de pytest: cuatro tests omitidos también producen un fallo de cobertura. Los artifacts están excluidos de Git; CI los conserva14 días en cada plataforma.
 
-Con `--summary <ruta>` se escribe el resumen en ese destino en lugar del archivo global. El flujo de [publicación local](../publishing-local.md) utiliza un destino independiente para cada arquitectura, comprobando también el ID de la imagen y la limpieza.
+Con `--summary <ruta>` se escribe el resumen en ese destino en lugar del archivo
+global. La [CI](../ci.md) ejecuta esta integración por arquitectura sobre la imagen
+ya construida y conserva el resumen y la evidencia de limpieza.
 
 La limpieza se ejecuta también ante fallos: desconecta el controlador y hace `down --volumes` exclusivamente sobre el proyecto de esa ejecución. Capturar logs, desconectar, retirar servicios y verificar recursos son pasos independientes: un error de diagnóstico no impide intentar los siguientes. `cleanupErrors` identifica las fases que fallaron; cualquiera de ellas impide un resultado global correcto. Verifica que no queden contenedores, volúmenes ni su red. No utiliza `prune`, no borra redes compartidas y no toca `docker/compose.yaml` de producción.
 

@@ -63,7 +63,7 @@ In PowerShell, replace the copy command with `Copy-Item .env.example .env`.
 Set these values in `.env`:
 
 ```dotenv
-MEALIE_MCP_IMAGE=ghcr.io/brunofelixns/mealie-mcp-server:0.1.0
+MEALIE_MCP_IMAGE=ghcr.io/brunofelixns/mealie-mcp-server:latest
 MEALIE_BASE_URL=https://mealie.example.com
 MEALIE_API_KEY=
 MCP_AUTH_TOKEN=
@@ -75,7 +75,9 @@ Use different values for the Mealie API key and MCP Bearer token. Generate the B
 > [!IMPORTANT]
 > HTTP binds to `127.0.0.1:8000`. For access from another machine, place an HTTPS reverse proxy in front of the service and preserve MCP streaming. See the [proxy example](docs/http-deployment.md#tls-y-proxy).
 
-Version `0.1.0` is published on GHCR for amd64 and arm64. To publish future versions from your machine, follow the [local publishing guide](docs/publishing-local.md). A manual [release workflow](.github/workflows/release.yaml) is also available.
+Every push and pull request runs CI on native amd64 and arm64 runners. Successful
+pushes to `main` publish the tested images to GHCR as `latest` and `sha-<commit>`.
+See [CI and automatic publication](docs/ci.md).
 
 ### Run over stdio
 
@@ -150,8 +152,8 @@ shopping. Source builds serve it through the official
 You can also copy **[`skills/mealie/`](skills/mealie/SKILL.md)** into your client's
 local skills directory and configure the MCP separately. Both methods use the
 same files. See the **[English installation guide](skills/README.md)** or
-**[guía completa en español](docs/skills.md)**. Rebuild to serve this feature from
-the current source; the previously published image is unchanged.
+**[guía completa en español](docs/skills.md)**. Skills are included in the runtime
+published by [CI](docs/ci.md).
 
 ## Configuration
 
@@ -178,7 +180,7 @@ Compose loads `.env` and passes variables to the container. The Python process r
 
 | Variable in `docker/.env` | Template value | Purpose |
 |---|---|---|
-| `MEALIE_MCP_IMAGE` | `ghcr.io/brunofelixns/mealie-mcp-server:0.1.0` | Published image; supports a version tag or digest. |
+| `MEALIE_MCP_IMAGE` | `ghcr.io/brunofelixns/mealie-mcp-server:latest` | Latest verified main build; also accepts a commit tag or digest. |
 | `COMPOSE_PROJECT_NAME` | `mealie-mcp` | Compose project name. |
 | `MCP_BIND_IP` | `127.0.0.1` | Host interface for HTTP. |
 | `MCP_PUBLISHED_PORT` | `8000` | Host port; the internal port remains `8000`. |
@@ -302,6 +304,7 @@ The detailed guides, tool schemas, and migration evidence below are maintained i
 | Deploy a published GHCR image | [Docker deployment](docker/README.md) |
 | Configure variables and credentials | [Configuration](docs/configuration.md) |
 | Connect an MCP client | [MCP clients](docs/clients.md) |
+| Run CI and publish verified images automatically | [CI and GHCR](docs/ci.md) |
 | Use skills over MCP or install them manually | [Skills guide](skills/README.md) · [Español](docs/skills.md) |
 | Set up HTTPS and remote access | [HTTP deployment](docs/http-deployment.md) |
 | Build the image or use file-based secrets | [Containers](docs/containers.md) |
@@ -315,7 +318,10 @@ The project uses strict models, contract tests against original snapshots, real-
 
 To test **all 78 tools against real Mealie in Docker**, over stdio and Bearer-authenticated HTTP, run `uv run python -m tests.e2e.runner` inside the Dev Container. The environment is local and disposable. The [E2E guide](docs/testing/local-e2e.md) describes the four runs and private-download rejection checks.
 
-To **build and publish amd64/arm64 images locally without GitHub Actions**, run `uv run python scripts/publish_local.py` inside the Dev Container. It validates everything locally first; `--publish` enables GHCR uploads. See the [local publishing guide](docs/publishing-local.md).
+The [CI workflow](.github/workflows/ci.yaml) runs the full suite, real disposable
+Mealie integration, compatibility checks, and image scanning before publication.
+It uploads the exact tested images without rebuilding. See the [CI guide](docs/ci.md)
+for tags, permissions, evidence, and recovery.
 
 The runtime is tested as a non-root user, with a read-only root filesystem and both architectures; local ARM verification used emulation. Measured results and their limits are recorded in the [acceptance report](docs/migration/acceptance.md). The last documented scan retains critical and high Debian advisories; review the [image security analysis](docs/migration/evidence/P23-security.md) and its limits before exposing a public service.
 

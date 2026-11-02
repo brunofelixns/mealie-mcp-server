@@ -26,8 +26,8 @@ the older `2025-11-25` protocol can still read the ordinary skill resources, but
 cannot use the extension's discovery methods. Local-skill support does not imply
 support for skills served over MCP; consult your client's documentation.
 
-This feature is in the current source. Rebuild the package/image to serve it;
-an already-published `0.1.0` image is not updated by a local source change.
+Skills are included in the image produced by [automatic CI publication](../docs/ci.md).
+Deploy `latest` or a verified `sha-<commit>` image to use the server-side extension.
 See [the detailed protocol example and compatibility notes](../docs/skills.md).
 
 ## Manual installation

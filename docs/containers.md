@@ -4,7 +4,9 @@ Para instalar un servicio desde una imagen ya publicada en GHCR, usar [docker/](
 
 El Dockerfile tiene etapas development, builder y runtime. El runtime instala el wheel y sus dependencias de producción; conserva CA, tzdata e ICU72. No incorpora Node, compiladores, uv, pip, ensurepip, herramientas de tests ni secretos. Ejecuta como10001:10001 y admite raíz de solo lectura con /tmp temporal.
 
-Para construir, probar y publicar amd64/arm64 desde el Dev Container sin GitHub Actions, usar `uv run python scripts/publish_local.py`; solo añadir `--publish` para enviar las imágenes verificadas a GHCR. El [runbook de publicación local](publishing-local.md) explica login, attestations, checks, artefactos y fallos parciales.
+La [CI](ci.md) verifica amd64/arm64 y publica en GHCR después de un push a `main`
+correcto. Los comandos siguientes construyen y prueban en desarrollo; la
+publicación se realiza mediante Actions.
 
 ## Construcción y prueba
 
@@ -67,7 +69,9 @@ El escáner fijado por digest recibe una copia del archivo de imagen y genera in
 
 Revisar actualizaciones de imágenes y uv.lock explícitamente, reconstruir y repetir ambos transportes, payloads grandes y plataformas. PyICU/ICU forman parte de la compatibilidad de ordenación; cambiar Debian/ICU exige repetir el corpus de matching y golden tests.
 
-release.yaml solo publica por workflow_dispatch con publish=true, después de CI, pruebas de la imagen por arquitectura, escaneo y release_gate. Este último exige las24 tareas verificadas y que la versión solicitada coincida con pyproject.toml. Publica en el namespace GHCR del repositorio que ejecuta el workflow y compone un manifest multiarch; no publica al upstream por crear estos archivos. No se ha ejecutado ninguna publicación.
+El job de publicación de [ci.yaml](../.github/workflows/ci.yaml) depende de todos
+los checks nativos, utiliza las imágenes probadas y verifica el índice multiarch
+antes de actualizar `latest`. Consultar [CI y GHCR](ci.md) para permisos y tags.
 
 ## Verificación del despliegue independiente
 

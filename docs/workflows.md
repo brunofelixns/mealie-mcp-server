@@ -34,12 +34,21 @@ Las credenciales Mealie y Bearer personal son independientes. stdio usa solo la 
 
 ## CI y publicación
 
-La [publicación local](publishing-local.md) ejecuta `scripts/publish_local.py` dentro del Dev Container y funciona sin minutos ni checks de GitHub Actions. Valida versión, código, ambas imágenes y sus attestations, tests/E2E y escaneos antes de cualquier subida. La publicación exige `--publish`, login Docker y checkout limpio; no reconstruye las imágenes después de probarlas.
+La [CI y publicación automática](ci.md) verifica cada push/PR en Linux amd64 y
+arm64 nativos. Los pushes a `main` publican en GHCR cuando ambas plataformas
+pasan; otras ramas y PR no reciben permisos para publicar.
 
-`.github/workflows/ci.yaml` utiliza el Dev Container en runners amd64 y arm64 nativos. Instala desde el lock frozen, comprueba Ruff/mypy y documentación, construye runtime con SBOM/provenance, ejecuta pytest con JUnit/cobertura y el checker78/78, integra Mealie desechable y analiza la imagen. Cada paso de shell falla al primer error. Conserva logs, métricas, reportes y wheel; no necesita Node para el producto ni la suite ordinaria.
+`.github/workflows/ci.yaml` utiliza el Dev Container. Instala desde el lock frozen,
+comprueba Ruff/mypy y documentación, construye runtime, ejecuta pytest con
+JUnit/cobertura y el checker78/78, integra Mealie desechable y analiza la imagen.
+Conserva logs, métricas, reportes, SBOM y wheel. Cada comando falla al primer error.
 
 La integración ejecuta `uv run python -m tests.e2e.runner --image mealie-mcp-server:local --no-build` sobre la imagen ya construida. El gate exige cuatro combinaciones de transporte/protocolo,78 herramientas y78 rechazos por combinación, sin skips; un fallo de prueba, cobertura de llamadas o limpieza hace fallar el comando. Los [informes E2E](testing/local-e2e.md) se conservan también si falla el job.
 
-`release.yaml` se invoca manualmente. Solo publica si publish=true, coincide la versión y release_gate confirma24 tareas verificadas; depende de CI y repite smoke/scan por plataforma antes de componer el manifest GHCR. Las credenciales de publicación no entran en el build. Los ficheros de workflows están configurados y validados localmente, pero no se han ejecutado en GitHub ni se ha publicado un artefacto remoto.
+El job `publish` carga las imágenes verificadas desde artefactos de la misma
+ejecución, comprueba sus IDs y plataformas, y las sube con `GITHUB_TOKEN`. Verifica
+el manifest `sha-<commit>` antes de actualizar `latest`. No reconstruye después de
+probar ni utiliza credenciales de publicación durante el build. Los scripts de
+publicación local y el workflow de release manual se retiraron.
 
 Renovate propone cambios sin automerge. Revisar dependencias, bases e ICU con el corpus de contratos y ambos transportes; no actualizar snapshots para ocultar diferencias. Los comandos y requisitos de entorno están en [desarrollo](development.md).

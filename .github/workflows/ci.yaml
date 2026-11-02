@@ -1,12 +1,16 @@
-name: Python and runtime checks
+name: Test and publish runtime
 on:
   push:
   pull_request:
-  workflow_call:
 permissions:
   contents: read
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
-  python:
+  checks:
+    name: Verify ${{ matrix.arch }}
+    timeout-minutes: 45
     strategy:
       fail-fast: false
       matrix:
@@ -29,7 +33,7 @@ jobs:
             uv run ruff format --check .
             uv run mypy src/mealie_mcp_server
             mkdir -p artifacts
-            docker buildx build --platform linux/${{ matrix.arch }} --target runtime --tag mealie-mcp-server:local --build-arg VCS_REF=$(git rev-parse HEAD) --sbom=true --provenance=mode=max --load --metadata-file artifacts/runtime-build.json .
+            docker buildx build --platform linux/${{ matrix.arch }} --target runtime --tag mealie-mcp-server:local --build-arg VCS_REF=$(git rev-parse HEAD) --provenance=false --load --metadata-file artifacts/runtime-build.json .
             export MCP_TEST_ARCH=${{ matrix.arch }}
             uv run pytest --cov=mealie_mcp_server --cov-branch --cov-report=json:artifacts/coverage.json --cov-report=xml:artifacts/coverage.xml --junitxml=artifacts/pytest.xml
             uv run python scripts/check_compatibility.py --require-all --coverage-json artifacts/coverage.json --junit-xml artifacts/pytest.xml
@@ -37,6 +41,19 @@ jobs:
             uv run python -m tests.e2e.runner --image mealie-mcp-server:local --no-build > artifacts/mealie-integration.log 2>&1
             uv run python scripts/scan_runtime.py mealie-mcp-server:local --platform linux/${{ matrix.arch }} --output artifacts/runtime-security.json --enforce
             uv build
+            docker image inspect --format '{{.Id}}' mealie-mcp-server:local > artifacts/runtime-${{ matrix.arch }}.id
+            docker image save --output artifacts/runtime-${{ matrix.arch }}.tar mealie-mcp-server:local
+      - name: Retain the exact tested image
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: tested-runtime-${{ matrix.arch }}
+          path: |
+            artifacts/runtime-${{ matrix.arch }}.tar
+            artifacts/runtime-${{ matrix.arch }}.id
+          if-no-files-found: error
+          compression-level: 1
+          retention-days: 1
       - name: Retain verification evidence
         if: always()
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
@@ -50,3 +67,60 @@ jobs:
             artifacts/e2e/**
             dist/*.whl
           retention-days: 14
+  publish:
+    name: Publish tested images to GHCR
+    needs: checks
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Download both tested runtimes
+        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7
+        with:
+          pattern: tested-runtime-*
+          path: artifacts/images
+          merge-multiple: true
+      - name: Set up Buildx
+        uses: docker/setup-buildx-action@8d2750c68a42422c14e847fe6c8ac0403b4cbd6f # v3
+      - name: Authenticate to GHCR
+        uses: docker/login-action@c94ce9fb468520275223c153574b00df6fe4bcc9 # v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Publish and verify the tested multi-platform image
+        id: publish
+        shell: bash
+        run: |
+          set -euo pipefail
+          image="ghcr.io/${GITHUB_REPOSITORY,,}"
+          commit_tag="sha-$GITHUB_SHA"
+          for arch in amd64 arm64; do
+            docker image load --input "artifacts/images/runtime-$arch.tar"
+            expected_id=$(cat "artifacts/images/runtime-$arch.id")
+            actual_id=$(docker image inspect --format '{{.Id}}' mealie-mcp-server:local)
+            test "$actual_id" = "$expected_id"
+            platform=$(docker image inspect --format '{{.Os}}/{{.Architecture}}' mealie-mcp-server:local)
+            test "$platform" = "linux/$arch"
+            docker tag mealie-mcp-server:local "$image:$commit_tag-$arch"
+          done
+          for arch in amd64 arm64; do
+            docker push "$image:$commit_tag-$arch"
+          done
+          amd64=$(docker buildx imagetools inspect "$image:$commit_tag-amd64" --format '{{.Manifest.Digest}}')
+          arm64=$(docker buildx imagetools inspect "$image:$commit_tag-arm64" --format '{{.Manifest.Digest}}')
+          [[ "$amd64" =~ ^sha256:[0-9a-f]{64}$ ]]
+          [[ "$arm64" =~ ^sha256:[0-9a-f]{64}$ ]]
+          docker buildx imagetools create --tag "$image:$commit_tag" "$image@$amd64" "$image@$arm64"
+          actual=$(docker buildx imagetools inspect "$image:$commit_tag" --format '{{range .Manifest.Manifests}}{{.Platform.OS}}/{{.Platform.Architecture}} {{.Digest}}{{println}}{{end}}' | sort)
+          expected=$(printf 'linux/amd64 %s\nlinux/arm64 %s\n' "$amd64" "$arm64" | sort)
+          test "$actual" = "$expected"
+          digest=$(docker buildx imagetools inspect "$image:$commit_tag" --format '{{.Manifest.Digest}}')
+          [[ "$digest" =~ ^sha256:[0-9a-f]{64}$ ]]
+          docker buildx imagetools create --tag "$image:latest" "$image@$digest"
+          latest=$(docker buildx imagetools inspect "$image:latest" --format '{{.Manifest.Digest}}')
+          test "$latest" = "$digest"
+          printf '### Published image\n\n`%s:%s`\n\n`%s:latest`\n\nDigest: `%s`\n' "$image" "$commit_tag" "$image" "$digest" >> "$GITHUB_STEP_SUMMARY"

@@ -32,11 +32,14 @@ Completar estos cuatro valores en `.env`:
 | MCP_AUTH_TOKEN | Token personal aleatorio independiente para los clientes HTTP. |
 | MCP_PUBLIC_URL | URL HTTPS que tendrá el MCP detrás del proxy, terminada en /mcp. |
 
-La imagen predeterminada es `ghcr.io/brunofelixns/mealie-mcp-server:0.1.0`. `MEALIE_MCP_IMAGE` y `TZ` son opcionales. Si el `.env` ya existe, editarlo sin volver a copiar la plantilla sobre él.
+La imagen predeterminada es `ghcr.io/brunofelixns/mealie-mcp-server:latest`. `MEALIE_MCP_IMAGE` y `TZ` son opcionales. Si el `.env` ya existe, editarlo sin volver a copiar la plantilla sobre él.
 
 Para generar el token HTTP en un servidor con OpenSSL: `openssl rand -hex 32`. Guardar el resultado en MCP_AUTH_TOKEN. Si un valor contiene `$`, escribirlo entre comillas simples en .env para evitar interpolación.
 
-La versión `0.1.0` está publicada en GHCR para amd64 y arm64. Para futuras versiones se puede publicar con release.yaml o [desde el Dev Container sin GitHub Actions](../docs/publishing-local.md). Si se utiliza otro fork, cambiar propietario/repositorio en `MEALIE_MCP_IMAGE`. Ambos flujos publican versiones concretas, sin un tag latest.
+La [CI](../docs/ci.md) publica amd64 y arm64 después de los checks de cada push a
+`main`. `latest` sigue el último commit verificado; para fijar un despliegue usar
+`sha-<SHA completo>` o su digest. Si se utiliza otro fork, cambiar el namespace
+de `MEALIE_MCP_IMAGE`. El tag histórico `0.1.0` se conserva sin sobrescribirlo.
 
 HTTP carga `.env` con `env_file`; debe estar junto a `compose.yaml`. También se pueden añadir allí las opciones avanzadas de la [configuración](../docs/configuration.md), por ejemplo `LOG_LEVEL`, `MCP_ALLOWED_ORIGINS`, `MCP_PUBLISHED_PORT` o `COMPOSE_PROJECT_NAME`. Para usar otro archivo de variables HTTP, cambiar la ruta `env_file`; `--env-file` controla la interpolación de Compose. [Semántica de Docker](https://docs.docker.com/compose/how-tos/environment-variables/set-environment-variables/).
 
