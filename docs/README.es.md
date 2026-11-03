@@ -212,7 +212,7 @@ Notas, metadatos, importación/exportación y límites: [guía de recetas](recip
 <!-- BEGIN GENERATED TOOLS -->
 ## Herramientas disponibles (162)
 
-Catálogo de la versión 0.2.0. Consulta los [esquemas completos](tools.md) y la [cobertura de API](api-coverage.md). <!-- x-release-please-version -->
+Catálogo de la versión 0.3.0. Consulta los [esquemas completos](tools.md) y la [cobertura de API](api-coverage.md). <!-- x-release-please-version -->
 
 | Familia | Herramientas |
 |---|---:|

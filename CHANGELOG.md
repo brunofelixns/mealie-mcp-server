@@ -67,6 +67,13 @@
 
 * add set_recipe_rating tool ([1454807](https://github.com/timo-reymann/mealie-mcp-server/commit/14548075ebe9d27020801d9541111cf7ef92dd6d))
 
+## [0.3.0](https://github.com/brunofelixns/mealie-mcp-server/compare/v0.2.0...v0.3.0) (2026-11-03)
+
+
+### Features
+
+* **recipes:** complete Mealie 3.30 support and harden validation ([#7](https://github.com/brunofelixns/mealie-mcp-server/issues/7)) ([7f281b3](https://github.com/brunofelixns/mealie-mcp-server/commit/7f281b3480053b51887b01ed15d91ecebe20b403))
+
 ## [0.2.0](https://github.com/brunofelixns/mealie-mcp-server/compare/v0.1.0...v0.2.0) (2026-11-02)
 
 
