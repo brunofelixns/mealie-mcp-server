@@ -4,7 +4,8 @@ import asyncio
 import json as jsonlib
 import logging
 import math
-from collections.abc import Mapping
+from collections.abc import AsyncGenerator, Mapping, Sequence
+from dataclasses import dataclass
 from decimal import Decimal
 from time import monotonic
 from types import TracebackType
@@ -22,6 +23,10 @@ from mealie_mcp_server.support.strings import trim
 
 type ParamScalar = str | int | float | bool
 type ParamValue = ParamScalar | list[str] | None | UnsetType
+type MultipartFiles = (
+    Mapping[str, tuple[str, bytes, str]]
+    | Sequence[tuple[str, tuple[str | None, bytes | str, str | None]]]
+)
 logger = logging.getLogger(__name__)
 
 
@@ -79,6 +84,19 @@ def _origin(url: httpx.URL) -> tuple[str, str, int]:
 
 def _reject_non_json_constant(value: str) -> NoReturn:
     raise ValueError("Mealie returned a non-JSON numeric constant.")
+
+
+@dataclass(frozen=True)
+class BinaryResponse:
+    content: bytes
+    content_type: str
+    content_disposition: str | None
+
+
+@dataclass(frozen=True)
+class SSEEvent:
+    event: str
+    data: JsonValue
 
 
 class MealieClient:
@@ -143,7 +161,7 @@ class MealieClient:
         params: list[tuple[str, str]] | None = None,
         json: JsonValue | UnsetType = UNSET,
         data: Mapping[str, str] | None = None,
-        files: Mapping[str, tuple[str, bytes, str]] | None = None,
+        files: MultipartFiles | None = None,
     ) -> JsonValue:
         if self._http is None:
             raise RuntimeError("Use MealieClient inside its async context manager.")
@@ -192,3 +210,210 @@ class MealieClient:
             )
         except ValueError, UnicodeError:
             raise MealieTransportError("Mealie returned invalid JSON.") from None
+
+    async def stream_events(
+        self,
+        path: str,
+        *,
+        json: JsonValue | UnsetType = UNSET,
+        files: MultipartFiles | None = None,
+        max_bytes: int = 2 * 1024 * 1024,
+        max_events: int = 2048,
+        max_line_bytes: int = 64 * 1024,
+    ) -> AsyncGenerator[SSEEvent]:
+        """Consume one native POST stream, with no redirect, reconnect or write replay.
+
+        Bound raw bytes before decoding and bound each line even when a peer never
+        sends a delimiter. SSE ids/retry fields are deliberately never acted upon.
+        """
+        if self._http is None:
+            raise RuntimeError("Use MealieClient inside its async context manager.")
+        if not path.startswith("/api/") or path.startswith("//"):
+            raise ValueError("Mealie endpoints must be relative /api/ paths.")
+        if min(max_bytes, max_events, max_line_bytes) <= 0:
+            raise ValueError("SSE limits must be positive.")
+        if not isinstance(json, UnsetType) and files is not None:
+            raise ValueError("JSON and multipart bodies cannot be combined.")
+        content = None
+        headers = {"Accept": "text/event-stream", "Accept-Encoding": "identity"}
+        if not isinstance(json, UnsetType):
+            content = jsonlib.dumps(json, ensure_ascii=False, allow_nan=False).encode("utf-8")
+            headers["Content-Type"] = "application/json"
+        event_name = "message"
+        data: list[bytes] = []
+        line = bytearray()
+        total = 0
+        events = 0
+        skip_lf = False
+        unknown = " Write outcome may be unknown; inspect recipes before another import."
+
+        def consume_line() -> SSEEvent | None:
+            nonlocal event_name, events
+            value = bytes(line)
+            line.clear()
+            if not value:
+                if not data:
+                    event_name = "message"
+                    return None
+                events += 1
+                if events > max_events:
+                    raise MealieTransportError("Mealie SSE event limit exceeded." + unknown)
+                try:
+                    decoded = cast(
+                        JsonValue,
+                        jsonlib.loads(b"\n".join(data), parse_constant=_reject_non_json_constant),
+                    )
+                    name = event_name
+                except ValueError, UnicodeError:
+                    raise MealieTransportError(
+                        "Mealie returned invalid SSE data." + unknown
+                    ) from None
+                data.clear()
+                event_name = "message"
+                return SSEEvent(name, decoded)
+            if value.startswith(b":"):
+                return None
+            field, _, field_value = value.partition(b":")
+            if field_value.startswith(b" "):
+                field_value = field_value[1:]
+            if field == b"data":
+                data.append(field_value)
+            elif field == b"event":
+                try:
+                    event_name = field_value.decode("utf-8")
+                except UnicodeError:
+                    raise MealieTransportError(
+                        "Mealie returned invalid SSE data." + unknown
+                    ) from None
+            return None
+
+        try:
+            async with (
+                asyncio.timeout(300),
+                self._http.stream(
+                    "POST",
+                    self.settings.mealie_base_url + path,
+                    content=content,
+                    files=files,
+                    headers=headers,
+                    follow_redirects=False,
+                ) as response,
+            ):
+                if not 200 <= response.status_code < 300:
+                    raise MealieApiError(
+                        response.status_code, f"Mealie API error {response.status_code}."
+                    )
+                if (
+                    response.headers.get("content-type", "").split(";", 1)[0].lower()
+                    != "text/event-stream"
+                ):
+                    raise MealieTransportError("Mealie did not return an SSE stream." + unknown)
+                if response.headers.get("content-encoding", "identity").lower() != "identity":
+                    raise MealieTransportError(
+                        "Mealie returned unsupported SSE encoding." + unknown
+                    )
+                async for chunk in response.aiter_raw():
+                    total += len(chunk)
+                    if total > max_bytes:
+                        raise MealieTransportError("Mealie SSE byte limit exceeded." + unknown)
+                    for byte in chunk:
+                        if skip_lf and byte == 10:
+                            skip_lf = False
+                            continue
+                        skip_lf = byte == 13
+                        if byte in {10, 13}:
+                            event = consume_line()
+                            if event is not None:
+                                yield event
+                        else:
+                            if len(line) >= max_line_bytes:
+                                raise MealieTransportError(
+                                    "Mealie SSE line limit exceeded." + unknown
+                                )
+                            line.append(byte)
+                # An unterminated final event is discarded, per SSE framing. The
+                # service requires an explicit done event before claiming success.
+        except httpx.TimeoutException, TimeoutError:
+            raise MealieTransportError("Mealie stream timed out." + unknown) from None
+        except httpx.RequestError:
+            raise MealieTransportError("Mealie stream failed." + unknown) from None
+
+    async def get_binary(
+        self,
+        path: str,
+        *,
+        params: list[tuple[str, str]] | None = None,
+        max_bytes: int = 20 * 1024 * 1024,
+    ) -> BinaryResponse:
+        """Download from the configured origin without buffering an unbounded response."""
+        if self._http is None:
+            raise RuntimeError("Use MealieClient inside its async context manager.")
+        if not path.startswith("/api/") or path.startswith("//"):
+            raise ValueError("Mealie endpoints must be relative /api/ paths.")
+        if max_bytes <= 0:
+            raise ValueError("Binary size limit must be positive.")
+        target = httpx.URL(self.settings.mealie_base_url + path)
+        query = tuple(params) if params is not None else None
+        try:
+            # HTTPX automatic redirects buffer intermediate bodies. Close each redirect
+            # without reading it, and scope credentials to the configured origin.
+            for redirect_count in range(21):
+                async with self._http.stream(
+                    "GET",
+                    target,
+                    headers={"Accept-Encoding": "identity"},
+                    params=query,
+                    follow_redirects=False,
+                ) as response:
+                    if response.is_redirect and response.headers.get("location"):
+                        target = response.request.url.join(response.headers["location"])
+                        if _origin(target) != self._origin or target.username or target.password:
+                            raise MealieApiError(
+                                response.status_code,
+                                "Mealie redirected outside its configured origin.",
+                            )
+                        if redirect_count == 20:
+                            raise MealieTransportError(
+                                "Mealie download exceeded the redirect limit."
+                            )
+                        query = None
+                        continue
+                    if not 200 <= response.status_code < 300:
+                        raise MealieApiError(
+                            response.status_code, f"Mealie API error {response.status_code}."
+                        )
+                    if response.headers.get("content-encoding", "identity").lower() != "identity":
+                        raise MealieTransportError(
+                            "Mealie returned unsupported binary content encoding."
+                        )
+                    length = response.headers.get("content-length")
+                    if length is not None:
+                        try:
+                            size = int(length)
+                        except ValueError:
+                            raise MealieTransportError(
+                                "Mealie returned invalid content length."
+                            ) from None
+                        if size < 0 or size > max_bytes:
+                            raise MealieTransportError(
+                                "Mealie binary response exceeds the size limit."
+                            )
+                    data = bytearray()
+                    async for chunk in response.aiter_bytes(chunk_size=64 * 1024):
+                        if len(data) + len(chunk) > max_bytes:
+                            raise MealieTransportError(
+                                "Mealie binary response exceeds the size limit."
+                            )
+                        data.extend(chunk)
+                    return BinaryResponse(
+                        bytes(data),
+                        response.headers.get("content-type", "application/octet-stream").split(
+                            ";", 1
+                        )[0],
+                        response.headers.get("content-disposition"),
+                    )
+            raise MealieTransportError("Mealie download exceeded the redirect limit.")
+        except httpx.TimeoutException:
+            raise MealieTransportError("Mealie download timed out.") from None
+        except httpx.RequestError:
+            raise MealieTransportError("Mealie download failed.") from None

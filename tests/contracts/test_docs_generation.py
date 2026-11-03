@@ -12,7 +12,7 @@ SCRIPT = ROOT / "scripts/generate_docs.py"
 
 
 @pytest.mark.parametrize("relative", ["README.md", "docs/README.es.md"])
-def test_generated_readme_includes_each_tool_once_and_family_counts_sum_to_78(relative):
+def test_generated_readme_includes_each_tool_once_and_family_counts_sum_to_catalog(relative):
     catalog = json.loads((ROOT / "src/mealie_mcp_server/resources/tool-catalog.json").read_text())
     section = (
         (ROOT / relative)
@@ -25,7 +25,7 @@ def test_generated_readme_includes_each_tool_once_and_family_counts_sum_to_78(re
     coverage = (ROOT / "docs/api-coverage.md").read_text()
     counts = [int(count) for count in re.findall(r"^\| [^|]+ \| (\d+) \|$", coverage, re.M)]
     assert len(counts) == 8 and all(count > 0 for count in counts)
-    assert sum(counts) == len(catalog["tools"]) == 78
+    assert sum(counts) == len(catalog["tools"])
 
 
 def test_generator_rejects_unknown_family_without_replacing_readme(tmp_path):
@@ -114,11 +114,18 @@ def test_generator_localizes_both_readmes_and_detects_spanish_catalog_drift(tmp_
     english = (tmp_path / "README.md").read_text()
     spanish_path = tmp_path / "docs/README.es.md"
     spanish = spanish_path.read_text()
-    assert "## Available tools (78)" in english
-    assert "| Recipes | 26 |" in english and "| Shopping lists | 13 |" in english
+    count = len(
+        json.loads((ROOT / "src/mealie_mcp_server/resources/tool-catalog.json").read_text())[
+            "tools"
+        ]
+    )
+    assert f"## Available tools ({count})" in english
+    inventory = json.loads((ROOT / "docs/migration/compatibility-inventory.json").read_text())
+    recipe_count = sum(tool["group"] == "recipes" for tool in inventory["tools"])
+    assert f"| Recipes | {recipe_count} |" in english and "| Shopping lists | 13 |" in english
     assert "[full schemas](docs/tools.md)" in english
-    assert "## Herramientas disponibles (78)" in spanish
-    assert "| Recetas | 26 |" in spanish and "| Compras | 13 |" in spanish
+    assert f"## Herramientas disponibles ({count})" in spanish
+    assert f"| Recetas | {recipe_count} |" in spanish and "| Compras | 13 |" in spanish
     assert "[esquemas completos](tools.md)" in spanish
     assert spanish.startswith("Manual introduction\n") and spanish.endswith("Manual ending\n")
     assert subprocess.run([*base, "--check"], capture_output=True).returncode == 0

@@ -16,7 +16,8 @@ enlaza la propuesta e indica cómo iniciar sus checks. Las PR de forks no se sel
 
 1. Crear una rama y una PR hacia `main`, con título Conventional Commit validado. Preferir
    squash para que el título y los breaking footers de la PR describan el merge.
-2. Pasar la política de workflows/dependencias y `Verify amd64` / `Verify arm64`,
+2. Pasar la política de workflows/dependencias, `Verify amd64` / `Verify arm64`
+   y CodeQL (`Analyze python` / `Analyze actions`),
    con la rama actualizada. Los checks nativos fallan si falla la política previa;
    no quedan simplemente omitidos, porque GitHub admite checks omitidos. Main exige PR
    incluso para administradores, historial lineal y conversaciones resueltas;
@@ -24,7 +25,7 @@ enlaza la propuesta e indica cómo iniciar sus checks. Las PR de forks no se sel
 3. El workflow [release-please.yaml](../.github/workflows/release-please.yaml) utiliza
    Release Please para crear o actualizar una sola PR, con los cambios pendientes.
    La propuesta **queda abierta**. Una GitHub App dedicada inicia sus checks
-   automáticamente; esperar a ambos checks antes de fusionarla.
+   automáticamente; esperar a los cuatro checks obligatorios antes de fusionarla.
 4. Cuando el usuario fusiona esa PR, la acción oficial crea el tag y la GitHub
    Release. El workflow despacha [ci.yaml](../.github/workflows/ci.yaml) sobre ese
    tag exacto, incluyendo el parámetro `release_tag`.
@@ -44,6 +45,15 @@ flowchart TD
 
 La Release puede aparecer antes de que termine su imagen; revisar la ejecución de
 CI antes de desplegarla. Un dispatch sin `release_tag` solo ejecuta checks.
+
+El E2E de cada job nativo audita primero el OpenAPI real de Mealie frente al
+contrato seleccionado de `tests/fixtures/mealie330/provider-contract.json`.
+`scripts/audit_mealie_api.py` detecta rutas/dependencias y cambios estructurales
+incompatibles antes de crear credenciales o mutar recetas. Un fallo detiene el
+job y conserva la limpieza y sus artifacts. Este contrato es independiente de
+los fixtures históricos y se revisa expresamente al cambiar la versión Mealie.
+El gate JUnit también exige un informe sin errores/fallos y sin identidades
+duplicadas, con los positivos/rechazos atribuidos a sus módulos de contrato.
 
 ## Versiones y archivos
 
@@ -151,7 +161,8 @@ Exige versión semántica, coincidencia de ambas imágenes, revisión Git, tag y
 Release existente que no sea draft. Un dispatch sin `release_tag` solo ejecuta pruebas.
 
 La configuración aplicada a main está en [main-protection.json](main-protection.json).
-Exige ambos checks de GitHub Actions, sin aprobaciones de otra persona para permitir
+Exige los cuatro checks de GitHub Actions (`Verify amd64`, `Verify arm64`,
+`Analyze python` y `Analyze actions`), sin aprobaciones de otra persona para permitir
 mantenimiento individual. La PR y sus checks siguen siendo obligatorios.
 
 ## Checks, tags y recuperación
@@ -240,8 +251,11 @@ Esto evita depender del pequeño cupo anónimo compartido por las IP de CI.
 
 CodeQL analiza Python y Actions en PR, push a main, dispatch y semanalmente. Es
 análisis estático sin ejecutar ni construir la aplicación. Publica resultados
-en Security; la compatibilidad del extractor con Python 3.14 deberá comprobarse
-en su primera ejecución remota. El setup avanzado no requiere activar default setup.
+en Security; los jobs `Analyze python` y `Analyze actions` son obligatorios para
+fusionar a main, asociados a GitHub Actions. Ambos análisis terminaron correctamente
+en main el 2 de noviembre de 2026. El setup avanzado no requiere activar default setup.
+Exigir esos jobs comprueba que el análisis se ejecutó correctamente; no equivale
+a exigir ausencia de todas las alertas de CodeQL.
 
 Renovate es el único bot de actualizaciones de versiones: ventana semanal de
 lunes 00:00–05:59 Europe/Madrid, un grupo semanal para Actions, imágenes Docker,
@@ -257,6 +271,36 @@ lo separa de las actualizaciones de versiones mediante su rama nativa
 `lock-file-maintenance-*`. No se fuerzan colisiones de ramas para fusionar ambos
 procesos. El grupo de versiones sí combina actualizaciones major/minor/patch y
 digests en una propuesta para revisión humana.
+
+## Seguridad y colaboración en GitHub
+
+La protección de `main` exige los cuatro checks de
+[main-protection.json](main-protection.json). Los archivos de configuración no
+aplican ajustes remotos por sí solos; revisar el estado efectivo en **Settings →
+Branches** después de cualquier cambio. Se mantienen PR obligatoria, rama
+actualizada, conversaciones resueltas, historial lineal, aplicación a
+administradores y prohibición de force push y borrado. No se requieren
+aprobaciones de otra persona para mantenimiento individual.
+
+En **Settings → Advanced Security**, mantener **Secret Protection**, **Push
+protection** y **Private vulnerability reporting** habilitados. Push protection
+se habilitó el 2 de noviembre de 2026; el canal privado ya estaba habilitado.
+La política para comunicar vulnerabilidades es [SECURITY.md](../SECURITY.md).
+Las plantillas públicas solicitan únicamente ejemplos y errores saneados.
+
+Renovate requiere instalar la [App oficial](https://github.com/apps/renovate)
+con **Only select repositories → brunofelixns/mealie-mcp-server**. La instalación
+no estaba presente en la revisión del 2 de noviembre de 2026 y queda pendiente de
+autorizar sus permisos. No asumir que `renovate.json` activa el servicio.
+Tras instalarla, comprobar que aparece en **Settings → GitHub Apps** y revisar
+su primera ejecución/onboarding. El horario semanal y `automerge: false`
+continúan definidos por `renovate.json`; no activar un segundo bot de PR de
+versiones. Las alertas de Dependabot existentes pueden permanecer habilitadas.
+
+Para contribuir, consultar [CONTRIBUTING.md](../CONTRIBUTING.md), el
+[código de conducta](../CODE_OF_CONDUCT.md) y las plantillas de issues y PR.
+No se publica en PyPI mediante esta configuración; añadir ese destino requiere
+una decisión y autorización de publicación independientes.
 
 ## Etiquetado de PR
 

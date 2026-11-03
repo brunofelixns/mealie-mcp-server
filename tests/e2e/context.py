@@ -104,6 +104,11 @@ def baseline_arguments():
     for path in sorted((ROOT / "tests/fixtures/compatibility/cases").glob("*.json")):
         for case in json.loads(path.read_text()):
             args.setdefault(case["tool"], case["arguments"])
+    for entry in json.loads((ROOT / "docs/migration/compatibility-inventory.json").read_text())[
+        "tools"
+    ]:
+        if "extensionArguments" in entry:
+            args[entry["name"]] = entry["extensionArguments"]
     if set(args) != catalog_names():
         raise RuntimeError("Missing baseline arguments for argument-rejection tests")
     return args

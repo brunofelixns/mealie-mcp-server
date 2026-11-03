@@ -7,14 +7,15 @@ import re
 import secrets
 import struct
 import subprocess
+import sys
 import zlib
 from pathlib import Path
 
 import httpx2 as httpx
 
 ROOT = Path(__file__).resolve().parents[2]
-MEALIE_VERSION = "v3.29.0"
-MEALIE_DIGEST = "sha256:78eb28b8776d0bad40c5e605c72b3f4f5976793e491558c7dcbdfc04c835d4bc"
+MEALIE_VERSION = "v3.30.0"
+MEALIE_DIGEST = "sha256:90f83da6f3ab0a421efc827118a556168573930105f13fa3321768f42163d784"
 PROJECT_PATTERN = r"mealie-mcp-e2e-[0-9a-f]{12}"
 
 
@@ -164,6 +165,38 @@ class Stack:
         ):
             raise RuntimeError("Refuse an unowned, externally attached or published service")
 
+    def audit_api(self):
+        """Check the actual disposable provider before credentials or recipe mutations."""
+        url = "http://" + self.env["MCP_E2E_MEALIE_HOST"] + ":9000"
+        schema_path = self.artifacts / "openapi.json"
+        report_path = self.artifacts / "api-audit.json"
+        with httpx.Client(base_url=url, timeout=30, trust_env=False) as http:
+            raw = http.get("/openapi.json").raise_for_status().content
+        schema_path.write_bytes(raw)
+        result = subprocess.run(
+            [
+                sys.executable,
+                str(ROOT / "scripts/audit_mealie_api.py"),
+                "--schema",
+                str(schema_path),
+                "--expected-version",
+                MEALIE_VERSION,
+                "--output",
+                str(report_path),
+            ],
+            cwd=ROOT,
+            capture_output=True,
+            text=True,
+            timeout=60,
+        )
+        # The report contains schema metadata only; never replay provider response bodies.
+        if result.returncode or not report_path.is_file():
+            raise RuntimeError("API audit failed; inspect api-audit.json and openapi.json")
+        report = json.loads(report_path.read_bytes())
+        if not report.get("contractChecked") or report.get("contractErrors"):
+            raise RuntimeError("API audit failed; inspect api-audit.json and openapi.json")
+        return {key: value for key, value in report.items() if key != "operations"}
+
     def bootstrap(self, directory):
         url = "http://" + self.env["MCP_E2E_MEALIE_HOST"] + ":9000"
         with httpx.Client(base_url=url, timeout=30, trust_env=False) as http:
@@ -192,6 +225,24 @@ class Stack:
             path.chmod(0o444)
         (directory / "image.png").write_bytes(png())
         (directory / "image.png").chmod(0o444)
+        recipe_json = json.dumps(
+            {
+                "@context": "https://schema.org",
+                "@type": "Recipe",
+                "name": "MCP Native URL Import",
+                "recipeYield": "2 servings",
+                "recipeIngredient": ["1 cup water"],
+                "recipeInstructions": [{"@type": "HowToStep", "text": "Bring water to a boil."}],
+            }
+        )
+        (directory / "recipe.html").write_text(
+            "<!doctype html><html><head><title>Recipe</title>"
+            '<script type="application/ld+json">' + recipe_json + "</script></head>"
+            "<body><h1>MCP Native URL Import</h1></body></html>"
+        )
+        (directory / "recipe.html").chmod(0o444)
+        (directory / "server.py").write_text((ROOT / "tests/e2e/fixture_server.py").read_text())
+        (directory / "server.py").chmod(0o444)
         for name in ("credentials", "fixture-assets"):
             docker(
                 "volume",
@@ -222,6 +273,8 @@ class Stack:
             for filename in ("mealie_api_key", "mcp_auth_token"):
                 docker("cp", str(directory / filename), preparer + ":/run/secrets/" + filename)
             docker("cp", str(directory / "image.png"), preparer + ":/assets/image.png")
+            docker("cp", str(directory / "recipe.html"), preparer + ":/assets/recipe.html")
+            docker("cp", str(directory / "server.py"), preparer + ":/assets/server.py")
         finally:
             docker("rm", "--force", preparer, check=False)
         self.compose_run(

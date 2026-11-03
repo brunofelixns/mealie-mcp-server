@@ -74,7 +74,13 @@ class Scenario:
         self.report["checks"].append("owned_data_removed")
 
     async def run(self):
-        from tests.e2e import catalog_flow, mealplan_flow, recipe_flow, shopping_flow
+        from tests.e2e import (
+            catalog_flow,
+            mealplan_flow,
+            recipe_extensions_flow,
+            recipe_flow,
+            shopping_flow,
+        )
 
         try:
             listed = await self.client.list_tools()
@@ -97,6 +103,18 @@ class Scenario:
             await self.reject_all_inputs()
             await catalog_flow.prepare(self)
             await recipe_flow.exercise(self)
+            await recipe_extensions_flow.exercise(self)
+            from tests.e2e import (
+                advanced_330_flow,
+                collections_330_flow,
+                jobs_330_flow,
+                media_330_flow,
+            )
+
+            await advanced_330_flow.exercise(self)
+            await collections_330_flow.exercise(self)
+            await media_330_flow.exercise(self)
+            await jobs_330_flow.exercise(self)
             await mealplan_flow.exercise(self)
             await shopping_flow.exercise(self)
             await recipe_flow.merge_and_cleanup(self)

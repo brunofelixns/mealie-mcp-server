@@ -1,18 +1,18 @@
 # Cobertura de API
 
-Generado con `uv run python scripts/generate_docs.py`. Catálogo explícito de 78 herramientas; los tipos completos están en [tools.md](tools.md).
+Generado con `uv run python scripts/generate_docs.py`. Catálogo explícito de 162 herramientas; los tipos completos están en [tools.md](tools.md).
 
 | Familia | Herramientas |
 |---|---:|
-| Recetas | 26 |
-| Planificación | 6 |
+| Recetas | 95 |
+| Planificación | 21 |
 | Categorías | 7 |
 | Etiquetas | 7 |
 | Compras | 13 |
 | Alimentos | 7 |
 | Unidades | 6 |
 | Equipamiento | 6 |
-| **Total** | **78** |
+| **Total** | **162** |
 
 ## `get_recipes`
 
@@ -520,3 +520,531 @@ Renames an existing Mealie Tool organizer. Reads the current Tool first and carr
 DESTRUCTIVE and irreversible: permanently deletes a Mealie Tool organizer. Use get_tool first to verify this is the exact Tool intended. If Mealie refuses the deletion, its error is surfaced unchanged.
 
 - DELETE /api/organizers/tools/{id}
+
+## `get_recipe_notes`
+
+Reads recipe notes with stable referenceId identities and the recipe updatedAt snapshot token. Retains provider fields; use expectedUpdatedAt from this snapshot for note writes.
+
+- GET /api/recipes/{slug}
+
+## `add_recipe_note`
+
+Appends a recipe note without reordering existing notes. Title and text are required strings; empty strings are preserved. Optional referenceId is a new UUID, generated when omitted. Requires the exact expectedUpdatedAt recipe snapshot; preserves unknown fields and verifies the result without replaying writes.
+
+- GET /api/recipes/{slug}
+- PATCH /api/recipes/{slug}
+
+## `update_recipe_note`
+
+Edits a recipe note selected by its stable UUID referenceId. Supply title and/or text; omitted fields, identity, order and unknown provider fields are preserved, and empty strings clear content. Requires expectedUpdatedAt, skips no-op writes and verifies persisted notes without replaying writes.
+
+- GET /api/recipes/{slug}
+- PATCH /api/recipes/{slug}
+
+## `delete_recipe_note`
+
+Deletes a recipe note by stable UUID referenceId with expectedUpdatedAt snapshot protection. Refuses linked notes unless removeReferences=true explicitly removes matching instruction note references. Preserves remaining notes, instruction fields and other references, ignoring ephemeral instruction IDs when verifying. Never replays writes.
+
+- GET /api/recipes/{slug}
+- PATCH /api/recipes/{slug}
+
+## `update_recipe_metadata`
+
+Updates recipe metadata including prepTime/cookTime/performTime, nutrition, settings and extras. Requires expectedUpdatedAt from get_recipe_detailed; stale snapshots fail before writing (not an atomic lock). Nested nutrition/settings/extras MERGE with the current objects, preserving omitted and unknown fields. nutrition:null clears nutrition; nested null clears that nutritional field; false, zero and empty strings are preserved. removeExtraKeys removes only the named extras and cannot overlap extras. Nutrition values are strings exactly as stored by Mealie, never AI estimates. A no-op skips PATCH. Verifies the returned values; on mismatch reports failure and asks for inspection, with no automatic retry or rollback. Does not edit ingredients, steps, taxonomy, notes or other unrelated recipe fields.
+
+- GET /api/recipes/{slug}
+- PATCH /api/recipes/{slug}
+
+## `get_recipe_comments`
+
+Lists comments for a recipe, preserving provider order and unknown fields.
+
+- GET /api/recipes/{slug}/comments
+
+## `create_recipe_comment`
+
+Creates a comment as the authenticated Mealie user after resolving the recipe slug. Mealie trims nonempty text. No automatic write retries.
+
+- GET /api/recipes/{slug}
+- POST /api/comments
+
+## `update_recipe_comment`
+
+Updates comment text by comment UUID. Mealie permits only the owner or an administrator. No automatic write retries.
+
+- PUT /api/comments/{commentId}
+
+## `delete_recipe_comment`
+
+Deletes a comment by UUID. Mealie permits only the owner or an administrator. No automatic write retries.
+
+- DELETE /api/comments/{commentId}
+
+## `get_recipe_share_links`
+
+Lists share tokens for one recipe after resolving its slug to a recipe UUID. Returned tokens grant public recipe access; handle them as sensitive data.
+
+- GET /api/recipes/{slug}
+- GET /api/shared/recipes
+
+## `create_recipe_share_link`
+
+Creates a public-access share token for a recipe. Omit expiresAt to use Mealie's 30-day default. Returns the provider token and recipe payload. No automatic write retries.
+
+- GET /api/recipes/{slug}
+- POST /api/shared/recipes
+
+## `delete_recipe_share_link`
+
+Revokes a recipe share token by its UUID. No automatic write retries.
+
+- DELETE /api/shared/recipes/{tokenId}
+
+## `get_recipe_timeline`
+
+Lists one page of timeline events filtered to a recipe UUID resolved from its slug. Preserves provider pagination, ordering and unknown fields.
+
+- GET /api/recipes/{slug}
+- GET /api/recipes/timeline/events
+
+## `create_recipe_timeline_event`
+
+Creates a recipe timeline event. eventType accepts system, info or comment; cooking history can be recorded as an info event. Omit timestamp and userId for Mealie defaults. No automatic write retries.
+
+- GET /api/recipes/{slug}
+- POST /api/recipes/timeline/events
+
+## `update_recipe_timeline_event`
+
+Updates a timeline event subject, optional eventMessage and image state. Requires subject; event type and timestamp cannot be changed by the provider endpoint. Omitted fields remain omitted; explicit null is forwarded. No automatic write retries. Mealie 3.29 may ignore default null values; use an empty eventMessage string to clear text.
+
+- PUT /api/recipes/timeline/events/{eventId}
+
+## `delete_recipe_timeline_event`
+
+Deletes a recipe timeline event and its provider-managed image files. No automatic write retries.
+
+- DELETE /api/recipes/timeline/events/{eventId}
+
+## `set_recipe_timeline_event_image`
+
+Uploads a PNG, JPEG, GIF or WebP timeline image using standard base64 (maximum 10 MiB decoded). Optional extension must match detected bytes. No host paths or automatic write retries.
+
+- PUT /api/recipes/timeline/events/{eventId}/image
+
+## `upload_recipe_asset`
+
+Uploads a recipe asset using bounded base64 data (10 MiB). Requires name, icon and a supported extension. Mealie stores the file and updates the recipe assets. No automatic write retry.
+
+- POST /api/recipes/{slug}/assets
+
+## `create_recipe_asset_from_url`
+
+Asks Mealie to fetch an image URL and add a recipe asset. Provider URL restrictions, permissions and its 5 MiB limit apply. No automatic write retry.
+
+- POST /api/recipes/{slug}/assets/url
+
+## `import_recipe_from_url`
+
+Creates a recipe through the native Mealie URL importer and returns its slug. Mealie fetches the URL and may create tags/categories when includeTags/includeCategories are true. An ambiguous failure must be reconciled before retrying.
+
+- POST /api/recipes/create/url
+
+## `import_recipe_from_html_or_json`
+
+Creates a recipe from HTML or a schema.org Recipe JSON string (2 MiB UTF-8 maximum), returning its slug. Optional source URL and tag/category options use native provider behavior. No automatic write retry.
+
+- POST /api/recipes/create/html-or-json
+
+## `import_recipe_from_zip`
+
+Creates a recipe through the native Mealie ZIP importer, returning its slug. archiveBase64 is limited to 20 MiB, 1000 members and 100 MiB expanded data; unsafe or encrypted members are rejected. No automatic write retry.
+
+- POST /api/recipes/create/zip
+
+## `get_recipe_export_formats`
+
+Lists native Mealie export template names grouped by json and zip.
+
+- GET /api/recipes/exports
+
+## `export_recipe`
+
+Exports a recipe with a native templateName from get_recipe_export_formats. Returns filename, mediaType, size and dataBase64; download is authenticated, same-origin and limited to 20 MiB. No host files are written.
+
+- GET /api/recipes/{slug}/exports
+
+## `search_recipes`
+
+Search recipes with native Mealie filters: category/tag/tool/food/household exact slugs or IDs, cookbook, requireAll flags, ordering, queryFilter, paginationSeed and bounded pagination. No taxonomy names are resolved implicitly.
+
+- GET /api/recipes
+
+## `get_recipe_suggestions`
+
+Get native suggestions from canonical food/tool UUIDs, on-hand inventory, missing-item limits and optional substitutions, with native ordering/queryFilter/paginationSeed. Explicit false and zero values are forwarded.
+
+- GET /api/recipes/suggestions
+
+## `parse_recipe_ingredient`
+
+Explicitly preview one ingredient using the native nlp, brute or openai parser. Does not apply the parsed result to a recipe. The openai option uses Mealie provider configuration and may send ingredient text to that provider.
+
+- POST /api/parser/ingredient
+
+## `parse_recipe_ingredients`
+
+Explicitly preview a bounded list of ingredients using the native nlp, brute or openai parser. Does not apply results to recipes. The openai option uses Mealie provider configuration and may send ingredient text to that provider.
+
+- POST /api/parser/ingredients
+
+## `update_recipe_ingredient_substitutions`
+
+Replace substitutions only for selected ingredient referenceIds with canonical substituteFoodId values, nonblank note-only alternatives, or a mix (empty list clears). No foods are invented; omitted and null fields are forwarded as supplied. Requires expectedUpdatedAt from a fresh snapshot and preserves other rows, provider fields, order and instruction references. Supplied IDs are validated and the response verified. Snapshot checks are not atomic CAS; writes are never replayed. Mealie trims note boundaries and converts blank ID-attached notes to null; verification follows this native normalization.
+
+- GET /api/recipes/{slug}
+- GET /api/foods/{item_id}
+- PATCH /api/recipes/{slug}
+
+## `update_food_substitutions`
+
+Replace a canonical food's substitutions with explicit canonical substituteFoodId values, nonblank note-only alternatives, or a mix (empty list clears). Omitted and null fields are forwarded as supplied; no foods are invented. Validates supplied food IDs, rejects self/duplicate food IDs and empty alternatives, preserves existing food fields and verifies the response without replaying a write. Native food updates have no atomic concurrency guard. Mealie trims note boundaries and converts blank ID-attached notes to null; verification follows this native normalization.
+
+- GET /api/foods/{item_id}
+- PUT /api/foods/{item_id}
+
+## `update_recipe_instruction_durations`
+
+Set timers on snapshot-indexed instruction rows: durationSeconds is null to clear or an integer from 1 through 2147483647. Requires expectedUpdatedAt from a fresh recipe snapshot and preserves text, references, other steps and provider fields. Ignores ephemeral instruction IDs when verifying; snapshot checks are not atomic CAS and writes are never replayed.
+
+- GET /api/recipes/{slug}
+- PATCH /api/recipes/{slug}
+
+## `get_recipe_assets`
+
+Lists current recipe asset metadata without losing unknown fields.
+
+- GET /api/recipes/{slug}
+
+## `download_recipe_asset`
+
+Downloads one asset listed on the current recipe. Resolves its recipe ID, refuses missing/ambiguous names and returns bounded filename/mediaType/size/dataBase64 without writing host files.
+
+- GET /api/recipes/{slug}
+- GET /api/media/recipes/{recipe_id}/assets/{file_name}
+
+## `download_recipe_image`
+
+Downloads a current recipe image variant from the configured Mealie origin. Returns filename/mediaType/size/dataBase64; limit 20 MiB, no host file writes or arbitrary URLs.
+
+- GET /api/recipes/{slug}
+- GET /api/media/recipes/{recipe_id}/images/{file_name}
+
+## `download_recipe_timeline_image`
+
+Downloads an event image after verifying that the event belongs to the selected recipe. Bounded 20 MiB base64 result; no arbitrary URL, local path or cross-origin redirect.
+
+- GET /api/recipes/{slug}
+- GET /api/recipes/timeline/events/{event_id}
+- GET /api/media/recipes/{recipe_id}/images/timeline/{event_id}/{file_name}
+
+## `get_shared_recipe`
+
+Reads a recipe through an existing share token on the configured Mealie instance. Token permissions/expiration are enforced by Mealie; never log or disclose tokens outside an explicit sharing request.
+
+- GET /api/recipes/shared/{token_id}
+
+## `download_shared_recipe`
+
+Downloads the shared recipe ZIP from the configured Mealie instance using an existing token. Returns bounded filename/mediaType/size/dataBase64; token is sensitive, no arbitrary URL or host file writes.
+
+- GET /api/recipes/shared/{token_id}/zip
+
+## `get_cookbooks`
+
+Lists group cookbooks visible to the authenticated user across households, with native filters and pagination.
+
+- GET /api/households/cookbooks
+
+## `create_cookbook`
+
+Creates a household cookbook. Mealie trims name and derives its collision-aware slug; slug cannot be supplied. Public visibility changes only when explicitly supplied. No automatic write retry.
+
+- POST /api/households/cookbooks
+
+## `get_cookbook`
+
+Reads a cookbook by native UUID or slug.
+
+- GET /api/households/cookbooks/{item_id}
+
+## `update_cookbook`
+
+Updates supplied cookbook changes after resolving UUID or slug through a fresh read, then writes its canonical UUID. Preserves unknown fields and native ownership. Mealie trims name and derives its collision-aware slug; slug cannot be edited. Other requested fields are verified exactly. This read/write is not atomic. No automatic write retry.
+
+- GET /api/households/cookbooks/{item_id}
+- PUT /api/households/cookbooks/{item_id}
+
+## `delete_cookbook`
+
+Deletes a cookbook by UUID or slug after a fresh read resolves its canonical UUID. Native household permissions apply. No automatic write retry.
+
+- GET /api/households/cookbooks/{item_id}
+- DELETE /api/households/cookbooks/{item_id}
+
+## `get_recipe_favorites`
+
+Reads favorited recipes for the authenticated user.
+
+- GET /api/users/self/favorites
+
+## `get_recipe_ratings`
+
+Reads rated recipes for the authenticated user.
+
+- GET /api/users/self/ratings
+
+## `list_recipe_comments`
+
+Lists comments visible to the authenticated user with native filters and pagination.
+
+- GET /api/comments
+
+## `get_recipe_comment`
+
+Reads one native recipe comment.
+
+- GET /api/comments/{item_id}
+
+## `get_recipe_timeline_event`
+
+Reads one native recipe timeline event.
+
+- GET /api/recipes/timeline/events/{item_id}
+
+## `get_recipe_share_link`
+
+Reads native recipe share-token details; returned tokens are confidential.
+
+- GET /api/shared/recipes/{item_id}
+
+## `get_recipe_actions`
+
+Lists configured household recipe actions without triggering them.
+
+- GET /api/households/recipe-actions
+
+## `create_recipe_action`
+
+Creates a native household recipe action. The supplied URL is stored by Mealie; creation does not trigger the external action. No automatic write retry.
+
+- POST /api/households/recipe-actions
+
+## `get_recipe_action`
+
+Reads one configured household recipe action.
+
+- GET /api/households/recipe-actions/{item_id}
+
+## `update_recipe_action`
+
+Updates a configured recipe action after a fresh read, preserving native ownership and unknown fields. This read/write is not atomic and does not trigger the action. No automatic write retry.
+
+- GET /api/households/recipe-actions/{item_id}
+- PUT /api/households/recipe-actions/{item_id}
+
+## `delete_recipe_action`
+
+Deletes a configured household recipe action. No automatic write retry.
+
+- DELETE /api/households/recipe-actions/{item_id}
+
+## `trigger_recipe_action`
+
+Explicitly triggers a configured Mealie recipe action for a recipe and scale. This may contact external services and cause irreversible effects; invoke only at the user request for that action. Never automatically replay an uncertain outcome. No automatic write retry.
+
+- POST /api/households/recipe-actions/{item_id}/trigger/{recipe_slug}
+
+## `get_recipe_household`
+
+Reads recipeId and lastMade for the authenticated household and selected recipe slug. Native timestamp/null and unknown fields are preserved; Mealie enforces access.
+
+- GET /api/households/self/recipes/{recipe_slug}
+
+## `list_mealplan_entries`
+
+Lists native meal-plan entries, optionally including weekly entries. Filters use exact provider snake_case query names.
+
+- GET /api/households/mealplans
+
+## `create_mealplan_entry`
+
+Creates a native meal-plan entry with text and positive recipeScale. Weekly endDate must be exactly six days after date. No automatic write retry.
+
+- POST /api/households/mealplans
+
+## `get_mealplan_entry`
+
+Reads one native meal-plan entry.
+
+- GET /api/households/mealplans/{item_id}
+
+## `update_mealplan_entry`
+
+Updates supplied meal-plan fields after a fresh read, preserving text, scale, unknown fields and native ownership. Validates merged weekly dates. This read/write is not atomic. No automatic write retry.
+
+- GET /api/households/mealplans/{item_id}
+- PUT /api/households/mealplans/{item_id}
+
+## `delete_mealplan_entry`
+
+Deletes one native meal-plan entry. No automatic write retry.
+
+- DELETE /api/households/mealplans/{item_id}
+
+## `create_random_mealplan_entry`
+
+Creates a native randomly selected meal-plan entry using applicable Mealie rules. Weekly endDate is exactly six days after date. No automatic write retry.
+
+- POST /api/households/mealplans/random
+
+## `get_mealplan_rules`
+
+Lists native household meal-plan rules.
+
+- GET /api/households/mealplans/rules
+
+## `create_mealplan_rule`
+
+Creates a native meal-plan rule; unset applies across days or entry types. No automatic write retry.
+
+- POST /api/households/mealplans/rules
+
+## `get_mealplan_rule`
+
+Reads a native meal-plan rule.
+
+- GET /api/households/mealplans/rules/{item_id}
+
+## `update_mealplan_rule`
+
+Updates supplied rule fields after a fresh read, preserving unknown fields and native ownership. This read/write is not atomic. No automatic write retry.
+
+- GET /api/households/mealplans/rules/{item_id}
+- PUT /api/households/mealplans/rules/{item_id}
+
+## `delete_mealplan_rule`
+
+Deletes a native meal-plan rule. No automatic write retry.
+
+- DELETE /api/households/mealplans/rules/{item_id}
+
+## `get_mealplan_ical_token`
+
+Reads the household calendar token, or null when disabled. Treat returned tokens as confidential.
+
+- GET /api/households/mealplans/ical
+
+## `rotate_mealplan_ical_token`
+
+Enables the household meal-plan iCal feed and replaces its token. Existing subscription URLs stop working; invoke only for an explicit calendar enable/rotate request. No automatic write retry.
+
+- POST /api/households/mealplans/ical
+
+## `delete_mealplan_ical_token`
+
+Disables the household meal-plan iCal feed and invalidates existing subscription URLs. No automatic write retry.
+
+- DELETE /api/households/mealplans/ical
+
+## `get_mealplan_ical_feed`
+
+Downloads the native iCal feed as dataBase64, limited to 5 MiB. Uses explicit timezone, exact date/time strings and repeated types parameters; does not write host files.
+
+- GET /api/households/mealplans/ical/{token}
+
+## `preview_recipe_from_url`
+
+Preview scraping a URL without creating a recipe. useOpenAI explicitly selects Mealie configured AI scraper. Native provider permissions and errors apply.
+
+- POST /api/recipes/test-scrape-url
+
+## `import_recipe_with_ai`
+
+Create a recipe through Mealie configured AI provider from content, URL and/or up to eight base64 images. Uses native multipart; may create organizers only when explicitly selected. No automatic retry; inspect recipes after ambiguous failures.
+
+- POST /api/recipes/create/ai
+
+## `import_recipe_from_url_with_progress`
+
+Create a recipe from a URL using bounded native SSE and safe MCP progress. No reconnect or retry after interruption; inspect recipes before importing again.
+
+- POST /api/recipes/create/url/stream
+
+## `import_recipe_from_html_or_json_with_progress`
+
+Create a recipe from HTML, schema.org JSON or a full Mealie export using bounded native SSE and safe MCP progress. No reconnect or retry.
+
+- POST /api/recipes/create/html-or-json/stream
+
+## `import_recipe_with_ai_with_progress`
+
+Create a recipe through Mealie configured AI provider with bounded SSE and safe MCP progress. Accepts native content, URL and repeated image uploads; no local AI credentials or automatic replay.
+
+- POST /api/recipes/create/ai/stream
+
+## `import_recipes_from_urls`
+
+Submit up to 100 URL imports as one native background job; return reportId for get_recipe_import_report. Tags/categories use explicit native organizer objects. Not atomic; partial failures are in the report. Never automatically retries.
+
+- POST /api/recipes/create/url/bulk
+
+## `get_recipe_import_reports`
+
+List native group reports filtered to bulk_import; inspect status and report IDs to track submitted imports.
+
+- GET /api/groups/reports
+
+## `get_recipe_import_report`
+
+Read a native bulk_import report and its per-recipe entries. Rejects reports from unrelated categories; preserve provider status and unknown data.
+
+- GET /api/groups/reports/{item_id}
+
+## `delete_recipes_bulk`
+
+Permanently delete up to 100 explicitly selected recipe slugs/IDs using native bulk deletion. Non-atomic; provider does not report per-item outcomes. No write retry.
+
+- POST /api/recipes/bulk-actions/delete
+
+## `export_recipes_bulk`
+
+Submit native JSON ZIP export for up to 100 explicit recipes. Use get_recipe_bulk_exports to locate completed exports; response does not invent a job ID. No write retry.
+
+- POST /api/recipes/bulk-actions/export
+
+## `get_recipe_bulk_exports`
+
+List native group recipe exports with IDs, sizes and expiry.
+
+- GET /api/recipes/bulk-actions/export
+
+## `download_recipe_bulk_export`
+
+Download an existing native recipe export as bounded base64 (20 MiB). Resolve its native file token internally at the configured Mealie origin; never return the token or a signed URL.
+
+- GET /api/recipes/bulk-actions/export/{export_id}/download
+- GET /api/utils/download
+
+## `purge_recipe_bulk_exports`
+
+Delete all native group recipe export records and on-disk export files. This affects all exports in the group; no automatic retry.
+
+- DELETE /api/recipes/bulk-actions/export/purge
+
+## `update_recipe_metadata_batch`
+
+Edit metadata on up to 50 recipes with explicit expectedUpdatedAt per item. Fresh read/patch preserves unrelated fields; snapshot check is not atomic CAS. Bounded concurrency (1-5), ordered per-item outcomes, partial completion and unknown outcomes are explicit. Never retries writes. Resolve recipe aliases to canonical IDs before any write; duplicate identities reject the whole batch. Identity lookup failures are ordered per-item failures with no write issued.
+
+- GET /api/recipes/{slug}
+- PATCH /api/recipes/{slug}

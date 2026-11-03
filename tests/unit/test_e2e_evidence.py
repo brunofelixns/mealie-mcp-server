@@ -38,13 +38,14 @@ def complete_case(transport="stdio", protocol="2026-07-28"):
     }
 
 
-def test_complete_evidence_distinguishes_77_positives_and_security_rejection():
+def test_complete_evidence_distinguishes_positives_and_security_rejection():
     report = complete_case()
     assert validate_case(report, NAMES) == {
-        "tools": 78,
-        "positive": 77,
+        "tools": len(NAMES),
+        "positive": len(NAMES) - 1,
         "securityRejections": 1,
-        "inputRejections": 78,
+        "configurationRejections": 0,
+        "inputRejections": len(NAMES),
     }
 
 
@@ -75,7 +76,7 @@ def test_suite_requires_all_four_transport_protocol_pairs_and_same_image():
         for transport in ("stdio", "http")
         for protocol in ("2026-07-28", "2025-11-25")
     ]
-    assert validate_suite(reports, NAMES)["totalToolPaths"] == 312
+    assert validate_suite(reports, NAMES)["totalToolPaths"] == 4 * len(NAMES)
     with pytest.raises(ValueError):
         validate_suite(reports[:-1], NAMES)
     reports[-1]["imageId"] = "sha256:" + "b" * 64
@@ -95,3 +96,20 @@ def test_secret_guard_refuses_to_write_sensitive_report(tmp_path, leak):
     with pytest.raises(ValueError):
         write_report(path, report, secrets=(secret,))
     assert not path.exists()
+
+
+def test_ai_unconfigured_evidence_requires_specific_provider_and_no_replay_assertions():
+    report = complete_case()
+    names = {"import_recipe_with_ai", "import_recipe_with_ai_with_progress"}
+    for record in report["tools"]:
+        if record["tool"] in names:
+            record["outcome"] = "configuration_rejection"
+            record["checks"] = ["provider_ai_unconfigured", "write_not_replayed"]
+    coverage = validate_case(report, NAMES)
+    assert coverage["configurationRejections"] == 2
+    assert coverage["positive"] == len(NAMES) - 3
+    broken = copy.deepcopy(report)
+    record = next(r for r in broken["tools"] if r["tool"] in names)
+    record["checks"] = ["generic_provider_error"]
+    with pytest.raises(ValueError):
+        validate_case(broken, NAMES)

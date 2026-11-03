@@ -7,13 +7,16 @@ from pydantic import BaseModel, BeforeValidator, ConfigDict, Field, field_valida
 from mealie_mcp_server.support.strings import trim
 
 
-def _json_integer(value: object) -> object:
+def normalize_json_integer(value: object) -> object:
     if isinstance(value, float) and value.is_integer():
         return int(value)
     return value
 
 
-type JsonInteger = Annotated[int, BeforeValidator(_json_integer)]
+type JsonInteger = Annotated[int, BeforeValidator(normalize_json_integer)]
+# Apply bounds before the validator so JSON Schema retains minimum/maximum.
+type PositiveJsonInteger = Annotated[int, Field(ge=1), BeforeValidator(normalize_json_integer)]
+type NonNegativeJsonInteger = Annotated[int, Field(ge=0), BeforeValidator(normalize_json_integer)]
 
 
 class ToolInput(BaseModel):

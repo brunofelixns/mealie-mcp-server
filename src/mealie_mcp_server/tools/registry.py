@@ -50,7 +50,16 @@ def register_all_tools(server: FastMCP) -> None:
     from mealie_mcp_server.tools.categories import register_categories
     from mealie_mcp_server.tools.equipment import register_equipment
     from mealie_mcp_server.tools.foods import register_foods
+    from mealie_mcp_server.tools.mealplan_advanced import register_mealplan_advanced
     from mealie_mcp_server.tools.mealplans import register_mealplans
+    from mealie_mcp_server.tools.recipe_advanced import register_recipe_advanced
+    from mealie_mcp_server.tools.recipe_collaboration import register_recipe_collaboration
+    from mealie_mcp_server.tools.recipe_collections import register_recipe_collections
+    from mealie_mcp_server.tools.recipe_io import register_recipe_io
+    from mealie_mcp_server.tools.recipe_jobs import register_recipe_jobs
+    from mealie_mcp_server.tools.recipe_media import register_recipe_media
+    from mealie_mcp_server.tools.recipe_metadata import register_recipe_metadata
+    from mealie_mcp_server.tools.recipe_notes import register_recipe_notes
     from mealie_mcp_server.tools.recipe_queues import register_recipe_queues
     from mealie_mcp_server.tools.recipes import (
         register_ratings_dates,
@@ -78,6 +87,15 @@ def register_all_tools(server: FastMCP) -> None:
     register_recipe_instructions(server)
     register_recipe_images(server)
     register_ratings_dates(server)
+    register_recipe_notes(server)
+    register_recipe_metadata(server)
+    register_recipe_io(server)
+    register_recipe_collaboration(server)
+    register_recipe_advanced(server)
+    register_recipe_media(server)
+    register_recipe_collections(server)
+    register_mealplan_advanced(server)
+    register_recipe_jobs(server)
     # Only the local tools need ordering. Server-wide transforms prevent the
     # native Skills extension from validating the resources it publishes.
     server.local_provider.add_transform(CatalogOrder(tuple(definitions())))

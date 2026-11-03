@@ -43,5 +43,7 @@ async def test_catalog_keeps_exact_original_schemas():
         tool["name"]: tool for tool in json.loads((FIXTURES / "catalog.json").read_text())["tools"]
     }
     assert {case.tool for case in CASES[:14]} <= {tool.name for tool in tools}
-    for tool in tools:
-        assert tool.input_schema == original[tool.name]["inputSchema"]
+    current = {tool.name: tool for tool in tools}
+    assert set(original) <= set(current)
+    for name, tool in original.items():
+        assert current[name].input_schema == tool["inputSchema"]

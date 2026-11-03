@@ -1,6 +1,6 @@
 # Pruebas E2E locales con Mealie y MCP en Docker
 
-La suite invoca las78 herramientas públicas mediante clientes del SDK MCP oficial y la imagen runtime instalada, contra Mealie real. Cubre stdio y Streamable HTTP con Bearer, en las eras MCP2026-07-28 y2025-11-25. No importa el servidor Python dentro del cliente de pruebas.
+La suite invoca las162 herramientas públicas mediante clientes del SDK MCP oficial y la imagen runtime instalada, contra Mealie real. Cubre stdio y Streamable HTTP con Bearer, en las eras MCP2026-07-28 y2025-11-25. No importa el servidor Python dentro del cliente de pruebas.
 
 ## Ejecutar
 
@@ -27,8 +27,8 @@ No lanzar `compose.integration.yaml up` directamente ni exportar credenciales pe
 
 Cada ejecución crea un proyecto `mealie-mcp-e2e-<12 hex>` con:
 
-- Mealie3.29.0 fijado por digest, SQLite y datos sintéticos en un volumen exclusivo.
-- Un servidor de PNG estáticos local. Solo esta instancia Mealie configura `HTTP_ALLOW_LIST=assets`, para permitir obtener esa imagen privada con su mecanismo oficial.
+- Mealie3.30.0 fijado por digest, SQLite y datos sintéticos en un volumen exclusivo.
+- Un servidor local de PNG y HTML schema.org Recipe. Solo esta instancia Mealie configura `HTTP_ALLOW_LIST=assets`, para probar importación de imagen y receta con su mecanismo oficial.
 - MCP HTTP como usuario10001, raíz de solo lectura, sin capacidades adicionales, sin socket Docker ni código montado. Recibe la API key y el Bearer mediante archivos de un volumen de solo lectura.
 - MCP stdio lanzado con `docker compose run --rm -T`, desde la misma imagen, sin configurar autenticación HTTP.
 - Una red `internal:true`, sin puertos publicados. El Dev Container se conecta temporalmente como cliente/controlador y se desconecta en la limpieza.
@@ -37,19 +37,33 @@ El bootstrap inicia sesión con la cuenta inicial de esa instancia desechable, c
 
 ## Qué se comprueba
 
-| Recorrido | Herramientas | Operaciones positivas | Rechazo SSRF esperado | Rechazos de argumentos |
-|---|---:|---:|---:|---:|
-| stdio · MCP2026-07-28 |78|77|1|78|
-| stdio · MCP2025-11-25 |78|77|1|78|
-| HTTP Bearer · MCP2026-07-28 |78|77|1|78|
-| HTTP Bearer · MCP2025-11-25 |78|77|1|78|
-| Total requerido |312|308|4|312|
+Antes del bootstrap se guarda el OpenAPI real y se auditan rutas y el contrato
+estructural seleccionado de Mealie 3.30.0. Si falla, no se ejecutan los escenarios
+de mutación y se limpian los recursos propios. El contrato versionado no se
+regenera automáticamente desde el proveedor; ver [guía 3.30](../mealie-3.30.md).
+
+| Recorrido | Herramientas | Operaciones positivas | Rechazo SSRF esperado | IA sin proveedor | Rechazos de argumentos |
+|---|---:|---:|---:|---:|---:|
+| stdio · MCP2026-07-28 |162|159|1|2|162|
+| stdio · MCP2025-11-25 |162|159|1|2|162|
+| HTTP Bearer · MCP2026-07-28 |162|159|1|2|162|
+| HTTP Bearer · MCP2025-11-25 |162|159|1|2|162|
+| Total requerido |648|636|4|8|648|
 
 Cada combinación exige el catálogo exacto, el prompt `weekly-meal-plan`, la versión negociada y comprobaciones por herramienta. Los campos desconocidos deben rechazarse sin devolver su valor. Una llamada intentada, un error inesperado del proveedor o un nombre repetido no completan la cobertura.
 
 Los escenarios crean y recuperan categorías, etiquetas, alimentos, unidades y equipamiento; comprueban búsquedas y matching; crean/consultan/duplican recetas; modifican escalares, ingredientes e instrucciones con referencias, taxonomía y equipamiento individual y por lotes; consultan las tres colas; actualizan imágenes, valoración/favorito y última preparación; crean/modifican planes; y ejecutan CRUD, lotes y asociaciones de listas de compra. Finalmente fusionan alimentos y eliminan sus registros.
 
-Las mutaciones se contrastan con lecturas HTTP independientes a Mealie. Se comprueba que todos los IDs creados desaparezcan después de los borrados. La [matriz de las78 herramientas](local-e2e-tool-matrix.md) enumera sus comprobaciones; el manifiesto JSON de cada recorrido conserva su resultado y [tools.md](../tools.md) contiene sus argumentos públicos.
+Las mutaciones se contrastan con lecturas HTTP independientes a Mealie. Se comprueba que todos los IDs creados desaparezcan después de los borrados. La [matriz histórica de las78 herramientas](local-e2e-tool-matrix.md) conserva las comprobaciones originales. `recipe_extensions_flow.py` añade 24 operaciones: notas y metadatos, comentarios, compartir, historial con imagen, adjuntos, importación URL/JSON/ZIP y exportación binaria. El manifiesto JSON de cada recorrido conserva cada resultado y [tools.md](../tools.md) sus argumentos públicos.
+
+Los flows `advanced_330`, `collections_330`, `media_330` y `jobs_330` añaden la
+comprobación de filtros y sugerencias, sustituciones, temporizadores, parser,
+recetarios, acciones, planificación avanzada, descargas e importación SSE/lotes.
+El destino de la acción es el servidor local: se comprueba su recepción efectiva,
+además de la aceptación asíncrona. Las dos herramientas IA comprueban que Mealie
+declara su proveedor desactivado, devuelve el error esperado y no crea recetas ni
+repite la escritura. Ese rechazo se contabiliza aparte; los positivos multipart
+y SSE con IA están cubiertos mediante respuestas controladas en contratos.
 
 **Límite de la prueba por archivo:** `set_recipe_image_from_file` descarga dentro del MCP y rechaza direcciones privadas por diseño. En esta red local se comprueba ese rechazo concreto y que la imagen anterior no cambie. Su descarga positiva desde una URL pública sigue cubierta por pruebas controladas de descarga/transporte de la suite Python; no se presenta como descarga positiva E2E local. No se introduce un bypass ni se desactiva la protección. `set_recipe_image_from_url` descarga dentro de Mealie y sí realiza una importación positiva desde el servidor local permitido.
 
@@ -62,6 +76,7 @@ Cada ejecución escribe en `artifacts/e2e/<proyecto>/`:
 | Archivo | Evidencia |
 |---|---|
 | `summary.json` | Resultado, fase de fallo si procede, imagen/plataforma/revisión, gate y limpieza |
+| `openapi.json` / `api-audit.json` | OpenAPI del proveedor y auditoría de rutas/contrato previa al bootstrap |
 | `case-<transporte>-<protocolo>.json` | Herramientas, aserciones, rechazos de entrada, cobertura y última llamada |
 | `pytest.xml` / `pytest.log` | Casos ejecutados y diagnósticos de pytest |
 | `build.log` / `build.json` | Build cuando no se utiliza `--no-build` |
@@ -96,6 +111,6 @@ No hace falta desconectar una interfaz que ya no existe. La limpieza no retira i
 
 ## Resultado observado
 
-La ejecución y sus medidas se registran en [local-e2e-progress.md](local-e2e-progress.md). La evidencia histórica P24 corresponde al test anterior de31 llamadas/28 herramientas y se conserva como historial. El nuevo gate exige las78 herramientas por combinación. Los resultados locales no demuestran un despliegue remoto, un cliente público concreto ni un job de GitHub Actions completado.
+La ejecución y sus medidas históricas se registran en [local-e2e-progress.md](local-e2e-progress.md). La evidencia P24 corresponde al test anterior de31 llamadas/28 herramientas y se conserva como historial. El gate actual exige el catálogo completo por combinación. Los resultados locales no demuestran un despliegue remoto, un cliente público concreto ni un job de GitHub Actions completado.
 
 Las pruebas reales motivaron [D10/D11](../migration/differences.md): las actualizaciones de compra obtienen primero el registro y envían un PUT completo, conservando identificadores/campos desconocidos; el borrado en lote repite la query `ids` para cada identificador. Ninguna escritura se reintenta. La [revisión independiente](local-e2e-review.md) registra sus hallazgos y correcciones.

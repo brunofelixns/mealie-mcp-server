@@ -62,6 +62,43 @@ def _payload(row: JsonObject) -> JsonObject:
     return result
 
 
+def _continuing_payload(
+    existing: JsonObject, requested: JsonObject, *, replacement: bool = False
+) -> JsonObject:
+    """Retain provider-only data and hydrated entities for continuing identities."""
+    payload = _payload(requested)
+    for kind in ("food", "unit"):
+        old, new = existing.get(kind), payload.get(kind)
+        if isinstance(old, dict) and isinstance(new, dict) and old.get("id") == new.get("id"):
+            payload[kind] = {**old, **new}
+    base = (
+        {
+            key: value
+            for key, value in existing.items()
+            if key not in (*COPIED_FIELDS, "food", "unit", "referencedRecipe")
+        }
+        if replacement
+        else existing
+    )
+    return {**base, **payload}
+
+
+def _replacement_payload(original: JsonObject, rows: list[JsonObject]) -> BuiltIngredients:
+    existing: dict[str, list[JsonObject]] = {}
+    for row in to_array(original.get("recipeIngredient")):
+        if reference := _ref(row.get("referenceId")):
+            existing.setdefault(reference, []).append(row)
+    payload: list[JsonObject] = []
+    for row in rows:
+        matches = existing.get(_ref(row.get("referenceId")), [])
+        if len(matches) > 1:
+            raise ValueError("Ambiguous continuing ingredient referenceId; nothing was written.")
+        payload.append(
+            _continuing_payload(matches[0], row, replacement=True) if matches else _payload(row)
+        )
+    return BuiltIngredients(rows, payload)
+
+
 def _plan(changes: JsonObject) -> bool:
     delta = any(key in changes for key in DELTA_FIELDS)
     if "ingredients" in changes and delta:
@@ -234,7 +271,7 @@ def _build_delta(original: JsonObject, changes: JsonObject) -> BuiltIngredients:
             _pair(patches[key], "food")
             _pair(patches[key], "unit")
             current = {**current, **patches[key]}
-            payload.append({**row, **_payload(current)})
+            payload.append(_continuing_payload(row, current))
         else:
             payload.append(row)
         inputs.append(current)
@@ -336,7 +373,9 @@ async def _write_ingredients(
         built = BuiltIngredients(rows, [_payload(row) for row in rows]) if replacement else None
         original = await recipes.get_recipe(client, slug)
         count += 1
-        if built is None:
+        if replacement:
+            built = _replacement_payload(original, rows)
+        elif built is None:
             built = _build_delta(original, changes)
         own_id = _ref(original.get("id"))
         if own_id and any(_ref(row.get("referencedRecipeId")) == own_id for row in built.inputs):

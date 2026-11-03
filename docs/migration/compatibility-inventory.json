@@ -7540,6 +7540,1453 @@
       ],
       "runtimeCaptureStatus": "behavior_captured_and_python_verified",
       "runtimeOutputSchemaPresent": false
+    },
+    {
+      "name": "get_recipe_notes",
+      "group": "recipes",
+      "origin": "python_recipe_extension",
+      "migrationStatus": "implemented_contract_verified",
+      "extensionArguments": {
+        "slug": "soup"
+      },
+      "runtimeExamples": [
+        {
+          "file": "tests/contracts/test_recipe_notes.py",
+          "test": "test_recipe_notes_mcp_positive",
+          "provenance": "python_native_mcp_recipe_extension"
+        }
+      ]
+    },
+    {
+      "name": "add_recipe_note",
+      "group": "recipes",
+      "origin": "python_recipe_extension",
+      "migrationStatus": "implemented_contract_verified",
+      "extensionArguments": {
+        "slug": "soup",
+        "expectedUpdatedAt": "2026-11-03T10:00:00Z",
+        "title": "Storage",
+        "text": "Refrigerate after cooling."
+      },
+      "runtimeExamples": [
+        {
+          "file": "tests/contracts/test_recipe_notes.py",
+          "test": "test_recipe_notes_mcp_positive",
+          "provenance": "python_native_mcp_recipe_extension"
+        }
+      ]
+    },
+    {
+      "name": "update_recipe_note",
+      "group": "recipes",
+      "origin": "python_recipe_extension",
+      "migrationStatus": "implemented_contract_verified",
+      "extensionArguments": {
+        "slug": "soup",
+        "expectedUpdatedAt": "2026-11-03T10:00:00Z",
+        "referenceId": "11111111-1111-4111-8111-111111111111",
+        "text": "Use within three days."
+      },
+      "runtimeExamples": [
+        {
+          "file": "tests/contracts/test_recipe_notes.py",
+          "test": "test_recipe_notes_mcp_positive",
+          "provenance": "python_native_mcp_recipe_extension"
+        }
+      ]
+    },
+    {
+      "name": "delete_recipe_note",
+      "group": "recipes",
+      "origin": "python_recipe_extension",
+      "migrationStatus": "implemented_contract_verified",
+      "extensionArguments": {
+        "slug": "soup",
+        "expectedUpdatedAt": "2026-11-03T10:00:00Z",
+        "referenceId": "11111111-1111-4111-8111-111111111111"
+      },
+      "runtimeExamples": [
+        {
+          "file": "tests/contracts/test_recipe_notes.py",
+          "test": "test_recipe_notes_mcp_positive",
+          "provenance": "python_native_mcp_recipe_extension"
+        }
+      ]
+    },
+    {
+      "name": "update_recipe_metadata",
+      "group": "recipes",
+      "origin": "python_recipe_extension",
+      "migrationStatus": "implemented_contract_verified",
+      "extensionArguments": {
+        "slug": "soup",
+        "expectedUpdatedAt": "snapshot",
+        "prepTime": "PT10M"
+      },
+      "runtimeExamples": [
+        {
+          "file": "tests/contracts/test_recipe_metadata.py",
+          "test": "test_recipe_metadata_mcp_positive",
+          "provenance": "python_native_mcp_recipe_extension"
+        }
+      ]
+    },
+    {
+      "name": "get_recipe_comments",
+      "group": "recipes",
+      "origin": "python_recipe_extension",
+      "migrationStatus": "implemented_contract_verified",
+      "extensionArguments": {
+        "slug": "soup"
+      },
+      "runtimeExamples": [
+        {
+          "file": "tests/contracts/test_recipe_collaboration.py",
+          "test": "test_recipe_collaboration_mcp_positive",
+          "provenance": "python_native_mcp_recipe_extension"
+        }
+      ]
+    },
+    {
+      "name": "create_recipe_comment",
+      "group": "recipes",
+      "origin": "python_recipe_extension",
+      "migrationStatus": "implemented_contract_verified",
+      "extensionArguments": {
+        "slug": "soup",
+        "text": " good "
+      },
+      "runtimeExamples": [
+        {
+          "file": "tests/contracts/test_recipe_collaboration.py",
+          "test": "test_recipe_collaboration_mcp_positive",
+          "provenance": "python_native_mcp_recipe_extension"
+        }
+      ]
+    },
+    {
+      "name": "update_recipe_comment",
+      "group": "recipes",
+      "origin": "python_recipe_extension",
+      "migrationStatus": "implemented_contract_verified",
+      "extensionArguments": {
+        "commentId": "22222222-2222-4222-8222-222222222222",
+        "text": "edit"
+      },
+      "runtimeExamples": [
+        {
+          "file": "tests/contracts/test_recipe_collaboration.py",
+          "test": "test_recipe_collaboration_mcp_positive",
+          "provenance": "python_native_mcp_recipe_extension"
+        }
+      ]
+    },
+    {
+      "name": "delete_recipe_comment",
+      "group": "recipes",
+      "origin": "python_recipe_extension",
+      "migrationStatus": "implemented_contract_verified",
+      "extensionArguments": {
+        "commentId": "22222222-2222-4222-8222-222222222222"
+      },
+      "runtimeExamples": [
+        {
+          "file": "tests/contracts/test_recipe_collaboration.py",
+          "test": "test_recipe_collaboration_mcp_positive",
+          "provenance": "python_native_mcp_recipe_extension"
+        }
+      ]
+    },
+    {
+      "name": "get_recipe_share_links",
+      "group": "recipes",
+      "origin": "python_recipe_extension",
+      "migrationStatus": "implemented_contract_verified",
+      "extensionArguments": {
+        "slug": "soup"
+      },
+      "runtimeExamples": [
+        {
+          "file": "tests/contracts/test_recipe_collaboration.py",
+          "test": "test_recipe_collaboration_mcp_positive",
+          "provenance": "python_native_mcp_recipe_extension"
+        }
+      ]
+    },
+    {
+      "name": "create_recipe_share_link",
+      "group": "recipes",
+      "origin": "python_recipe_extension",
+      "migrationStatus": "implemented_contract_verified",
+      "extensionArguments": {
+        "slug": "soup",
+        "expiresAt": "2027-01-01T00:00:00Z"
+      },
+      "runtimeExamples": [
+        {
+          "file": "tests/contracts/test_recipe_collaboration.py",
+          "test": "test_recipe_collaboration_mcp_positive",
+          "provenance": "python_native_mcp_recipe_extension"
+        }
+      ]
+    },
+    {
+      "name": "delete_recipe_share_link",
+      "group": "recipes",
+      "origin": "python_recipe_extension",
+      "migrationStatus": "implemented_contract_verified",
+      "extensionArguments": {
+        "tokenId": "22222222-2222-4222-8222-222222222222"
+      },
+      "runtimeExamples": [
+        {
+          "file": "tests/contracts/test_recipe_collaboration.py",
+          "test": "test_recipe_collaboration_mcp_positive",
+          "provenance": "python_native_mcp_recipe_extension"
+        }
+      ]
+    },
+    {
+      "name": "get_recipe_timeline",
+      "group": "recipes",
+      "origin": "python_recipe_extension",
+      "migrationStatus": "implemented_contract_verified",
+      "extensionArguments": {
+        "slug": "soup",
+        "page": 2,
+        "perPage": 5
+      },
+      "runtimeExamples": [
+        {
+          "file": "tests/contracts/test_recipe_collaboration.py",
+          "test": "test_recipe_collaboration_mcp_positive",
+          "provenance": "python_native_mcp_recipe_extension"
+        }
+      ]
+    },
+    {
+      "name": "create_recipe_timeline_event",
+      "group": "recipes",
+      "origin": "python_recipe_extension",
+      "migrationStatus": "implemented_contract_verified",
+      "extensionArguments": {
+        "slug": "soup",
+        "subject": "Made",
+        "eventType": "info",
+        "eventMessage": ""
+      },
+      "runtimeExamples": [
+        {
+          "file": "tests/contracts/test_recipe_collaboration.py",
+          "test": "test_recipe_collaboration_mcp_positive",
+          "provenance": "python_native_mcp_recipe_extension"
+        }
+      ]
+    },
+    {
+      "name": "update_recipe_timeline_event",
+      "group": "recipes",
+      "origin": "python_recipe_extension",
+      "migrationStatus": "implemented_contract_verified",
+      "extensionArguments": {
+        "eventId": "22222222-2222-4222-8222-222222222222",
+        "subject": "",
+        "eventMessage": null
+      },
+      "runtimeExamples": [
+        {
+          "file": "tests/contracts/test_recipe_collaboration.py",
+          "test": "test_recipe_collaboration_mcp_positive",
+          "provenance": "python_native_mcp_recipe_extension"
+        }
+      ]
+    },
+    {
+      "name": "delete_recipe_timeline_event",
+      "group": "recipes",
+      "origin": "python_recipe_extension",
+      "migrationStatus": "implemented_contract_verified",
+      "extensionArguments": {
+        "eventId": "22222222-2222-4222-8222-222222222222"
+      },
+      "runtimeExamples": [
+        {
+          "file": "tests/contracts/test_recipe_collaboration.py",
+          "test": "test_recipe_collaboration_mcp_positive",
+          "provenance": "python_native_mcp_recipe_extension"
+        }
+      ]
+    },
+    {
+      "name": "set_recipe_timeline_event_image",
+      "group": "recipes",
+      "origin": "python_recipe_extension",
+      "migrationStatus": "implemented_contract_verified",
+      "extensionArguments": {
+        "eventId": "22222222-2222-4222-8222-222222222222",
+        "imageBase64": "iVBORw0KGgpoZWxsbw==",
+        "extension": "png"
+      },
+      "runtimeExamples": [
+        {
+          "file": "tests/contracts/test_recipe_collaboration.py",
+          "test": "test_recipe_collaboration_mcp_positive",
+          "provenance": "python_native_mcp_recipe_extension"
+        }
+      ]
+    },
+    {
+      "name": "upload_recipe_asset",
+      "group": "recipes",
+      "origin": "python_recipe_extension",
+      "migrationStatus": "implemented_contract_verified",
+      "extensionArguments": {
+        "slug": "soup",
+        "name": "Guide",
+        "icon": "mdi-file",
+        "extension": "pdf",
+        "fileBase64": "JVBERg=="
+      },
+      "runtimeExamples": [
+        {
+          "file": "tests/contracts/test_recipe_io.py",
+          "test": "test_recipe_io_mcp_positive",
+          "provenance": "python_native_mcp_recipe_extension"
+        }
+      ]
+    },
+    {
+      "name": "create_recipe_asset_from_url",
+      "group": "recipes",
+      "origin": "python_recipe_extension",
+      "migrationStatus": "implemented_contract_verified",
+      "extensionArguments": {
+        "slug": "soup",
+        "url": "https://recipes.test/image.png"
+      },
+      "runtimeExamples": [
+        {
+          "file": "tests/contracts/test_recipe_io.py",
+          "test": "test_recipe_io_mcp_positive",
+          "provenance": "python_native_mcp_recipe_extension"
+        }
+      ]
+    },
+    {
+      "name": "import_recipe_from_url",
+      "group": "recipes",
+      "origin": "python_recipe_extension",
+      "migrationStatus": "implemented_contract_verified",
+      "extensionArguments": {
+        "url": "https://recipes.test/soup",
+        "includeTags": false
+      },
+      "runtimeExamples": [
+        {
+          "file": "tests/contracts/test_recipe_io.py",
+          "test": "test_recipe_io_mcp_positive",
+          "provenance": "python_native_mcp_recipe_extension"
+        }
+      ]
+    },
+    {
+      "name": "import_recipe_from_html_or_json",
+      "group": "recipes",
+      "origin": "python_recipe_extension",
+      "migrationStatus": "implemented_contract_verified",
+      "extensionArguments": {
+        "data": "{\"@type\":\"Recipe\",\"name\":\"Soup\"}",
+        "url": null,
+        "includeCategories": false
+      },
+      "runtimeExamples": [
+        {
+          "file": "tests/contracts/test_recipe_io.py",
+          "test": "test_recipe_io_mcp_positive",
+          "provenance": "python_native_mcp_recipe_extension"
+        }
+      ]
+    },
+    {
+      "name": "import_recipe_from_zip",
+      "group": "recipes",
+      "origin": "python_recipe_extension",
+      "migrationStatus": "implemented_contract_verified",
+      "extensionArguments": {
+        "archiveBase64": "UEsDBBQAAAAAACB9Y139BVs4DwAAAA8AAAALAAAAcmVjaXBlLmpzb257Im5hbWUiOiJTb3VwIn1QSwECFAMUAAAAAAAgfWNd/QVbOA8AAAAPAAAACwAAAAAAAAAAAAAAgAEAAAAAcmVjaXBlLmpzb25QSwUGAAAAAAEAAQA5AAAAOAAAAAAA"
+      },
+      "runtimeExamples": [
+        {
+          "file": "tests/contracts/test_recipe_io.py",
+          "test": "test_recipe_io_mcp_positive",
+          "provenance": "python_native_mcp_recipe_extension"
+        }
+      ]
+    },
+    {
+      "name": "get_recipe_export_formats",
+      "group": "recipes",
+      "origin": "python_recipe_extension",
+      "migrationStatus": "implemented_contract_verified",
+      "extensionArguments": {},
+      "runtimeExamples": [
+        {
+          "file": "tests/contracts/test_recipe_io.py",
+          "test": "test_recipe_io_mcp_positive",
+          "provenance": "python_native_mcp_recipe_extension"
+        }
+      ]
+    },
+    {
+      "name": "export_recipe",
+      "group": "recipes",
+      "origin": "python_recipe_extension",
+      "migrationStatus": "implemented_contract_verified",
+      "extensionArguments": {
+        "slug": "soup",
+        "templateName": "json"
+      },
+      "runtimeExamples": [
+        {
+          "file": "tests/contracts/test_recipe_io.py",
+          "test": "test_recipe_io_mcp_positive",
+          "provenance": "python_native_mcp_recipe_extension"
+        }
+      ]
+    },
+    {
+      "name": "search_recipes",
+      "group": "recipes",
+      "origin": "mealie_330",
+      "migrationStatus": "implemented_contract_verified",
+      "extensionArguments": {
+        "search": "soup",
+        "tools": [
+          "pot"
+        ],
+        "orderDirection": "asc",
+        "perPage": 10
+      },
+      "runtimeExamples": [
+        {
+          "file": "tests/contracts/test_recipe_advanced.py",
+          "test": "test_recipe_advanced_mcp_positive",
+          "provenance": "python_native_mcp_recipe_extension"
+        }
+      ]
+    },
+    {
+      "name": "get_recipe_suggestions",
+      "group": "recipes",
+      "origin": "mealie_330",
+      "migrationStatus": "implemented_contract_verified",
+      "extensionArguments": {
+        "foods": [
+          "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa"
+        ],
+        "maxMissingFoods": 0,
+        "includeSubstitutions": false
+      },
+      "runtimeExamples": [
+        {
+          "file": "tests/contracts/test_recipe_advanced.py",
+          "test": "test_recipe_advanced_mcp_positive",
+          "provenance": "python_native_mcp_recipe_extension"
+        }
+      ]
+    },
+    {
+      "name": "parse_recipe_ingredient",
+      "group": "recipes",
+      "origin": "mealie_330",
+      "migrationStatus": "implemented_contract_verified",
+      "extensionArguments": {
+        "ingredient": "1 tsp Salt",
+        "parser": "brute"
+      },
+      "runtimeExamples": [
+        {
+          "file": "tests/contracts/test_recipe_advanced.py",
+          "test": "test_recipe_advanced_mcp_positive",
+          "provenance": "python_native_mcp_recipe_extension"
+        }
+      ]
+    },
+    {
+      "name": "parse_recipe_ingredients",
+      "group": "recipes",
+      "origin": "mealie_330",
+      "migrationStatus": "implemented_contract_verified",
+      "extensionArguments": {
+        "ingredients": [
+          "Salt",
+          "Pepper"
+        ],
+        "parser": "nlp"
+      },
+      "runtimeExamples": [
+        {
+          "file": "tests/contracts/test_recipe_advanced.py",
+          "test": "test_recipe_advanced_mcp_positive",
+          "provenance": "python_native_mcp_recipe_extension"
+        }
+      ]
+    },
+    {
+      "name": "update_recipe_ingredient_substitutions",
+      "group": "recipes",
+      "origin": "mealie_330",
+      "migrationStatus": "implemented_contract_verified",
+      "extensionArguments": {
+        "slug": "soup",
+        "expectedUpdatedAt": "snapshot",
+        "updates": [
+          {
+            "referenceId": "11111111-1111-4111-8111-111111111111",
+            "substitutions": [
+              {
+                "substituteFoodId": "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb"
+              },
+              {
+                "note": "Use vegetable stock instead"
+              }
+            ]
+          }
+        ]
+      },
+      "runtimeExamples": [
+        {
+          "file": "tests/contracts/test_recipe_advanced.py",
+          "test": "test_recipe_advanced_mcp_positive",
+          "provenance": "python_native_mcp_recipe_extension"
+        }
+      ]
+    },
+    {
+      "name": "update_food_substitutions",
+      "group": "recipes",
+      "origin": "mealie_330",
+      "migrationStatus": "implemented_contract_verified",
+      "extensionArguments": {
+        "foodId": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+        "substitutions": [
+          {
+            "substituteFoodId": "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb",
+            "note": "Alternative"
+          },
+          {
+            "note": "Use vegetable stock instead"
+          }
+        ]
+      },
+      "runtimeExamples": [
+        {
+          "file": "tests/contracts/test_recipe_advanced.py",
+          "test": "test_recipe_advanced_mcp_positive",
+          "provenance": "python_native_mcp_recipe_extension"
+        }
+      ]
+    },
+    {
+      "name": "update_recipe_instruction_durations",
+      "group": "recipes",
+      "origin": "mealie_330",
+      "migrationStatus": "implemented_contract_verified",
+      "extensionArguments": {
+        "slug": "soup",
+        "expectedUpdatedAt": "snapshot",
+        "updates": [
+          {
+            "index": 0,
+            "durationSeconds": 60
+          }
+        ]
+      },
+      "runtimeExamples": [
+        {
+          "file": "tests/contracts/test_recipe_advanced.py",
+          "test": "test_recipe_advanced_mcp_positive",
+          "provenance": "python_native_mcp_recipe_extension"
+        }
+      ]
+    },
+    {
+      "name": "get_recipe_assets",
+      "group": "recipes",
+      "origin": "mealie_330",
+      "migrationStatus": "implemented_contract_verified",
+      "extensionArguments": {
+        "slug": "soup"
+      },
+      "runtimeExamples": [
+        {
+          "file": "tests/contracts/test_recipe_media.py",
+          "test": "test_recipe_media_mcp_positive",
+          "provenance": "python_native_mcp_recipe_extension"
+        }
+      ]
+    },
+    {
+      "name": "download_recipe_asset",
+      "group": "recipes",
+      "origin": "mealie_330",
+      "migrationStatus": "implemented_contract_verified",
+      "extensionArguments": {
+        "slug": "soup",
+        "fileName": "notes.pdf"
+      },
+      "runtimeExamples": [
+        {
+          "file": "tests/contracts/test_recipe_media.py",
+          "test": "test_recipe_media_mcp_positive",
+          "provenance": "python_native_mcp_recipe_extension"
+        }
+      ]
+    },
+    {
+      "name": "download_recipe_image",
+      "group": "recipes",
+      "origin": "mealie_330",
+      "migrationStatus": "implemented_contract_verified",
+      "extensionArguments": {
+        "slug": "soup"
+      },
+      "runtimeExamples": [
+        {
+          "file": "tests/contracts/test_recipe_media.py",
+          "test": "test_recipe_media_mcp_positive",
+          "provenance": "python_native_mcp_recipe_extension"
+        }
+      ]
+    },
+    {
+      "name": "download_recipe_timeline_image",
+      "group": "recipes",
+      "origin": "mealie_330",
+      "migrationStatus": "implemented_contract_verified",
+      "extensionArguments": {
+        "slug": "soup",
+        "eventId": "11111111-1111-4111-8111-111111111111"
+      },
+      "runtimeExamples": [
+        {
+          "file": "tests/contracts/test_recipe_media.py",
+          "test": "test_recipe_media_mcp_positive",
+          "provenance": "python_native_mcp_recipe_extension"
+        }
+      ]
+    },
+    {
+      "name": "get_shared_recipe",
+      "group": "recipes",
+      "origin": "mealie_330",
+      "migrationStatus": "implemented_contract_verified",
+      "extensionArguments": {
+        "tokenId": "11111111-1111-4111-8111-111111111111"
+      },
+      "runtimeExamples": [
+        {
+          "file": "tests/contracts/test_recipe_media.py",
+          "test": "test_recipe_media_mcp_positive",
+          "provenance": "python_native_mcp_recipe_extension"
+        }
+      ]
+    },
+    {
+      "name": "download_shared_recipe",
+      "group": "recipes",
+      "origin": "mealie_330",
+      "migrationStatus": "implemented_contract_verified",
+      "extensionArguments": {
+        "tokenId": "11111111-1111-4111-8111-111111111111"
+      },
+      "runtimeExamples": [
+        {
+          "file": "tests/contracts/test_recipe_media.py",
+          "test": "test_recipe_media_mcp_positive",
+          "provenance": "python_native_mcp_recipe_extension"
+        }
+      ]
+    },
+    {
+      "name": "get_cookbooks",
+      "group": "recipes",
+      "origin": "mealie_330",
+      "migrationStatus": "implemented_contract_verified",
+      "extensionArguments": {},
+      "runtimeExamples": [
+        {
+          "file": "tests/contracts/test_recipe_collections.py",
+          "test": "test_recipe_collections_mcp_positive",
+          "provenance": "python_native_mcp_recipe_extension"
+        }
+      ]
+    },
+    {
+      "name": "create_cookbook",
+      "group": "recipes",
+      "origin": "mealie_330",
+      "migrationStatus": "implemented_contract_verified",
+      "extensionArguments": {
+        "name": "Weeknight"
+      },
+      "runtimeExamples": [
+        {
+          "file": "tests/contracts/test_recipe_collections.py",
+          "test": "test_recipe_collections_mcp_positive",
+          "provenance": "python_native_mcp_recipe_extension"
+        }
+      ]
+    },
+    {
+      "name": "get_cookbook",
+      "group": "recipes",
+      "origin": "mealie_330",
+      "migrationStatus": "implemented_contract_verified",
+      "extensionArguments": {
+        "cookbookId": "weeknight"
+      },
+      "runtimeExamples": [
+        {
+          "file": "tests/contracts/test_recipe_collections.py",
+          "test": "test_recipe_collections_mcp_positive",
+          "provenance": "python_native_mcp_recipe_extension"
+        }
+      ]
+    },
+    {
+      "name": "update_cookbook",
+      "group": "recipes",
+      "origin": "mealie_330",
+      "migrationStatus": "implemented_contract_verified",
+      "extensionArguments": {
+        "cookbookId": "weeknight",
+        "changes": {
+          "public": false
+        }
+      },
+      "runtimeExamples": [
+        {
+          "file": "tests/contracts/test_recipe_collections.py",
+          "test": "test_recipe_collections_mcp_positive",
+          "provenance": "python_native_mcp_recipe_extension"
+        }
+      ]
+    },
+    {
+      "name": "delete_cookbook",
+      "group": "recipes",
+      "origin": "mealie_330",
+      "migrationStatus": "implemented_contract_verified",
+      "extensionArguments": {
+        "cookbookId": "weeknight"
+      },
+      "runtimeExamples": [
+        {
+          "file": "tests/contracts/test_recipe_collections.py",
+          "test": "test_recipe_collections_mcp_positive",
+          "provenance": "python_native_mcp_recipe_extension"
+        }
+      ]
+    },
+    {
+      "name": "get_recipe_favorites",
+      "group": "recipes",
+      "origin": "mealie_330",
+      "migrationStatus": "implemented_contract_verified",
+      "extensionArguments": {},
+      "runtimeExamples": [
+        {
+          "file": "tests/contracts/test_recipe_collections.py",
+          "test": "test_recipe_collections_mcp_positive",
+          "provenance": "python_native_mcp_recipe_extension"
+        }
+      ]
+    },
+    {
+      "name": "get_recipe_ratings",
+      "group": "recipes",
+      "origin": "mealie_330",
+      "migrationStatus": "implemented_contract_verified",
+      "extensionArguments": {},
+      "runtimeExamples": [
+        {
+          "file": "tests/contracts/test_recipe_collections.py",
+          "test": "test_recipe_collections_mcp_positive",
+          "provenance": "python_native_mcp_recipe_extension"
+        }
+      ]
+    },
+    {
+      "name": "list_recipe_comments",
+      "group": "recipes",
+      "origin": "mealie_330",
+      "migrationStatus": "implemented_contract_verified",
+      "extensionArguments": {},
+      "runtimeExamples": [
+        {
+          "file": "tests/contracts/test_recipe_collections.py",
+          "test": "test_recipe_collections_mcp_positive",
+          "provenance": "python_native_mcp_recipe_extension"
+        }
+      ]
+    },
+    {
+      "name": "get_recipe_comment",
+      "group": "recipes",
+      "origin": "mealie_330",
+      "migrationStatus": "implemented_contract_verified",
+      "extensionArguments": {
+        "commentId": "22222222-2222-4222-8222-222222222222"
+      },
+      "runtimeExamples": [
+        {
+          "file": "tests/contracts/test_recipe_collections.py",
+          "test": "test_recipe_collections_mcp_positive",
+          "provenance": "python_native_mcp_recipe_extension"
+        }
+      ]
+    },
+    {
+      "name": "get_recipe_timeline_event",
+      "group": "recipes",
+      "origin": "mealie_330",
+      "migrationStatus": "implemented_contract_verified",
+      "extensionArguments": {
+        "eventId": "22222222-2222-4222-8222-222222222222"
+      },
+      "runtimeExamples": [
+        {
+          "file": "tests/contracts/test_recipe_collections.py",
+          "test": "test_recipe_collections_mcp_positive",
+          "provenance": "python_native_mcp_recipe_extension"
+        }
+      ]
+    },
+    {
+      "name": "get_recipe_share_link",
+      "group": "recipes",
+      "origin": "mealie_330",
+      "migrationStatus": "implemented_contract_verified",
+      "extensionArguments": {
+        "tokenId": "22222222-2222-4222-8222-222222222222"
+      },
+      "runtimeExamples": [
+        {
+          "file": "tests/contracts/test_recipe_collections.py",
+          "test": "test_recipe_collections_mcp_positive",
+          "provenance": "python_native_mcp_recipe_extension"
+        }
+      ]
+    },
+    {
+      "name": "get_recipe_actions",
+      "group": "recipes",
+      "origin": "mealie_330",
+      "migrationStatus": "implemented_contract_verified",
+      "extensionArguments": {},
+      "runtimeExamples": [
+        {
+          "file": "tests/contracts/test_recipe_collections.py",
+          "test": "test_recipe_collections_mcp_positive",
+          "provenance": "python_native_mcp_recipe_extension"
+        }
+      ]
+    },
+    {
+      "name": "create_recipe_action",
+      "group": "recipes",
+      "origin": "mealie_330",
+      "migrationStatus": "implemented_contract_verified",
+      "extensionArguments": {
+        "actionType": "post",
+        "title": "Notify",
+        "url": "https://hooks.example.test/recipe"
+      },
+      "runtimeExamples": [
+        {
+          "file": "tests/contracts/test_recipe_collections.py",
+          "test": "test_recipe_collections_mcp_positive",
+          "provenance": "python_native_mcp_recipe_extension"
+        }
+      ]
+    },
+    {
+      "name": "get_recipe_action",
+      "group": "recipes",
+      "origin": "mealie_330",
+      "migrationStatus": "implemented_contract_verified",
+      "extensionArguments": {
+        "actionId": "22222222-2222-4222-8222-222222222222"
+      },
+      "runtimeExamples": [
+        {
+          "file": "tests/contracts/test_recipe_collections.py",
+          "test": "test_recipe_collections_mcp_positive",
+          "provenance": "python_native_mcp_recipe_extension"
+        }
+      ]
+    },
+    {
+      "name": "update_recipe_action",
+      "group": "recipes",
+      "origin": "mealie_330",
+      "migrationStatus": "implemented_contract_verified",
+      "extensionArguments": {
+        "actionId": "22222222-2222-4222-8222-222222222222",
+        "changes": {
+          "title": "Notify kitchen"
+        }
+      },
+      "runtimeExamples": [
+        {
+          "file": "tests/contracts/test_recipe_collections.py",
+          "test": "test_recipe_collections_mcp_positive",
+          "provenance": "python_native_mcp_recipe_extension"
+        }
+      ]
+    },
+    {
+      "name": "delete_recipe_action",
+      "group": "recipes",
+      "origin": "mealie_330",
+      "migrationStatus": "implemented_contract_verified",
+      "extensionArguments": {
+        "actionId": "22222222-2222-4222-8222-222222222222"
+      },
+      "runtimeExamples": [
+        {
+          "file": "tests/contracts/test_recipe_collections.py",
+          "test": "test_recipe_collections_mcp_positive",
+          "provenance": "python_native_mcp_recipe_extension"
+        }
+      ]
+    },
+    {
+      "name": "trigger_recipe_action",
+      "group": "recipes",
+      "origin": "mealie_330",
+      "migrationStatus": "implemented_contract_verified",
+      "extensionArguments": {
+        "actionId": "22222222-2222-4222-8222-222222222222",
+        "slug": "soup",
+        "recipe_scale": 2
+      },
+      "runtimeExamples": [
+        {
+          "file": "tests/contracts/test_recipe_collections.py",
+          "test": "test_recipe_collections_mcp_positive",
+          "provenance": "python_native_mcp_recipe_extension"
+        }
+      ]
+    },
+    {
+      "name": "get_recipe_household",
+      "group": "recipes",
+      "origin": "mealie_330",
+      "migrationStatus": "implemented_contract_verified",
+      "extensionArguments": {
+        "slug": "soup"
+      },
+      "runtimeExamples": [
+        {
+          "file": "tests/contracts/test_recipe_collections.py",
+          "test": "test_recipe_collections_mcp_positive",
+          "provenance": "python_native_mcp_recipe_extension"
+        }
+      ]
+    },
+    {
+      "name": "list_mealplan_entries",
+      "group": "mealplans",
+      "origin": "mealie_330",
+      "migrationStatus": "implemented_contract_verified",
+      "extensionArguments": {
+        "include_week_entries": true
+      },
+      "runtimeExamples": [
+        {
+          "file": "tests/contracts/test_mealplan_advanced.py",
+          "test": "test_mealplan_advanced_mcp_positive",
+          "provenance": "python_native_mcp_recipe_extension"
+        }
+      ]
+    },
+    {
+      "name": "create_mealplan_entry",
+      "group": "mealplans",
+      "origin": "mealie_330",
+      "migrationStatus": "implemented_contract_verified",
+      "extensionArguments": {
+        "date": "2026-11-03",
+        "endDate": "2026-11-09",
+        "text": "Weekly note",
+        "recipeScale": 2
+      },
+      "runtimeExamples": [
+        {
+          "file": "tests/contracts/test_mealplan_advanced.py",
+          "test": "test_mealplan_advanced_mcp_positive",
+          "provenance": "python_native_mcp_recipe_extension"
+        }
+      ]
+    },
+    {
+      "name": "get_mealplan_entry",
+      "group": "mealplans",
+      "origin": "mealie_330",
+      "migrationStatus": "implemented_contract_verified",
+      "extensionArguments": {
+        "entryId": 1
+      },
+      "runtimeExamples": [
+        {
+          "file": "tests/contracts/test_mealplan_advanced.py",
+          "test": "test_mealplan_advanced_mcp_positive",
+          "provenance": "python_native_mcp_recipe_extension"
+        }
+      ]
+    },
+    {
+      "name": "update_mealplan_entry",
+      "group": "mealplans",
+      "origin": "mealie_330",
+      "migrationStatus": "implemented_contract_verified",
+      "extensionArguments": {
+        "entryId": 1,
+        "changes": {
+          "text": "Updated note",
+          "recipeScale": 2
+        }
+      },
+      "runtimeExamples": [
+        {
+          "file": "tests/contracts/test_mealplan_advanced.py",
+          "test": "test_mealplan_advanced_mcp_positive",
+          "provenance": "python_native_mcp_recipe_extension"
+        }
+      ]
+    },
+    {
+      "name": "delete_mealplan_entry",
+      "group": "mealplans",
+      "origin": "mealie_330",
+      "migrationStatus": "implemented_contract_verified",
+      "extensionArguments": {
+        "entryId": 1
+      },
+      "runtimeExamples": [
+        {
+          "file": "tests/contracts/test_mealplan_advanced.py",
+          "test": "test_mealplan_advanced_mcp_positive",
+          "provenance": "python_native_mcp_recipe_extension"
+        }
+      ]
+    },
+    {
+      "name": "create_random_mealplan_entry",
+      "group": "mealplans",
+      "origin": "mealie_330",
+      "migrationStatus": "implemented_contract_verified",
+      "extensionArguments": {
+        "date": "2026-11-03",
+        "entryType": "dinner"
+      },
+      "runtimeExamples": [
+        {
+          "file": "tests/contracts/test_mealplan_advanced.py",
+          "test": "test_mealplan_advanced_mcp_positive",
+          "provenance": "python_native_mcp_recipe_extension"
+        }
+      ]
+    },
+    {
+      "name": "get_mealplan_rules",
+      "group": "mealplans",
+      "origin": "mealie_330",
+      "migrationStatus": "implemented_contract_verified",
+      "extensionArguments": {},
+      "runtimeExamples": [
+        {
+          "file": "tests/contracts/test_mealplan_advanced.py",
+          "test": "test_mealplan_advanced_mcp_positive",
+          "provenance": "python_native_mcp_recipe_extension"
+        }
+      ]
+    },
+    {
+      "name": "create_mealplan_rule",
+      "group": "mealplans",
+      "origin": "mealie_330",
+      "migrationStatus": "implemented_contract_verified",
+      "extensionArguments": {
+        "day": "monday",
+        "entryType": "dinner",
+        "queryFilterString": "name~soup"
+      },
+      "runtimeExamples": [
+        {
+          "file": "tests/contracts/test_mealplan_advanced.py",
+          "test": "test_mealplan_advanced_mcp_positive",
+          "provenance": "python_native_mcp_recipe_extension"
+        }
+      ]
+    },
+    {
+      "name": "get_mealplan_rule",
+      "group": "mealplans",
+      "origin": "mealie_330",
+      "migrationStatus": "implemented_contract_verified",
+      "extensionArguments": {
+        "ruleId": "22222222-2222-4222-8222-222222222222"
+      },
+      "runtimeExamples": [
+        {
+          "file": "tests/contracts/test_mealplan_advanced.py",
+          "test": "test_mealplan_advanced_mcp_positive",
+          "provenance": "python_native_mcp_recipe_extension"
+        }
+      ]
+    },
+    {
+      "name": "update_mealplan_rule",
+      "group": "mealplans",
+      "origin": "mealie_330",
+      "migrationStatus": "implemented_contract_verified",
+      "extensionArguments": {
+        "ruleId": "22222222-2222-4222-8222-222222222222",
+        "changes": {
+          "queryFilterString": ""
+        }
+      },
+      "runtimeExamples": [
+        {
+          "file": "tests/contracts/test_mealplan_advanced.py",
+          "test": "test_mealplan_advanced_mcp_positive",
+          "provenance": "python_native_mcp_recipe_extension"
+        }
+      ]
+    },
+    {
+      "name": "delete_mealplan_rule",
+      "group": "mealplans",
+      "origin": "mealie_330",
+      "migrationStatus": "implemented_contract_verified",
+      "extensionArguments": {
+        "ruleId": "22222222-2222-4222-8222-222222222222"
+      },
+      "runtimeExamples": [
+        {
+          "file": "tests/contracts/test_mealplan_advanced.py",
+          "test": "test_mealplan_advanced_mcp_positive",
+          "provenance": "python_native_mcp_recipe_extension"
+        }
+      ]
+    },
+    {
+      "name": "get_mealplan_ical_token",
+      "group": "mealplans",
+      "origin": "mealie_330",
+      "migrationStatus": "implemented_contract_verified",
+      "extensionArguments": {},
+      "runtimeExamples": [
+        {
+          "file": "tests/contracts/test_mealplan_advanced.py",
+          "test": "test_mealplan_advanced_mcp_positive",
+          "provenance": "python_native_mcp_recipe_extension"
+        }
+      ]
+    },
+    {
+      "name": "rotate_mealplan_ical_token",
+      "group": "mealplans",
+      "origin": "mealie_330",
+      "migrationStatus": "implemented_contract_verified",
+      "extensionArguments": {},
+      "runtimeExamples": [
+        {
+          "file": "tests/contracts/test_mealplan_advanced.py",
+          "test": "test_mealplan_advanced_mcp_positive",
+          "provenance": "python_native_mcp_recipe_extension"
+        }
+      ]
+    },
+    {
+      "name": "delete_mealplan_ical_token",
+      "group": "mealplans",
+      "origin": "mealie_330",
+      "migrationStatus": "implemented_contract_verified",
+      "extensionArguments": {},
+      "runtimeExamples": [
+        {
+          "file": "tests/contracts/test_mealplan_advanced.py",
+          "test": "test_mealplan_advanced_mcp_positive",
+          "provenance": "python_native_mcp_recipe_extension"
+        }
+      ]
+    },
+    {
+      "name": "get_mealplan_ical_feed",
+      "group": "mealplans",
+      "origin": "mealie_330",
+      "migrationStatus": "implemented_contract_verified",
+      "extensionArguments": {
+        "token": "calendar-token",
+        "types": [
+          "dinner"
+        ],
+        "tz": "Europe/Madrid",
+        "dinner": "19:30:00"
+      },
+      "runtimeExamples": [
+        {
+          "file": "tests/contracts/test_mealplan_advanced.py",
+          "test": "test_mealplan_advanced_mcp_positive",
+          "provenance": "python_native_mcp_recipe_extension"
+        }
+      ]
+    },
+    {
+      "name": "preview_recipe_from_url",
+      "group": "recipes",
+      "origin": "mealie_330",
+      "migrationStatus": "implemented_contract_verified",
+      "extensionArguments": {
+        "url": "https://recipes.test/soup",
+        "useOpenAI": false
+      },
+      "runtimeExamples": [
+        {
+          "file": "tests/contracts/test_recipe_jobs.py",
+          "test": "test_recipe_jobs_mcp_positive",
+          "provenance": "python_native_mcp_recipe_extension"
+        }
+      ]
+    },
+    {
+      "name": "import_recipe_with_ai",
+      "group": "recipes",
+      "origin": "mealie_330",
+      "migrationStatus": "implemented_contract_verified",
+      "extensionArguments": {
+        "content": "Soup recipe",
+        "createNewOrganizers": false
+      },
+      "runtimeExamples": [
+        {
+          "file": "tests/contracts/test_recipe_jobs.py",
+          "test": "test_recipe_jobs_mcp_positive",
+          "provenance": "python_native_mcp_recipe_extension"
+        }
+      ]
+    },
+    {
+      "name": "import_recipe_from_url_with_progress",
+      "group": "recipes",
+      "origin": "mealie_330",
+      "migrationStatus": "implemented_contract_verified",
+      "extensionArguments": {
+        "url": "https://recipes.test/soup",
+        "includeTags": false
+      },
+      "runtimeExamples": [
+        {
+          "file": "tests/contracts/test_recipe_jobs.py",
+          "test": "test_recipe_jobs_mcp_positive",
+          "provenance": "python_native_mcp_recipe_extension"
+        }
+      ]
+    },
+    {
+      "name": "import_recipe_from_html_or_json_with_progress",
+      "group": "recipes",
+      "origin": "mealie_330",
+      "migrationStatus": "implemented_contract_verified",
+      "extensionArguments": {
+        "data": "{\"name\":\"Soup\"}",
+        "url": null,
+        "includeCategories": false
+      },
+      "runtimeExamples": [
+        {
+          "file": "tests/contracts/test_recipe_jobs.py",
+          "test": "test_recipe_jobs_mcp_positive",
+          "provenance": "python_native_mcp_recipe_extension"
+        }
+      ]
+    },
+    {
+      "name": "import_recipe_with_ai_with_progress",
+      "group": "recipes",
+      "origin": "mealie_330",
+      "migrationStatus": "implemented_contract_verified",
+      "extensionArguments": {
+        "content": "Soup recipe",
+        "createNewOrganizers": false
+      },
+      "runtimeExamples": [
+        {
+          "file": "tests/contracts/test_recipe_jobs.py",
+          "test": "test_recipe_jobs_mcp_positive",
+          "provenance": "python_native_mcp_recipe_extension"
+        }
+      ]
+    },
+    {
+      "name": "import_recipes_from_urls",
+      "group": "recipes",
+      "origin": "mealie_330",
+      "migrationStatus": "implemented_contract_verified",
+      "extensionArguments": {
+        "imports": [
+          {
+            "url": "https://recipes.test/soup",
+            "tags": [],
+            "categories": null
+          }
+        ]
+      },
+      "runtimeExamples": [
+        {
+          "file": "tests/contracts/test_recipe_jobs.py",
+          "test": "test_recipe_jobs_mcp_positive",
+          "provenance": "python_native_mcp_recipe_extension"
+        }
+      ]
+    },
+    {
+      "name": "get_recipe_import_reports",
+      "group": "recipes",
+      "origin": "mealie_330",
+      "migrationStatus": "implemented_contract_verified",
+      "extensionArguments": {},
+      "runtimeExamples": [
+        {
+          "file": "tests/contracts/test_recipe_jobs.py",
+          "test": "test_recipe_jobs_mcp_positive",
+          "provenance": "python_native_mcp_recipe_extension"
+        }
+      ]
+    },
+    {
+      "name": "get_recipe_import_report",
+      "group": "recipes",
+      "origin": "mealie_330",
+      "migrationStatus": "implemented_contract_verified",
+      "extensionArguments": {
+        "reportId": "11111111-1111-4111-8111-111111111111"
+      },
+      "runtimeExamples": [
+        {
+          "file": "tests/contracts/test_recipe_jobs.py",
+          "test": "test_recipe_jobs_mcp_positive",
+          "provenance": "python_native_mcp_recipe_extension"
+        }
+      ]
+    },
+    {
+      "name": "delete_recipes_bulk",
+      "group": "recipes",
+      "origin": "mealie_330",
+      "migrationStatus": "implemented_contract_verified",
+      "extensionArguments": {
+        "recipes": [
+          "soup"
+        ]
+      },
+      "runtimeExamples": [
+        {
+          "file": "tests/contracts/test_recipe_jobs.py",
+          "test": "test_recipe_jobs_mcp_positive",
+          "provenance": "python_native_mcp_recipe_extension"
+        }
+      ]
+    },
+    {
+      "name": "export_recipes_bulk",
+      "group": "recipes",
+      "origin": "mealie_330",
+      "migrationStatus": "implemented_contract_verified",
+      "extensionArguments": {
+        "recipes": [
+          "soup"
+        ],
+        "exportType": "json"
+      },
+      "runtimeExamples": [
+        {
+          "file": "tests/contracts/test_recipe_jobs.py",
+          "test": "test_recipe_jobs_mcp_positive",
+          "provenance": "python_native_mcp_recipe_extension"
+        }
+      ]
+    },
+    {
+      "name": "get_recipe_bulk_exports",
+      "group": "recipes",
+      "origin": "mealie_330",
+      "migrationStatus": "implemented_contract_verified",
+      "extensionArguments": {},
+      "runtimeExamples": [
+        {
+          "file": "tests/contracts/test_recipe_jobs.py",
+          "test": "test_recipe_jobs_mcp_positive",
+          "provenance": "python_native_mcp_recipe_extension"
+        }
+      ]
+    },
+    {
+      "name": "download_recipe_bulk_export",
+      "group": "recipes",
+      "origin": "mealie_330",
+      "migrationStatus": "implemented_contract_verified",
+      "extensionArguments": {
+        "exportId": "11111111-1111-4111-8111-111111111111"
+      },
+      "runtimeExamples": [
+        {
+          "file": "tests/contracts/test_recipe_jobs.py",
+          "test": "test_recipe_jobs_mcp_positive",
+          "provenance": "python_native_mcp_recipe_extension"
+        }
+      ]
+    },
+    {
+      "name": "purge_recipe_bulk_exports",
+      "group": "recipes",
+      "origin": "mealie_330",
+      "migrationStatus": "implemented_contract_verified",
+      "extensionArguments": {},
+      "runtimeExamples": [
+        {
+          "file": "tests/contracts/test_recipe_jobs.py",
+          "test": "test_recipe_jobs_mcp_positive",
+          "provenance": "python_native_mcp_recipe_extension"
+        }
+      ]
+    },
+    {
+      "name": "update_recipe_metadata_batch",
+      "group": "recipes",
+      "origin": "mealie_330",
+      "migrationStatus": "implemented_contract_verified",
+      "extensionArguments": {
+        "items": [
+          {
+            "slug": "soup",
+            "expectedUpdatedAt": "snapshot",
+            "prepTime": "PT10M"
+          }
+        ],
+        "concurrency": 2
+      },
+      "runtimeExamples": [
+        {
+          "file": "tests/contracts/test_recipe_jobs.py",
+          "test": "test_recipe_jobs_mcp_positive",
+          "provenance": "python_native_mcp_recipe_extension"
+        }
+      ]
     }
   ],
   "prompts": [

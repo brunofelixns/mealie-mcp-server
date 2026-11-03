@@ -8,6 +8,7 @@ from fastmcp import Client
 from mealie_mcp_server import version
 from mealie_mcp_server.config import load_settings
 from mealie_mcp_server.server import create_server
+from mealie_mcp_server.tools.registry import definitions
 from tests.support.fake_mealie import FakeMealie
 from tests.support.version import PROJECT_VERSION
 
@@ -23,15 +24,17 @@ async def test_full_catalog_preserves_all_fields_and_order(mode):
         settings = load_settings({"MEALIE_BASE_URL": fake.server_url, "MEALIE_API_KEY": "fixture"})
         async with Client(create_server(settings), mode=mode) as client:
             tools = await client.list_tools()
-    assert len(tools) == 78
-    assert [tool.name for tool in tools] == [tool["name"] for tool in ORIGINAL]
+    assert len(tools) == len(definitions())
+    assert [tool.name for tool in tools[: len(ORIGINAL)]] == [tool["name"] for tool in ORIGINAL]
+    assert [tool.name for tool in tools] == list(definitions())
     expected = copy.deepcopy(ORIGINAL)
     if mode == "auto":
         assert DIFFERENCES["D01"]["modernToolExecution"] == "omitted_by_protocol"
         for tool in expected:
             assert tool.pop("execution") == DIFFERENCES["D01"]["legacyToolExecution"]
     assert [
-        tool.model_dump(mode="json", by_alias=True, exclude_unset=True) for tool in tools
+        tool.model_dump(mode="json", by_alias=True, exclude_unset=True)
+        for tool in tools[: len(ORIGINAL)]
     ] == expected
     assert [tool.name for tool in tools if (tool.meta or {}).get("openai/fileParams")] == [
         "set_recipe_image_from_file"

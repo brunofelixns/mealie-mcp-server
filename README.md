@@ -17,7 +17,7 @@
   <a href="pyproject.toml"><img src="https://img.shields.io/badge/Python-3.14-3776AB?logo=python&amp;logoColor=white" alt="Python 3.14"></a>
   <a href="pyproject.toml"><img src="https://img.shields.io/badge/FastMCP-4.1.4-245348" alt="FastMCP 4.1.4"></a>
   <a href="docs/clients.md"><img src="https://img.shields.io/badge/MCP-2026--07--28-245348" alt="MCP 2026-07-28"></a>
-  <a href="#available-tools-78"><img src="https://img.shields.io/badge/Tools-78-C5653E" alt="78 tools"></a>
+  <a href="#available-tools-162"><img src="https://img.shields.io/badge/Tools-162-C5653E" alt="162 tools"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-C5653E" alt="MIT license"></a>
 </p>
 
@@ -25,11 +25,11 @@
   <a href="#quick-start">Quick start</a> ·
   <a href="#connect-your-mcp-client">MCP clients</a> ·
   <a href="#configuration">Configuration</a> ·
-  <a href="#available-tools-78">Tools</a> ·
+  <a href="#available-tools-162">Tools</a> ·
   <a href="#documentation">Documentation</a>
 </p>
 
-A **Model Context Protocol server for [Mealie](https://github.com/mealie-recipes/mealie)**, built with Python and FastMCP. Give your assistant access to **78 tools** for recipes, meal planning, and shopping, plus the **`weekly-meal-plan`** prompt. Connect locally over **stdio** or remotely over **Streamable HTTP with a personal Bearer token**.
+A **Model Context Protocol server for [Mealie](https://github.com/mealie-recipes/mealie)**, built with Python and FastMCP. Give your assistant access to **162 tools** for recipes, meal planning, and shopping, plus the **`weekly-meal-plan`** prompt. Connect locally over **stdio** or remotely over **Streamable HTTP with a personal Bearer token**.
 
 Mealie stores your recipes; your MCP client supplies the model and uses the tools to read data or make changes. The server supports protocol **2026-07-28** and clients from the **2025-11-25** protocol era.
 
@@ -210,34 +210,36 @@ uv run --frozen mealie-mcp-server --transport stdio
 | `--version` | Print the package version. |
 | `--help` | Show CLI help. |
 
+Recipe editing, native import/export and limits: [recipe guide](docs/recipes.md) (Spanish).
+
 <!-- BEGIN GENERATED TOOLS -->
-## Available tools (78)
+## Available tools (162)
 
 Catalog for version 0.2.0. See the [full schemas](docs/tools.md) and [API coverage](docs/api-coverage.md) (in Spanish). <!-- x-release-please-version -->
 
 | Family | Tools |
 |---|---:|
-| Recipes | 26 |
-| Meal planning | 6 |
+| Recipes | 95 |
+| Meal planning | 21 |
 | Categories | 7 |
 | Tags | 7 |
 | Shopping lists | 13 |
 | Foods | 7 |
 | Units | 6 |
 | Equipment | 6 |
-| **Total** | **78** |
+| **Total** | **162** |
 
 <details>
-<summary><strong>Recipes</strong> · 26 tools</summary>
+<summary><strong>Recipes</strong> · 95 tools</summary>
 
-`create_recipe`, `delete_recipe`, `duplicate_recipe`, `find_recipes_for_ingredients`, `get_recipe_concise`, `get_recipe_detailed`, `get_recipes`, `get_recipes_batch`, `get_recipes_detailed_batch`, `get_recipes_for_classification`, `get_recipes_for_data_enrichment`, `get_recipes_for_ingredient_parsing`, `mark_recipe_last_made`, `patch_recipe`, `set_recipe_image`, `set_recipe_image_from_file`, `set_recipe_image_from_url`, `set_recipe_rating`, `update_recipe_ingredients`, `update_recipe_ingredients_batch`, `update_recipe_instructions`, `update_recipe_instructions_batch`, `update_recipe_taxonomy`, `update_recipe_taxonomy_batch`, `update_recipe_tools`, `update_recipe_tools_batch`
+`add_recipe_note`, `create_cookbook`, `create_recipe`, `create_recipe_action`, `create_recipe_asset_from_url`, `create_recipe_comment`, `create_recipe_share_link`, `create_recipe_timeline_event`, `delete_cookbook`, `delete_recipe`, `delete_recipe_action`, `delete_recipe_comment`, `delete_recipe_note`, `delete_recipe_share_link`, `delete_recipe_timeline_event`, `delete_recipes_bulk`, `download_recipe_asset`, `download_recipe_bulk_export`, `download_recipe_image`, `download_recipe_timeline_image`, `download_shared_recipe`, `duplicate_recipe`, `export_recipe`, `export_recipes_bulk`, `find_recipes_for_ingredients`, `get_cookbook`, `get_cookbooks`, `get_recipe_action`, `get_recipe_actions`, `get_recipe_assets`, `get_recipe_bulk_exports`, `get_recipe_comment`, `get_recipe_comments`, `get_recipe_concise`, `get_recipe_detailed`, `get_recipe_export_formats`, `get_recipe_favorites`, `get_recipe_household`, `get_recipe_import_report`, `get_recipe_import_reports`, `get_recipe_notes`, `get_recipe_ratings`, `get_recipe_share_link`, `get_recipe_share_links`, `get_recipe_suggestions`, `get_recipe_timeline`, `get_recipe_timeline_event`, `get_recipes`, `get_recipes_batch`, `get_recipes_detailed_batch`, `get_recipes_for_classification`, `get_recipes_for_data_enrichment`, `get_recipes_for_ingredient_parsing`, `get_shared_recipe`, `import_recipe_from_html_or_json`, `import_recipe_from_html_or_json_with_progress`, `import_recipe_from_url`, `import_recipe_from_url_with_progress`, `import_recipe_from_zip`, `import_recipe_with_ai`, `import_recipe_with_ai_with_progress`, `import_recipes_from_urls`, `list_recipe_comments`, `mark_recipe_last_made`, `parse_recipe_ingredient`, `parse_recipe_ingredients`, `patch_recipe`, `preview_recipe_from_url`, `purge_recipe_bulk_exports`, `search_recipes`, `set_recipe_image`, `set_recipe_image_from_file`, `set_recipe_image_from_url`, `set_recipe_rating`, `set_recipe_timeline_event_image`, `trigger_recipe_action`, `update_cookbook`, `update_food_substitutions`, `update_recipe_action`, `update_recipe_comment`, `update_recipe_ingredient_substitutions`, `update_recipe_ingredients`, `update_recipe_ingredients_batch`, `update_recipe_instruction_durations`, `update_recipe_instructions`, `update_recipe_instructions_batch`, `update_recipe_metadata`, `update_recipe_metadata_batch`, `update_recipe_note`, `update_recipe_taxonomy`, `update_recipe_taxonomy_batch`, `update_recipe_timeline_event`, `update_recipe_tools`, `update_recipe_tools_batch`, `upload_recipe_asset`
 
 </details>
 
 <details>
-<summary><strong>Meal planning</strong> · 6 tools</summary>
+<summary><strong>Meal planning</strong> · 21 tools</summary>
 
-`create_mealplan`, `create_mealplan_bulk`, `get_all_mealplans`, `get_mealplan_with_recipes`, `get_todays_mealplan`, `patch_mealplan`
+`create_mealplan`, `create_mealplan_bulk`, `create_mealplan_entry`, `create_mealplan_rule`, `create_random_mealplan_entry`, `delete_mealplan_entry`, `delete_mealplan_ical_token`, `delete_mealplan_rule`, `get_all_mealplans`, `get_mealplan_entry`, `get_mealplan_ical_feed`, `get_mealplan_ical_token`, `get_mealplan_rule`, `get_mealplan_rules`, `get_mealplan_with_recipes`, `get_todays_mealplan`, `list_mealplan_entries`, `patch_mealplan`, `rotate_mealplan_ical_token`, `update_mealplan_entry`, `update_mealplan_rule`
 
 </details>
 
@@ -315,6 +317,7 @@ The detailed guides, tool schemas, and migration evidence below are maintained i
 | Set up HTTPS and remote access | [HTTP deployment](docs/http-deployment.md) |
 | Build the image or use file-based secrets | [Containers](docs/containers.md) |
 | Look up tool parameters | [MCP reference](docs/tools.md) |
+| Use recipe notes, files and Mealie 3.30 features | [Recipe editing](docs/recipes.md) · [Mealie 3.30](docs/mealie-3.30.md) |
 | Understand modules and workflows | [Architecture](docs/architecture.md) · [Workflows](docs/workflows.md) |
 | Review migration results and compatibility | [Acceptance](docs/migration/acceptance.md) · [Intentional differences](docs/migration/differences.md) |
 
@@ -322,7 +325,7 @@ The detailed guides, tool schemas, and migration evidence below are maintained i
 
 The project uses strict models, contract tests against original snapshots, real-socket and installed-image tests, Ruff, and mypy. Verified mutations have bounded cancellation recovery. Check the current Mealie state before repeating a write whose outcome is unknown.
 
-To test **all 78 tools against real Mealie in Docker**, over stdio and Bearer-authenticated HTTP, run `uv run python -m tests.e2e.runner` inside the Dev Container. The environment is local and disposable. The [E2E guide](docs/testing/local-e2e.md) describes the four runs and private-download rejection checks.
+To test **all 162 tools against real Mealie in Docker**, over stdio and Bearer-authenticated HTTP, run `uv run python -m tests.e2e.runner` inside the Dev Container. The environment is local and disposable. The [E2E guide](docs/testing/local-e2e.md) describes the four runs and private-download rejection checks.
 
 The [CI workflow](.github/workflows/ci.yaml) runs the full suite, real disposable
 Mealie integration, compatibility checks, and image scanning before publication.
@@ -330,6 +333,12 @@ It uploads the exact tested images without rebuilding. See the [CI guide](docs/c
 for tags, permissions, evidence, and recovery.
 
 The runtime is tested as a non-root user, with a read-only root filesystem and both architectures; local ARM verification used emulation. Measured results and their limits are recorded in the [acceptance report](docs/migration/acceptance.md). The last documented scan retains critical and high Debian advisories; review the [image security analysis](docs/migration/evidence/P23-security.md) and its limits before exposing a public service.
+
+## Contributing and reporting issues
+
+Read [CONTRIBUTING.md](CONTRIBUTING.md) and the [code of conduct](CODE_OF_CONDUCT.md).
+Use the issue templates for bugs and feature requests. Report vulnerabilities
+privately using the process in [SECURITY.md](SECURITY.md).
 
 ## License and credits
 

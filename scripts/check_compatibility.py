@@ -13,6 +13,41 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 
 
+def _passed_junit_cases(path: Path) -> set[tuple[str, str]]:
+    """Only a clean report with unique case identities can prove execution."""
+    document = ET.parse(path).getroot()
+    passed: set[tuple[str, str]] = set()
+    seen: set[tuple[str, str]] = set()
+    for node in document.iter():
+        if node.tag in {"testsuite", "testsuites"}:
+            for attribute in ("failures", "errors"):
+                try:
+                    count = int(node.get(attribute, "0"))
+                except ValueError:
+                    raise ValueError("Invalid JUnit failure/error count.") from None
+                if count < 0:
+                    raise ValueError("Invalid JUnit failure/error count.")
+                if count:
+                    raise ValueError("JUnit contains failed or errored tests.")
+        if node.tag != "testcase":
+            continue
+        identity = (node.get("classname", ""), node.get("name", ""))
+        if not identity[1]:
+            raise ValueError("JUnit testcase requires a name.")
+        if identity in seen:
+            raise ValueError("Duplicate JUnit testcase identity.")
+        seen.add(identity)
+        if any(node.find(tag) is not None for tag in ("failure", "error")):
+            raise ValueError("JUnit contains failed or errored tests.")
+        if node.find("skipped") is None:
+            passed.add(identity)
+    return passed
+
+
+def _test_module(file: str) -> str:
+    return file.removesuffix(".py").replace("/", ".")
+
+
 def check(
     inventory_path: Path,
     require_all: bool,
@@ -23,8 +58,17 @@ def check(
     catalog = json.loads((ROOT / "src/mealie_mcp_server/resources/tool-catalog.json").read_text())
     state = json.loads((ROOT / "docs/migration/implementation-state.json").read_text())
     names = {tool["name"] for tool in catalog["tools"]}
-    if len(names) != 78 or names != {tool["name"] for tool in inventory["tools"]}:
-        raise ValueError("Inventory and public catalog must contain exactly the same 78 tools")
+    baseline = json.loads((ROOT / "tests/fixtures/compatibility/catalog.json").read_text())["tools"]
+    original = [
+        {key: value for key, value in tool.items() if key != "endpoints"}
+        for tool in catalog["tools"][: len(baseline)]
+    ]
+    if len(baseline) != 78 or original != baseline:
+        raise ValueError("The immutable 78-tool baseline definitions and order must be preserved")
+    if len(names) != len(catalog["tools"]) or names != {
+        tool["name"] for tool in inventory["tools"]
+    }:
+        raise ValueError("Inventory and public catalog must contain the same unique tools")
     if any(
         tool["inputSchema"].get("additionalProperties") is not False for tool in catalog["tools"]
     ):
@@ -49,14 +93,30 @@ def check(
             result = case.get("expected_python_result", case["expected_result"])
             if "content" in result and not result.get("isError") and case["expected_requests"]:
                 positive.add(case["tool"])
-                positive_sources.append((case["tool"], case["scenario"]))
+                # The categories.json sample exercises the comparator itself; the
+                # get_categories contract is separately captured in categories_tags.
+                function = (
+                    "test_core_recipe_contract"
+                    if path.stem == "recipes_core"
+                    else f"test_{path.stem}_contract"
+                )
+                positive_sources.append(
+                    (
+                        case["tool"],
+                        f"tests.contracts.test_{path.stem}",
+                        f"{function}[{case['scenario']}]",
+                    )
+                )
     captured_positive = len(positive)
     additional = []
     for tool in inventory["tools"]:
         if tool["name"] in positive:
             continue
         for example in tool.get("runtimeExamples", []):
-            if example.get("provenance") == "python_native_mcp_with_injected_download":
+            if example.get("provenance") in {
+                "python_native_mcp_with_injected_download",
+                "python_native_mcp_recipe_extension",
+            }:
                 path = ROOT / example["file"]
                 if "async def " + example["test"] + "(" not in path.read_text():
                     raise ValueError("Missing declared Python positive test")
@@ -67,24 +127,30 @@ def check(
         raise ValueError("Missing full-catalog rejection test")
     if require_all and positive != names:
         raise ValueError("Missing positive MCP evidence: " + ", ".join(sorted(names - positive)))
-    negative = names & represented
+    negative = (names & represented) | {
+        tool["name"] for tool in inventory["tools"] if "extensionArguments" in tool
+    }
     if junit_path:
-        passed = [
-            case.get("name", "")
-            for case in ET.parse(junit_path).getroot().iter("testcase")
-            if not any(case.find(tag) is not None for tag in ("failure", "error", "skipped"))
-        ]
-        positive = {
-            name
-            for name, scenario in positive_sources
-            if any("[" + scenario + "]" in test for test in passed)
-        }
-        positive.update(example["tool"] for example in additional if example["test"] in passed)
-        prefix = "test_all_78_tools_reject_unknown_field_without_provider_side_effects["
+        passed = _passed_junit_cases(junit_path)
+        positive = {name for name, module, test in positive_sources if (module, test) in passed}
+        positive.update(
+            example["tool"]
+            for example in additional
+            if any(
+                module == _test_module(example["file"])
+                and (
+                    test == example["test"] or test == example["test"] + "[" + example["tool"] + "]"
+                )
+                for module, test in passed
+            )
+        )
+        prefix = "test_all_tools_reject_unknown_field_without_provider_side_effects["
         negative = {
             test[len(prefix) : -1]
-            for test in passed
-            if test.startswith(prefix) and test.endswith("]")
+            for module, test in passed
+            if module == "tests.contracts.test_complete_rejections"
+            and test.startswith(prefix)
+            and test.endswith("]")
         }
         if require_all and (positive != names or negative != names):
             raise ValueError(
@@ -95,6 +161,8 @@ def check(
             )
     report = {
         "tools": len(names),
+        "baselineTools": len(baseline),
+        "extensionTools": len(names) - len(baseline),
         "positiveTools": len(positive),
         "negativeTools": len(negative),
         "executionEvidence": str(junit_path)

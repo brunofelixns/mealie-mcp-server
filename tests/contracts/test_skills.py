@@ -5,6 +5,7 @@ from mcp.shared.exceptions import MCPError
 
 from mealie_mcp_server.config import load_settings
 from mealie_mcp_server.server import create_server
+from mealie_mcp_server.tools.registry import definitions
 from tests.support.fake_mealie import FakeMealie
 from tests.support.skills import EXTENSION, ROOT, SKILL_URI, assert_skill_bytes
 
@@ -61,7 +62,7 @@ async def test_clients_without_extension_can_read_skill_resources(mode):
             assert SKILL_URI in {str(resource.uri) for resource in resources}
             raw = (await client.read_resource(SKILL_URI))[0].text.encode("utf-8")
             assert raw == (ROOT / "skills/mealie/SKILL.md").read_bytes()
-            assert len(await client.list_tools()) == 78
+            assert len(await client.list_tools()) == len(definitions())
             assert [prompt.name for prompt in await client.list_prompts()] == ["weekly-meal-plan"]
 
 

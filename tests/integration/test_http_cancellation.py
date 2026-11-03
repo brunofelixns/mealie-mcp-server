@@ -13,12 +13,14 @@ from tests.integration.test_http import AUTH, settings_for
 from tests.support.contracts import FIXTURES, load_cases
 from tests.support.fake_mealie import FakeMealie
 from tests.support.http_server import serve_http
+from tests.support.mealie330_compatibility import apply_request_overlay
 
 
 @pytest.mark.parametrize("family", ["recipe_ingredients", "recipe_instructions"])
 async def test_tcp_disconnect_finishes_verification_and_rollback_without_replay(family):
     case = next(case for case in load_cases(family) if case.scenario.endswith(".rollback"))
     requests = json.loads((FIXTURES / "scenarios.json").read_text())[case.scenario]["requests"]
+    requests = apply_request_overlay(case.scenario, requests)
     observed = []
     entered, release, restored = asyncio.Event(), asyncio.Event(), asyncio.Event()
 

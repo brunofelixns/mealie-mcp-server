@@ -15,6 +15,7 @@ VOCABULARY = Vocabulary(
         "extras",
         "labelId",
         "aliases",
+        "substitutions",
         "householdsWithIngredientFood",
     ),
 )

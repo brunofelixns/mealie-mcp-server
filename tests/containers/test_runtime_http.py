@@ -7,6 +7,7 @@ import httpx2 as httpx
 from mcp import Client
 from mcp.client.streamable_http import streamable_http_client
 
+from mealie_mcp_server.tools.registry import definitions
 from tests.containers.conftest import AUTH_TOKEN as TOKEN
 from tests.containers.conftest import docker, run_arguments, unique_name
 from tests.support.contracts import FIXTURES
@@ -79,7 +80,7 @@ async def test_runtime_http_auth_health_and_stop45_without_source_mount(
                     streamable_http_client(f"http://{name}:8000/mcp", http_client=http),
                     read_timeout_seconds=40,
                 ) as client:
-                    assert len((await client.list_tools()).tools) == 78
+                    assert len((await client.list_tools()).tools) == len(definitions())
                     assert not (
                         await client.call_tool("get_categories", {"page": 1, "perPage": 20})
                     ).is_error

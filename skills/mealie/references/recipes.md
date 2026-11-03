@@ -13,8 +13,11 @@ wrong. For example, «4 huevos» can correctly have quantity 4 and no unit.
 
 ## Import or create
 
-Extract the recipe from the source using the client's own reading capabilities;
-this MCP does not scrape websites or perform OCR. Preserve the source's ingredient
+Use native `import_recipe_from_url`, `import_recipe_from_html_or_json` or
+`import_recipe_from_zip` when requested; these delegate parsing to Mealie and
+create recipes. After an ambiguous response, inspect before importing again.
+For manual creation, extract using the client's reading capabilities; the MCP
+adds no OCR. Preserve the source's ingredient
 lines, quantities, instructions, order, and meaningful sections. Do not invent
 servings, times, nutrition, or unit conversions.
 
@@ -51,3 +54,45 @@ Use `update_recipe_taxonomy` and `update_recipe_tools` (or their batch forms) fo
 categories/tags and equipment. Resolve existing vocabulary first. Choose merge,
 replacement, removal, or creation only according to the user's request and the
 tool schema; do not normalize unrelated recipes or create missing terms silently.
+
+## Notes, metadata and files
+
+Recipe notes differ from ingredient notes and user comments. Read
+`get_recipe_notes`, then use `add_recipe_note`, `update_recipe_note` or
+`delete_recipe_note` with fresh `expectedUpdatedAt`. Edit/delete by stable
+`referenceId`; deleting linked notes requires explicit `removeReferences:true`.
+Preserve unselected notes; re-read after a stale or ambiguous write.
+
+Use `update_recipe_metadata` for prep/cook/perform time, `orgURL`, nutrition,
+settings and extras. Nested objects merge and omitted fields stay intact.
+`nutrition:null` clears the block. Do not invent nutritional values or change
+privacy/locking without a request. The snapshot check is not atomic.
+
+Comments, shared links and timeline events have dedicated tools. Shared tokens
+grant access: create/reveal them only when requested. Add attachments with
+`upload_recipe_asset` or `create_recipe_asset_from_url`. Discover formats with
+`get_recipe_export_formats`; `export_recipe` returns bounded base64 data without
+writing host files. Do not log file contents, credentials or signed URLs.
+
+## Mealie 3.30
+
+Prefer `search_recipes` for advanced native filters/order/queryFilter and
+`get_recipe_suggestions` for stock, missing foods/tools and substitution options.
+Use explicit canonical IDs or meaningful text-only alternatives with
+`update_recipe_ingredient_substitutions` and `update_food_substitutions`.
+`update_recipe_instruction_durations` edits timers
+by fresh snapshot index, accepts positive whole seconds or null to clear, and
+preserves other instruction content.
+
+Native ingredient parsing is optional and read-only for Mealie data; an OpenAI
+parser can call the provider configured in Mealie. Review parsed data before
+applying it. AI imports also use Mealie's configuration, never a local key.
+Progress/bulk imports must not be replayed after an ambiguous failure. Inspect
+their returned job/report instead; accepted does not mean every item succeeded.
+
+Media downloads, cookbook CRUD, favorites/ratings reads, shared recipe/token
+reads and advanced meal plans are available through dedicated tools. Weekly
+entries use endDate six days after date; recipeScale is positive. Rotate share
+or iCal tokens and trigger external recipe actions only when explicitly requested.
+Use `get_recipe_household` to read the current household's lastMade; preserve null
+and do not infer this date from the recipe's general metadata.
