@@ -1,0 +1,2378 @@
+{
+  "providerVersion": "v3.30.0",
+  "mcpTools": 162,
+  "apiOperations": 283,
+  "catalogDependencyOperations": 132,
+  "recipeOperations": 90,
+  "recipeCatalogDependencies": 84,
+  "recipeAlternativeContracts": 6,
+  "unmappedRecipeOperations": [],
+  "unmatchedCatalogDependencies": [],
+  "contractErrors": [],
+  "contractChecked": true,
+  "limitations": [
+    "Catalog dependencies include internal reads; they do not prove full parameter support.",
+    "Alternative batch tools have distinct snapshot, ordering, error and partial-result contracts; arbitrary full-model writes are not exposed.",
+    "Public exploration of other groups, account/provider configuration and administration are outside this household recipe extension.",
+    "AI provider success requires separate evidence; see the real-provider E2E report."
+  ],
+  "operations": [
+    {
+      "endpoint": "GET /api/app/about",
+      "summary": "Get App Info",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "GET /api/app/about/startup-info",
+      "summary": "Get Startup Info",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "GET /api/app/about/theme",
+      "summary": "Get App Theme",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "GET /api/app/about/branding-logo",
+      "summary": "Get App Branding Logo",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "POST /api/auth/token",
+      "summary": "Get Token",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "GET /api/auth/oauth",
+      "summary": "Oauth Login",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "GET /api/auth/oauth/callback",
+      "summary": "Oauth Callback",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "GET /api/auth/oauth/native/config",
+      "summary": "Oauth Native Config",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "POST /api/auth/oauth/native/token",
+      "summary": "Oauth Native Token",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "GET /api/auth/reverse-proxy",
+      "summary": "Reverse Proxy Login",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "POST /api/auth/refresh",
+      "summary": "Refresh Token",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "POST /api/auth/logout",
+      "summary": "Logout",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "POST /api/users/register",
+      "summary": "Register New User",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "GET /api/users/self",
+      "summary": "Get Logged In User",
+      "recipeScope": false,
+      "status": "catalog_dependency",
+      "tools": [
+        "set_recipe_rating"
+      ]
+    },
+    {
+      "endpoint": "GET /api/users/self/ratings",
+      "summary": "Get Logged In User Ratings",
+      "recipeScope": true,
+      "status": "catalog_dependency",
+      "tools": [
+        "get_recipe_ratings"
+      ]
+    },
+    {
+      "endpoint": "GET /api/users/self/ratings/{recipe_id}",
+      "summary": "Get Logged In User Rating For Recipe",
+      "recipeScope": true,
+      "status": "catalog_dependency",
+      "tools": [
+        "set_recipe_rating"
+      ]
+    },
+    {
+      "endpoint": "GET /api/users/self/favorites",
+      "summary": "Get Logged In User Favorites",
+      "recipeScope": true,
+      "status": "catalog_dependency",
+      "tools": [
+        "get_recipe_favorites"
+      ]
+    },
+    {
+      "endpoint": "PUT /api/users/password",
+      "summary": "Update Password",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "PUT /api/users/{item_id}",
+      "summary": "Update User",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "POST /api/users/forgot-password",
+      "summary": "Forgot Password",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "POST /api/users/reset-password",
+      "summary": "Reset Password",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "POST /api/users/{id}/image",
+      "summary": "Update User Image",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "POST /api/users/api-tokens",
+      "summary": "Create Api Token",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "DELETE /api/users/api-tokens/{token_id}",
+      "summary": "Delete Api Token",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "GET /api/users/{id}/ratings",
+      "summary": "Get Ratings",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "GET /api/users/{id}/favorites",
+      "summary": "Get Favorites",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "POST /api/users/{id}/ratings/{slug}",
+      "summary": "Set Rating",
+      "recipeScope": false,
+      "status": "catalog_dependency",
+      "tools": [
+        "set_recipe_rating"
+      ]
+    },
+    {
+      "endpoint": "POST /api/users/{id}/favorites/{slug}",
+      "summary": "Add Favorite",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "DELETE /api/users/{id}/favorites/{slug}",
+      "summary": "Remove Favorite",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "GET /api/households/cookbooks",
+      "summary": "Get All",
+      "recipeScope": true,
+      "status": "catalog_dependency",
+      "tools": [
+        "get_cookbooks"
+      ]
+    },
+    {
+      "endpoint": "POST /api/households/cookbooks",
+      "summary": "Create One",
+      "recipeScope": true,
+      "status": "catalog_dependency",
+      "tools": [
+        "create_cookbook"
+      ]
+    },
+    {
+      "endpoint": "PUT /api/households/cookbooks",
+      "summary": "Update Many",
+      "recipeScope": true,
+      "status": "explicit_alternative_contract",
+      "tools": [
+        "update_cookbook"
+      ]
+    },
+    {
+      "endpoint": "GET /api/households/cookbooks/{item_id}",
+      "summary": "Get One",
+      "recipeScope": true,
+      "status": "catalog_dependency",
+      "tools": [
+        "get_cookbook",
+        "update_cookbook",
+        "delete_cookbook"
+      ]
+    },
+    {
+      "endpoint": "PUT /api/households/cookbooks/{item_id}",
+      "summary": "Update One",
+      "recipeScope": true,
+      "status": "catalog_dependency",
+      "tools": [
+        "update_cookbook"
+      ]
+    },
+    {
+      "endpoint": "DELETE /api/households/cookbooks/{item_id}",
+      "summary": "Delete One",
+      "recipeScope": true,
+      "status": "catalog_dependency",
+      "tools": [
+        "delete_cookbook"
+      ]
+    },
+    {
+      "endpoint": "GET /api/households/events/notifications",
+      "summary": "Get All",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "POST /api/households/events/notifications",
+      "summary": "Create One",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "GET /api/households/events/notifications/{item_id}",
+      "summary": "Get One",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "PUT /api/households/events/notifications/{item_id}",
+      "summary": "Update One",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "DELETE /api/households/events/notifications/{item_id}",
+      "summary": "Delete One",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "POST /api/households/events/notifications/{item_id}/test",
+      "summary": "Test Notification",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "GET /api/households/recipe-actions",
+      "summary": "Get All",
+      "recipeScope": true,
+      "status": "catalog_dependency",
+      "tools": [
+        "get_recipe_actions"
+      ]
+    },
+    {
+      "endpoint": "POST /api/households/recipe-actions",
+      "summary": "Create One",
+      "recipeScope": true,
+      "status": "catalog_dependency",
+      "tools": [
+        "create_recipe_action"
+      ]
+    },
+    {
+      "endpoint": "GET /api/households/recipe-actions/{item_id}",
+      "summary": "Get One",
+      "recipeScope": true,
+      "status": "catalog_dependency",
+      "tools": [
+        "get_recipe_action",
+        "update_recipe_action"
+      ]
+    },
+    {
+      "endpoint": "PUT /api/households/recipe-actions/{item_id}",
+      "summary": "Update One",
+      "recipeScope": true,
+      "status": "catalog_dependency",
+      "tools": [
+        "update_recipe_action"
+      ]
+    },
+    {
+      "endpoint": "DELETE /api/households/recipe-actions/{item_id}",
+      "summary": "Delete One",
+      "recipeScope": true,
+      "status": "catalog_dependency",
+      "tools": [
+        "delete_recipe_action"
+      ]
+    },
+    {
+      "endpoint": "POST /api/households/recipe-actions/{item_id}/trigger/{recipe_slug}",
+      "summary": "Trigger Action",
+      "recipeScope": true,
+      "status": "catalog_dependency",
+      "tools": [
+        "trigger_recipe_action"
+      ]
+    },
+    {
+      "endpoint": "GET /api/households/self",
+      "summary": "Get Logged In User Household",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "GET /api/households/self/recipes/{recipe_slug}",
+      "summary": "Get Household Recipe",
+      "recipeScope": true,
+      "status": "catalog_dependency",
+      "tools": [
+        "get_recipe_household"
+      ]
+    },
+    {
+      "endpoint": "GET /api/households/members",
+      "summary": "Get Household Members",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "GET /api/households/preferences",
+      "summary": "Get Household Preferences",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "PUT /api/households/preferences",
+      "summary": "Update Household Preferences",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "PUT /api/households/permissions",
+      "summary": "Set Member Permissions",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "GET /api/households/statistics",
+      "summary": "Get Statistics",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "GET /api/households/invitations",
+      "summary": "Get Invite Tokens",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "POST /api/households/invitations",
+      "summary": "Create Invite Token",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "POST /api/households/invitations/email",
+      "summary": "Email Invitation",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "GET /api/households/shopping/lists",
+      "summary": "Get All",
+      "recipeScope": false,
+      "status": "catalog_dependency",
+      "tools": [
+        "get_shopping_lists"
+      ]
+    },
+    {
+      "endpoint": "POST /api/households/shopping/lists",
+      "summary": "Create One",
+      "recipeScope": false,
+      "status": "catalog_dependency",
+      "tools": [
+        "create_shopping_list"
+      ]
+    },
+    {
+      "endpoint": "GET /api/households/shopping/lists/{item_id}",
+      "summary": "Get One",
+      "recipeScope": false,
+      "status": "catalog_dependency",
+      "tools": [
+        "get_shopping_list"
+      ]
+    },
+    {
+      "endpoint": "PUT /api/households/shopping/lists/{item_id}",
+      "summary": "Update One",
+      "recipeScope": false,
+      "status": "catalog_dependency",
+      "tools": [
+        "update_shopping_list"
+      ]
+    },
+    {
+      "endpoint": "DELETE /api/households/shopping/lists/{item_id}",
+      "summary": "Delete One",
+      "recipeScope": false,
+      "status": "catalog_dependency",
+      "tools": [
+        "delete_shopping_list"
+      ]
+    },
+    {
+      "endpoint": "PUT /api/households/shopping/lists/{item_id}/label-settings",
+      "summary": "Update Label Settings",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "POST /api/households/shopping/lists/{item_id}/recipe",
+      "summary": "Add Recipe Ingredients To List",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "POST /api/households/shopping/lists/{item_id}/recipe/{recipe_id}",
+      "summary": "Add Single Recipe Ingredients To List",
+      "recipeScope": false,
+      "status": "catalog_dependency",
+      "tools": [
+        "add_recipe_to_shopping_list"
+      ]
+    },
+    {
+      "endpoint": "POST /api/households/shopping/lists/{item_id}/recipe/{recipe_id}/delete",
+      "summary": "Remove Recipe Ingredients From List",
+      "recipeScope": false,
+      "status": "catalog_dependency",
+      "tools": [
+        "remove_recipe_from_shopping_list"
+      ]
+    },
+    {
+      "endpoint": "GET /api/households/shopping/items",
+      "summary": "Get All",
+      "recipeScope": false,
+      "status": "catalog_dependency",
+      "tools": [
+        "get_shopping_list_items"
+      ]
+    },
+    {
+      "endpoint": "POST /api/households/shopping/items",
+      "summary": "Create One",
+      "recipeScope": false,
+      "status": "catalog_dependency",
+      "tools": [
+        "create_shopping_list_item"
+      ]
+    },
+    {
+      "endpoint": "PUT /api/households/shopping/items",
+      "summary": "Update Many",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "DELETE /api/households/shopping/items",
+      "summary": "Delete Many",
+      "recipeScope": false,
+      "status": "catalog_dependency",
+      "tools": [
+        "delete_shopping_list_items_bulk"
+      ]
+    },
+    {
+      "endpoint": "POST /api/households/shopping/items/create-bulk",
+      "summary": "Create Many",
+      "recipeScope": false,
+      "status": "catalog_dependency",
+      "tools": [
+        "create_shopping_list_items_bulk"
+      ]
+    },
+    {
+      "endpoint": "GET /api/households/shopping/items/{item_id}",
+      "summary": "Get One",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "PUT /api/households/shopping/items/{item_id}",
+      "summary": "Update One",
+      "recipeScope": false,
+      "status": "catalog_dependency",
+      "tools": [
+        "update_shopping_list_item"
+      ]
+    },
+    {
+      "endpoint": "DELETE /api/households/shopping/items/{item_id}",
+      "summary": "Delete One",
+      "recipeScope": false,
+      "status": "catalog_dependency",
+      "tools": [
+        "delete_shopping_list_item"
+      ]
+    },
+    {
+      "endpoint": "GET /api/households/webhooks",
+      "summary": "Get All",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "POST /api/households/webhooks",
+      "summary": "Create One",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "POST /api/households/webhooks/rerun",
+      "summary": "Rerun Webhooks",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "GET /api/households/webhooks/{item_id}",
+      "summary": "Get One",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "PUT /api/households/webhooks/{item_id}",
+      "summary": "Update One",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "DELETE /api/households/webhooks/{item_id}",
+      "summary": "Delete One",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "POST /api/households/webhooks/{item_id}/test",
+      "summary": "Test One",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "GET /api/households/mealplans/rules",
+      "summary": "Get All",
+      "recipeScope": true,
+      "status": "catalog_dependency",
+      "tools": [
+        "get_mealplan_rules"
+      ]
+    },
+    {
+      "endpoint": "POST /api/households/mealplans/rules",
+      "summary": "Create One",
+      "recipeScope": true,
+      "status": "catalog_dependency",
+      "tools": [
+        "create_mealplan_rule"
+      ]
+    },
+    {
+      "endpoint": "GET /api/households/mealplans/rules/{item_id}",
+      "summary": "Get One",
+      "recipeScope": true,
+      "status": "catalog_dependency",
+      "tools": [
+        "get_mealplan_rule",
+        "update_mealplan_rule"
+      ]
+    },
+    {
+      "endpoint": "PUT /api/households/mealplans/rules/{item_id}",
+      "summary": "Update One",
+      "recipeScope": true,
+      "status": "catalog_dependency",
+      "tools": [
+        "update_mealplan_rule"
+      ]
+    },
+    {
+      "endpoint": "DELETE /api/households/mealplans/rules/{item_id}",
+      "summary": "Delete One",
+      "recipeScope": true,
+      "status": "catalog_dependency",
+      "tools": [
+        "delete_mealplan_rule"
+      ]
+    },
+    {
+      "endpoint": "GET /api/households/mealplans/ical",
+      "summary": "Get Ical Token",
+      "recipeScope": true,
+      "status": "catalog_dependency",
+      "tools": [
+        "get_mealplan_ical_token"
+      ]
+    },
+    {
+      "endpoint": "POST /api/households/mealplans/ical",
+      "summary": "Create Ical Token",
+      "recipeScope": true,
+      "status": "catalog_dependency",
+      "tools": [
+        "rotate_mealplan_ical_token"
+      ]
+    },
+    {
+      "endpoint": "DELETE /api/households/mealplans/ical",
+      "summary": "Delete Ical Token",
+      "recipeScope": true,
+      "status": "catalog_dependency",
+      "tools": [
+        "delete_mealplan_ical_token"
+      ]
+    },
+    {
+      "endpoint": "GET /api/households/mealplans/ical/{token}",
+      "summary": "Get Mealplan Ical Feed",
+      "recipeScope": true,
+      "status": "catalog_dependency",
+      "tools": [
+        "get_mealplan_ical_feed"
+      ]
+    },
+    {
+      "endpoint": "GET /api/households/mealplans",
+      "summary": "Get All",
+      "recipeScope": true,
+      "status": "catalog_dependency",
+      "tools": [
+        "get_all_mealplans",
+        "get_mealplan_with_recipes",
+        "list_mealplan_entries"
+      ]
+    },
+    {
+      "endpoint": "POST /api/households/mealplans",
+      "summary": "Create One",
+      "recipeScope": true,
+      "status": "catalog_dependency",
+      "tools": [
+        "create_mealplan",
+        "create_mealplan_bulk",
+        "patch_mealplan",
+        "create_mealplan_entry"
+      ]
+    },
+    {
+      "endpoint": "GET /api/households/mealplans/today",
+      "summary": "Get Todays Meals",
+      "recipeScope": true,
+      "status": "catalog_dependency",
+      "tools": [
+        "get_todays_mealplan"
+      ]
+    },
+    {
+      "endpoint": "POST /api/households/mealplans/random",
+      "summary": "Create Random Meal",
+      "recipeScope": true,
+      "status": "catalog_dependency",
+      "tools": [
+        "create_random_mealplan_entry"
+      ]
+    },
+    {
+      "endpoint": "GET /api/households/mealplans/{item_id}",
+      "summary": "Get One",
+      "recipeScope": true,
+      "status": "catalog_dependency",
+      "tools": [
+        "patch_mealplan",
+        "get_mealplan_entry",
+        "update_mealplan_entry"
+      ]
+    },
+    {
+      "endpoint": "PUT /api/households/mealplans/{item_id}",
+      "summary": "Update One",
+      "recipeScope": true,
+      "status": "catalog_dependency",
+      "tools": [
+        "patch_mealplan",
+        "update_mealplan_entry"
+      ]
+    },
+    {
+      "endpoint": "DELETE /api/households/mealplans/{item_id}",
+      "summary": "Delete One",
+      "recipeScope": true,
+      "status": "catalog_dependency",
+      "tools": [
+        "patch_mealplan",
+        "delete_mealplan_entry"
+      ]
+    },
+    {
+      "endpoint": "POST /api/groups/ai-providers/providers",
+      "summary": "Create Ai Provider",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "POST /api/groups/ai-providers/providers/test",
+      "summary": "Test Ai Provider",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "POST /api/groups/ai-providers/providers/{provider_id}/test",
+      "summary": "Test Saved Ai Provider",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "GET /api/groups/ai-providers/providers/{provider_id}",
+      "summary": "Get Ai Provider",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "PUT /api/groups/ai-providers/providers/{provider_id}",
+      "summary": "Update Ai Provider",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "DELETE /api/groups/ai-providers/providers/{provider_id}",
+      "summary": "Delete Ai Provider",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "GET /api/groups/ai-providers/settings",
+      "summary": "Get Ai Provider Settings",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "PUT /api/groups/ai-providers/settings",
+      "summary": "Update Ai Provider Settings",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "GET /api/groups/ai-providers/prompts",
+      "summary": "Get Ai Prompts",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "PUT /api/groups/ai-providers/prompts/{prompt_name}",
+      "summary": "Update Ai Prompt",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "DELETE /api/groups/ai-providers/prompts/{prompt_name}",
+      "summary": "Delete Ai Prompt",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "GET /api/groups/households",
+      "summary": "Get All Households",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "GET /api/groups/households/{household_slug}",
+      "summary": "Get One Household",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "GET /api/groups/self",
+      "summary": "Get Logged In User Group",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "GET /api/groups/members",
+      "summary": "Get Group Members",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "GET /api/groups/members/{username_or_id}",
+      "summary": "Get Group Member",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "GET /api/groups/preferences",
+      "summary": "Get Group Preferences",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "PUT /api/groups/preferences",
+      "summary": "Update Group Preferences",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "GET /api/groups/storage",
+      "summary": "Get Storage",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "POST /api/groups/migrations",
+      "summary": "Start Data Migration",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "GET /api/groups/reports",
+      "summary": "Get All",
+      "recipeScope": false,
+      "status": "catalog_dependency",
+      "tools": [
+        "get_recipe_import_reports"
+      ]
+    },
+    {
+      "endpoint": "GET /api/groups/reports/{item_id}",
+      "summary": "Get One",
+      "recipeScope": false,
+      "status": "catalog_dependency",
+      "tools": [
+        "get_recipe_import_report"
+      ]
+    },
+    {
+      "endpoint": "DELETE /api/groups/reports/{item_id}",
+      "summary": "Delete One",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "GET /api/groups/labels",
+      "summary": "Get All",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "POST /api/groups/labels",
+      "summary": "Create One",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "GET /api/groups/labels/empty",
+      "summary": "Get All Empty",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "POST /api/groups/labels/merge",
+      "summary": "Merge Labels",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "GET /api/groups/labels/{item_id}",
+      "summary": "Get One",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "PUT /api/groups/labels/{item_id}",
+      "summary": "Update One",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "DELETE /api/groups/labels/{item_id}",
+      "summary": "Delete One",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "POST /api/groups/seeders/foods",
+      "summary": "Seed Foods",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "POST /api/groups/seeders/units",
+      "summary": "Seed Units",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "GET /api/recipes/exports",
+      "summary": "Get Recipe Formats And Templates",
+      "recipeScope": true,
+      "status": "catalog_dependency",
+      "tools": [
+        "get_recipe_export_formats"
+      ]
+    },
+    {
+      "endpoint": "GET /api/recipes/{slug}/exports",
+      "summary": "Get Recipe As Format",
+      "recipeScope": true,
+      "status": "catalog_dependency",
+      "tools": [
+        "export_recipe"
+      ]
+    },
+    {
+      "endpoint": "POST /api/recipes/test-scrape-url",
+      "summary": "Test Parse Recipe Url",
+      "recipeScope": true,
+      "status": "catalog_dependency",
+      "tools": [
+        "preview_recipe_from_url"
+      ]
+    },
+    {
+      "endpoint": "POST /api/recipes/create/html-or-json",
+      "summary": "Create Recipe From Html Or Json",
+      "recipeScope": true,
+      "status": "catalog_dependency",
+      "tools": [
+        "import_recipe_from_html_or_json"
+      ]
+    },
+    {
+      "endpoint": "POST /api/recipes/create/html-or-json/stream",
+      "summary": "Create Recipe From Html Or Json Stream",
+      "recipeScope": true,
+      "status": "catalog_dependency",
+      "tools": [
+        "import_recipe_from_html_or_json_with_progress"
+      ]
+    },
+    {
+      "endpoint": "POST /api/recipes/create/url",
+      "summary": "Parse Recipe Url",
+      "recipeScope": true,
+      "status": "catalog_dependency",
+      "tools": [
+        "import_recipe_from_url"
+      ]
+    },
+    {
+      "endpoint": "POST /api/recipes/create/url/stream",
+      "summary": "Parse Recipe Url Stream",
+      "recipeScope": true,
+      "status": "catalog_dependency",
+      "tools": [
+        "import_recipe_from_url_with_progress"
+      ]
+    },
+    {
+      "endpoint": "POST /api/recipes/create/ai",
+      "summary": "Create Recipe With Ai",
+      "recipeScope": true,
+      "status": "catalog_dependency",
+      "tools": [
+        "import_recipe_with_ai"
+      ]
+    },
+    {
+      "endpoint": "POST /api/recipes/create/ai/stream",
+      "summary": "Create Recipe With Ai Stream",
+      "recipeScope": true,
+      "status": "catalog_dependency",
+      "tools": [
+        "import_recipe_with_ai_with_progress"
+      ]
+    },
+    {
+      "endpoint": "POST /api/recipes/create/url/bulk",
+      "summary": "Parse Recipe Url Bulk",
+      "recipeScope": true,
+      "status": "catalog_dependency",
+      "tools": [
+        "import_recipes_from_urls"
+      ]
+    },
+    {
+      "endpoint": "POST /api/recipes/create/zip",
+      "summary": "Create Recipe From Zip",
+      "recipeScope": true,
+      "status": "catalog_dependency",
+      "tools": [
+        "import_recipe_from_zip"
+      ]
+    },
+    {
+      "endpoint": "GET /api/recipes",
+      "summary": "Get All",
+      "recipeScope": true,
+      "status": "catalog_dependency",
+      "tools": [
+        "get_recipes",
+        "find_recipes_for_ingredients",
+        "get_recipes_for_classification",
+        "get_recipes_for_ingredient_parsing",
+        "get_recipes_for_data_enrichment",
+        "search_recipes"
+      ]
+    },
+    {
+      "endpoint": "POST /api/recipes",
+      "summary": "Create One",
+      "recipeScope": true,
+      "status": "catalog_dependency",
+      "tools": [
+        "create_recipe"
+      ]
+    },
+    {
+      "endpoint": "PUT /api/recipes",
+      "summary": "Update Many",
+      "recipeScope": true,
+      "status": "explicit_alternative_contract",
+      "tools": [
+        "update_recipe_metadata_batch",
+        "update_recipe_ingredients_batch",
+        "update_recipe_instructions_batch",
+        "update_recipe_taxonomy_batch",
+        "update_recipe_tools_batch"
+      ]
+    },
+    {
+      "endpoint": "PATCH /api/recipes",
+      "summary": "Patch Many",
+      "recipeScope": true,
+      "status": "explicit_alternative_contract",
+      "tools": [
+        "update_recipe_metadata_batch"
+      ]
+    },
+    {
+      "endpoint": "GET /api/recipes/suggestions",
+      "summary": "Suggest Recipes",
+      "recipeScope": true,
+      "status": "catalog_dependency",
+      "tools": [
+        "find_recipes_for_ingredients",
+        "get_recipe_suggestions"
+      ]
+    },
+    {
+      "endpoint": "GET /api/recipes/{slug}",
+      "summary": "Get One",
+      "recipeScope": true,
+      "status": "catalog_dependency",
+      "tools": [
+        "get_recipe_detailed",
+        "get_recipe_concise",
+        "get_recipes_batch",
+        "get_recipes_detailed_batch",
+        "get_recipes_for_classification",
+        "get_recipes_for_ingredient_parsing",
+        "get_recipes_for_data_enrichment",
+        "patch_recipe",
+        "update_recipe_ingredients",
+        "update_recipe_ingredients_batch",
+        "update_recipe_instructions",
+        "update_recipe_instructions_batch",
+        "update_recipe_taxonomy",
+        "update_recipe_taxonomy_batch",
+        "update_recipe_tools",
+        "update_recipe_tools_batch",
+        "set_recipe_rating",
+        "get_mealplan_with_recipes",
+        "get_recipe_notes",
+        "add_recipe_note",
+        "update_recipe_note",
+        "delete_recipe_note",
+        "update_recipe_metadata",
+        "create_recipe_comment",
+        "get_recipe_share_links",
+        "create_recipe_share_link",
+        "get_recipe_timeline",
+        "create_recipe_timeline_event",
+        "update_recipe_ingredient_substitutions",
+        "update_recipe_instruction_durations",
+        "get_recipe_assets",
+        "download_recipe_asset",
+        "download_recipe_image",
+        "download_recipe_timeline_image",
+        "update_recipe_metadata_batch"
+      ]
+    },
+    {
+      "endpoint": "PUT /api/recipes/{slug}",
+      "summary": "Update One",
+      "recipeScope": true,
+      "status": "catalog_dependency",
+      "tools": [
+        "create_recipe"
+      ]
+    },
+    {
+      "endpoint": "PATCH /api/recipes/{slug}",
+      "summary": "Patch One",
+      "recipeScope": true,
+      "status": "catalog_dependency",
+      "tools": [
+        "patch_recipe",
+        "update_recipe_ingredients",
+        "update_recipe_ingredients_batch",
+        "update_recipe_instructions",
+        "update_recipe_instructions_batch",
+        "update_recipe_taxonomy",
+        "update_recipe_taxonomy_batch",
+        "update_recipe_tools",
+        "update_recipe_tools_batch",
+        "add_recipe_note",
+        "update_recipe_note",
+        "delete_recipe_note",
+        "update_recipe_metadata",
+        "update_recipe_ingredient_substitutions",
+        "update_recipe_instruction_durations",
+        "update_recipe_metadata_batch"
+      ]
+    },
+    {
+      "endpoint": "DELETE /api/recipes/{slug}",
+      "summary": "Delete One",
+      "recipeScope": true,
+      "status": "catalog_dependency",
+      "tools": [
+        "delete_recipe"
+      ]
+    },
+    {
+      "endpoint": "POST /api/recipes/{slug}/duplicate",
+      "summary": "Duplicate One",
+      "recipeScope": true,
+      "status": "catalog_dependency",
+      "tools": [
+        "duplicate_recipe"
+      ]
+    },
+    {
+      "endpoint": "PATCH /api/recipes/{slug}/last-made",
+      "summary": "Update Last Made",
+      "recipeScope": true,
+      "status": "catalog_dependency",
+      "tools": [
+        "mark_recipe_last_made"
+      ]
+    },
+    {
+      "endpoint": "POST /api/recipes/{slug}/image",
+      "summary": "Scrape Image Url",
+      "recipeScope": true,
+      "status": "catalog_dependency",
+      "tools": [
+        "set_recipe_image_from_url"
+      ]
+    },
+    {
+      "endpoint": "PUT /api/recipes/{slug}/image",
+      "summary": "Update Recipe Image",
+      "recipeScope": true,
+      "status": "catalog_dependency",
+      "tools": [
+        "set_recipe_image",
+        "set_recipe_image_from_file"
+      ]
+    },
+    {
+      "endpoint": "DELETE /api/recipes/{slug}/image",
+      "summary": "Delete Recipe Image",
+      "recipeScope": true,
+      "status": "catalog_dependency",
+      "tools": [
+        "set_recipe_image"
+      ]
+    },
+    {
+      "endpoint": "POST /api/recipes/{slug}/assets",
+      "summary": "Upload Recipe Asset",
+      "recipeScope": true,
+      "status": "catalog_dependency",
+      "tools": [
+        "upload_recipe_asset"
+      ]
+    },
+    {
+      "endpoint": "POST /api/recipes/{slug}/assets/url",
+      "summary": "Create Recipe Asset From Url",
+      "recipeScope": true,
+      "status": "catalog_dependency",
+      "tools": [
+        "create_recipe_asset_from_url"
+      ]
+    },
+    {
+      "endpoint": "GET /api/recipes/{slug}/comments",
+      "summary": "Get Recipe Comments",
+      "recipeScope": true,
+      "status": "catalog_dependency",
+      "tools": [
+        "get_recipe_comments"
+      ]
+    },
+    {
+      "endpoint": "POST /api/recipes/bulk-actions/tag",
+      "summary": "Bulk Tag Recipes",
+      "recipeScope": true,
+      "status": "explicit_alternative_contract",
+      "tools": [
+        "update_recipe_taxonomy_batch"
+      ]
+    },
+    {
+      "endpoint": "POST /api/recipes/bulk-actions/settings",
+      "summary": "Bulk Settings Recipes",
+      "recipeScope": true,
+      "status": "explicit_alternative_contract",
+      "tools": [
+        "update_recipe_metadata_batch"
+      ]
+    },
+    {
+      "endpoint": "POST /api/recipes/bulk-actions/categorize",
+      "summary": "Bulk Categorize Recipes",
+      "recipeScope": true,
+      "status": "explicit_alternative_contract",
+      "tools": [
+        "update_recipe_taxonomy_batch"
+      ]
+    },
+    {
+      "endpoint": "POST /api/recipes/bulk-actions/delete",
+      "summary": "Bulk Delete Recipes",
+      "recipeScope": true,
+      "status": "catalog_dependency",
+      "tools": [
+        "delete_recipes_bulk"
+      ]
+    },
+    {
+      "endpoint": "POST /api/recipes/bulk-actions/export",
+      "summary": "Bulk Export Recipes",
+      "recipeScope": true,
+      "status": "catalog_dependency",
+      "tools": [
+        "export_recipes_bulk"
+      ]
+    },
+    {
+      "endpoint": "GET /api/recipes/bulk-actions/export",
+      "summary": "Get Exported Data",
+      "recipeScope": true,
+      "status": "catalog_dependency",
+      "tools": [
+        "get_recipe_bulk_exports"
+      ]
+    },
+    {
+      "endpoint": "GET /api/recipes/bulk-actions/export/{export_id}/download",
+      "summary": "Get Exported Data Token",
+      "recipeScope": true,
+      "status": "catalog_dependency",
+      "tools": [
+        "download_recipe_bulk_export"
+      ]
+    },
+    {
+      "endpoint": "DELETE /api/recipes/bulk-actions/export/purge",
+      "summary": "Purge Export Data",
+      "recipeScope": true,
+      "status": "catalog_dependency",
+      "tools": [
+        "purge_recipe_bulk_exports"
+      ]
+    },
+    {
+      "endpoint": "GET /api/recipes/shared/{token_id}",
+      "summary": "Get Shared Recipe",
+      "recipeScope": true,
+      "status": "catalog_dependency",
+      "tools": [
+        "get_shared_recipe"
+      ]
+    },
+    {
+      "endpoint": "GET /api/recipes/shared/{token_id}/zip",
+      "summary": "Get Shared Recipe As Zip",
+      "recipeScope": true,
+      "status": "catalog_dependency",
+      "tools": [
+        "download_shared_recipe"
+      ]
+    },
+    {
+      "endpoint": "GET /api/recipes/timeline/events",
+      "summary": "Get All",
+      "recipeScope": true,
+      "status": "catalog_dependency",
+      "tools": [
+        "get_recipe_timeline"
+      ]
+    },
+    {
+      "endpoint": "POST /api/recipes/timeline/events",
+      "summary": "Create One",
+      "recipeScope": true,
+      "status": "catalog_dependency",
+      "tools": [
+        "create_recipe_timeline_event"
+      ]
+    },
+    {
+      "endpoint": "GET /api/recipes/timeline/events/{item_id}",
+      "summary": "Get One",
+      "recipeScope": true,
+      "status": "catalog_dependency",
+      "tools": [
+        "download_recipe_timeline_image",
+        "get_recipe_timeline_event"
+      ]
+    },
+    {
+      "endpoint": "PUT /api/recipes/timeline/events/{item_id}",
+      "summary": "Update One",
+      "recipeScope": true,
+      "status": "catalog_dependency",
+      "tools": [
+        "update_recipe_timeline_event"
+      ]
+    },
+    {
+      "endpoint": "DELETE /api/recipes/timeline/events/{item_id}",
+      "summary": "Delete One",
+      "recipeScope": true,
+      "status": "catalog_dependency",
+      "tools": [
+        "delete_recipe_timeline_event"
+      ]
+    },
+    {
+      "endpoint": "PUT /api/recipes/timeline/events/{item_id}/image",
+      "summary": "Update Event Image",
+      "recipeScope": true,
+      "status": "catalog_dependency",
+      "tools": [
+        "set_recipe_timeline_event_image"
+      ]
+    },
+    {
+      "endpoint": "GET /api/organizers/categories",
+      "summary": "Get All",
+      "recipeScope": false,
+      "status": "catalog_dependency",
+      "tools": [
+        "update_recipe_taxonomy",
+        "update_recipe_taxonomy_batch",
+        "get_categories"
+      ]
+    },
+    {
+      "endpoint": "POST /api/organizers/categories",
+      "summary": "Create One",
+      "recipeScope": false,
+      "status": "catalog_dependency",
+      "tools": [
+        "update_recipe_taxonomy",
+        "update_recipe_taxonomy_batch",
+        "create_category"
+      ]
+    },
+    {
+      "endpoint": "GET /api/organizers/categories/empty",
+      "summary": "Get All Empty",
+      "recipeScope": false,
+      "status": "catalog_dependency",
+      "tools": [
+        "get_empty_categories"
+      ]
+    },
+    {
+      "endpoint": "POST /api/organizers/categories/merge",
+      "summary": "Merge Categories",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "GET /api/organizers/categories/{item_id}",
+      "summary": "Get One",
+      "recipeScope": false,
+      "status": "catalog_dependency",
+      "tools": [
+        "get_category"
+      ]
+    },
+    {
+      "endpoint": "PUT /api/organizers/categories/{item_id}",
+      "summary": "Update One",
+      "recipeScope": false,
+      "status": "catalog_dependency",
+      "tools": [
+        "update_category"
+      ]
+    },
+    {
+      "endpoint": "DELETE /api/organizers/categories/{item_id}",
+      "summary": "Delete One",
+      "recipeScope": false,
+      "status": "catalog_dependency",
+      "tools": [
+        "delete_category"
+      ]
+    },
+    {
+      "endpoint": "GET /api/organizers/categories/slug/{category_slug}",
+      "summary": "Get One By Slug",
+      "recipeScope": false,
+      "status": "catalog_dependency",
+      "tools": [
+        "get_category_by_slug"
+      ]
+    },
+    {
+      "endpoint": "GET /api/organizers/tags",
+      "summary": "Get All",
+      "recipeScope": false,
+      "status": "catalog_dependency",
+      "tools": [
+        "update_recipe_taxonomy",
+        "update_recipe_taxonomy_batch",
+        "get_tags"
+      ]
+    },
+    {
+      "endpoint": "POST /api/organizers/tags",
+      "summary": "Create One",
+      "recipeScope": false,
+      "status": "catalog_dependency",
+      "tools": [
+        "update_recipe_taxonomy",
+        "update_recipe_taxonomy_batch",
+        "create_tag"
+      ]
+    },
+    {
+      "endpoint": "GET /api/organizers/tags/empty",
+      "summary": "Get Empty Tags",
+      "recipeScope": false,
+      "status": "catalog_dependency",
+      "tools": [
+        "get_empty_tags"
+      ]
+    },
+    {
+      "endpoint": "POST /api/organizers/tags/merge",
+      "summary": "Merge Tags",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "GET /api/organizers/tags/{item_id}",
+      "summary": "Get One",
+      "recipeScope": false,
+      "status": "catalog_dependency",
+      "tools": [
+        "get_tag"
+      ]
+    },
+    {
+      "endpoint": "PUT /api/organizers/tags/{item_id}",
+      "summary": "Update One",
+      "recipeScope": false,
+      "status": "catalog_dependency",
+      "tools": [
+        "update_tag"
+      ]
+    },
+    {
+      "endpoint": "DELETE /api/organizers/tags/{item_id}",
+      "summary": "Delete Recipe Tag",
+      "recipeScope": false,
+      "status": "catalog_dependency",
+      "tools": [
+        "delete_tag"
+      ]
+    },
+    {
+      "endpoint": "GET /api/organizers/tags/slug/{tag_slug}",
+      "summary": "Get One By Slug",
+      "recipeScope": false,
+      "status": "catalog_dependency",
+      "tools": [
+        "get_tag_by_slug"
+      ]
+    },
+    {
+      "endpoint": "GET /api/organizers/tools",
+      "summary": "Get All",
+      "recipeScope": false,
+      "status": "catalog_dependency",
+      "tools": [
+        "update_recipe_tools",
+        "update_recipe_tools_batch",
+        "get_tools",
+        "get_tool_matches"
+      ]
+    },
+    {
+      "endpoint": "POST /api/organizers/tools",
+      "summary": "Create One",
+      "recipeScope": false,
+      "status": "catalog_dependency",
+      "tools": [
+        "update_recipe_tools",
+        "update_recipe_tools_batch",
+        "create_tool"
+      ]
+    },
+    {
+      "endpoint": "GET /api/organizers/tools/empty",
+      "summary": "Get All Empty",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "POST /api/organizers/tools/merge",
+      "summary": "Merge Tools",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "GET /api/organizers/tools/{item_id}",
+      "summary": "Get One",
+      "recipeScope": false,
+      "status": "catalog_dependency",
+      "tools": [
+        "get_tool",
+        "update_tool"
+      ]
+    },
+    {
+      "endpoint": "PUT /api/organizers/tools/{item_id}",
+      "summary": "Update One",
+      "recipeScope": false,
+      "status": "catalog_dependency",
+      "tools": [
+        "update_tool"
+      ]
+    },
+    {
+      "endpoint": "DELETE /api/organizers/tools/{item_id}",
+      "summary": "Delete One",
+      "recipeScope": false,
+      "status": "catalog_dependency",
+      "tools": [
+        "delete_tool"
+      ]
+    },
+    {
+      "endpoint": "GET /api/organizers/tools/slug/{tool_slug}",
+      "summary": "Get One By Slug",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "GET /api/shared/recipes",
+      "summary": "Get All",
+      "recipeScope": true,
+      "status": "catalog_dependency",
+      "tools": [
+        "get_recipe_share_links"
+      ]
+    },
+    {
+      "endpoint": "POST /api/shared/recipes",
+      "summary": "Create One",
+      "recipeScope": true,
+      "status": "catalog_dependency",
+      "tools": [
+        "create_recipe_share_link"
+      ]
+    },
+    {
+      "endpoint": "GET /api/shared/recipes/{item_id}",
+      "summary": "Get One",
+      "recipeScope": true,
+      "status": "catalog_dependency",
+      "tools": [
+        "get_recipe_share_link"
+      ]
+    },
+    {
+      "endpoint": "DELETE /api/shared/recipes/{item_id}",
+      "summary": "Delete One",
+      "recipeScope": true,
+      "status": "catalog_dependency",
+      "tools": [
+        "delete_recipe_share_link"
+      ]
+    },
+    {
+      "endpoint": "GET /api/comments",
+      "summary": "Get All",
+      "recipeScope": true,
+      "status": "catalog_dependency",
+      "tools": [
+        "list_recipe_comments"
+      ]
+    },
+    {
+      "endpoint": "POST /api/comments",
+      "summary": "Create One",
+      "recipeScope": true,
+      "status": "catalog_dependency",
+      "tools": [
+        "create_recipe_comment"
+      ]
+    },
+    {
+      "endpoint": "GET /api/comments/{item_id}",
+      "summary": "Get One",
+      "recipeScope": true,
+      "status": "catalog_dependency",
+      "tools": [
+        "get_recipe_comment"
+      ]
+    },
+    {
+      "endpoint": "PUT /api/comments/{item_id}",
+      "summary": "Update One",
+      "recipeScope": true,
+      "status": "catalog_dependency",
+      "tools": [
+        "update_recipe_comment"
+      ]
+    },
+    {
+      "endpoint": "DELETE /api/comments/{item_id}",
+      "summary": "Delete One",
+      "recipeScope": true,
+      "status": "catalog_dependency",
+      "tools": [
+        "delete_recipe_comment"
+      ]
+    },
+    {
+      "endpoint": "POST /api/parser/ingredient",
+      "summary": "Parse Ingredient",
+      "recipeScope": true,
+      "status": "catalog_dependency",
+      "tools": [
+        "parse_recipe_ingredient"
+      ]
+    },
+    {
+      "endpoint": "POST /api/parser/ingredients",
+      "summary": "Parse Ingredients",
+      "recipeScope": true,
+      "status": "catalog_dependency",
+      "tools": [
+        "parse_recipe_ingredients"
+      ]
+    },
+    {
+      "endpoint": "GET /api/foods",
+      "summary": "Get All",
+      "recipeScope": false,
+      "status": "catalog_dependency",
+      "tools": [
+        "find_recipes_for_ingredients",
+        "get_foods",
+        "get_food_matches"
+      ]
+    },
+    {
+      "endpoint": "POST /api/foods",
+      "summary": "Create One",
+      "recipeScope": false,
+      "status": "catalog_dependency",
+      "tools": [
+        "create_food"
+      ]
+    },
+    {
+      "endpoint": "GET /api/foods/empty",
+      "summary": "Get All Empty",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "PUT /api/foods/merge",
+      "summary": "Merge One",
+      "recipeScope": false,
+      "status": "catalog_dependency",
+      "tools": [
+        "merge_foods"
+      ]
+    },
+    {
+      "endpoint": "GET /api/foods/{item_id}",
+      "summary": "Get One",
+      "recipeScope": false,
+      "status": "catalog_dependency",
+      "tools": [
+        "get_food",
+        "update_food",
+        "merge_foods",
+        "update_recipe_ingredient_substitutions",
+        "update_food_substitutions"
+      ]
+    },
+    {
+      "endpoint": "PUT /api/foods/{item_id}",
+      "summary": "Update One",
+      "recipeScope": false,
+      "status": "catalog_dependency",
+      "tools": [
+        "update_food",
+        "update_food_substitutions"
+      ]
+    },
+    {
+      "endpoint": "DELETE /api/foods/{item_id}",
+      "summary": "Delete One",
+      "recipeScope": false,
+      "status": "catalog_dependency",
+      "tools": [
+        "delete_food"
+      ]
+    },
+    {
+      "endpoint": "GET /api/units",
+      "summary": "Get All",
+      "recipeScope": false,
+      "status": "catalog_dependency",
+      "tools": [
+        "get_units",
+        "get_unit_matches"
+      ]
+    },
+    {
+      "endpoint": "POST /api/units",
+      "summary": "Create One",
+      "recipeScope": false,
+      "status": "catalog_dependency",
+      "tools": [
+        "create_unit"
+      ]
+    },
+    {
+      "endpoint": "PUT /api/units/merge",
+      "summary": "Merge One",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "GET /api/units/{item_id}",
+      "summary": "Get One",
+      "recipeScope": false,
+      "status": "catalog_dependency",
+      "tools": [
+        "get_unit",
+        "update_unit"
+      ]
+    },
+    {
+      "endpoint": "PUT /api/units/{item_id}",
+      "summary": "Update One",
+      "recipeScope": false,
+      "status": "catalog_dependency",
+      "tools": [
+        "update_unit"
+      ]
+    },
+    {
+      "endpoint": "DELETE /api/units/{item_id}",
+      "summary": "Delete One",
+      "recipeScope": false,
+      "status": "catalog_dependency",
+      "tools": [
+        "delete_unit"
+      ]
+    },
+    {
+      "endpoint": "GET /api/admin/about",
+      "summary": "Get App Info",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "GET /api/admin/about/statistics",
+      "summary": "Get App Statistics",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "GET /api/admin/about/check",
+      "summary": "Check App Config",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "GET /api/admin/users",
+      "summary": "Get All",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "POST /api/admin/users",
+      "summary": "Create One",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "POST /api/admin/users/unlock",
+      "summary": "Unlock Users",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "GET /api/admin/users/{item_id}",
+      "summary": "Get One",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "PUT /api/admin/users/{item_id}",
+      "summary": "Update One",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "DELETE /api/admin/users/{item_id}",
+      "summary": "Delete One",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "POST /api/admin/users/password-reset-token",
+      "summary": "Generate Token",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "GET /api/admin/households",
+      "summary": "Get All",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "POST /api/admin/households",
+      "summary": "Create One",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "GET /api/admin/households/{item_id}",
+      "summary": "Get One",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "PUT /api/admin/households/{item_id}",
+      "summary": "Update One",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "DELETE /api/admin/households/{item_id}",
+      "summary": "Delete One",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "GET /api/admin/groups",
+      "summary": "Get All",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "POST /api/admin/groups",
+      "summary": "Create One",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "GET /api/admin/groups/{item_id}",
+      "summary": "Get One",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "PUT /api/admin/groups/{item_id}",
+      "summary": "Update One",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "DELETE /api/admin/groups/{item_id}",
+      "summary": "Delete One",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "POST /api/admin/groups/{group_id}/ai-providers/providers",
+      "summary": "Create Ai Provider",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "GET /api/admin/groups/{group_id}/ai-providers/providers/{provider_id}",
+      "summary": "Get Ai Provider",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "PUT /api/admin/groups/{group_id}/ai-providers/providers/{provider_id}",
+      "summary": "Update Ai Provider",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "DELETE /api/admin/groups/{group_id}/ai-providers/providers/{provider_id}",
+      "summary": "Delete Ai Provider",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "GET /api/admin/groups/{group_id}/ai-providers/prompts",
+      "summary": "Get Ai Prompts",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "PUT /api/admin/groups/{group_id}/ai-providers/prompts/{prompt_name}",
+      "summary": "Update Ai Prompt",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "DELETE /api/admin/groups/{group_id}/ai-providers/prompts/{prompt_name}",
+      "summary": "Delete Ai Prompt",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "GET /api/admin/email",
+      "summary": "Check Email Config",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "POST /api/admin/email",
+      "summary": "Send Test Email",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "GET /api/admin/backups",
+      "summary": "Get All",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "POST /api/admin/backups",
+      "summary": "Create One",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "GET /api/admin/backups/{file_name}",
+      "summary": "Get One",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "DELETE /api/admin/backups/{file_name}",
+      "summary": "Delete One",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "POST /api/admin/backups/upload",
+      "summary": "Upload One",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "POST /api/admin/backups/{file_name}/restore",
+      "summary": "Import One",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "GET /api/admin/maintenance",
+      "summary": "Get Maintenance Summary",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "GET /api/admin/maintenance/storage",
+      "summary": "Get Storage Details",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "POST /api/admin/maintenance/clean/images",
+      "summary": "Clean Images",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "POST /api/admin/maintenance/clean/temp",
+      "summary": "Clean Temp",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "POST /api/admin/maintenance/clean/recipe-folders",
+      "summary": "Clean Recipe Folders",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "POST /api/admin/debug/openai/{provider_id}",
+      "summary": "Debug Openai",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "GET /api/explore/groups/{group_slug}/foods",
+      "summary": "Get All",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "GET /api/explore/groups/{group_slug}/foods/{item_id}",
+      "summary": "Get One",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "GET /api/explore/groups/{group_slug}/households",
+      "summary": "Get All",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "GET /api/explore/groups/{group_slug}/households/{household_slug}",
+      "summary": "Get Household",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "GET /api/explore/groups/{group_slug}/organizers/categories",
+      "summary": "Get All",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "GET /api/explore/groups/{group_slug}/organizers/categories/{item_id}",
+      "summary": "Get One",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "GET /api/explore/groups/{group_slug}/organizers/tags",
+      "summary": "Get All",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "GET /api/explore/groups/{group_slug}/organizers/tags/{item_id}",
+      "summary": "Get One",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "GET /api/explore/groups/{group_slug}/organizers/tools",
+      "summary": "Get All",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "GET /api/explore/groups/{group_slug}/organizers/tools/{item_id}",
+      "summary": "Get One",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "GET /api/explore/groups/{group_slug}/cookbooks",
+      "summary": "Get All",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "GET /api/explore/groups/{group_slug}/cookbooks/{item_id}",
+      "summary": "Get One",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "GET /api/explore/groups/{group_slug}/recipes",
+      "summary": "Get All",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "GET /api/explore/groups/{group_slug}/recipes/suggestions",
+      "summary": "Suggest Recipes",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "GET /api/explore/groups/{group_slug}/recipes/{recipe_slug}",
+      "summary": "Get Recipe",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "GET /api/media/recipes/{recipe_id}/images/{file_name}",
+      "summary": "Get Recipe Img",
+      "recipeScope": true,
+      "status": "catalog_dependency",
+      "tools": [
+        "download_recipe_image"
+      ]
+    },
+    {
+      "endpoint": "GET /api/media/recipes/{recipe_id}/images/timeline/{timeline_event_id}/{file_name}",
+      "summary": "Get Recipe Timeline Event Img",
+      "recipeScope": true,
+      "status": "catalog_dependency",
+      "tools": [
+        "download_recipe_timeline_image"
+      ]
+    },
+    {
+      "endpoint": "GET /api/media/recipes/{recipe_id}/assets/{file_name}",
+      "summary": "Get Recipe Asset",
+      "recipeScope": true,
+      "status": "catalog_dependency",
+      "tools": [
+        "download_recipe_asset"
+      ]
+    },
+    {
+      "endpoint": "GET /api/media/users/{user_id}/{file_name}",
+      "summary": "Get User Image",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "GET /api/media/docker/validate.txt",
+      "summary": "Get Validation Text",
+      "recipeScope": false,
+      "status": "outside_recipe_extension",
+      "tools": []
+    },
+    {
+      "endpoint": "GET /api/utils/download",
+      "summary": "Download File",
+      "recipeScope": false,
+      "status": "catalog_dependency",
+      "tools": [
+        "download_recipe_bulk_export"
+      ]
+    }
+  ],
+  "openapiSha256": "23a7adc37f3ae1921499a43b8d62684a83647235867030a47a0162f608b1560c",
+  "catalogSha256": "7d87ed897b76431c8f6831ec9b42a7c4b877123c8577c604e8d8e11028c744c1",
+  "contractSha256": "83fa2c184d4f235d232b1ed581e25e49377550aec6686cbfb5f2875eb88dc5b3"
+}

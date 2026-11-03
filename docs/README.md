@@ -11,7 +11,8 @@ La implementación y verificación local están completas (24/24), y `0.1.0` est
 | Necesidad | Documento |
 |---|---|
 | Preparar el entorno y ejecutar checks | [Desarrollo](development.md) |
-| Probar las78 herramientas con Mealie real en Docker | [E2E local](testing/local-e2e.md) |
+| Probar el catálogo actual con Mealie real en Docker | [E2E local](testing/local-e2e.md) |
+| Editar recetas y utilizar las novedades de Mealie 3.30 | [Recetas](recipes.md) · [Mealie 3.30](mealie-3.30.md) |
 | Variables y credenciales | [Configuración](configuration.md) |
 | Conectar clientes stdio/HTTP | [Clientes](clients.md) |
 | Skills servidos por MCP e instalación manual | [Skills](skills.md) |

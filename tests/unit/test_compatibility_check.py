@@ -35,7 +35,16 @@ def test_compatibility_checker_enforces_separate_line_and_branch_thresholds(
     assert result.returncode == (0 if valid else 1), result.stderr
     if valid:
         report = json.loads(result.stdout)
-        assert report["tools"] == report["positiveTools"] == report["negativeTools"] == 78
+        catalog = json.loads(
+            (ROOT / "src/mealie_mcp_server/resources/tool-catalog.json").read_text()
+        )
+        assert (
+            report["tools"]
+            == report["positiveTools"]
+            == report["negativeTools"]
+            == len(catalog["tools"])
+        )
+        assert report["baselineTools"] == 78
         assert report["coverage"]["lines"] == 90
         assert report["coverage"]["branches"] == 85
     else:

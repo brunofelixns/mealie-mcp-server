@@ -1,0 +1,59 @@
+name: Bug report
+description: Report a reproducible problem with the Python MCP server.
+body:
+  - type: markdown
+    attributes:
+      value: |
+        For vulnerabilities, use the private reporting link in SECURITY.md.
+        Remove tokens, recipes, personal data, and signed URLs from all examples.
+  - type: input
+    id: version
+    attributes:
+      label: Server version or image digest
+      placeholder: Release version, commit SHA, or immutable image digest
+    validations:
+      required: true
+  - type: input
+    id: mealie-version
+    attributes:
+      label: Mealie version
+    validations:
+      required: true
+  - type: dropdown
+    id: transport
+    attributes:
+      label: MCP transport
+      options:
+        - stdio
+        - Streamable HTTP
+        - Both
+        - Not applicable
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Client and deployment
+      description: MCP client/version, OS, architecture, Docker or package installation, and relevant sanitized settings.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to reproduce
+      description: Give a minimal example using disposable data, including the tool and sanitized arguments if relevant.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior and sanitized errors
+      description: Include relevant errors only. Do not upload credentials or real recipe bodies.
+    validations:
+      required: true

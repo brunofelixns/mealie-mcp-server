@@ -11,8 +11,10 @@ from fastmcp.client.transports import StdioTransport
 from mcp import Client
 from mcp.client.stdio import StdioServerParameters
 
+from mealie_mcp_server.tools.registry import definitions
 from tests.support.contracts import FIXTURES, load_cases
 from tests.support.fake_mealie import FakeMealie
+from tests.support.mealie330_compatibility import apply_request_overlay
 from tests.support.version import PROJECT_VERSION
 
 
@@ -41,7 +43,7 @@ async def test_official_sdk_stdio_catalog_prompt_and_tool(mode):
         async with Client(params, mode=mode, read_timeout_seconds=20) as client:
             assert client.protocol_version == ("2025-11-25" if mode == "legacy" else "2026-07-28")
             catalog = await client.list_tools()
-            assert len(catalog.tools) == 78
+            assert len(catalog.tools) == len(definitions())
             assert catalog.tools[0].name == "get_recipes"
             prompt = await client.get_prompt("weekly-meal-plan", {"preferences": "vegetarian"})
             assert [message.role for message in prompt.messages] == ["assistant", "user"]
@@ -57,7 +59,7 @@ async def test_fastmcp_stdio_roundtrip(mode):
             command=sys.executable, args=["-m", "mealie_mcp_server"], env=environment(fake)
         )
         async with FastMCPClient(transport, mode=mode, timeout=20) as client:
-            assert len(await client.list_tools()) == 78
+            assert len(await client.list_tools()) == len(definitions())
             result = await client.call_tool("get_categories", {"page": 1, "perPage": 20})
             assert not result.is_error
 
@@ -183,6 +185,7 @@ async def test_stdio_shutdown_finishes_an_issued_write_and_rollback(shutdown):
     )
     fixture_data = json.loads(await asyncio.to_thread((FIXTURES / "scenarios.json").read_text))
     requests = fixture_data[case.scenario]["requests"]
+    requests = apply_request_overlay(case.scenario, requests)
     entered, release = threading.Event(), threading.Event()
     first_patch = next(request for request in requests if request["method"] == "PATCH")
     first_patch.update(response_entered=entered, response_gate=release)

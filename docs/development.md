@@ -44,7 +44,12 @@ la revisión de dependencias y las acreditaciones de release.
 visible en Actions, también cuando la verificación se interrumpe. Los umbrales
 siguen perteneciendo a `check_compatibility.py`: 90% de líneas y 85% de ramas.
 
-Construir primero la imagen runtime como indica [contenedores](containers.md): la suite incluye pruebas reales de esa imagen. Los umbrales se comprueban independientemente: líneas >=90% y ramas >=85%. coverage activa la medición de los subprocess Python para observar el CLI real; la imagen de producción no incorpora coverage. El JUnit demuestra la ejecución de casos positivos y rechazos para las78 herramientas; un índice de fixtures por sí solo no demuestra que pasaron.
+Construir primero la imagen runtime como indica [contenedores](containers.md): la suite incluye pruebas reales de esa imagen. Los umbrales se comprueban independientemente: líneas >=90% y ramas >=85%. coverage activa la medición de los subprocess Python para observar el CLI real; la imagen de producción no incorpora coverage. El JUnit demuestra la ejecución de casos positivos y rechazos para las162 herramientas; un índice de fixtures por sí solo no demuestra que pasaron.
+
+El gate JUnit rechaza cualquier test fallido o con error, contadores de fallo
+declarados y casos duplicados ambiguos. Vincula cada positivo/rechazo a su módulo
+y función de contrato; un test con el mismo nombre en otro archivo no aporta esa
+evidencia. Las capturas originales siguen siendo inmutables.
 
 `uv run python scripts/generate_docs.py` regenera docs/tools.md, docs/api-coverage.md, el índice API_COVERAGE.md y únicamente las secciones delimitadas de herramientas en README.md (inglés) y docs/README.es.md (español). Conserva el texto manual de ambas versiones y escribe mediante reemplazo atómico. `--check` falla ante diferencias en cualquiera de los dos idiomas, incluidos cambios de esquema.
 
@@ -56,7 +61,15 @@ Desde el terminal del Dev Container, con Docker Desktop disponible:
 uv run python -m tests.e2e.runner
 ```
 
-El controlador construye el runtime y crea un proyecto Compose único con Mealie3.29.0 fijado por digest. Ejecuta las78 herramientas y78 rechazos de argumentos por cada combinación stdio/HTTP y MCP2026-07-28/2025-11-25, con Bearer independiente en HTTP. Usa red interna, sin puertos publicados ni credenciales personales, y elimina sus contenedores/volúmenes incluso si fallan las pruebas. La descarga privada por archivo se verifica como rechazo SSRF esperado; las otras77 herramientas requieren operaciones positivas. Consultar el [runbook E2E](testing/local-e2e.md) para requisitos, evidencias, limpieza tras interrupciones y límites.
+El controlador construye el runtime y crea un proyecto Compose único con Mealie3.30.0 fijado por digest. Ejecuta las162 herramientas y162 rechazos de argumentos por cada combinación stdio/HTTP y MCP2026-07-28/2025-11-25, con Bearer independiente en HTTP. Usa red interna, sin puertos publicados ni credenciales personales, y elimina sus contenedores/volúmenes incluso si fallan las pruebas. Se exigen159 operaciones positivas, un rechazo SSRF para la descarga privada y dos rechazos de configuración IA comprobados por separado. Consultar el [runbook E2E](testing/local-e2e.md) para requisitos, evidencias, limpieza tras interrupciones y límites.
+
+El E2E valida primero el OpenAPI de la imagen Mealie contra el contrato separado
+`tests/fixtures/mealie330/provider-contract.json`, mediante
+`scripts/audit_mealie_api.py`. Un cambio incompatible detiene el controlador antes
+de crear credenciales o recetas y sigue ejecutando la limpieza. La ejecución de
+CI usa el mismo gate. Las pruebas persistentes `test_api_audit.py` y
+`test_e2e_api_audit.py` verifican deriva y limpieza; las de paridad numérica
+comprueban los límites publicados y su rechazo antes de llamar al proveedor.
 
 ## Skills portables y extensión MCP
 

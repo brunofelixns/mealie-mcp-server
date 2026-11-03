@@ -4,6 +4,7 @@ import pytest
 from mcp import Client
 from mcp.client.stdio import StdioServerParameters
 
+from mealie_mcp_server.tools.registry import definitions
 from tests.containers.conftest import run_arguments
 from tests.support.fake_mealie import FakeMealie
 
@@ -24,7 +25,7 @@ async def test_installed_runtime_stdio_without_source_mount_or_tty(runtime_image
         async with Client(
             StdioServerParameters(command="docker", args=args), mode=mode, read_timeout_seconds=40
         ) as client:
-            assert len((await client.list_tools()).tools) == 78
+            assert len((await client.list_tools()).tools) == len(definitions())
             assert len((await client.get_prompt("weekly-meal-plan")).messages) == 2
             result = await client.call_tool("get_categories", {"page": 1, "perPage": 20})
             assert not result.is_error

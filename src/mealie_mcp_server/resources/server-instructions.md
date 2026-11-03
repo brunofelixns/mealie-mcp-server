@@ -16,7 +16,7 @@ This server exposes tools for a Mealie recipe database: recipes, meal plans, sho
 
 When the user asks to add, create, import, or save a recipe in Mealie — from a URL, pasted text, an image/screenshot, a document, or their own description — aim to create a complete, useful recipe representation from the information the source actually provides, not merely the minimum object the API accepts.
 
-This server has no URL scraper, OCR, or document/image parser of its own — extracting the recipe's content from whatever source the user gives you (reading the page, reading the image, reading the document, or just using the pasted/described text) is your job, using your own capabilities. The tools below only persist what you've already extracted.
+Native import tools delegate URL scraping, HTML/schema.org JSON parsing and ZIP import to Mealie: use import_recipe_from_url, import_recipe_from_html_or_json or import_recipe_from_zip when requested. They create recipes and may import taxonomy according to their flags. After an ambiguous write, inspect before repeating. This server adds no OCR or document/image parser. For manual creation from text, images or documents, extract content using your own capabilities and follow the workflow below.
 
 ### What a complete recipe includes
 
@@ -25,11 +25,11 @@ When the source provides them, populate: name, description, source yield/serving
 ### Workflow
 
 1. **Create the recipe with its instructions.** `create_recipe` takes `name` and, optionally, `instructions` (an ordered array of step strings — plain ordered text, no title/summary/ingredient links). Extract the full instruction text and pass it here; later edits, section titles, and ingredient links go through `update_recipe_instructions` (see "Editing Recipe Instructions" below). Preserve step ordering, and preserve meaningful section/group boundaries within the instruction text itself where practical (e.g. a step that reads "For the sauce:"), along with temperatures, durations, and rest/marinade/chill times; don't summarize away a material step or rewrite the recipe's voice unless the user asked for that.
-2. **Fill in scalar metadata with `patch_recipe`.** Set `description` and `recipeYield` from the source when available. Mealie only exposes one aggregate time field here (`totalTime`) — there's no separate prep/cook time to populate. Prefer the source's own explicit total time when it states one. If the source only gives component times (prep, cook, rest, chill, marinate, proof, etc.), derive a single `totalTime` only when the source makes their relationship clear enough to do so faithfully — don't blindly sum prep + cook, since real total time often isn't just their sum (overlapping work, resting/chilling/marinating/proofing time, etc.). Otherwise leave `totalTime` unset rather than guessing.
+2. **Fill in metadata.** Legacy patch_recipe retains its original arguments. Use update_recipe_metadata with the latest expectedUpdatedAt to edit description, orgURL, servings/yield, totalTime, prepTime, cookTime, performTime, nutrition, settings and extras. Nested objects merge with current state, preserving omitted fields; nutrition:null clears the block. Copy times and nutrition from the source, never invent them or blindly sum overlapping component times. Change privacy or locking only when explicitly requested.
 3. **Structure the ingredients per the Ingredient Parsing and Structuring section below** — that policy is the single source of truth for ingredient semantics and is not repeated here. `create_recipe`'s own `ingredients` parameter only stores free-form notes (no food/unit), so a recipe is not complete after that step alone: interpret the source ingredients semantically, resolve food/unit concepts with `get_food_matches`/`get_unit_matches` against existing canonical vocabulary (creating new vocabulary only when nothing suitable exists), and persist the result with `update_recipe_ingredients`.
 4. **Apply categories/tags if relevant to the request**, via `patch_recipe` or `update_recipe_taxonomy`: preserve any taxonomy the source already supplies, reuse existing categories/tags, and derive at most a small number of natural classifications — don't turn an import into open-ended taxonomy expansion, and don't treat classification as mandatory when the user didn't ask for it.
 5. **Set the image only when you have a real source.** Prefer `set_recipe_image_from_file` when the host provides a file reference for the image (host-dependent), then `set_recipe_image_from_url` when the source gives you a fetchable URL, then `set_recipe_image` with base64 data as the portable fallback (e.g. a user-provided image file). Never substitute an unrelated image, and leave the image unset when you have neither a fetchable URL nor real image data.
-6. **Preserve the source URL when the available recipe schema supports it.** The current toolset does not expose Mealie's source-URL field, so don't invent one, and don't default to stuffing the URL into `description` just to work around the gap. If the user explicitly wants provenance retained despite this limitation, using `description` as a fallback is acceptable — but treat that as an explicit workaround, not the default behavior.
+6. **Preserve the source URL in orgURL**, using patch_recipe or update_recipe_metadata. Do not put it into description as a workaround when the dedicated field is available.
 
 ### Verify after creating or importing
 
@@ -163,3 +163,23 @@ When the user asks to edit, add, remove, reorder, section, or link instructions 
 2. Use the delta form (`addInstructions`/`updateInstructions`/`removeInstructionIndexes`) for focused edits; use complete replacement (`instructions`) for a substantial rebuild or reordering. The two cannot be mixed.
 3. Link instructions to ingredients with `ingredientReferenceIds` taken from the recipe's `recipeIngredient[].referenceId`. Which ingredients belong to which step, and the wording and sectioning, are your decisions — the MCP never infers them. Unknown ids are rejected before any write.
 4. Changes that leave instructions identical skip the write. Writes are verified by content and rolled back on mismatch; the result reports whether rollback succeeded.
+
+## Additional Recipe Operations
+
+get_recipe_notes reads notes and a fresh updatedAt. add_recipe_note appends; update_recipe_note edits title/text by stable referenceId; delete_recipe_note deletes that identity. All writes require expectedUpdatedAt. Recipe notes differ from ingredient note fields and user comments. Deleting a linked note requires explicit removeReferences:true. On stale snapshots, re-read and reassess without automatic replay.
+
+Use get_recipe_comments/create_recipe_comment/update_recipe_comment/delete_recipe_comment for user comments; Mealie enforces ownership. get_recipe_share_links/create_recipe_share_link/delete_recipe_share_link manage shared access: create or reveal tokens only for an explicit sharing request, never as a cleanup side effect. Timeline tools list/create/update/delete events and upload event images; the provider controls editability.
+
+upload_recipe_asset and create_recipe_asset_from_url add attachments, available in get_recipe_detailed. get_recipe_export_formats discovers formats; export_recipe returns bounded dataBase64, filename and mediaType without writing host files. Native imports are additional options alongside manual creation. Never log recipe/file contents, credentials or signed URLs.
+
+## Mealie 3.30 Recipe Capabilities
+
+Use search_recipes for native advanced filters/order/queryFilter and get_recipe_suggestions for missing-food/tool, stock and substitution options. Legacy get_recipes/find_recipes_for_ingredients retain their original contracts.
+
+Substitution edits use update_recipe_ingredient_substitutions or update_food_substitutions with explicit canonical food IDs or meaningful text-only alternatives; never invent or create a food to fill an ID. update_recipe_instruction_durations sets or clears durationSeconds by fresh snapshot index; do not use ephemeral instruction IDs. Preserve unrelated content and refresh after stale or ambiguous writes.
+
+Native parse_recipe_ingredient/parse_recipe_ingredients and AI imports are explicit optional interpretation paths delegated to Mealie; they do not authorize silently applying their output to existing recipes. Existing client interpretation remains available. Native AI imports use Mealie's provider configuration, not a local API key.
+
+Recipe media downloads return bounded base64 data without writing host files or accepting arbitrary URLs. Share and iCal tokens are sensitive. Bulk imports/exports/actions may be asynchronous: accepted is not completed. Report per-item failures, propagate unknown write outcomes and never automatically replay an import, trigger or other write. External recipe actions and token rotations only run on an explicit request.
+
+Cookbook CRUD, current-household last-made data via get_recipe_household, personal favorites/ratings reads, single comment/event/share reads and advanced meal plans are available as separate tools. Advanced meal plans support text, positive recipeScale and weekly endDate exactly six days after date. Keep the scope of the user's request; do not turn recipe editing into provider or account administration.

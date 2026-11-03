@@ -12,6 +12,7 @@ from mealie_mcp_server.config import load_settings
 from mealie_mcp_server.http import create_http_app
 from mealie_mcp_server.mealie.client import MealieClient
 from mealie_mcp_server.server import create_server
+from mealie_mcp_server.tools.registry import definitions
 from tests.support.fake_mealie import FakeMealie
 from tests.support.http_server import serve_http
 
@@ -47,7 +48,7 @@ async def test_http_catalog_prompt_effects_and_separate_credentials(mode, kind):
                 async with client:
                     catalog = await client.list_tools()
                     tools = catalog.tools if kind == "official" else catalog
-                    assert len(tools) == 78
+                    assert len(tools) == len(definitions())
                     assert tools[0].name == "get_recipes"
                     prompt = await client.get_prompt(
                         "weekly-meal-plan", {"preferences": "vegetarian"}
@@ -128,7 +129,11 @@ async def test_two_protocol_clients_share_exactly_one_owned_pool():
                 FastMCPClient(url + "/mcp", auth=TOKEN, mode="legacy") as legacy,
                 FastMCPClient(url + "/mcp", auth=TOKEN) as modern,
             ):
-                assert len(await legacy.list_tools()) == len(await modern.list_tools()) == 78
+                assert (
+                    len(await legacy.list_tools())
+                    == len(await modern.list_tools())
+                    == len(definitions())
+                )
                 assert events == ["opened"]
         assert events == ["opened", "closed"]
 
@@ -150,7 +155,7 @@ async def test_explicit_public_host_and_browser_origin_are_accepted():
                 }
             ) as http:
                 async with Client(streamable_http_client(url + "/mcp", http_client=http)) as client:
-                    assert len((await client.list_tools()).tools) == 78
+                    assert len((await client.list_tools()).tools) == len(definitions())
 
 
 async def test_http_body_limit_counts_chunked_bytes_and_rejects_declared_oversize():

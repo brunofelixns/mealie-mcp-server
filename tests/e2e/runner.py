@@ -34,10 +34,16 @@ def main():
             phase = "start_mealie"
             print("E2E: starting isolated local Mealie", flush=True)
             stack.start_mealie()
+            phase = "api_audit"
+            print("E2E: auditing the disposable provider OpenAPI contract", flush=True)
+            report["apiAudit"] = stack.audit_api()
             phase = "bootstrap"
             report["stack"] = stack.bootstrap(Path(directory))
             phase = "pytest"
-            print("E2E: running all 78 tools through stdio/HTTP and both protocol eras", flush=True)
+            print(
+                "E2E: running the current catalog through stdio/HTTP and both protocol eras",
+                flush=True,
+            )
             result = subprocess.run(
                 [
                     sys.executable,

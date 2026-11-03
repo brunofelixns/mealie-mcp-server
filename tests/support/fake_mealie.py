@@ -12,6 +12,7 @@ from typing import Any
 from urllib.parse import parse_qs, urlsplit
 
 from tests.support.contracts import _typed_json
+from tests.support.mealie330_compatibility import apply_request_overlay
 
 FIXTURES = Path(__file__).resolve().parents[1] / "fixtures" / "compatibility"
 
@@ -20,7 +21,9 @@ class FakeMealie:
     def __init__(self, scenario: str | list[dict[str, Any]], *, keep_alive: bool = False) -> None:
         scenarios = json.loads((FIXTURES / "scenarios.json").read_text())
         self.pending = (
-            scenarios[scenario]["requests"] if isinstance(scenario, str) else list(scenario)
+            apply_request_overlay(scenario, scenarios[scenario]["requests"])
+            if isinstance(scenario, str)
+            else list(scenario)
         )
         self.recorded_requests: list[dict[str, Any]] = []
         self.errors: list[str] = []

@@ -5,6 +5,7 @@ import re
 from pathlib import Path
 
 FILE_TOOL = "set_recipe_image_from_file"
+AI_TOOLS = {"import_recipe_with_ai", "import_recipe_with_ai_with_progress"}
 PROTOCOLS = ("2026-07-28", "2025-11-25")
 PAIRS = {(transport, protocol) for transport in ("stdio", "http") for protocol in PROTOCOLS}
 
@@ -24,6 +25,10 @@ def _complete_records(records, names, *, rejected=False):
                 raise ValueError("Incomplete argument-rejection evidence")
             continue
         expected = "security_rejection" if record["tool"] == FILE_TOOL else "positive"
+        if record["tool"] in AI_TOOLS and record.get("outcome") == "configuration_rejection":
+            if not {"provider_ai_unconfigured", "write_not_replayed"} <= set(checks):
+                raise ValueError("AI tools require verified provider configuration and no replay")
+            continue
         if record.get("outcome") != expected:
             raise ValueError("Unexpected tool outcome: " + str(record.get("tool")))
         if expected == "security_rejection" and not {
@@ -47,10 +52,14 @@ def validate_case(report: dict, names: set[str]) -> dict:
         raise ValueError("Missing global E2E assertions")
     _complete_records(report.get("tools"), names)
     _complete_records(report.get("inputRejections"), names, rejected=True)
+    configured_rejections = sum(
+        item.get("outcome") == "configuration_rejection" for item in report["tools"]
+    )
     return {
         "tools": len(names),
-        "positive": len(names) - 1,
+        "positive": len(names) - 1 - configured_rejections,
         "securityRejections": 1,
+        "configurationRejections": configured_rejections,
         "inputRejections": len(names),
     }
 
@@ -59,8 +68,7 @@ def validate_suite(reports: list[dict], names: set[str]) -> dict:
     pairs = [(report.get("transport"), report.get("protocolVersion")) for report in reports]
     if len(reports) != 4 or set(pairs) != PAIRS:
         raise ValueError("All four distinct transport/protocol pairs are required")
-    for report in reports:
-        validate_case(report, names)
+    coverage = [validate_case(report, names) for report in reports]
     if len({report["imageId"] for report in reports}) != 1:
         raise ValueError("HTTP and stdio must use the same immutable runtime image")
     return {
@@ -68,8 +76,9 @@ def validate_suite(reports: list[dict], names: set[str]) -> dict:
         "cases": 4,
         "toolsPerCase": len(names),
         "totalToolPaths": 4 * len(names),
-        "positivePaths": 4 * (len(names) - 1),
+        "positivePaths": sum(item["positive"] for item in coverage),
         "securityRejections": 4,
+        "configurationRejections": sum(item["configurationRejections"] for item in coverage),
         "inputRejections": 4 * len(names),
     }
 

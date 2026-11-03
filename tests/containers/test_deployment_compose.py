@@ -11,6 +11,7 @@ from mcp import Client
 from mcp.client.stdio import StdioServerParameters
 from mcp.client.streamable_http import streamable_http_client
 
+from mealie_mcp_server.tools.registry import definitions
 from tests.containers.conftest import AUTH_TOKEN, MEALIE_KEY, docker, unique_name
 from tests.support.fake_mealie import FakeMealie
 
@@ -111,7 +112,7 @@ async def test_portable_compose_http_auth_and_provider_credentials(runtime_image
                     streamable_http_client(f"http://{hostname}:8000/mcp", http_client=http),
                     read_timeout_seconds=READ_TIMEOUT,
                 ) as client:
-                    assert len((await client.list_tools()).tools) == 78
+                    assert len((await client.list_tools()).tools) == len(definitions())
                     result = await client.call_tool("get_categories", {"page": 1, "perPage": 20})
                     assert not result.is_error
                     assert json.loads(result.content[0].text)["total"] == 1
@@ -143,7 +144,7 @@ async def test_portable_compose_stdio_without_http_token(runtime_image, tmp_path
                 ),
                 read_timeout_seconds=READ_TIMEOUT,
             ) as client:
-                assert len((await client.list_tools()).tools) == 78
+                assert len((await client.list_tools()).tools) == len(definitions())
                 assert len((await client.get_prompt("weekly-meal-plan")).messages) == 2
                 assert not (
                     await client.call_tool("get_categories", {"page": 1, "perPage": 20})

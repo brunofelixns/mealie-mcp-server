@@ -1,5 +1,8 @@
 """Every public tool rejects an extra root field before any Mealie request."""
 
+import json
+from pathlib import Path
+
 import pytest
 from fastmcp import Client
 
@@ -14,10 +17,18 @@ for path in sorted((FIXTURES / "cases").glob("*.json")):
     for case in load_cases(path.stem):
         BASE.setdefault(case.tool, case.arguments)
 
+for entry in json.loads(
+    (
+        Path(__file__).resolve().parents[2] / "docs/migration/compatibility-inventory.json"
+    ).read_text()
+)["tools"]:
+    if "extensionArguments" in entry:
+        BASE[entry["name"]] = entry["extensionArguments"]
+
 
 @pytest.mark.parametrize("name", definitions())
-async def test_all_78_tools_reject_unknown_field_without_provider_side_effects(name):
-    assert len(BASE) == 78 and name in BASE
+async def test_all_tools_reject_unknown_field_without_provider_side_effects(name):
+    assert set(BASE) == set(definitions()) and name in BASE
     with FakeMealie("no_requests") as fake:
         settings = load_settings({"MEALIE_BASE_URL": fake.server_url, "MEALIE_API_KEY": "fixture"})
         async with Client(create_server(settings)) as client:

@@ -3475,3 +3475,4966 @@ DESTRUCTIVE and irreversible: permanently deletes a Mealie Tool organizer. Use g
   "additionalProperties": false
 }
 ```
+
+## get_recipe_notes
+
+Reads recipe notes with stable referenceId identities and the recipe updatedAt snapshot token. Retains provider fields; use expectedUpdatedAt from this snapshot for note writes.
+
+```json
+{
+  "type": "object",
+  "properties": {
+    "slug": {
+      "type": "string",
+      "minLength": 1
+    }
+  },
+  "required": [
+    "slug"
+  ],
+  "additionalProperties": false
+}
+```
+
+## add_recipe_note
+
+Appends a recipe note without reordering existing notes. Title and text are required strings; empty strings are preserved. Optional referenceId is a new UUID, generated when omitted. Requires the exact expectedUpdatedAt recipe snapshot; preserves unknown fields and verifies the result without replaying writes.
+
+```json
+{
+  "type": "object",
+  "properties": {
+    "slug": {
+      "type": "string",
+      "minLength": 1
+    },
+    "expectedUpdatedAt": {
+      "type": "string",
+      "minLength": 1
+    },
+    "title": {
+      "type": "string"
+    },
+    "text": {
+      "type": "string"
+    },
+    "referenceId": {
+      "type": "string",
+      "format": "uuid",
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+    }
+  },
+  "required": [
+    "slug",
+    "expectedUpdatedAt",
+    "title",
+    "text"
+  ],
+  "additionalProperties": false
+}
+```
+
+## update_recipe_note
+
+Edits a recipe note selected by its stable UUID referenceId. Supply title and/or text; omitted fields, identity, order and unknown provider fields are preserved, and empty strings clear content. Requires expectedUpdatedAt, skips no-op writes and verifies persisted notes without replaying writes.
+
+```json
+{
+  "type": "object",
+  "properties": {
+    "slug": {
+      "type": "string",
+      "minLength": 1
+    },
+    "expectedUpdatedAt": {
+      "type": "string",
+      "minLength": 1
+    },
+    "referenceId": {
+      "type": "string",
+      "format": "uuid",
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+    },
+    "title": {
+      "type": "string"
+    },
+    "text": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "slug",
+    "expectedUpdatedAt",
+    "referenceId"
+  ],
+  "anyOf": [
+    {
+      "required": [
+        "title"
+      ]
+    },
+    {
+      "required": [
+        "text"
+      ]
+    }
+  ],
+  "additionalProperties": false
+}
+```
+
+## delete_recipe_note
+
+Deletes a recipe note by stable UUID referenceId with expectedUpdatedAt snapshot protection. Refuses linked notes unless removeReferences=true explicitly removes matching instruction note references. Preserves remaining notes, instruction fields and other references, ignoring ephemeral instruction IDs when verifying. Never replays writes.
+
+```json
+{
+  "type": "object",
+  "properties": {
+    "slug": {
+      "type": "string",
+      "minLength": 1
+    },
+    "expectedUpdatedAt": {
+      "type": "string",
+      "minLength": 1
+    },
+    "referenceId": {
+      "type": "string",
+      "format": "uuid",
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+    },
+    "removeReferences": {
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "required": [
+    "slug",
+    "expectedUpdatedAt",
+    "referenceId"
+  ],
+  "additionalProperties": false
+}
+```
+
+## update_recipe_metadata
+
+Updates recipe metadata including prepTime/cookTime/performTime, nutrition, settings and extras. Requires expectedUpdatedAt from get_recipe_detailed; stale snapshots fail before writing (not an atomic lock). Nested nutrition/settings/extras MERGE with the current objects, preserving omitted and unknown fields. nutrition:null clears nutrition; nested null clears that nutritional field; false, zero and empty strings are preserved. removeExtraKeys removes only the named extras and cannot overlap extras. Nutrition values are strings exactly as stored by Mealie, never AI estimates. A no-op skips PATCH. Verifies the returned values; on mismatch reports failure and asks for inspection, with no automatic retry or rollback. Does not edit ingredients, steps, taxonomy, notes or other unrelated recipe fields.
+
+```json
+{
+  "$defs": {
+    "JsonObject": {
+      "additionalProperties": {
+        "$ref": "#/$defs/JsonValue"
+      },
+      "type": "object"
+    },
+    "JsonValue": {},
+    "RecipeNutritionPatch": {
+      "additionalProperties": false,
+      "properties": {
+        "calories": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Calories"
+        },
+        "carbohydrateContent": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Carbohydratecontent"
+        },
+        "cholesterolContent": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Cholesterolcontent"
+        },
+        "fatContent": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Fatcontent"
+        },
+        "fiberContent": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Fibercontent"
+        },
+        "proteinContent": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Proteincontent"
+        },
+        "saturatedFatContent": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Saturatedfatcontent"
+        },
+        "sodiumContent": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Sodiumcontent"
+        },
+        "sugarContent": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Sugarcontent"
+        },
+        "transFatContent": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Transfatcontent"
+        },
+        "unsaturatedFatContent": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Unsaturatedfatcontent"
+        }
+      },
+      "title": "RecipeNutritionPatch",
+      "type": "object"
+    },
+    "RecipeSettingsPatch": {
+      "additionalProperties": false,
+      "properties": {
+        "public": {
+          "default": false,
+          "title": "Public",
+          "type": "boolean"
+        },
+        "showNutrition": {
+          "default": false,
+          "title": "Shownutrition",
+          "type": "boolean"
+        },
+        "showAssets": {
+          "default": false,
+          "title": "Showassets",
+          "type": "boolean"
+        },
+        "landscapeView": {
+          "default": false,
+          "title": "Landscapeview",
+          "type": "boolean"
+        },
+        "disableComments": {
+          "default": true,
+          "title": "Disablecomments",
+          "type": "boolean"
+        },
+        "locked": {
+          "default": false,
+          "title": "Locked",
+          "type": "boolean"
+        }
+      },
+      "title": "RecipeSettingsPatch",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "slug": {
+      "minLength": 1,
+      "title": "Slug",
+      "type": "string"
+    },
+    "expectedUpdatedAt": {
+      "minLength": 1,
+      "title": "Expectedupdatedat",
+      "type": "string"
+    },
+    "name": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Name"
+    },
+    "description": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Description"
+    },
+    "recipeServings": {
+      "default": 0,
+      "minimum": 0,
+      "title": "Recipeservings",
+      "type": "number"
+    },
+    "recipeYieldQuantity": {
+      "default": 0,
+      "minimum": 0,
+      "title": "Recipeyieldquantity",
+      "type": "number"
+    },
+    "recipeYield": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Recipeyield"
+    },
+    "totalTime": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Totaltime"
+    },
+    "prepTime": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Preptime"
+    },
+    "cookTime": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Cooktime"
+    },
+    "performTime": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Performtime"
+    },
+    "orgURL": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Orgurl"
+    },
+    "nutrition": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/RecipeNutritionPatch"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "settings": {
+      "$ref": "#/$defs/RecipeSettingsPatch"
+    },
+    "extras": {
+      "$ref": "#/$defs/JsonObject"
+    },
+    "removeExtraKeys": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Removeextrakeys",
+      "type": "array"
+    }
+  },
+  "required": [
+    "slug",
+    "expectedUpdatedAt"
+  ],
+  "title": "UpdateRecipeMetadataInput",
+  "type": "object"
+}
+```
+
+## get_recipe_comments
+
+Lists comments for a recipe, preserving provider order and unknown fields.
+
+```json
+{
+  "$defs": {
+    "RecipeSlug": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "slug": {
+      "$ref": "#/$defs/RecipeSlug"
+    }
+  },
+  "required": [
+    "slug"
+  ],
+  "type": "object"
+}
+```
+
+## create_recipe_comment
+
+Creates a comment as the authenticated Mealie user after resolving the recipe slug. Mealie trims nonempty text. No automatic write retries.
+
+```json
+{
+  "$defs": {
+    "RecipeSlug": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "slug": {
+      "$ref": "#/$defs/RecipeSlug"
+    },
+    "text": {
+      "title": "Text",
+      "type": "string"
+    }
+  },
+  "required": [
+    "slug",
+    "text"
+  ],
+  "type": "object"
+}
+```
+
+## update_recipe_comment
+
+Updates comment text by comment UUID. Mealie permits only the owner or an administrator. No automatic write retries.
+
+```json
+{
+  "$defs": {
+    "UUID4String": {
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-4[0-9a-fA-F]{3}-[89aAbB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "commentId": {
+      "$ref": "#/$defs/UUID4String"
+    },
+    "text": {
+      "title": "Text",
+      "type": "string"
+    }
+  },
+  "required": [
+    "commentId",
+    "text"
+  ],
+  "type": "object"
+}
+```
+
+## delete_recipe_comment
+
+Deletes a comment by UUID. Mealie permits only the owner or an administrator. No automatic write retries.
+
+```json
+{
+  "$defs": {
+    "UUID4String": {
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-4[0-9a-fA-F]{3}-[89aAbB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "commentId": {
+      "$ref": "#/$defs/UUID4String"
+    }
+  },
+  "required": [
+    "commentId"
+  ],
+  "type": "object"
+}
+```
+
+## get_recipe_share_links
+
+Lists share tokens for one recipe after resolving its slug to a recipe UUID. Returned tokens grant public recipe access; handle them as sensitive data.
+
+```json
+{
+  "$defs": {
+    "RecipeSlug": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "slug": {
+      "$ref": "#/$defs/RecipeSlug"
+    }
+  },
+  "required": [
+    "slug"
+  ],
+  "type": "object"
+}
+```
+
+## create_recipe_share_link
+
+Creates a public-access share token for a recipe. Omit expiresAt to use Mealie's 30-day default. Returns the provider token and recipe payload. No automatic write retries.
+
+```json
+{
+  "$defs": {
+    "RecipeSlug": {
+      "type": "string"
+    },
+    "Timestamp": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "slug": {
+      "$ref": "#/$defs/RecipeSlug"
+    },
+    "expiresAt": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "slug"
+  ],
+  "type": "object"
+}
+```
+
+## delete_recipe_share_link
+
+Revokes a recipe share token by its UUID. No automatic write retries.
+
+```json
+{
+  "$defs": {
+    "UUID4String": {
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-4[0-9a-fA-F]{3}-[89aAbB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "tokenId": {
+      "$ref": "#/$defs/UUID4String"
+    }
+  },
+  "required": [
+    "tokenId"
+  ],
+  "type": "object"
+}
+```
+
+## get_recipe_timeline
+
+Lists one page of timeline events filtered to a recipe UUID resolved from its slug. Preserves provider pagination, ordering and unknown fields.
+
+```json
+{
+  "$defs": {
+    "JsonInteger": {
+      "type": "integer"
+    },
+    "RecipeSlug": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "slug": {
+      "$ref": "#/$defs/RecipeSlug"
+    },
+    "page": {
+      "$ref": "#/$defs/JsonInteger",
+      "default": 1,
+      "minimum": 1
+    },
+    "perPage": {
+      "$ref": "#/$defs/JsonInteger",
+      "default": 50,
+      "minimum": 1,
+      "maximum": 1000
+    }
+  },
+  "required": [
+    "slug"
+  ],
+  "type": "object"
+}
+```
+
+## create_recipe_timeline_event
+
+Creates a recipe timeline event. eventType accepts system, info or comment; cooking history can be recorded as an info event. Omit timestamp and userId for Mealie defaults. No automatic write retries.
+
+```json
+{
+  "$defs": {
+    "EventImage": {
+      "enum": [
+        "has image",
+        "does not have image"
+      ],
+      "type": "string"
+    },
+    "RecipeSlug": {
+      "type": "string"
+    },
+    "Timestamp": {
+      "type": "string"
+    },
+    "UUID4String": {
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-4[0-9a-fA-F]{3}-[89aAbB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "slug": {
+      "$ref": "#/$defs/RecipeSlug"
+    },
+    "subject": {
+      "title": "Subject",
+      "type": "string"
+    },
+    "eventType": {
+      "enum": [
+        "system",
+        "info",
+        "comment"
+      ],
+      "title": "Eventtype",
+      "type": "string"
+    },
+    "eventMessage": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Eventmessage"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "userId": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/UUID4String"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "image": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/EventImage"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    }
+  },
+  "required": [
+    "slug",
+    "subject",
+    "eventType"
+  ],
+  "type": "object"
+}
+```
+
+## update_recipe_timeline_event
+
+Updates a timeline event subject, optional eventMessage and image state. Requires subject; event type and timestamp cannot be changed by the provider endpoint. Omitted fields remain omitted; explicit null is forwarded. No automatic write retries. Mealie 3.29 may ignore default null values; use an empty eventMessage string to clear text.
+
+```json
+{
+  "$defs": {
+    "EventImage": {
+      "enum": [
+        "has image",
+        "does not have image"
+      ],
+      "type": "string"
+    },
+    "UUID4String": {
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-4[0-9a-fA-F]{3}-[89aAbB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "eventId": {
+      "$ref": "#/$defs/UUID4String"
+    },
+    "subject": {
+      "title": "Subject",
+      "type": "string"
+    },
+    "eventMessage": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Eventmessage"
+    },
+    "image": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/EventImage"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    }
+  },
+  "required": [
+    "eventId",
+    "subject"
+  ],
+  "type": "object"
+}
+```
+
+## delete_recipe_timeline_event
+
+Deletes a recipe timeline event and its provider-managed image files. No automatic write retries.
+
+```json
+{
+  "$defs": {
+    "UUID4String": {
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-4[0-9a-fA-F]{3}-[89aAbB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "eventId": {
+      "$ref": "#/$defs/UUID4String"
+    }
+  },
+  "required": [
+    "eventId"
+  ],
+  "type": "object"
+}
+```
+
+## set_recipe_timeline_event_image
+
+Uploads a PNG, JPEG, GIF or WebP timeline image using standard base64 (maximum 10 MiB decoded). Optional extension must match detected bytes. No host paths or automatic write retries.
+
+```json
+{
+  "$defs": {
+    "UUID4String": {
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-4[0-9a-fA-F]{3}-[89aAbB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "eventId": {
+      "$ref": "#/$defs/UUID4String"
+    },
+    "imageBase64": {
+      "maxLength": 13981016,
+      "minLength": 1,
+      "title": "Imagebase64",
+      "type": "string"
+    },
+    "extension": {
+      "anyOf": [
+        {
+          "enum": [
+            "png",
+            "jpg",
+            "jpeg",
+            "gif",
+            "webp"
+          ],
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Extension"
+    }
+  },
+  "required": [
+    "eventId",
+    "imageBase64"
+  ],
+  "type": "object"
+}
+```
+
+## upload_recipe_asset
+
+Uploads a recipe asset using bounded base64 data (10 MiB). Requires name, icon and a supported extension. Mealie stores the file and updates the recipe assets. No automatic write retry.
+
+```json
+{
+  "$defs": {
+    "Segment": {
+      "maxLength": 255,
+      "minLength": 1,
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "slug": {
+      "$ref": "#/$defs/Segment"
+    },
+    "name": {
+      "maxLength": 255,
+      "minLength": 1,
+      "title": "Name",
+      "type": "string"
+    },
+    "icon": {
+      "maxLength": 100,
+      "minLength": 1,
+      "title": "Icon",
+      "type": "string"
+    },
+    "extension": {
+      "maxLength": 10,
+      "pattern": "^[A-Za-z0-9]+$",
+      "title": "Extension",
+      "type": "string"
+    },
+    "fileBase64": {
+      "maxLength": 13981016,
+      "minLength": 1,
+      "title": "Filebase64",
+      "type": "string"
+    }
+  },
+  "required": [
+    "slug",
+    "name",
+    "icon",
+    "extension",
+    "fileBase64"
+  ],
+  "title": "UploadRecipeAssetInput",
+  "type": "object"
+}
+```
+
+## create_recipe_asset_from_url
+
+Asks Mealie to fetch an image URL and add a recipe asset. Provider URL restrictions, permissions and its 5 MiB limit apply. No automatic write retry.
+
+```json
+{
+  "$defs": {
+    "RemoteUrl": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "Segment": {
+      "maxLength": 255,
+      "minLength": 1,
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "slug": {
+      "$ref": "#/$defs/Segment"
+    },
+    "url": {
+      "$ref": "#/$defs/RemoteUrl"
+    }
+  },
+  "required": [
+    "slug",
+    "url"
+  ],
+  "title": "CreateRecipeAssetFromUrlInput",
+  "type": "object"
+}
+```
+
+## import_recipe_from_url
+
+Creates a recipe through the native Mealie URL importer and returns its slug. Mealie fetches the URL and may create tags/categories when includeTags/includeCategories are true. An ambiguous failure must be reconciled before retrying.
+
+```json
+{
+  "$defs": {
+    "RemoteUrl": {
+      "maxLength": 8192,
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "includeTags": {
+      "default": false,
+      "title": "Includetags",
+      "type": "boolean"
+    },
+    "includeCategories": {
+      "default": false,
+      "title": "Includecategories",
+      "type": "boolean"
+    },
+    "url": {
+      "$ref": "#/$defs/RemoteUrl"
+    }
+  },
+  "required": [
+    "url"
+  ],
+  "title": "ImportRecipeFromUrlInput",
+  "type": "object"
+}
+```
+
+## import_recipe_from_html_or_json
+
+Creates a recipe from HTML or a schema.org Recipe JSON string (2 MiB UTF-8 maximum), returning its slug. Optional source URL and tag/category options use native provider behavior. No automatic write retry.
+
+```json
+{
+  "$defs": {
+    "RemoteUrl": {
+      "maxLength": 8192,
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "includeTags": {
+      "default": false,
+      "title": "Includetags",
+      "type": "boolean"
+    },
+    "includeCategories": {
+      "default": false,
+      "title": "Includecategories",
+      "type": "boolean"
+    },
+    "data": {
+      "maxLength": 2097152,
+      "minLength": 1,
+      "title": "Data",
+      "type": "string"
+    },
+    "url": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/RemoteUrl"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    }
+  },
+  "required": [
+    "data"
+  ],
+  "title": "ImportRecipeFromHtmlOrJsonInput",
+  "type": "object"
+}
+```
+
+## import_recipe_from_zip
+
+Creates a recipe through the native Mealie ZIP importer, returning its slug. archiveBase64 is limited to 20 MiB, 1000 members and 100 MiB expanded data; unsafe or encrypted members are rejected. No automatic write retry.
+
+```json
+{
+  "additionalProperties": false,
+  "properties": {
+    "archiveBase64": {
+      "maxLength": 27962028,
+      "minLength": 1,
+      "title": "Archivebase64",
+      "type": "string"
+    }
+  },
+  "required": [
+    "archiveBase64"
+  ],
+  "title": "ImportRecipeFromZipInput",
+  "type": "object"
+}
+```
+
+## get_recipe_export_formats
+
+Lists native Mealie export template names grouped by json and zip.
+
+```json
+{
+  "additionalProperties": false,
+  "properties": {},
+  "title": "GetRecipeExportFormatsInput",
+  "type": "object"
+}
+```
+
+## export_recipe
+
+Exports a recipe with a native templateName from get_recipe_export_formats. Returns filename, mediaType, size and dataBase64; download is authenticated, same-origin and limited to 20 MiB. No host files are written.
+
+```json
+{
+  "$defs": {
+    "Segment": {
+      "maxLength": 255,
+      "minLength": 1,
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "slug": {
+      "$ref": "#/$defs/Segment"
+    },
+    "templateName": {
+      "maxLength": 255,
+      "minLength": 1,
+      "title": "Templatename",
+      "type": "string"
+    }
+  },
+  "required": [
+    "slug",
+    "templateName"
+  ],
+  "title": "ExportRecipeInput",
+  "type": "object"
+}
+```
+
+## search_recipes
+
+Search recipes with native Mealie filters: category/tag/tool/food/household exact slugs or IDs, cookbook, requireAll flags, ordering, queryFilter, paginationSeed and bounded pagination. No taxonomy names are resolved implicitly.
+
+```json
+{
+  "$defs": {
+    "Identifier": {
+      "maxLength": 200,
+      "minLength": 1,
+      "type": "string"
+    },
+    "ShortText": {
+      "maxLength": 10000,
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "orderBy": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Identifier"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "orderByNullPosition": {
+      "anyOf": [
+        {
+          "enum": [
+            "first",
+            "last"
+          ],
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Orderbynullposition"
+    },
+    "orderDirection": {
+      "default": "desc",
+      "enum": [
+        "asc",
+        "desc"
+      ],
+      "title": "Orderdirection",
+      "type": "string"
+    },
+    "queryFilter": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/ShortText"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "paginationSeed": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Identifier"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "search": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/ShortText"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "categories": {
+      "anyOf": [
+        {
+          "items": {
+            "$ref": "#/$defs/Identifier"
+          },
+          "maxItems": 100,
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Categories"
+    },
+    "tags": {
+      "anyOf": [
+        {
+          "items": {
+            "$ref": "#/$defs/Identifier"
+          },
+          "maxItems": 100,
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Tags"
+    },
+    "tools": {
+      "anyOf": [
+        {
+          "items": {
+            "$ref": "#/$defs/Identifier"
+          },
+          "maxItems": 100,
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Tools"
+    },
+    "foods": {
+      "anyOf": [
+        {
+          "items": {
+            "$ref": "#/$defs/Identifier"
+          },
+          "maxItems": 100,
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Foods"
+    },
+    "households": {
+      "anyOf": [
+        {
+          "items": {
+            "$ref": "#/$defs/Identifier"
+          },
+          "maxItems": 100,
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Households"
+    },
+    "cookbook": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Identifier"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "page": {
+      "default": 1,
+      "maximum": 2147483647,
+      "minimum": 1,
+      "title": "Page",
+      "type": "integer"
+    },
+    "perPage": {
+      "default": 50,
+      "maximum": 1000,
+      "minimum": 1,
+      "title": "Perpage",
+      "type": "integer"
+    },
+    "requireAllCategories": {
+      "default": false,
+      "title": "Requireallcategories",
+      "type": "boolean"
+    },
+    "requireAllTags": {
+      "default": false,
+      "title": "Requirealltags",
+      "type": "boolean"
+    },
+    "requireAllTools": {
+      "default": false,
+      "title": "Requirealltools",
+      "type": "boolean"
+    },
+    "requireAllFoods": {
+      "default": false,
+      "title": "Requireallfoods",
+      "type": "boolean"
+    }
+  },
+  "title": "SearchRecipesInput",
+  "type": "object"
+}
+```
+
+## get_recipe_suggestions
+
+Get native suggestions from canonical food/tool UUIDs, on-hand inventory, missing-item limits and optional substitutions, with native ordering/queryFilter/paginationSeed. Explicit false and zero values are forwarded.
+
+```json
+{
+  "$defs": {
+    "FoodId": {
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-4[0-9a-fA-F]{3}-[89aAbB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$",
+      "type": "string"
+    },
+    "Identifier": {
+      "maxLength": 200,
+      "minLength": 1,
+      "type": "string"
+    },
+    "ShortText": {
+      "maxLength": 10000,
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "orderBy": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Identifier"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "orderByNullPosition": {
+      "anyOf": [
+        {
+          "enum": [
+            "first",
+            "last"
+          ],
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Orderbynullposition"
+    },
+    "orderDirection": {
+      "default": "desc",
+      "enum": [
+        "asc",
+        "desc"
+      ],
+      "title": "Orderdirection",
+      "type": "string"
+    },
+    "queryFilter": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/ShortText"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "paginationSeed": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Identifier"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "foods": {
+      "anyOf": [
+        {
+          "items": {
+            "$ref": "#/$defs/FoodId"
+          },
+          "maxItems": 100,
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Foods"
+    },
+    "tools": {
+      "anyOf": [
+        {
+          "items": {
+            "$ref": "#/$defs/FoodId"
+          },
+          "maxItems": 100,
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Tools"
+    },
+    "limit": {
+      "default": 10,
+      "maximum": 1000,
+      "minimum": 1,
+      "title": "Limit",
+      "type": "integer"
+    },
+    "maxMissingFoods": {
+      "default": 5,
+      "maximum": 1000,
+      "minimum": 0,
+      "title": "Maxmissingfoods",
+      "type": "integer"
+    },
+    "maxMissingTools": {
+      "default": 5,
+      "maximum": 1000,
+      "minimum": 0,
+      "title": "Maxmissingtools",
+      "type": "integer"
+    },
+    "includeFoodsOnHand": {
+      "default": true,
+      "title": "Includefoodsonhand",
+      "type": "boolean"
+    },
+    "includeToolsOnHand": {
+      "default": true,
+      "title": "Includetoolsonhand",
+      "type": "boolean"
+    },
+    "includeSubstitutions": {
+      "default": true,
+      "title": "Includesubstitutions",
+      "type": "boolean"
+    }
+  },
+  "title": "GetRecipeSuggestionsInput",
+  "type": "object"
+}
+```
+
+## parse_recipe_ingredient
+
+Explicitly preview one ingredient using the native nlp, brute or openai parser. Does not apply the parsed result to a recipe. The openai option uses Mealie provider configuration and may send ingredient text to that provider.
+
+```json
+{
+  "additionalProperties": false,
+  "properties": {
+    "parser": {
+      "default": "nlp",
+      "enum": [
+        "nlp",
+        "brute",
+        "openai"
+      ],
+      "title": "Parser",
+      "type": "string"
+    },
+    "ingredient": {
+      "maxLength": 10000,
+      "minLength": 1,
+      "title": "Ingredient",
+      "type": "string"
+    }
+  },
+  "required": [
+    "ingredient"
+  ],
+  "title": "ParseRecipeIngredientInput",
+  "type": "object"
+}
+```
+
+## parse_recipe_ingredients
+
+Explicitly preview a bounded list of ingredients using the native nlp, brute or openai parser. Does not apply results to recipes. The openai option uses Mealie provider configuration and may send ingredient text to that provider.
+
+```json
+{
+  "additionalProperties": false,
+  "properties": {
+    "parser": {
+      "default": "nlp",
+      "enum": [
+        "nlp",
+        "brute",
+        "openai"
+      ],
+      "title": "Parser",
+      "type": "string"
+    },
+    "ingredients": {
+      "items": {
+        "maxLength": 10000,
+        "minLength": 1,
+        "type": "string"
+      },
+      "maxItems": 100,
+      "minItems": 1,
+      "title": "Ingredients",
+      "type": "array"
+    }
+  },
+  "required": [
+    "ingredients"
+  ],
+  "title": "ParseRecipeIngredientsInput",
+  "type": "object"
+}
+```
+
+## update_recipe_ingredient_substitutions
+
+Replace substitutions only for selected ingredient referenceIds with canonical substituteFoodId values, nonblank note-only alternatives, or a mix (empty list clears). No foods are invented; omitted and null fields are forwarded as supplied. Requires expectedUpdatedAt from a fresh snapshot and preserves other rows, provider fields, order and instruction references. Supplied IDs are validated and the response verified. Snapshot checks are not atomic CAS; writes are never replayed. Mealie trims note boundaries and converts blank ID-attached notes to null; verification follows this native normalization.
+
+```json
+{
+  "$defs": {
+    "FoodId": {
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-4[0-9a-fA-F]{3}-[89aAbB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$",
+      "type": "string"
+    },
+    "FoodSubstitutionInput": {
+      "additionalProperties": false,
+      "anyOf": [
+        {
+          "properties": {
+            "substituteFoodId": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "substituteFoodId"
+          ]
+        },
+        {
+          "properties": {
+            "note": {
+              "pattern": "\\S",
+              "type": "string"
+            }
+          },
+          "required": [
+            "note"
+          ]
+        }
+      ],
+      "properties": {
+        "substituteFoodId": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/FoodId"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "note": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ShortText"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "title": "FoodSubstitutionInput",
+      "type": "object"
+    },
+    "Identifier": {
+      "maxLength": 200,
+      "minLength": 1,
+      "type": "string"
+    },
+    "IngredientSubstitutionUpdate": {
+      "additionalProperties": false,
+      "properties": {
+        "referenceId": {
+          "$ref": "#/$defs/NoteReferenceId"
+        },
+        "substitutions": {
+          "items": {
+            "$ref": "#/$defs/FoodSubstitutionInput"
+          },
+          "maxItems": 100,
+          "title": "Substitutions",
+          "type": "array"
+        }
+      },
+      "required": [
+        "referenceId",
+        "substitutions"
+      ],
+      "title": "IngredientSubstitutionUpdate",
+      "type": "object"
+    },
+    "NoteReferenceId": {
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+      "type": "string"
+    },
+    "ShortText": {
+      "maxLength": 10000,
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "slug": {
+      "$ref": "#/$defs/Identifier"
+    },
+    "expectedUpdatedAt": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Expectedupdatedat",
+      "type": "string"
+    },
+    "updates": {
+      "items": {
+        "$ref": "#/$defs/IngredientSubstitutionUpdate"
+      },
+      "maxItems": 100,
+      "minItems": 1,
+      "title": "Updates",
+      "type": "array"
+    }
+  },
+  "required": [
+    "slug",
+    "expectedUpdatedAt",
+    "updates"
+  ],
+  "title": "UpdateRecipeIngredientSubstitutionsInput",
+  "type": "object"
+}
+```
+
+## update_food_substitutions
+
+Replace a canonical food's substitutions with explicit canonical substituteFoodId values, nonblank note-only alternatives, or a mix (empty list clears). Omitted and null fields are forwarded as supplied; no foods are invented. Validates supplied food IDs, rejects self/duplicate food IDs and empty alternatives, preserves existing food fields and verifies the response without replaying a write. Native food updates have no atomic concurrency guard. Mealie trims note boundaries and converts blank ID-attached notes to null; verification follows this native normalization.
+
+```json
+{
+  "$defs": {
+    "FoodId": {
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-4[0-9a-fA-F]{3}-[89aAbB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$",
+      "type": "string"
+    },
+    "FoodSubstitutionInput": {
+      "additionalProperties": false,
+      "anyOf": [
+        {
+          "properties": {
+            "substituteFoodId": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "substituteFoodId"
+          ]
+        },
+        {
+          "properties": {
+            "note": {
+              "pattern": "\\S",
+              "type": "string"
+            }
+          },
+          "required": [
+            "note"
+          ]
+        }
+      ],
+      "properties": {
+        "substituteFoodId": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/FoodId"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "note": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ShortText"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "title": "FoodSubstitutionInput",
+      "type": "object"
+    },
+    "ShortText": {
+      "maxLength": 10000,
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "foodId": {
+      "$ref": "#/$defs/FoodId"
+    },
+    "substitutions": {
+      "items": {
+        "$ref": "#/$defs/FoodSubstitutionInput"
+      },
+      "maxItems": 100,
+      "title": "Substitutions",
+      "type": "array"
+    }
+  },
+  "required": [
+    "foodId",
+    "substitutions"
+  ],
+  "title": "UpdateFoodSubstitutionsInput",
+  "type": "object"
+}
+```
+
+## update_recipe_instruction_durations
+
+Set timers on snapshot-indexed instruction rows: durationSeconds is null to clear or an integer from 1 through 2147483647. Requires expectedUpdatedAt from a fresh recipe snapshot and preserves text, references, other steps and provider fields. Ignores ephemeral instruction IDs when verifying; snapshot checks are not atomic CAS and writes are never replayed.
+
+```json
+{
+  "$defs": {
+    "Identifier": {
+      "maxLength": 200,
+      "minLength": 1,
+      "type": "string"
+    },
+    "InstructionDurationUpdate": {
+      "additionalProperties": false,
+      "properties": {
+        "index": {
+          "maximum": 2147483647,
+          "minimum": 0,
+          "title": "Index",
+          "type": "integer"
+        },
+        "durationSeconds": {
+          "anyOf": [
+            {
+              "maximum": 2147483647,
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Durationseconds"
+        }
+      },
+      "required": [
+        "index",
+        "durationSeconds"
+      ],
+      "title": "InstructionDurationUpdate",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "slug": {
+      "$ref": "#/$defs/Identifier"
+    },
+    "expectedUpdatedAt": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Expectedupdatedat",
+      "type": "string"
+    },
+    "updates": {
+      "items": {
+        "$ref": "#/$defs/InstructionDurationUpdate"
+      },
+      "maxItems": 100,
+      "minItems": 1,
+      "title": "Updates",
+      "type": "array"
+    }
+  },
+  "required": [
+    "slug",
+    "expectedUpdatedAt",
+    "updates"
+  ],
+  "title": "UpdateRecipeInstructionDurationsInput",
+  "type": "object"
+}
+```
+
+## get_recipe_assets
+
+Lists current recipe asset metadata without losing unknown fields.
+
+```json
+{
+  "$defs": {
+    "MediaSegment": {
+      "maxLength": 255,
+      "minLength": 1,
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "slug": {
+      "$ref": "#/$defs/MediaSegment"
+    }
+  },
+  "required": [
+    "slug"
+  ],
+  "title": "GetRecipeAssetsInput",
+  "type": "object"
+}
+```
+
+## download_recipe_asset
+
+Downloads one asset listed on the current recipe. Resolves its recipe ID, refuses missing/ambiguous names and returns bounded filename/mediaType/size/dataBase64 without writing host files.
+
+```json
+{
+  "$defs": {
+    "MediaSegment": {
+      "maxLength": 255,
+      "minLength": 1,
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "slug": {
+      "$ref": "#/$defs/MediaSegment"
+    },
+    "fileName": {
+      "$ref": "#/$defs/MediaSegment"
+    }
+  },
+  "required": [
+    "slug",
+    "fileName"
+  ],
+  "title": "DownloadRecipeAssetInput",
+  "type": "object"
+}
+```
+
+## download_recipe_image
+
+Downloads a current recipe image variant from the configured Mealie origin. Returns filename/mediaType/size/dataBase64; limit 20 MiB, no host file writes or arbitrary URLs.
+
+```json
+{
+  "$defs": {
+    "ImageVariant": {
+      "enum": [
+        "original.webp",
+        "min-original.webp",
+        "tiny-original.webp"
+      ],
+      "type": "string"
+    },
+    "MediaSegment": {
+      "maxLength": 255,
+      "minLength": 1,
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "slug": {
+      "$ref": "#/$defs/MediaSegment"
+    },
+    "fileName": {
+      "$ref": "#/$defs/ImageVariant",
+      "default": "original.webp"
+    }
+  },
+  "required": [
+    "slug"
+  ],
+  "title": "DownloadRecipeImageInput",
+  "type": "object"
+}
+```
+
+## download_recipe_timeline_image
+
+Downloads an event image after verifying that the event belongs to the selected recipe. Bounded 20 MiB base64 result; no arbitrary URL, local path or cross-origin redirect.
+
+```json
+{
+  "$defs": {
+    "ImageVariant": {
+      "enum": [
+        "original.webp",
+        "min-original.webp",
+        "tiny-original.webp"
+      ],
+      "type": "string"
+    },
+    "MediaSegment": {
+      "maxLength": 255,
+      "minLength": 1,
+      "type": "string"
+    },
+    "UUID4String": {
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-4[0-9a-fA-F]{3}-[89aAbB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "slug": {
+      "$ref": "#/$defs/MediaSegment"
+    },
+    "fileName": {
+      "$ref": "#/$defs/ImageVariant",
+      "default": "original.webp"
+    },
+    "eventId": {
+      "$ref": "#/$defs/UUID4String"
+    }
+  },
+  "required": [
+    "slug",
+    "eventId"
+  ],
+  "title": "DownloadRecipeTimelineImageInput",
+  "type": "object"
+}
+```
+
+## get_shared_recipe
+
+Reads a recipe through an existing share token on the configured Mealie instance. Token permissions/expiration are enforced by Mealie; never log or disclose tokens outside an explicit sharing request.
+
+```json
+{
+  "$defs": {
+    "UUID4String": {
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-4[0-9a-fA-F]{3}-[89aAbB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "tokenId": {
+      "$ref": "#/$defs/UUID4String"
+    }
+  },
+  "required": [
+    "tokenId"
+  ],
+  "title": "GetSharedRecipeInput",
+  "type": "object"
+}
+```
+
+## download_shared_recipe
+
+Downloads the shared recipe ZIP from the configured Mealie instance using an existing token. Returns bounded filename/mediaType/size/dataBase64; token is sensitive, no arbitrary URL or host file writes.
+
+```json
+{
+  "$defs": {
+    "UUID4String": {
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-4[0-9a-fA-F]{3}-[89aAbB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "tokenId": {
+      "$ref": "#/$defs/UUID4String"
+    }
+  },
+  "required": [
+    "tokenId"
+  ],
+  "title": "DownloadSharedRecipeInput",
+  "type": "object"
+}
+```
+
+## get_cookbooks
+
+Lists group cookbooks visible to the authenticated user across households, with native filters and pagination.
+
+```json
+{
+  "$defs": {
+    "CollectionPageSize": {
+      "maximum": 1000,
+      "minimum": 1,
+      "type": "integer"
+    },
+    "PositiveJsonInteger": {
+      "minimum": 1,
+      "type": "integer"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "page": {
+      "$ref": "#/$defs/PositiveJsonInteger",
+      "default": 1
+    },
+    "perPage": {
+      "$ref": "#/$defs/CollectionPageSize",
+      "default": 50
+    },
+    "orderBy": {
+      "anyOf": [
+        {
+          "maxLength": 500,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Orderby"
+    },
+    "orderByNullPosition": {
+      "anyOf": [
+        {
+          "enum": [
+            "first",
+            "last"
+          ],
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Orderbynullposition"
+    },
+    "orderDirection": {
+      "default": "desc",
+      "enum": [
+        "asc",
+        "desc"
+      ],
+      "title": "Orderdirection",
+      "type": "string"
+    },
+    "queryFilter": {
+      "anyOf": [
+        {
+          "maxLength": 10000,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Queryfilter"
+    },
+    "paginationSeed": {
+      "anyOf": [
+        {
+          "maxLength": 500,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Paginationseed"
+    }
+  },
+  "title": "ListCollectionsInput",
+  "type": "object"
+}
+```
+
+## create_cookbook
+
+Creates a household cookbook. Mealie trims name and derives its collision-aware slug; slug cannot be supplied. Public visibility changes only when explicitly supplied. No automatic write retry.
+
+```json
+{
+  "$defs": {
+    "JsonInteger": {
+      "type": "integer"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "name": {
+      "maxLength": 1000,
+      "minLength": 1,
+      "title": "Name",
+      "type": "string"
+    },
+    "description": {
+      "default": "",
+      "maxLength": 10000,
+      "title": "Description",
+      "type": "string"
+    },
+    "position": {
+      "$ref": "#/$defs/JsonInteger",
+      "default": 1
+    },
+    "public": {
+      "default": false,
+      "title": "Public",
+      "type": "boolean"
+    },
+    "queryFilterString": {
+      "default": "",
+      "maxLength": 10000,
+      "title": "Queryfilterstring",
+      "type": "string"
+    }
+  },
+  "required": [
+    "name"
+  ],
+  "title": "CreateCookbookInput",
+  "type": "object"
+}
+```
+
+## get_cookbook
+
+Reads a cookbook by native UUID or slug.
+
+```json
+{
+  "$defs": {
+    "RecipeSlug": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "cookbookId": {
+      "$ref": "#/$defs/RecipeSlug"
+    }
+  },
+  "required": [
+    "cookbookId"
+  ],
+  "title": "CookbookIdInput",
+  "type": "object"
+}
+```
+
+## update_cookbook
+
+Updates supplied cookbook changes after resolving UUID or slug through a fresh read, then writes its canonical UUID. Preserves unknown fields and native ownership. Mealie trims name and derives its collision-aware slug; slug cannot be edited. Other requested fields are verified exactly. This read/write is not atomic. No automatic write retry.
+
+```json
+{
+  "$defs": {
+    "CookbookChanges": {
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "anyOf": [
+            {
+              "maxLength": 1000,
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Name"
+        },
+        "description": {
+          "anyOf": [
+            {
+              "maxLength": 10000,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Description"
+        },
+        "position": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/JsonInteger"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "public": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Public"
+        },
+        "queryFilterString": {
+          "anyOf": [
+            {
+              "maxLength": 10000,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Queryfilterstring"
+        }
+      },
+      "title": "CookbookChanges",
+      "type": "object"
+    },
+    "JsonInteger": {
+      "type": "integer"
+    },
+    "RecipeSlug": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "cookbookId": {
+      "$ref": "#/$defs/RecipeSlug"
+    },
+    "changes": {
+      "$ref": "#/$defs/CookbookChanges"
+    }
+  },
+  "required": [
+    "cookbookId",
+    "changes"
+  ],
+  "title": "UpdateCookbookInput",
+  "type": "object"
+}
+```
+
+## delete_cookbook
+
+Deletes a cookbook by UUID or slug after a fresh read resolves its canonical UUID. Native household permissions apply. No automatic write retry.
+
+```json
+{
+  "$defs": {
+    "RecipeSlug": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "cookbookId": {
+      "$ref": "#/$defs/RecipeSlug"
+    }
+  },
+  "required": [
+    "cookbookId"
+  ],
+  "title": "CookbookIdInput",
+  "type": "object"
+}
+```
+
+## get_recipe_favorites
+
+Reads favorited recipes for the authenticated user.
+
+```json
+{
+  "additionalProperties": false,
+  "properties": {},
+  "title": "EmptyInput",
+  "type": "object"
+}
+```
+
+## get_recipe_ratings
+
+Reads rated recipes for the authenticated user.
+
+```json
+{
+  "additionalProperties": false,
+  "properties": {},
+  "title": "EmptyInput",
+  "type": "object"
+}
+```
+
+## list_recipe_comments
+
+Lists comments visible to the authenticated user with native filters and pagination.
+
+```json
+{
+  "$defs": {
+    "CollectionPageSize": {
+      "maximum": 1000,
+      "minimum": 1,
+      "type": "integer"
+    },
+    "PositiveJsonInteger": {
+      "minimum": 1,
+      "type": "integer"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "page": {
+      "$ref": "#/$defs/PositiveJsonInteger",
+      "default": 1
+    },
+    "perPage": {
+      "$ref": "#/$defs/CollectionPageSize",
+      "default": 50
+    },
+    "orderBy": {
+      "anyOf": [
+        {
+          "maxLength": 500,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Orderby"
+    },
+    "orderByNullPosition": {
+      "anyOf": [
+        {
+          "enum": [
+            "first",
+            "last"
+          ],
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Orderbynullposition"
+    },
+    "orderDirection": {
+      "default": "desc",
+      "enum": [
+        "asc",
+        "desc"
+      ],
+      "title": "Orderdirection",
+      "type": "string"
+    },
+    "queryFilter": {
+      "anyOf": [
+        {
+          "maxLength": 10000,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Queryfilter"
+    },
+    "paginationSeed": {
+      "anyOf": [
+        {
+          "maxLength": 500,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Paginationseed"
+    }
+  },
+  "title": "ListCollectionsInput",
+  "type": "object"
+}
+```
+
+## get_recipe_comment
+
+Reads one native recipe comment.
+
+```json
+{
+  "$defs": {
+    "UUID4String": {
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-4[0-9a-fA-F]{3}-[89aAbB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "commentId": {
+      "$ref": "#/$defs/UUID4String"
+    }
+  },
+  "required": [
+    "commentId"
+  ],
+  "title": "CommentIdInput",
+  "type": "object"
+}
+```
+
+## get_recipe_timeline_event
+
+Reads one native recipe timeline event.
+
+```json
+{
+  "$defs": {
+    "UUID4String": {
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-4[0-9a-fA-F]{3}-[89aAbB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "eventId": {
+      "$ref": "#/$defs/UUID4String"
+    }
+  },
+  "required": [
+    "eventId"
+  ],
+  "title": "TimelineEventIdInput",
+  "type": "object"
+}
+```
+
+## get_recipe_share_link
+
+Reads native recipe share-token details; returned tokens are confidential.
+
+```json
+{
+  "$defs": {
+    "UUID4String": {
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-4[0-9a-fA-F]{3}-[89aAbB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "tokenId": {
+      "$ref": "#/$defs/UUID4String"
+    }
+  },
+  "required": [
+    "tokenId"
+  ],
+  "title": "ShareLinkIdInput",
+  "type": "object"
+}
+```
+
+## get_recipe_actions
+
+Lists configured household recipe actions without triggering them.
+
+```json
+{
+  "$defs": {
+    "CollectionPageSize": {
+      "maximum": 1000,
+      "minimum": 1,
+      "type": "integer"
+    },
+    "PositiveJsonInteger": {
+      "minimum": 1,
+      "type": "integer"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "page": {
+      "$ref": "#/$defs/PositiveJsonInteger",
+      "default": 1
+    },
+    "perPage": {
+      "$ref": "#/$defs/CollectionPageSize",
+      "default": 50
+    },
+    "orderBy": {
+      "anyOf": [
+        {
+          "maxLength": 500,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Orderby"
+    },
+    "orderByNullPosition": {
+      "anyOf": [
+        {
+          "enum": [
+            "first",
+            "last"
+          ],
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Orderbynullposition"
+    },
+    "orderDirection": {
+      "default": "desc",
+      "enum": [
+        "asc",
+        "desc"
+      ],
+      "title": "Orderdirection",
+      "type": "string"
+    },
+    "queryFilter": {
+      "anyOf": [
+        {
+          "maxLength": 10000,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Queryfilter"
+    },
+    "paginationSeed": {
+      "anyOf": [
+        {
+          "maxLength": 500,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Paginationseed"
+    }
+  },
+  "title": "ListCollectionsInput",
+  "type": "object"
+}
+```
+
+## create_recipe_action
+
+Creates a native household recipe action. The supplied URL is stored by Mealie; creation does not trigger the external action. No automatic write retry.
+
+```json
+{
+  "$defs": {
+    "ActionUrl": {
+      "maxLength": 4000,
+      "minLength": 1,
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "actionType": {
+      "enum": [
+        "link",
+        "post"
+      ],
+      "title": "Actiontype",
+      "type": "string"
+    },
+    "title": {
+      "maxLength": 1000,
+      "minLength": 1,
+      "title": "Title",
+      "type": "string"
+    },
+    "url": {
+      "$ref": "#/$defs/ActionUrl"
+    }
+  },
+  "required": [
+    "actionType",
+    "title",
+    "url"
+  ],
+  "title": "CreateRecipeActionInput",
+  "type": "object"
+}
+```
+
+## get_recipe_action
+
+Reads one configured household recipe action.
+
+```json
+{
+  "$defs": {
+    "UUID4String": {
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-4[0-9a-fA-F]{3}-[89aAbB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "actionId": {
+      "$ref": "#/$defs/UUID4String"
+    }
+  },
+  "required": [
+    "actionId"
+  ],
+  "title": "RecipeActionIdInput",
+  "type": "object"
+}
+```
+
+## update_recipe_action
+
+Updates a configured recipe action after a fresh read, preserving native ownership and unknown fields. This read/write is not atomic and does not trigger the action. No automatic write retry.
+
+```json
+{
+  "$defs": {
+    "ActionUrl": {
+      "maxLength": 4000,
+      "minLength": 1,
+      "type": "string"
+    },
+    "RecipeActionChanges": {
+      "additionalProperties": false,
+      "properties": {
+        "actionType": {
+          "anyOf": [
+            {
+              "enum": [
+                "link",
+                "post"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Actiontype"
+        },
+        "title": {
+          "anyOf": [
+            {
+              "maxLength": 1000,
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Title"
+        },
+        "url": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ActionUrl"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "title": "RecipeActionChanges",
+      "type": "object"
+    },
+    "UUID4String": {
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-4[0-9a-fA-F]{3}-[89aAbB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "actionId": {
+      "$ref": "#/$defs/UUID4String"
+    },
+    "changes": {
+      "$ref": "#/$defs/RecipeActionChanges"
+    }
+  },
+  "required": [
+    "actionId",
+    "changes"
+  ],
+  "title": "UpdateRecipeActionInput",
+  "type": "object"
+}
+```
+
+## delete_recipe_action
+
+Deletes a configured household recipe action. No automatic write retry.
+
+```json
+{
+  "$defs": {
+    "UUID4String": {
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-4[0-9a-fA-F]{3}-[89aAbB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "actionId": {
+      "$ref": "#/$defs/UUID4String"
+    }
+  },
+  "required": [
+    "actionId"
+  ],
+  "title": "RecipeActionIdInput",
+  "type": "object"
+}
+```
+
+## trigger_recipe_action
+
+Explicitly triggers a configured Mealie recipe action for a recipe and scale. This may contact external services and cause irreversible effects; invoke only at the user request for that action. Never automatically replay an uncertain outcome. No automatic write retry.
+
+```json
+{
+  "$defs": {
+    "RecipeSlug": {
+      "type": "string"
+    },
+    "UUID4String": {
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-4[0-9a-fA-F]{3}-[89aAbB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "actionId": {
+      "$ref": "#/$defs/UUID4String"
+    },
+    "slug": {
+      "$ref": "#/$defs/RecipeSlug"
+    },
+    "recipe_scale": {
+      "default": 1,
+      "exclusiveMinimum": 0,
+      "title": "Recipe Scale",
+      "type": "number"
+    }
+  },
+  "required": [
+    "actionId",
+    "slug"
+  ],
+  "title": "TriggerRecipeActionInput",
+  "type": "object"
+}
+```
+
+## get_recipe_household
+
+Reads recipeId and lastMade for the authenticated household and selected recipe slug. Native timestamp/null and unknown fields are preserved; Mealie enforces access.
+
+```json
+{
+  "$defs": {
+    "RecipeSlug": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "slug": {
+      "$ref": "#/$defs/RecipeSlug",
+      "maxLength": 255,
+      "minLength": 1
+    }
+  },
+  "required": [
+    "slug"
+  ],
+  "title": "GetRecipeHouseholdInput",
+  "type": "object"
+}
+```
+
+## list_mealplan_entries
+
+Lists native meal-plan entries, optionally including weekly entries. Filters use exact provider snake_case query names.
+
+```json
+{
+  "$defs": {
+    "CollectionPageSize": {
+      "maximum": 1000,
+      "minimum": 1,
+      "type": "integer"
+    },
+    "DateString": {
+      "type": "string"
+    },
+    "PositiveJsonInteger": {
+      "minimum": 1,
+      "type": "integer"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "page": {
+      "$ref": "#/$defs/PositiveJsonInteger",
+      "default": 1
+    },
+    "perPage": {
+      "$ref": "#/$defs/CollectionPageSize",
+      "default": 50
+    },
+    "orderBy": {
+      "anyOf": [
+        {
+          "maxLength": 500,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Orderby"
+    },
+    "orderByNullPosition": {
+      "anyOf": [
+        {
+          "enum": [
+            "first",
+            "last"
+          ],
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Orderbynullposition"
+    },
+    "orderDirection": {
+      "default": "desc",
+      "enum": [
+        "asc",
+        "desc"
+      ],
+      "title": "Orderdirection",
+      "type": "string"
+    },
+    "queryFilter": {
+      "anyOf": [
+        {
+          "maxLength": 10000,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Queryfilter"
+    },
+    "paginationSeed": {
+      "anyOf": [
+        {
+          "maxLength": 500,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Paginationseed"
+    },
+    "start_date": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/DateString"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "end_date": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/DateString"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "include_week_entries": {
+      "default": false,
+      "title": "Include Week Entries",
+      "type": "boolean"
+    }
+  },
+  "title": "ListMealplanEntriesInput",
+  "type": "object"
+}
+```
+
+## create_mealplan_entry
+
+Creates a native meal-plan entry with text and positive recipeScale. Weekly endDate must be exactly six days after date. No automatic write retry.
+
+```json
+{
+  "$defs": {
+    "DateString": {
+      "type": "string"
+    },
+    "EntryType": {
+      "enum": [
+        "breakfast",
+        "lunch",
+        "dinner",
+        "side",
+        "snack",
+        "drink",
+        "dessert"
+      ],
+      "type": "string"
+    },
+    "UUIDString": {
+      "pattern": "^[0-9a-fA-F]{8}(-[0-9a-fA-F]{4}){3}-[0-9a-fA-F]{12}$",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "date": {
+      "$ref": "#/$defs/DateString"
+    },
+    "endDate": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/DateString"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "entryType": {
+      "$ref": "#/$defs/EntryType",
+      "default": "breakfast"
+    },
+    "title": {
+      "default": "",
+      "maxLength": 10000,
+      "title": "Title",
+      "type": "string"
+    },
+    "text": {
+      "default": "",
+      "maxLength": 100000,
+      "title": "Text",
+      "type": "string"
+    },
+    "recipeId": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/UUIDString"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "recipeScale": {
+      "default": 1,
+      "exclusiveMinimum": 0,
+      "title": "Recipescale",
+      "type": "number"
+    }
+  },
+  "required": [
+    "date"
+  ],
+  "title": "CreateMealplanEntryInput",
+  "type": "object"
+}
+```
+
+## get_mealplan_entry
+
+Reads one native meal-plan entry.
+
+```json
+{
+  "$defs": {
+    "PositiveJsonInteger": {
+      "minimum": 1,
+      "type": "integer"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "entryId": {
+      "$ref": "#/$defs/PositiveJsonInteger"
+    }
+  },
+  "required": [
+    "entryId"
+  ],
+  "title": "MealplanEntryIdInput",
+  "type": "object"
+}
+```
+
+## update_mealplan_entry
+
+Updates supplied meal-plan fields after a fresh read, preserving text, scale, unknown fields and native ownership. Validates merged weekly dates. This read/write is not atomic. No automatic write retry.
+
+```json
+{
+  "$defs": {
+    "DateString": {
+      "type": "string"
+    },
+    "EntryType": {
+      "enum": [
+        "breakfast",
+        "lunch",
+        "dinner",
+        "side",
+        "snack",
+        "drink",
+        "dessert"
+      ],
+      "type": "string"
+    },
+    "MealplanEntryChanges": {
+      "additionalProperties": false,
+      "properties": {
+        "date": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/DateString"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "endDate": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/DateString"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "entryType": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/EntryType"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "title": {
+          "anyOf": [
+            {
+              "maxLength": 10000,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Title"
+        },
+        "text": {
+          "anyOf": [
+            {
+              "maxLength": 100000,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Text"
+        },
+        "recipeId": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/UUIDString"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "recipeScale": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Recipescale"
+        }
+      },
+      "title": "MealplanEntryChanges",
+      "type": "object"
+    },
+    "PositiveJsonInteger": {
+      "minimum": 1,
+      "type": "integer"
+    },
+    "UUIDString": {
+      "pattern": "^[0-9a-fA-F]{8}(-[0-9a-fA-F]{4}){3}-[0-9a-fA-F]{12}$",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "entryId": {
+      "$ref": "#/$defs/PositiveJsonInteger"
+    },
+    "changes": {
+      "$ref": "#/$defs/MealplanEntryChanges"
+    }
+  },
+  "required": [
+    "entryId",
+    "changes"
+  ],
+  "title": "UpdateMealplanEntryInput",
+  "type": "object"
+}
+```
+
+## delete_mealplan_entry
+
+Deletes one native meal-plan entry. No automatic write retry.
+
+```json
+{
+  "$defs": {
+    "PositiveJsonInteger": {
+      "minimum": 1,
+      "type": "integer"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "entryId": {
+      "$ref": "#/$defs/PositiveJsonInteger"
+    }
+  },
+  "required": [
+    "entryId"
+  ],
+  "title": "MealplanEntryIdInput",
+  "type": "object"
+}
+```
+
+## create_random_mealplan_entry
+
+Creates a native randomly selected meal-plan entry using applicable Mealie rules. Weekly endDate is exactly six days after date. No automatic write retry.
+
+```json
+{
+  "$defs": {
+    "DateString": {
+      "type": "string"
+    },
+    "EntryType": {
+      "enum": [
+        "breakfast",
+        "lunch",
+        "dinner",
+        "side",
+        "snack",
+        "drink",
+        "dessert"
+      ],
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "date": {
+      "$ref": "#/$defs/DateString"
+    },
+    "endDate": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/DateString"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "entryType": {
+      "$ref": "#/$defs/EntryType",
+      "default": "dinner"
+    }
+  },
+  "required": [
+    "date"
+  ],
+  "title": "CreateRandomMealplanEntryInput",
+  "type": "object"
+}
+```
+
+## get_mealplan_rules
+
+Lists native household meal-plan rules.
+
+```json
+{
+  "$defs": {
+    "CollectionPageSize": {
+      "maximum": 1000,
+      "minimum": 1,
+      "type": "integer"
+    },
+    "PositiveJsonInteger": {
+      "minimum": 1,
+      "type": "integer"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "page": {
+      "$ref": "#/$defs/PositiveJsonInteger",
+      "default": 1
+    },
+    "perPage": {
+      "$ref": "#/$defs/CollectionPageSize",
+      "default": 50
+    },
+    "orderBy": {
+      "anyOf": [
+        {
+          "maxLength": 500,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Orderby"
+    },
+    "orderByNullPosition": {
+      "anyOf": [
+        {
+          "enum": [
+            "first",
+            "last"
+          ],
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Orderbynullposition"
+    },
+    "orderDirection": {
+      "default": "desc",
+      "enum": [
+        "asc",
+        "desc"
+      ],
+      "title": "Orderdirection",
+      "type": "string"
+    },
+    "queryFilter": {
+      "anyOf": [
+        {
+          "maxLength": 10000,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Queryfilter"
+    },
+    "paginationSeed": {
+      "anyOf": [
+        {
+          "maxLength": 500,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Paginationseed"
+    }
+  },
+  "title": "ListCollectionsInput",
+  "type": "object"
+}
+```
+
+## create_mealplan_rule
+
+Creates a native meal-plan rule; unset applies across days or entry types. No automatic write retry.
+
+```json
+{
+  "$defs": {
+    "EntryType": {
+      "enum": [
+        "breakfast",
+        "lunch",
+        "dinner",
+        "side",
+        "snack",
+        "drink",
+        "dessert"
+      ],
+      "type": "string"
+    },
+    "RuleDay": {
+      "enum": [
+        "monday",
+        "tuesday",
+        "wednesday",
+        "thursday",
+        "friday",
+        "saturday",
+        "sunday",
+        "unset"
+      ],
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "day": {
+      "$ref": "#/$defs/RuleDay",
+      "default": "unset"
+    },
+    "entryType": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/EntryType"
+        },
+        {
+          "const": "unset",
+          "type": "string"
+        }
+      ],
+      "default": "unset",
+      "title": "Entrytype"
+    },
+    "queryFilterString": {
+      "default": "",
+      "maxLength": 10000,
+      "title": "Queryfilterstring",
+      "type": "string"
+    }
+  },
+  "title": "CreateMealplanRuleInput",
+  "type": "object"
+}
+```
+
+## get_mealplan_rule
+
+Reads a native meal-plan rule.
+
+```json
+{
+  "$defs": {
+    "UUID4String": {
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-4[0-9a-fA-F]{3}-[89aAbB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "ruleId": {
+      "$ref": "#/$defs/UUID4String"
+    }
+  },
+  "required": [
+    "ruleId"
+  ],
+  "title": "MealplanRuleIdInput",
+  "type": "object"
+}
+```
+
+## update_mealplan_rule
+
+Updates supplied rule fields after a fresh read, preserving unknown fields and native ownership. This read/write is not atomic. No automatic write retry.
+
+```json
+{
+  "$defs": {
+    "EntryType": {
+      "enum": [
+        "breakfast",
+        "lunch",
+        "dinner",
+        "side",
+        "snack",
+        "drink",
+        "dessert"
+      ],
+      "type": "string"
+    },
+    "MealplanRuleChanges": {
+      "additionalProperties": false,
+      "properties": {
+        "day": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/RuleDay"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "entryType": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/EntryType"
+            },
+            {
+              "const": "unset",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Entrytype"
+        },
+        "queryFilterString": {
+          "anyOf": [
+            {
+              "maxLength": 10000,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Queryfilterstring"
+        }
+      },
+      "title": "MealplanRuleChanges",
+      "type": "object"
+    },
+    "RuleDay": {
+      "enum": [
+        "monday",
+        "tuesday",
+        "wednesday",
+        "thursday",
+        "friday",
+        "saturday",
+        "sunday",
+        "unset"
+      ],
+      "type": "string"
+    },
+    "UUID4String": {
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-4[0-9a-fA-F]{3}-[89aAbB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "ruleId": {
+      "$ref": "#/$defs/UUID4String"
+    },
+    "changes": {
+      "$ref": "#/$defs/MealplanRuleChanges"
+    }
+  },
+  "required": [
+    "ruleId",
+    "changes"
+  ],
+  "title": "UpdateMealplanRuleInput",
+  "type": "object"
+}
+```
+
+## delete_mealplan_rule
+
+Deletes a native meal-plan rule. No automatic write retry.
+
+```json
+{
+  "$defs": {
+    "UUID4String": {
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-4[0-9a-fA-F]{3}-[89aAbB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "ruleId": {
+      "$ref": "#/$defs/UUID4String"
+    }
+  },
+  "required": [
+    "ruleId"
+  ],
+  "title": "MealplanRuleIdInput",
+  "type": "object"
+}
+```
+
+## get_mealplan_ical_token
+
+Reads the household calendar token, or null when disabled. Treat returned tokens as confidential.
+
+```json
+{
+  "additionalProperties": false,
+  "properties": {},
+  "title": "EmptyInput",
+  "type": "object"
+}
+```
+
+## rotate_mealplan_ical_token
+
+Enables the household meal-plan iCal feed and replaces its token. Existing subscription URLs stop working; invoke only for an explicit calendar enable/rotate request. No automatic write retry.
+
+```json
+{
+  "additionalProperties": false,
+  "properties": {},
+  "title": "EmptyInput",
+  "type": "object"
+}
+```
+
+## delete_mealplan_ical_token
+
+Disables the household meal-plan iCal feed and invalidates existing subscription URLs. No automatic write retry.
+
+```json
+{
+  "additionalProperties": false,
+  "properties": {},
+  "title": "EmptyInput",
+  "type": "object"
+}
+```
+
+## get_mealplan_ical_feed
+
+Downloads the native iCal feed as dataBase64, limited to 5 MiB. Uses explicit timezone, exact date/time strings and repeated types parameters; does not write host files.
+
+```json
+{
+  "$defs": {
+    "CalendarDuration": {
+      "maximum": 1440,
+      "minimum": 1,
+      "type": "integer"
+    },
+    "EntryType": {
+      "enum": [
+        "breakfast",
+        "lunch",
+        "dinner",
+        "side",
+        "snack",
+        "drink",
+        "dessert"
+      ],
+      "type": "string"
+    },
+    "RecipeSlug": {
+      "type": "string"
+    },
+    "TimeString": {
+      "type": "string"
+    },
+    "TimezoneString": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "token": {
+      "$ref": "#/$defs/RecipeSlug"
+    },
+    "types": {
+      "anyOf": [
+        {
+          "items": {
+            "$ref": "#/$defs/EntryType"
+          },
+          "maxItems": 7,
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Types"
+    },
+    "includeNotes": {
+      "default": true,
+      "title": "Includenotes",
+      "type": "boolean"
+    },
+    "tz": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/TimezoneString"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "lang": {
+      "anyOf": [
+        {
+          "maxLength": 20,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Lang"
+    },
+    "duration": {
+      "$ref": "#/$defs/CalendarDuration",
+      "default": 60
+    },
+    "summary": {
+      "default": "${type}: ${title}",
+      "maxLength": 500,
+      "title": "Summary",
+      "type": "string"
+    },
+    "description": {
+      "default": "${note}\n\n${url}",
+      "maxLength": 500,
+      "title": "Description",
+      "type": "string"
+    },
+    "breakfast": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/TimeString"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "lunch": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/TimeString"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "dinner": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/TimeString"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "side": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/TimeString"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "snack": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/TimeString"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "drink": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/TimeString"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "dessert": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/TimeString"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    }
+  },
+  "required": [
+    "token"
+  ],
+  "title": "GetMealplanIcalFeedInput",
+  "type": "object"
+}
+```
+
+## preview_recipe_from_url
+
+Preview scraping a URL without creating a recipe. useOpenAI explicitly selects Mealie configured AI scraper. Native provider permissions and errors apply.
+
+```json
+{
+  "$defs": {
+    "RemoteUrl": {
+      "maxLength": 8192,
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "url": {
+      "$ref": "#/$defs/RemoteUrl"
+    },
+    "useOpenAI": {
+      "default": false,
+      "title": "Useopenai",
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "url"
+  ],
+  "title": "PreviewRecipeFromUrlInput",
+  "type": "object"
+}
+```
+
+## import_recipe_with_ai
+
+Create a recipe through Mealie configured AI provider from content, URL and/or up to eight base64 images. Uses native multipart; may create organizers only when explicitly selected. No automatic retry; inspect recipes after ambiguous failures.
+
+```json
+{
+  "$defs": {
+    "AiRecipeImage": {
+      "additionalProperties": false,
+      "properties": {
+        "filename": {
+          "$ref": "#/$defs/Segment"
+        },
+        "mediaType": {
+          "enum": [
+            "image/png",
+            "image/jpeg",
+            "image/webp",
+            "image/gif"
+          ],
+          "title": "Mediatype",
+          "type": "string"
+        },
+        "dataBase64": {
+          "maxLength": 6990508,
+          "minLength": 1,
+          "title": "Database64",
+          "type": "string"
+        }
+      },
+      "required": [
+        "filename",
+        "mediaType",
+        "dataBase64"
+      ],
+      "title": "AiRecipeImage",
+      "type": "object"
+    },
+    "RemoteUrl": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "Segment": {
+      "maxLength": 255,
+      "minLength": 1,
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "content": {
+      "anyOf": [
+        {
+          "maxLength": 2097152,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Content"
+    },
+    "url": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/RemoteUrl"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "translateLanguage": {
+      "anyOf": [
+        {
+          "maxLength": 100,
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Translatelanguage"
+    },
+    "createNewOrganizers": {
+      "default": false,
+      "title": "Createneworganizers",
+      "type": "boolean"
+    },
+    "images": {
+      "items": {
+        "$ref": "#/$defs/AiRecipeImage"
+      },
+      "maxItems": 8,
+      "title": "Images",
+      "type": "array"
+    }
+  },
+  "title": "ImportRecipeWithAiInput",
+  "type": "object"
+}
+```
+
+## import_recipe_from_url_with_progress
+
+Create a recipe from a URL using bounded native SSE and safe MCP progress. No reconnect or retry after interruption; inspect recipes before importing again.
+
+```json
+{
+  "$defs": {
+    "RemoteUrl": {
+      "maxLength": 8192,
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "includeTags": {
+      "default": false,
+      "title": "Includetags",
+      "type": "boolean"
+    },
+    "includeCategories": {
+      "default": false,
+      "title": "Includecategories",
+      "type": "boolean"
+    },
+    "url": {
+      "$ref": "#/$defs/RemoteUrl"
+    }
+  },
+  "required": [
+    "url"
+  ],
+  "title": "ImportRecipeFromUrlInput",
+  "type": "object"
+}
+```
+
+## import_recipe_from_html_or_json_with_progress
+
+Create a recipe from HTML, schema.org JSON or a full Mealie export using bounded native SSE and safe MCP progress. No reconnect or retry.
+
+```json
+{
+  "$defs": {
+    "RemoteUrl": {
+      "maxLength": 8192,
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "includeTags": {
+      "default": false,
+      "title": "Includetags",
+      "type": "boolean"
+    },
+    "includeCategories": {
+      "default": false,
+      "title": "Includecategories",
+      "type": "boolean"
+    },
+    "data": {
+      "maxLength": 2097152,
+      "minLength": 1,
+      "title": "Data",
+      "type": "string"
+    },
+    "url": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/RemoteUrl"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    }
+  },
+  "required": [
+    "data"
+  ],
+  "title": "ImportRecipeFromHtmlOrJsonInput",
+  "type": "object"
+}
+```
+
+## import_recipe_with_ai_with_progress
+
+Create a recipe through Mealie configured AI provider with bounded SSE and safe MCP progress. Accepts native content, URL and repeated image uploads; no local AI credentials or automatic replay.
+
+```json
+{
+  "$defs": {
+    "AiRecipeImage": {
+      "additionalProperties": false,
+      "properties": {
+        "filename": {
+          "$ref": "#/$defs/Segment"
+        },
+        "mediaType": {
+          "enum": [
+            "image/png",
+            "image/jpeg",
+            "image/webp",
+            "image/gif"
+          ],
+          "title": "Mediatype",
+          "type": "string"
+        },
+        "dataBase64": {
+          "maxLength": 6990508,
+          "minLength": 1,
+          "title": "Database64",
+          "type": "string"
+        }
+      },
+      "required": [
+        "filename",
+        "mediaType",
+        "dataBase64"
+      ],
+      "title": "AiRecipeImage",
+      "type": "object"
+    },
+    "RemoteUrl": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "Segment": {
+      "maxLength": 255,
+      "minLength": 1,
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "content": {
+      "anyOf": [
+        {
+          "maxLength": 2097152,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Content"
+    },
+    "url": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/RemoteUrl"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "translateLanguage": {
+      "anyOf": [
+        {
+          "maxLength": 100,
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Translatelanguage"
+    },
+    "createNewOrganizers": {
+      "default": false,
+      "title": "Createneworganizers",
+      "type": "boolean"
+    },
+    "images": {
+      "items": {
+        "$ref": "#/$defs/AiRecipeImage"
+      },
+      "maxItems": 8,
+      "title": "Images",
+      "type": "array"
+    }
+  },
+  "title": "ImportRecipeWithAiInput",
+  "type": "object"
+}
+```
+
+## import_recipes_from_urls
+
+Submit up to 100 URL imports as one native background job; return reportId for get_recipe_import_report. Tags/categories use explicit native organizer objects. Not atomic; partial failures are in the report. Never automatically retries.
+
+```json
+{
+  "$defs": {
+    "BulkImportOrganizer": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/UUID4String"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "groupId": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/UUID4String"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "name": {
+          "maxLength": 255,
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        },
+        "slug": {
+          "$ref": "#/$defs/Segment"
+        },
+        "recipeCount": {
+          "$ref": "#/$defs/NonNegativeJsonInteger",
+          "default": 0
+        }
+      },
+      "required": [
+        "name",
+        "slug"
+      ],
+      "title": "BulkImportOrganizer",
+      "type": "object"
+    },
+    "BulkRecipeUrl": {
+      "additionalProperties": false,
+      "properties": {
+        "url": {
+          "$ref": "#/$defs/RemoteUrl"
+        },
+        "categories": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/BulkImportOrganizer"
+              },
+              "maxItems": 100,
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Categories"
+        },
+        "tags": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/BulkImportOrganizer"
+              },
+              "maxItems": 100,
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Tags"
+        }
+      },
+      "required": [
+        "url"
+      ],
+      "title": "BulkRecipeUrl",
+      "type": "object"
+    },
+    "NonNegativeJsonInteger": {
+      "minimum": 0,
+      "type": "integer"
+    },
+    "RemoteUrl": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "Segment": {
+      "maxLength": 255,
+      "minLength": 1,
+      "type": "string"
+    },
+    "UUID4String": {
+      "pattern": "^[0-9a-fA-F-]{36}$",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "imports": {
+      "items": {
+        "$ref": "#/$defs/BulkRecipeUrl"
+      },
+      "maxItems": 100,
+      "minItems": 1,
+      "title": "Imports",
+      "type": "array"
+    }
+  },
+  "required": [
+    "imports"
+  ],
+  "title": "ImportRecipesFromUrlsInput",
+  "type": "object"
+}
+```
+
+## get_recipe_import_reports
+
+List native group reports filtered to bulk_import; inspect status and report IDs to track submitted imports.
+
+```json
+{
+  "additionalProperties": false,
+  "properties": {},
+  "title": "GetRecipeImportReportsInput",
+  "type": "object"
+}
+```
+
+## get_recipe_import_report
+
+Read a native bulk_import report and its per-recipe entries. Rejects reports from unrelated categories; preserve provider status and unknown data.
+
+```json
+{
+  "$defs": {
+    "UUID4String": {
+      "pattern": "^[0-9a-fA-F-]{36}$",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "reportId": {
+      "$ref": "#/$defs/UUID4String"
+    }
+  },
+  "required": [
+    "reportId"
+  ],
+  "title": "GetRecipeImportReportInput",
+  "type": "object"
+}
+```
+
+## delete_recipes_bulk
+
+Permanently delete up to 100 explicitly selected recipe slugs/IDs using native bulk deletion. Non-atomic; provider does not report per-item outcomes. No write retry.
+
+```json
+{
+  "$defs": {
+    "Segment": {
+      "maxLength": 255,
+      "minLength": 1,
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "recipes": {
+      "items": {
+        "$ref": "#/$defs/Segment"
+      },
+      "maxItems": 100,
+      "minItems": 1,
+      "title": "Recipes",
+      "type": "array"
+    }
+  },
+  "required": [
+    "recipes"
+  ],
+  "title": "DeleteRecipesBulkInput",
+  "type": "object"
+}
+```
+
+## export_recipes_bulk
+
+Submit native JSON ZIP export for up to 100 explicit recipes. Use get_recipe_bulk_exports to locate completed exports; response does not invent a job ID. No write retry.
+
+```json
+{
+  "$defs": {
+    "Segment": {
+      "maxLength": 255,
+      "minLength": 1,
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "recipes": {
+      "items": {
+        "$ref": "#/$defs/Segment"
+      },
+      "maxItems": 100,
+      "minItems": 1,
+      "title": "Recipes",
+      "type": "array"
+    },
+    "exportType": {
+      "const": "json",
+      "default": "json",
+      "title": "Exporttype",
+      "type": "string"
+    }
+  },
+  "required": [
+    "recipes"
+  ],
+  "title": "ExportRecipesBulkInput",
+  "type": "object"
+}
+```
+
+## get_recipe_bulk_exports
+
+List native group recipe exports with IDs, sizes and expiry.
+
+```json
+{
+  "additionalProperties": false,
+  "properties": {},
+  "title": "GetRecipeBulkExportsInput",
+  "type": "object"
+}
+```
+
+## download_recipe_bulk_export
+
+Download an existing native recipe export as bounded base64 (20 MiB). Resolve its native file token internally at the configured Mealie origin; never return the token or a signed URL.
+
+```json
+{
+  "$defs": {
+    "UUID4String": {
+      "pattern": "^[0-9a-fA-F-]{36}$",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "exportId": {
+      "$ref": "#/$defs/UUID4String"
+    }
+  },
+  "required": [
+    "exportId"
+  ],
+  "title": "DownloadRecipeBulkExportInput",
+  "type": "object"
+}
+```
+
+## purge_recipe_bulk_exports
+
+Delete all native group recipe export records and on-disk export files. This affects all exports in the group; no automatic retry.
+
+```json
+{
+  "additionalProperties": false,
+  "properties": {},
+  "title": "PurgeRecipeBulkExportsInput",
+  "type": "object"
+}
+```
+
+## update_recipe_metadata_batch
+
+Edit metadata on up to 50 recipes with explicit expectedUpdatedAt per item. Fresh read/patch preserves unrelated fields; snapshot check is not atomic CAS. Bounded concurrency (1-5), ordered per-item outcomes, partial completion and unknown outcomes are explicit. Never retries writes. Resolve recipe aliases to canonical IDs before any write; duplicate identities reject the whole batch. Identity lookup failures are ordered per-item failures with no write issued.
+
+```json
+{
+  "$defs": {
+    "BatchMetadataItem": {
+      "additionalProperties": false,
+      "properties": {
+        "slug": {
+          "$ref": "#/$defs/Segment"
+        },
+        "expectedUpdatedAt": {
+          "minLength": 1,
+          "title": "Expectedupdatedat",
+          "type": "string"
+        },
+        "name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Name"
+        },
+        "description": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Description"
+        },
+        "recipeServings": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Recipeservings",
+          "type": "number"
+        },
+        "recipeYieldQuantity": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Recipeyieldquantity",
+          "type": "number"
+        },
+        "recipeYield": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Recipeyield"
+        },
+        "totalTime": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Totaltime"
+        },
+        "prepTime": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Preptime"
+        },
+        "cookTime": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Cooktime"
+        },
+        "performTime": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Performtime"
+        },
+        "orgURL": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Orgurl"
+        },
+        "nutrition": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/RecipeNutritionPatch"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "settings": {
+          "$ref": "#/$defs/RecipeSettingsPatch"
+        },
+        "extras": {
+          "$ref": "#/$defs/JsonObject"
+        },
+        "removeExtraKeys": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Removeextrakeys",
+          "type": "array"
+        }
+      },
+      "required": [
+        "slug",
+        "expectedUpdatedAt"
+      ],
+      "title": "BatchMetadataItem",
+      "type": "object"
+    },
+    "JsonObject": {
+      "additionalProperties": {
+        "$ref": "#/$defs/JsonValue"
+      },
+      "type": "object"
+    },
+    "JsonValue": {},
+    "MetadataConcurrency": {
+      "maximum": 5,
+      "minimum": 1,
+      "type": "integer"
+    },
+    "RecipeNutritionPatch": {
+      "additionalProperties": false,
+      "properties": {
+        "calories": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Calories"
+        },
+        "carbohydrateContent": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Carbohydratecontent"
+        },
+        "cholesterolContent": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Cholesterolcontent"
+        },
+        "fatContent": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Fatcontent"
+        },
+        "fiberContent": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Fibercontent"
+        },
+        "proteinContent": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Proteincontent"
+        },
+        "saturatedFatContent": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Saturatedfatcontent"
+        },
+        "sodiumContent": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Sodiumcontent"
+        },
+        "sugarContent": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Sugarcontent"
+        },
+        "transFatContent": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Transfatcontent"
+        },
+        "unsaturatedFatContent": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Unsaturatedfatcontent"
+        }
+      },
+      "title": "RecipeNutritionPatch",
+      "type": "object"
+    },
+    "RecipeSettingsPatch": {
+      "additionalProperties": false,
+      "properties": {
+        "public": {
+          "default": false,
+          "title": "Public",
+          "type": "boolean"
+        },
+        "showNutrition": {
+          "default": false,
+          "title": "Shownutrition",
+          "type": "boolean"
+        },
+        "showAssets": {
+          "default": false,
+          "title": "Showassets",
+          "type": "boolean"
+        },
+        "landscapeView": {
+          "default": false,
+          "title": "Landscapeview",
+          "type": "boolean"
+        },
+        "disableComments": {
+          "default": true,
+          "title": "Disablecomments",
+          "type": "boolean"
+        },
+        "locked": {
+          "default": false,
+          "title": "Locked",
+          "type": "boolean"
+        }
+      },
+      "title": "RecipeSettingsPatch",
+      "type": "object"
+    },
+    "Segment": {
+      "maxLength": 255,
+      "minLength": 1,
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "items": {
+      "items": {
+        "$ref": "#/$defs/BatchMetadataItem"
+      },
+      "maxItems": 50,
+      "minItems": 1,
+      "title": "Items",
+      "type": "array"
+    },
+    "concurrency": {
+      "$ref": "#/$defs/MetadataConcurrency",
+      "default": 3
+    }
+  },
+  "required": [
+    "items"
+  ],
+  "title": "UpdateRecipeMetadataBatchInput",
+  "type": "object"
+}
+```

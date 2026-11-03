@@ -5,6 +5,8 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Literal
 
+from tests.support.mealie330_compatibility import apply_request_overlay, apply_result_overlay
+
 FIXTURES = Path(__file__).resolve().parents[1] / "fixtures" / "compatibility"
 
 
@@ -72,6 +74,7 @@ async def assert_contract_matches(server: Any, case: ContractCase, fake: Any) ->
         expected = case.expected_python_result
     else:
         expected = case.expected_result
+    expected = apply_result_overlay(case.scenario, expected)
     is_error = bool(expected.get("isError", False))
     assert result.is_error == is_error
     actual_blocks = [
@@ -89,5 +92,6 @@ async def assert_contract_matches(server: Any, case: ContractCase, fake: Any) ->
         }
         assert case.tool in allowed.get(case.documented_difference, set())
         requests = case.expected_python_requests
+    requests = apply_request_overlay(case.scenario, requests)
     assert_requests_match(fake.recorded_requests, requests, case.request_order)
     assert not fake.errors

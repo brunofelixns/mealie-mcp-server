@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "updatedOn": "2026-10-28",
+  "updatedOn": "2026-11-03",
   "status": "implementation_complete_local_verified",
   "plan": "../superpowers/plans/2026-10-27-python-migration.md",
   "upstreamCommit": "d027e1b4a314d781a322f1f91e37840f01464d77",
@@ -890,6 +890,234 @@
         }
       ],
       "commit": "edc067df15930cdbacad8c1449221a11871cf45d"
+    },
+    {
+      "id": "R-notes",
+      "title": "Recipe notes",
+      "tools": [
+        "get_recipe_notes",
+        "add_recipe_note",
+        "update_recipe_note",
+        "delete_recipe_note"
+      ],
+      "status": "verified",
+      "plan": "../superpowers/plans/2026-11-03-complete-recipe-tools.md",
+      "evidence": [
+        {
+          "report": "docs/testing/recipe-extensions-evidence.md",
+          "result": "local_verified_with_targeted_test_rechecks",
+          "mcpPositive": true,
+          "e2eProvider": "Mealie 3.29.0"
+        }
+      ]
+    },
+    {
+      "id": "R-metadata",
+      "title": "Recipe metadata",
+      "tools": [
+        "update_recipe_metadata"
+      ],
+      "status": "verified",
+      "plan": "../superpowers/plans/2026-11-03-complete-recipe-tools.md",
+      "evidence": [
+        {
+          "report": "docs/testing/recipe-extensions-evidence.md",
+          "result": "local_verified_with_targeted_test_rechecks",
+          "mcpPositive": true,
+          "e2eProvider": "Mealie 3.29.0"
+        }
+      ]
+    },
+    {
+      "id": "R-collaboration",
+      "title": "Recipe collaboration",
+      "tools": [
+        "get_recipe_comments",
+        "create_recipe_comment",
+        "update_recipe_comment",
+        "delete_recipe_comment",
+        "get_recipe_share_links",
+        "create_recipe_share_link",
+        "delete_recipe_share_link",
+        "get_recipe_timeline",
+        "create_recipe_timeline_event",
+        "update_recipe_timeline_event",
+        "delete_recipe_timeline_event",
+        "set_recipe_timeline_event_image"
+      ],
+      "status": "verified",
+      "plan": "../superpowers/plans/2026-11-03-complete-recipe-tools.md",
+      "evidence": [
+        {
+          "report": "docs/testing/recipe-extensions-evidence.md",
+          "result": "local_verified_with_targeted_test_rechecks",
+          "mcpPositive": true,
+          "e2eProvider": "Mealie 3.29.0"
+        }
+      ]
+    },
+    {
+      "id": "R-io",
+      "title": "Recipe io",
+      "tools": [
+        "upload_recipe_asset",
+        "create_recipe_asset_from_url",
+        "import_recipe_from_url",
+        "import_recipe_from_html_or_json",
+        "import_recipe_from_zip",
+        "get_recipe_export_formats",
+        "export_recipe"
+      ],
+      "status": "verified",
+      "plan": "../superpowers/plans/2026-11-03-complete-recipe-tools.md",
+      "evidence": [
+        {
+          "report": "docs/testing/recipe-extensions-evidence.md",
+          "result": "local_verified_with_targeted_test_rechecks",
+          "mcpPositive": true,
+          "e2eProvider": "Mealie 3.29.0"
+        }
+      ]
+    },
+    {
+      "id": "R330-advanced",
+      "title": "Mealie 3.30 advanced",
+      "tools": [
+        "search_recipes",
+        "get_recipe_suggestions",
+        "parse_recipe_ingredient",
+        "parse_recipe_ingredients",
+        "update_recipe_ingredient_substitutions",
+        "update_food_substitutions",
+        "update_recipe_instruction_durations"
+      ],
+      "status": "verified",
+      "plan": "../superpowers/plans/2026-11-03-mealie-330-recipes.md",
+      "evidence": [
+        {
+          "report": "docs/testing/mealie-3.30-evidence.md",
+          "result": "local_verified_with_complete_shard_recheck",
+          "mcpPositive": true,
+          "e2eProvider": "Mealie 3.30.0"
+        }
+      ]
+    },
+    {
+      "id": "R330-media",
+      "title": "Mealie 3.30 media",
+      "tools": [
+        "get_recipe_assets",
+        "download_recipe_asset",
+        "download_recipe_image",
+        "download_recipe_timeline_image",
+        "get_shared_recipe",
+        "download_shared_recipe"
+      ],
+      "status": "verified",
+      "plan": "../superpowers/plans/2026-11-03-mealie-330-recipes.md",
+      "evidence": [
+        {
+          "report": "docs/testing/mealie-3.30-evidence.md",
+          "result": "local_verified_with_complete_shard_recheck",
+          "mcpPositive": true,
+          "e2eProvider": "Mealie 3.30.0"
+        }
+      ]
+    },
+    {
+      "id": "R330-collections",
+      "title": "Mealie 3.30 collections",
+      "tools": [
+        "get_cookbooks",
+        "create_cookbook",
+        "get_cookbook",
+        "update_cookbook",
+        "delete_cookbook",
+        "get_recipe_favorites",
+        "get_recipe_ratings",
+        "list_recipe_comments",
+        "get_recipe_comment",
+        "get_recipe_timeline_event",
+        "get_recipe_share_link",
+        "get_recipe_actions",
+        "create_recipe_action",
+        "get_recipe_action",
+        "update_recipe_action",
+        "delete_recipe_action",
+        "trigger_recipe_action",
+        "get_recipe_household"
+      ],
+      "status": "verified",
+      "plan": "../superpowers/plans/2026-11-03-mealie-330-recipes.md",
+      "evidence": [
+        {
+          "report": "docs/testing/mealie-3.30-evidence.md",
+          "result": "local_verified_with_complete_shard_recheck",
+          "mcpPositive": true,
+          "e2eProvider": "Mealie 3.30.0"
+        }
+      ]
+    },
+    {
+      "id": "R330-planning",
+      "title": "Mealie 3.30 planning",
+      "tools": [
+        "list_mealplan_entries",
+        "create_mealplan_entry",
+        "get_mealplan_entry",
+        "update_mealplan_entry",
+        "delete_mealplan_entry",
+        "create_random_mealplan_entry",
+        "get_mealplan_rules",
+        "create_mealplan_rule",
+        "get_mealplan_rule",
+        "update_mealplan_rule",
+        "delete_mealplan_rule",
+        "get_mealplan_ical_token",
+        "rotate_mealplan_ical_token",
+        "delete_mealplan_ical_token",
+        "get_mealplan_ical_feed"
+      ],
+      "status": "verified",
+      "plan": "../superpowers/plans/2026-11-03-mealie-330-recipes.md",
+      "evidence": [
+        {
+          "report": "docs/testing/mealie-3.30-evidence.md",
+          "result": "local_verified_with_complete_shard_recheck",
+          "mcpPositive": true,
+          "e2eProvider": "Mealie 3.30.0"
+        }
+      ]
+    },
+    {
+      "id": "R330-jobs",
+      "title": "Mealie 3.30 jobs",
+      "tools": [
+        "preview_recipe_from_url",
+        "import_recipe_with_ai",
+        "import_recipe_from_url_with_progress",
+        "import_recipe_from_html_or_json_with_progress",
+        "import_recipe_with_ai_with_progress",
+        "import_recipes_from_urls",
+        "get_recipe_import_reports",
+        "get_recipe_import_report",
+        "delete_recipes_bulk",
+        "export_recipes_bulk",
+        "get_recipe_bulk_exports",
+        "download_recipe_bulk_export",
+        "purge_recipe_bulk_exports",
+        "update_recipe_metadata_batch"
+      ],
+      "status": "verified",
+      "plan": "../superpowers/plans/2026-11-03-mealie-330-recipes.md",
+      "evidence": [
+        {
+          "report": "docs/testing/mealie-3.30-evidence.md",
+          "result": "local_verified_with_complete_shard_recheck",
+          "mcpPositive": true,
+          "e2eProvider": "Mealie 3.30.0"
+        }
+      ]
     }
   ],
   "contracts": {
@@ -1068,5 +1296,169 @@
       "Compose configuration",
       "release gate"
     ]
+  },
+  "recipe330Validation": {
+    "status": "local_verified",
+    "provider": "Mealie 3.30.0",
+    "platform": "linux/amd64",
+    "catalogTools": 162,
+    "addedTools": 60,
+    "previousDefinitionsPreserved": 102,
+    "immutableBaselineTools": 78,
+    "ordinarySuite": {
+      "tests": 1794,
+      "failures": 0,
+      "deselectedLiveCases": 4,
+      "files": 101,
+      "junit": "artifacts/pytest.xml",
+      "suiteReport": "artifacts/mealie330/suite-1793726914/final-summary.json",
+      "initialInitializeTimeouts": 2,
+      "wholeShardRecheckTests": 529,
+      "wholeShardRecheckFiles": 27,
+      "sourceOrExpectationChangesForRecheck": false
+    },
+    "coverage": {
+      "lines": 96.52543875199433,
+      "branches": 87.211093990755
+    },
+    "compatibilityReport": "artifacts/mealie330/compatibility.json",
+    "positiveTools": 162,
+    "negativeTools": 162,
+    "e2e": {
+      "status": "passed",
+      "cases": 4,
+      "toolsPerCase": 162,
+      "totalToolPaths": 648,
+      "positivePaths": 636,
+      "securityRejections": 4,
+      "configurationRejections": 8,
+      "inputRejections": 648,
+      "imageId": "sha256:b93c2a7e55e16728d5816cc4f5b8c43df1efa7b378eb639645430209bbdc7045",
+      "report": "artifacts/e2e/mealie-mcp-e2e-76b1ed38a91e/summary.json",
+      "cleanupPassed": true
+    },
+    "apiAudit": {
+      "apiOperations": 283,
+      "recipeOperations": 90,
+      "recipeCatalogDependencies": 84,
+      "recipeAlternativeContracts": 6,
+      "unmappedRecipeOperations": [],
+      "unmatchedCatalogDependencies": []
+    },
+    "checks": [
+      "ruff",
+      "format",
+      "mypy",
+      "workflow linters",
+      "documentation generation",
+      "local recipe guide links",
+      "API audit and drift guards",
+      "executed MCP compatibility",
+      "wheel and sdist",
+      "runtime image and installed-container tests",
+      "independent review and directed follow-up"
+    ],
+    "limits": [
+      "Local amd64 evidence; no new native ARM or remote CI run",
+      "AI-positive multipart/SSE is controlled; native provider was unconfigured",
+      "Expected SSRF rejection for the private file-download fixture",
+      "No publication, release or personal-instance deployment"
+    ],
+    "phase": "D14 historical evidence before D15 review fixes"
+  },
+  "recipeReviewValidation": {
+    "status": "local_verified",
+    "date": "2026-11-03",
+    "plan": "docs/superpowers/plans/2026-11-03-recipe-review-fixes.md",
+    "report": "docs/testing/mealie-3.30-evidence.md",
+    "baseCommit": "b6746122f664009a8e5cb7ba883d55f2a41bdc4a",
+    "validatedPackageVersion": "0.2.0",
+    "platform": "linux/amd64",
+    "tools": 162,
+    "preservedPreviousDefinitions": 102,
+    "correctedNewNumericSchemas": 11,
+    "ordinarySuite": {
+      "tests": 2010,
+      "files": 107,
+      "failures": 0,
+      "deselectedLiveCases": 4,
+      "junit": "artifacts/pytest.xml",
+      "rawShardedCases": 1996,
+      "freshAuditorCases": 66,
+      "addedFinalReviewRegressions": 14,
+      "summary": "artifacts/review-fixes/suite-1793731874/consolidated-summary.json"
+    },
+    "coverage": {
+      "lines": 96.55841863748677,
+      "branches": 87.34662576687117
+    },
+    "compatibilityReport": "artifacts/review-fixes/compatibility.json",
+    "positiveTools": 162,
+    "negativeTools": 162,
+    "e2e": {
+      "status": "passed",
+      "cases": 4,
+      "toolsPerCase": 162,
+      "totalToolPaths": 648,
+      "positivePaths": 636,
+      "securityRejections": 4,
+      "configurationRejections": 8,
+      "inputRejections": 648,
+      "imageId": "sha256:09cc0487b430ad1984a8991e3cb1c4033839aaa50c7304a39db0c8ac7cec7e24",
+      "revision": "unknown (local working tree)",
+      "cleanupPassed": true,
+      "report": "artifacts/e2e/mealie-mcp-e2e-ff4b241dc1d3/summary.json"
+    },
+    "apiAudit": {
+      "providerVersion": "v3.30.0",
+      "mcpTools": 162,
+      "apiOperations": 283,
+      "catalogDependencyOperations": 132,
+      "recipeOperations": 90,
+      "recipeCatalogDependencies": 84,
+      "recipeAlternativeContracts": 6,
+      "unmappedRecipeOperations": [],
+      "unmatchedCatalogDependencies": [],
+      "contractErrors": [],
+      "contractChecked": true,
+      "limitations": [
+        "Catalog dependencies include internal reads; they do not prove full parameter support.",
+        "Alternative batch tools have distinct snapshot, ordering, error and partial-result contracts; arbitrary full-model writes are not exposed.",
+        "Public exploration of other groups, account/provider configuration and administration are outside this household recipe extension.",
+        "AI provider success requires separate evidence; see the real-provider E2E report."
+      ],
+      "openapiSha256": "23a7adc37f3ae1921499a43b8d62684a83647235867030a47a0162f608b1560c",
+      "catalogSha256": "7d87ed897b76431c8f6831ec9b42a7c4b877123c8577c604e8d8e11028c744c1",
+      "contractSha256": "83fa2c184d4f235d232b1ed581e25e49377550aec6686cbfb5f2875eb88dc5b3"
+    },
+    "checks": [
+      "Ruff",
+      "format",
+      "mypy",
+      "workflow linters",
+      "generated docs",
+      "local documentation links",
+      "wheel/sdist",
+      "installed runtime/container tests",
+      "full ordinary suite",
+      "executed compatibility",
+      "real provider audit before credentials",
+      "four Mealie transport/protocol cases",
+      "independent review"
+    ],
+    "limitations": [
+      "Local amd64; native ARM and remote CI not claimed by local results",
+      "AI-positive contract responses controlled; native provider deliberately unconfigured",
+      "Private file fixture verifies SSRF rejection; no automatic write retry",
+      "No merge, new release publication or personal-instance deployment"
+    ],
+    "pullRequest": {
+      "url": "https://github.com/brunofelixns/mealie-mcp-server/pull/7",
+      "headBranch": "codex/complete-recipe-tools",
+      "number": 7,
+      "status": "open",
+      "sourceChangesCommit": "68c6858dc9e253e3b8eef3e2b4cfd9a8c1965f4f",
+      "baseBranch": "main"
+    }
   }
 }

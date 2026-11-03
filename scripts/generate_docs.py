@@ -36,7 +36,7 @@ def render(root: Path) -> dict[Path, str]:
     inventory = json.loads((root / "docs/migration/compatibility-inventory.json").read_text())
     tools = catalog["tools"]
     owners = {tool["name"]: tool["group"] for tool in inventory["tools"]}
-    assert len(tools) == len({tool["name"] for tool in tools}) == 78
+    assert len(tools) == len({tool["name"] for tool in tools})
     assert set(owners) == {tool["name"] for tool in tools}
     unsupported = set(owners.values()) - GROUPS.keys()
     if unsupported:
@@ -64,7 +64,7 @@ def render(root: Path) -> dict[Path, str]:
         "# Cobertura de API",
         "",
         "Generado con `uv run python scripts/generate_docs.py`. "
-        "Catálogo explícito de 78 herramientas; "
+        f"Catálogo explícito de {len(tools)} herramientas; "
         "los tipos completos están en [tools.md](tools.md).",
         "",
         "| Familia | Herramientas |",
@@ -108,7 +108,7 @@ def render(root: Path) -> dict[Path, str]:
                 ]
             )
     coverage.extend(f"| {title} | {len(grouped[group])} |" for group, title in GROUPS.items())
-    coverage.extend(["| **Total** | **78** |", ""])
+    coverage.extend([f"| **Total** | **{len(tools)}** |", ""])
     for tool in tools:
         name = tool["name"]
         endpoints = tool["endpoints"]
@@ -196,7 +196,12 @@ def main() -> int:
             finally:
                 if temporary:
                     temporary.unlink(missing_ok=True)
-    print("Documentation checked: 78 tools, one prompt.")
+    count = len(
+        json.loads((args.root / "src/mealie_mcp_server/resources/tool-catalog.json").read_text())[
+            "tools"
+        ]
+    )
+    print(f"Documentation checked: {count} tools, one prompt.")
     return 0
 
 
