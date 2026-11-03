@@ -215,7 +215,7 @@ Recipe editing, native import/export and limits: [recipe guide](docs/recipes.md)
 <!-- BEGIN GENERATED TOOLS -->
 ## Available tools (162)
 
-Catalog for version 0.2.0. See the [full schemas](docs/tools.md) and [API coverage](docs/api-coverage.md) (in Spanish). <!-- x-release-please-version -->
+Catalog for version 0.3.0. See the [full schemas](docs/tools.md) and [API coverage](docs/api-coverage.md) (in Spanish). <!-- x-release-please-version -->
 
 | Family | Tools |
 |---|---:|
