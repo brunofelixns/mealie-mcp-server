@@ -1451,6 +1451,14 @@
       "AI-positive contract responses controlled; native provider deliberately unconfigured",
       "Private file fixture verifies SSRF rejection; no automatic write retry",
       "No merge, new release publication or personal-instance deployment"
-    ]
+    ],
+    "pullRequest": {
+      "url": "https://github.com/brunofelixns/mealie-mcp-server/pull/7",
+      "headBranch": "codex/complete-recipe-tools",
+      "number": 7,
+      "status": "open",
+      "sourceChangesCommit": "68c6858dc9e253e3b8eef3e2b4cfd9a8c1965f4f",
+      "baseBranch": "main"
+    }
   }
 }

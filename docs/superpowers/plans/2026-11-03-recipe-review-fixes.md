@@ -19,7 +19,7 @@
 - [x] Integrate and document D15, recipe guide, development/CI checks and validation results. Preserve original definitions/captures and verify cross-task behavior.
 - [x] Run Ruff/format/mypy/workflow/docs checks, full pytest with coverage/JUnit, compatibility gate, wheel/sdist/runtime build and four real-provider E2E cases; avoid overlapping CPU-heavy E2E with sharded startup tests.
 - [x] Independent final review, fix findings and recheck affected behavior.
-- [ ] Commit all authorized repository changes, push feature branch and open PR against verified main. Confirm remote head/files and report actual CI state without claiming unobserved success.
+- [x] Commit all authorized repository changes, push feature branch and open PR against verified main. Confirm remote head/files and report actual CI state without claiming unobserved success.
 
 ## Review focus
 
@@ -80,3 +80,8 @@
   real provider audit; 636 positive paths, four SSRF rejections, eight AI config
   rejections, 648 argument rejections and cleanup passed. No configured LLM
   provider, remote CI or native ARM result is claimed by these local checks.
+- Feature commit `68c6858dc9e253e3b8eef3e2b4cfd9a8c1965f4f` uploaded all 125
+  changed repository files. PR [#7](https://github.com/brunofelixns/mealie-mcp-server/pull/7)
+  is open from `codex/complete-recipe-tools` to verified `main` (`b674612`).
+  Publication of the PR does not merge it or publish a package/image; hosted
+  checks must be assessed separately from the local evidence above.
